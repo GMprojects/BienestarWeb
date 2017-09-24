@@ -88,6 +88,7 @@
               'imageFormat': 'Formato de Imagen no permitido (solo .png .jpg y .jpge).'
            }
          });
+
       	$(document).ready(function(){
             $('input').iCheck({
                checkboxClass: 'icheckbox_square-green',

@@ -66,7 +66,7 @@ class PersonaController extends Controller
            $name = 'usr_'. $tipoPersona->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $path = public_path().'\\images\\Usuario\\'.$tipoPersona->tipo;
            $file->move($path, $name);
-           $nuevaPersona->foto = $name;           
+           $nuevaPersona->foto = $name;
         }
         $nuevaPersona = new Persona();
         $nuevaPersona->nombre = $request->nombre;
@@ -122,13 +122,13 @@ class PersonaController extends Controller
      */
     public function edit($id)
     {   $persona = Persona::findOrFail($id);
-        switch ($persona->idTipoPersona) {
-           case '1': $alumno = Alumno::findOrFail($persona->idTipoPersona);
-                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $alumno);
-           case '2': $docente = Docente::findOrFail($persona->idTipoPersona);
-                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $docente);
-           case '3': $administrativo = administrativo::findOrFail($persona->idTipoPersona);
-                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $administrativo);
+      switch ($persona->idTipoPersona) {
+           case '1': $tipoPersona = $persona->alumno()->get(); break;
+           case '2': $tipoPersona = $persona->docente()->get(); break;
+           case '3': $tipoPersona = $persona->docente()->get(); break;
+        }
+        if(sizeof($tipoPersona)>0){
+           return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $tipoPersona[0]);
         }
     }
 
@@ -140,14 +140,7 @@ class PersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $persona = Persona::findOrFail($id);
-        switch ($persona->idTipoPersona)
-        {
-           case '1': $alumno = Alumno::findOrFail($persona->idTipoPersona); break;
-           case '2': $docente = Docente::findOrFail($persona->idTipoPersona); break;
-           case '3': $administrativo = administrativo::findOrFail($persona->idTipoPersona); break;
-        }
+    {   $persona = Persona::findOrFail($id);
         $persona->nombre = $request->nombre;
         $persona->apellidoPaterno = $request->apellidoPaterno;
         $persona->apellidoMaterno = $request->apellidoMaterno;
@@ -164,12 +157,14 @@ class PersonaController extends Controller
            $nuevoName = 'usr_'. $request->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $file->move($nuevoPath, $nuevoName);
            $persona->foto = $nuevoName;
+        }else {
+           $persona->foto = null;
         }
         $persona->funcion = $request->funcion;
         $persona->idTipoPersona = $request->tipo;
         $persona->update();
 
-        switch ($request->tipo) {
+        switch ($persona->tipo) {
            case '1': $alumno = $persona->alumno()->get();
                      $alumno[0]->condicion = $request->condicion;
                      $alumno[0]->update();
@@ -187,6 +182,7 @@ class PersonaController extends Controller
                      $administrativo[0]->update();
                      break;
         }
+        dd($persona);
         return Redirect::to('admin/persona');
     }
 
