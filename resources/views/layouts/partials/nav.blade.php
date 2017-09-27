@@ -215,8 +215,8 @@
                 <img src="{{ asset('images/avatar3.png') }}" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  Gaby Alvarez - Aprendiz
+                  <small>Miembro desde siempre</small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -240,7 +240,15 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                   <a href="{{ route('logout') }}"
+                      onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();"
+                                class="btn btn-default btn-flat">
+                      Cerrar Sesión
+                   </a>
+                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      {{ csrf_field() }}
+                   </form>
                 </div>
               </li>
             </ul>

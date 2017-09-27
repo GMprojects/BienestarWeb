@@ -1,4 +1,4 @@
-@extends ('layouts.admin')
+@extends('layouts.admin', ['titulo' => 'Tipos de Habito', 'nombreTabla' => '', 'item' => 'encuHabitTipoH'])
 @section ('contenido')
 <div class="row">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -28,7 +28,7 @@
 				@include('admin.tipoHabito.modal')
 				@endforeach
 			</table>
-		</div>		
+		</div>
 	</div>
 </div>
 @endsection

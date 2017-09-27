@@ -32,7 +32,8 @@ class CrearTablaActPedagogia extends Migration
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
-            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
         });
@@ -54,11 +55,13 @@ class CrearTablaActPedagogia extends Migration
 
             //Clave foranea de la tabla ActPedagogia
             $tabla->integer('idActPedagogia')->unsigned();
-            $tabla->foreign('idActPedagogia')->references('idActPedagogia')->on('ActPedagogia');
+            $tabla->foreign('idActPedagogia')->references('idActPedagogia')->on('ActPedagogia')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla RecomendacionTutor
             $tabla->integer('idRecomendacionTutor')->unsigned();
-            $tabla->foreign('idRecomendacionTutor')->references('idRecomendacionTutor')->on('RecomendacionTutor');
+            $tabla->foreign('idRecomendacionTutor')->references('idRecomendacionTutor')->on('RecomendacionTutor')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
         });

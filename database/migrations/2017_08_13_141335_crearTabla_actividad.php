@@ -23,7 +23,7 @@ class CrearTablaActividad extends Migration
             $tabla->date('fechaEjecutada')->nullable();
             $tabla->time('horaEjecutada')->nullable();
             $tabla->integer('cuposTotales');
-            $tabla->enum('estado', ['1', '2', '3', '4']); 
+            $tabla->enum('estado', ['1', '2', '3', '4']);
             /*  Estado:
                 1. Programada
                 2. Ejecutada
@@ -39,7 +39,7 @@ class CrearTablaActividad extends Migration
                 2. Grupal
             */
             $tabla->string('observaciones', 500)->default('Ninguna');
-            $tabla->string('recomendaciones', 500)->default('Ninguna');            
+            $tabla->string('recomendaciones', 500)->default('Ninguna');
             $tabla->mediumtext('rutaImagen');
 
             //Clave foranea de la tabla tipoActividad
@@ -54,7 +54,7 @@ class CrearTablaActividad extends Migration
             $tabla->integer('idPersonaProg')->unsigned();
             $tabla->foreign('idPersonaProg')->references('idPersona')->on('Persona');
 
-            $tabla->timestamps();                        
+            $tabla->timestamps();
         });
 
         Schema::create('EvidenciaActividad', function(Blueprint $tabla)
@@ -63,10 +63,11 @@ class CrearTablaActividad extends Migration
             $tabla->mediumtext('ruta');
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
-            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
-            
-            $tabla->timestamps();   
-        });  
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')
+               ->onDelete('cascade');
+
+            $tabla->timestamps();
+        });
     }
 
     /**

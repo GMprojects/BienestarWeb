@@ -8,6 +8,7 @@ use BienestarWeb\TipoPersona;
 use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
 use BienestarWeb\Administrativo;
+use BienestarWeb\User;
 
 class PersonaController extends Controller
 {
@@ -45,7 +46,7 @@ class PersonaController extends Controller
            'codigo' => 'required|min:4|max:20',
            'email' => 'required|max:100',
            'direccion'=> 'max:100',
-           'telefono' => 'max:15|min:6',
+           'telefono' => 'max:15',
            'celular' => 'max:15',
            'foto' => 'file',
            'funcion' => 'required|numeric|min:1|max:3',
@@ -59,16 +60,21 @@ class PersonaController extends Controller
            //validacion si tipo = 3 (ADMINISTRATIVO)
            'cargo' => 'required_if:tipo,3|max:50'
         ]);
+        //REGISTRO DE usuario
+        $usuario = new User();
+        $usuario->email = $request->email;
+        $usuario->password = bcrypt($request->codigo);
+
+
         $file = $request->file('foto');
         $tipoPersona = TipoPersona::find($request->tipo);
-
+        $nuevaPersona = new Persona();
         if($file != null){
-           $name = 'usr_'. $tipoPersona->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
+           $name = 'usr_'.$tipoPersona->tipo.'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $path = public_path().'\\images\\Usuario\\'.$tipoPersona->tipo;
            $file->move($path, $name);
            $nuevaPersona->foto = $name;
         }
-        $nuevaPersona = new Persona();
         $nuevaPersona->nombre = $request->nombre;
         $nuevaPersona->apellidoPaterno = $request->apellidoPaterno;
         $nuevaPersona->apellidoMaterno = $request->apellidoMaterno;
@@ -80,6 +86,7 @@ class PersonaController extends Controller
         $nuevaPersona->funcion = $request->funcion;
         $nuevaPersona->estado = 1;
         $nuevaPersona->idTipoPersona = $request->tipo;
+        $usuario->save();
         $nuevaPersona->save();
         $persona = Persona::where('codigo', $request->codigo)->get();
         switch ($request->tipo) {
@@ -100,6 +107,8 @@ class PersonaController extends Controller
                      $persona[0]->administrativo()->save($nuevoAdministrativo);
                      break;
         }
+
+
         return Redirect::to('admin/persona');
     }
 
@@ -158,7 +167,7 @@ class PersonaController extends Controller
            $file->move($nuevoPath, $nuevoName);
            $persona->foto = $nuevoName;
         }else {
-           $persona->foto = null;
+           //$persona->foto = null;
         }
         $persona->funcion = $request->funcion;
         $persona->idTipoPersona = $request->tipo;
@@ -182,7 +191,6 @@ class PersonaController extends Controller
                      $administrativo[0]->update();
                      break;
         }
-        dd($persona);
         return Redirect::to('admin/persona');
     }
 
@@ -194,6 +202,8 @@ class PersonaController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        $persona = Persona::findOrFail($id);
+        $persona->estado = 0;
+        return Redirect::to('admin/persona');
+     }
 }

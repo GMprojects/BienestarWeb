@@ -15,15 +15,17 @@ class CrearTablaEncuestaRespondidaInsc extends Migration
     {
         Schema::create('EncuestaRespondidaInsc', function(Blueprint $tabla)
         {
-            $tabla->increments('idEncuestaRespondidaInsc');            
+            $tabla->increments('idEncuestaRespondidaInsc');
 
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
-            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
+            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla Encuesta
             $tabla->integer('idEncuesta')->unsigned();
-            $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta');
+            $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
         });
@@ -35,13 +37,15 @@ class CrearTablaEncuestaRespondidaInsc extends Migration
 
             //Clave foranea de la tabla PreguntaEncuesta
             $tabla->integer('idPreguntaEncuesta')->unsigned();
-            $tabla->foreign('idPreguntaEncuesta')->references('idPreguntaEncuesta')->on('PreguntaEncuesta');
+            $tabla->foreign('idPreguntaEncuesta')->references('idPreguntaEncuesta')->on('PreguntaEncuesta')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla EncuestaRespondidaInsc
             $tabla->integer('idEncuestaRespondidaInsc')->unsigned();
-            $tabla->foreign('idEncuestaRespondidaInsc')->references('idEncuestaRespondidaInsc')->on('EncuestaRespondidaInsc');
+            $tabla->foreign('idEncuestaRespondidaInsc')->references('idEncuestaRespondidaInsc')->on('EncuestaRespondidaInsc')
+               ->onDelete('cascade');
         });
-        
+
     }
 
     /**

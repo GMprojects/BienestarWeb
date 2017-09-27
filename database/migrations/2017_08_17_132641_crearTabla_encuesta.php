@@ -21,7 +21,8 @@ class CrearTablaEncuesta extends Migration
 
             //Clave foranea de la tabla TipoActividad
             $tabla->integer('idTipoActividad')->unsigned();
-            $tabla->foreign('idTipoActividad')->references('idTipoActividad')->on('TipoActividad');
+            $tabla->foreign('idTipoActividad')->references('idTipoActividad')->on('TipoActividad')
+               ->onDelete('cascade');
         });
 
         Schema::create('Alternativa', function(Blueprint $tabla)
@@ -31,7 +32,8 @@ class CrearTablaEncuesta extends Migration
 
             //Clave foranea de la tabla Encuesta
             $tabla->integer('idEncuesta')->unsigned();
-            $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta');
+            $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta')
+               ->onDelete('cascade');
         });
 
         Schema::create('PreguntaEncuesta', function(Blueprint $tabla)
@@ -41,7 +43,8 @@ class CrearTablaEncuesta extends Migration
 
             //Clave foranea de la tabla Encuesta
             $tabla->integer('idEncuesta')->unsigned();
-            $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta');
+            $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta')
+               ->onDelete('cascade');
         });
     }
 

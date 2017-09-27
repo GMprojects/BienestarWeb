@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.admin', ['titulo' => 'Editar tipo de Actividad', 'nombreTabla' => '', 'item' => 'actiTipos'])
 @section('contenido')
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -8,7 +8,7 @@
 					<ul>
 						@foreach ($errors->all() as $error)
 							<li>{{ $error }}</li>
-						@endforeach					
+						@endforeach
 					</ul>
 				</div>
 			@endif

@@ -20,12 +20,13 @@ class CrearTablaActComedor extends Migration
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
-            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
-            
-            $tabla->timestamps();                        
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')
+               ->onDelete('cascade');
+
+            $tabla->timestamps();
         });
-        
-        
+
+
     }
     /**
      * Reverse the migrations.

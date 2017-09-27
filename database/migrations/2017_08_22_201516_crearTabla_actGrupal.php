@@ -21,10 +21,11 @@ class CrearTablaActGrupal extends Migration
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
-            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')
+               ->onDelete('cascade');
 
-            $tabla->timestamps();                        
-        });        
+            $tabla->timestamps();
+        });
     }
 
     /**
@@ -34,6 +35,6 @@ class CrearTablaActGrupal extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ActGrupal');        
+        Schema::dropIfExists('ActGrupal');
     }
 }

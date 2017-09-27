@@ -23,19 +23,21 @@ class CrearTablaBeneficiarioComedor extends Migration
                 2. MediaBeca
                 3. Especial
             */
-            
+
             //Clave foranea de la tabla ActComedor
             $tabla->integer('idActComedor')->unsigned();
-            $tabla->foreign('idActComedor')->references('idActComedor')->on('ActComedor');
+            $tabla->foreign('idActComedor')->references('idActComedor')->on('ActComedor')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla Alumno
             $tabla->integer('idAlumno')->unsigned();
-            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno');
-            
+            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno')
+               ->onDelete('cascade');
+
             $tabla->timestamps();
         });
     }
-    
+
 
     /**
      * Reverse the migrations.

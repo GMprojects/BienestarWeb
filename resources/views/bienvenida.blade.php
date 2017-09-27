@@ -1,73 +1,40 @@
-<!doctype html>
-<html class="no-js" lang="en" dir="ltr">
+<!DOCTYPE html>
+<html>
 	<head>
 		<meta charset="utf-8">
-	    <meta http-equiv="x-ua-compatible" content="ie=edge">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	    <title>@yield('title', 'Default') | Panel de administración</title>
-	    <link rel="stylesheet" href="{{ asset('plugins/boowtstrap/css/bootstrap.css') }}"> 
-
+		<title>Login</title>
+		<link rel="stylesheet" href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.css') }}">
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+			body {
+				background: url('shattered-island.gif');
+				background-position: center;
+			}
+			form {
+				background: #fff;
+				background-position: center;
+				width: 300px;
+				border: 1px;
+				border-radius: 5px;
+				box-shadow: 0 0 10px #000;
+				margin:100px auto;
+				height: 300px;
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+			h3 {
+				text-align: center;
+			}
+		</style>
 	</head>
-	</head>
-
-	<body>  
-		
-		<nav class="navbar navbar-dark bg-dark">
-		  <div class="container-fluid">
-		    <!-- Brand and toggle get grouped for better mobile display -->
-		    <div class="navbar-header">
-		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-		        <span class="sr-only">Toggle navigation</span>
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-		      </button>
-		      <a class="navbar-brand" href="#">Brand</a>
-		    </div>
-
-		    <!-- Collect the nav links, forms, and other content for toggling -->
-		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		      <ul class="nav navbar-nav">
-		            <li><a href="#">Inicio</a></li>
-		            <li><a href="#">Usuarios</a></li>
-		            <li><a href="#">Categorías</a></li>
-		            <li role="separator" class="divider"></li>
-		            <li><a href="#">Actividades</a></li>
-		            <li role="separator" class="divider"></li>
-		            <li><a href="#">Imagenes</a></li>       
-		      </ul>
-
-		      <form class="navbar-form navbar-left">
-		        <div class="form-group">
-		          <input type="text" class="form-control" placeholder="Search">
-		        </div>
-		        <button type="submit" class="btn btn-default">Submit</button>
-		      </form>
-		      <ul class="nav navbar-nav navbar-right">
-		        <li><a href="#">Link</a></li>
-		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-		          <ul class="dropdown-menu">
-		            <li><a href="#">Action</a></li>
-		            <li><a href="#">Another action</a></li>
-		            <li><a href="#">Something else here</a></li>
-		            <li role="separator" class="divider"></li>
-		            <li><a href="#">Separated link</a></li>
-		          </ul>
-		        </li>
-		      </ul>
-		    </div><!-- /.navbar-collapse -->
-		  </div><!-- /.container-fluid -->
-		</nav>
-		
-		
-		<footer>
-			
-		</footer>
-		
-	    <script src="{{ asset('plugins/jquery/jquery-3.2.1.js') }}"></script>
-		<script src="{{ asset('plugins/bootstrap/js/bootstrap.js') }}"></script>		
+	<body>
+		{!! Form::open(['url'=>'admin/persona','method'=>'POST','autocomplete'=>'off','files'=>'false']) !!}
+		{{ Form::token() }}
+			@section('content')
+		{!! Form::close() !!}
+		<script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 	</body>
 </html>
-
-

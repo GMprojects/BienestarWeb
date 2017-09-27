@@ -11,7 +11,7 @@
    <body class="hold-transition skin-purple-light sidebar-mini">
       <div class="wrapper">
          <header class="main-header">
-            <a href="index.html" class="logo">
+            <a href="{{ route('home') }}" class="logo">
                <span class="logo-mini"><b>F</b>Bi</span>
                <span class="logo-lg"><b>Farmacia</b>Bienestar</span>
             </a>

@@ -33,9 +33,9 @@ class CrearTablaEgresado extends Migration
             $tabla->string('email', 100)->unique();
             $tabla->string('codigo', 20)->unique();
             $tabla->smallInteger('anioEgreso');
-            $tabla->enum('numeroSemestre', ['1', '2', '3']);  
-            $tabla->timestamps();        
-            
+            $tabla->enum('numeroSemestre', ['1', '2', '3']);
+            $tabla->timestamps();
+
         });
 
         Schema::create('Trabajo', function(Blueprint $tabla)
@@ -51,7 +51,8 @@ class CrearTablaEgresado extends Migration
 
             //Clave foranea de la tabla Egresado
             $tabla->integer('idEgresado')->unsigned();
-            $tabla->foreign('idEgresado')->references('idEgresado')->on('Egresado');
+            $tabla->foreign('idEgresado')->references('idEgresado')->on('Egresado')
+               ->onDelete('cascade');;
         });
     }
 
@@ -63,6 +64,6 @@ class CrearTablaEgresado extends Migration
     public function down()
     {
         Schema::dropIfExists('Egresado');
-        Schema::dropIfExists('Trabajo'); 
+        Schema::dropIfExists('Trabajo');
     }
 }

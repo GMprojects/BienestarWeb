@@ -1,4 +1,4 @@
-@extends ('layouts.admin')
+@extends('layouts.admin', ['titulo' => 'Pregunta de Hábitos de Estudio', 'nombreTabla' => 'tabPreguntaHabito', 'item' => 'encuHabitPregu'])
 @section ('contenido')
 <div class="row">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -14,7 +14,7 @@
 <div class="row">
 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 		<div class="table-responsive">
-			<table class="table table-striped table-bordered table-consdensed table-hover">
+			<table id="tabPreguntaHabito" class="table table-striped table-bordered table-consdensed table-hover">
 				<thead>
 					<th>Id</th>
 					<th>Enunciado</th>

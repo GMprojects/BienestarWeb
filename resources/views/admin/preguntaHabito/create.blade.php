@@ -1,4 +1,4 @@
-@extends ('layouts.admin')
+@extends('layouts.admin', ['titulo' => 'Pregunta de Hábitos de Estudio', 'nombreTabla' => '', 'item' => 'encuHabitPregu'])
 @section ('contenido')
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -14,7 +14,7 @@
 			@endif
 		</div>
 	</div>
-	<div>			
+	<div>
 		{!!Form::open(['url'=>'admin/preguntaHabito','method'=>'POST','autocomplete'=>'off'])!!}
 		{{Form::token()}}
 		<div class="row">
@@ -31,14 +31,14 @@
 						@foreach($tiposHabito as $tipo)
 							<option value="{{$tipo->idTipoHabito}}">{{$tipo->tipo}}</option>
 						@endforeach
-					</select>				
+					</select>
 				</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<button class="btn btn-primary" type="submit">Guardar</button>
 			<button class="btn btn-danger" type="reset">Cancelar</button>
-		</div>			
+		</div>
 		{!!Form::close()!!}
 	</div>
 @endsection

@@ -22,16 +22,18 @@ class CrearTablaBeneficiarioMovilidad extends Migration
             $tabla->tinyInteger('duracionAnio');
             $tabla->string('institucion', 100);
             $tabla->string('pais', 45);
-            $tabla->mediumtext('observaciones');          
+            $tabla->mediumtext('observaciones');
 
             //Clave foranea de la tabla ActMovilidad
             $tabla->integer('idActMovilidad')->unsigned();
-            $tabla->foreign('idActMovilidad')->references('idActMovilidad')->on('ActMovilidad');
+            $tabla->foreign('idActMovilidad')->references('idActMovilidad')->on('ActMovilidad')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla Alumno
             $tabla->integer('idAlumno')->unsigned();
-            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno');
-            
+            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno')
+               ->onDelete('cascade');
+
             $tabla->timestamps();
         });
 
@@ -39,13 +41,14 @@ class CrearTablaBeneficiarioMovilidad extends Migration
         {
             $tabla->increments('idEvidenciaMovilidad');
             $tabla->mediumtext('ruta');
-            
+
             //Clave foranea de la tabla Alumno
             $tabla->integer('idBeneficiaroMovilidad')->unsigned();
-            $tabla->foreign('idBeneficiaroMovilidad')->references('idBeneficiaroMovilidad')->on('BeneficiaroMovilidad');
-            
-            $tabla->timestamps();   
-        });        
+            $tabla->foreign('idBeneficiaroMovilidad')->references('idBeneficiaroMovilidad')->on('BeneficiaroMovilidad')
+               ->onDelete('cascade');;
+
+            $tabla->timestamps();
+        });
     }
 
     /**
@@ -56,6 +59,6 @@ class CrearTablaBeneficiarioMovilidad extends Migration
     public function down()
     {
         Schema::dropIfExists('BeneficiaroMovilidad');
-        Schema::dropIfExists('EvidenciaMovilidad');        
+        Schema::dropIfExists('EvidenciaMovilidad');
     }
 }

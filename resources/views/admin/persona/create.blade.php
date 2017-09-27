@@ -32,7 +32,7 @@
 					<div class="row">
 						<div class="col-sm-4"></div>
 						<div class="col-sm-4">
-							<input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/avatar3.png') }}" data-allowed-file-extensions="png jpg jpge" />
+							<input type="file" name="foto" class="dropify" value="{{old('foto')}}" data-default-file="{{ asset('images/avatar3.png') }}" data-allowed-file-extensions="png jpg jpge" />
 						</div>
 						<div class="col-sm-4"></div>
 					</div><br />
@@ -64,7 +64,7 @@
 	   					<div class="col-sm-8">
 	   						<div class="input-group">
 	   							 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-	   							 <input required minlength="2" maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" placeholder="e.g. Lizárraga">
+	   							 <input maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" placeholder="e.g. Lizárraga">
 	   						</div>
 	   					</div>
 	   				</div>
@@ -74,7 +74,7 @@
 	   					<div class="col-sm-8">
 	   						<div class="input-group">
 	   							 <span class="input-group-addon"><i class="fa fa-home"></i></span>
-	   							 <input required minlength="6" maxlength="100" type="direccion" class="form-control" name="direccion"  value="{{old('direccion')}}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
+	   							 <input maxlength="100" type="direccion" class="form-control" name="direccion"  value="{{old('direccion')}}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
 	   						</div>
 	   					</div>
 	   				</div>
@@ -94,7 +94,7 @@
 	   					<div class="col-sm-8">
 	   						<div class="input-group">
 	   							 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-	   							 <input pattern="[0-9]+" minlength="6" maxlength="15" type="text" class="form-control" name="telefono"  value="{{old('telefono')}}" placeholder="(xxx)xxxxxx">
+	   							 <input pattern="[0-9]+" maxlength="15" type="text" class="form-control" name="telefono"  value="{{old('telefono')}}" placeholder="(xxx)xxxxxx">
 	   						</div>
 	   					</div>
 	   				</div>
@@ -104,7 +104,7 @@
 	   					<div class="col-sm-8">
 	   						<div class="input-group">
 	   							 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-	   							 <input pattern="[0-9]+" minlength="9" maxlength="15" type="celular" class="form-control" name="celular" value="{{old('celular')}}" placeholder="(xxx)xxxxxxxxx">
+	   							 <input pattern="[0-9]+" maxlength="15" type="celular" class="form-control" name="celular" value="{{old('celular')}}" placeholder="(xxx)xxxxxxxxx">
 	   						</div>
 	   					</div>
 	   				</div>

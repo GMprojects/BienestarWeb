@@ -18,7 +18,7 @@ class CrearTablaDocente extends Migration
             $tabla->increments('idDocente');
             $tabla->enum('categoria', ['1', '2', '3', '4']);
             /*
-                Categoria: 
+                Categoria:
                 1. Principal
                 2. Asociado
                 3. Auxiliar
@@ -37,18 +37,19 @@ class CrearTablaDocente extends Migration
                 1. Ordinario
                 2. Contratado
             */
-            
+
             //Clave foranea de la tabla Persona
             $tabla->integer('idPersona')->unsigned();
-            $tabla->foreign('idPersona')->references('idPersona')->on('Persona');
-            
-            $tabla->timestamps();                        
+            $tabla->foreign('idPersona')->references('idPersona')->on('Persona')
+               ->onDelete('cascade');
+
+            $tabla->timestamps();
         });
 
         Schema::create('HorarioDisponible', function(Blueprint $tabla)
         {
             $tabla->increments('idHorarioDisponible');
-            $tabla->enum('dia', ['1', '2', '3', '4', '5', '6', '7']);         
+            $tabla->enum('dia', ['1', '2', '3', '4', '5', '6', '7']);
             $tabla->time('horaInicio');
             $tabla->time('horaFin');
             $tabla->string('lugar', 100);
@@ -57,9 +58,10 @@ class CrearTablaDocente extends Migration
 
             //Clave foranea de la tabla Docente
             $tabla->integer('idDocente')->unsigned();
-            $tabla->foreign('idDocente')->references('idDocente')->on('Docente');
-            
-            $tabla->timestamps();                        
+            $tabla->foreign('idDocente')->references('idDocente')->on('Docente')
+               ->onDelete('cascade');
+
+            $tabla->timestamps();
         });
     }
 

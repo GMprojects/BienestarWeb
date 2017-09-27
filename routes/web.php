@@ -12,10 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('bienvenida');
+    return view('home');
 });
 
-Route::prefix('admin')->group(function () {
+Route::middleware(['admin', 'auth'])->prefix('admin')->group(function () {
     Route::resource('tipoPersona','TipoPersonaController');
     Route::resource('tipoHabito','TipoHabitoController');
     Route::resource('preguntaHabito','PreguntaHabitoController');
@@ -28,11 +28,11 @@ Route::prefix('admin')->group(function () {
     Route::resource('persona', 'PersonaController');
 });
 
-Route::prefix('usuario')->group(function () {
+Route::middleware(['miembro', 'auth'])->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
 });
 
-Route::prefix('programador')->group(function () {
+Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
     Route::resource('actividad', 'ActividadController');
     Route::resource('evidencia', 'EvidenciaActividadController');
     Route::resource('inscripcion', 'InscripcionADAController');
@@ -40,4 +40,8 @@ Route::prefix('programador')->group(function () {
     Route::resource('evidenciaActividad', 'EvidenciaActividadController');
 });
 
-Route::get('beneficiarioComedor', 'AlumnoController@showBeneficiarioComedor');
+Route::middleware(['miembro', 'auth'])->get('beneficiarioComedor', 'AlumnoController@showBeneficiarioComedor');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

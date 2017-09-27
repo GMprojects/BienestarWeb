@@ -24,7 +24,8 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
-            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')
+               ->onDelete('cascade');
 
 
             $tabla->timestamps();
@@ -39,14 +40,15 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad');
-            
+
             //Clave foranea de la tabla Alumno
             $tabla->integer('idAlumno')->unsigned();
             $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno');
 
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
-            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
+            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
 
@@ -62,11 +64,13 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla Docente
             $tabla->integer('idDocente')->unsigned();
-            $tabla->foreign('idDocente')->references('idDocente')->on('Docente');
+            $tabla->foreign('idDocente')->references('idDocente')->on('Docente')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
-            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
+            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
 
@@ -82,11 +86,13 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla Administrativo
             $tabla->integer('idAdministrativo')->unsigned();
-            $tabla->foreign('idAdministrativo')->references('idAdministrativo')->on('Administrativo');
+            $tabla->foreign('idAdministrativo')->references('idAdministrativo')->on('Administrativo')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
-            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
+            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
 

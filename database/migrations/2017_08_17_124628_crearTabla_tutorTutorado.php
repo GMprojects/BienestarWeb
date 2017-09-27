@@ -21,11 +21,13 @@ class CrearTablaTutorTutorado extends Migration
 
             //Clave foranea de la tabla Alumno
             $tabla->integer('idAlumno')->unsigned();
-            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno');
+            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno')
+               ->onDelete('cascade');
 
             //Clave foranea de la tabla Docente
             $tabla->integer('idDocente')->unsigned();
-            $tabla->foreign('idDocente')->references('idDocente')->on('Docente');
+            $tabla->foreign('idDocente')->references('idDocente')->on('Docente')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
 
@@ -37,7 +39,8 @@ class CrearTablaTutorTutorado extends Migration
 
             //Clave foranea de la tabla TutorTutorado
             $tabla->integer('idTutorTutorado')->unsigned();
-            $tabla->foreign('idTutorTutorado')->references('idTutorTutorado')->on('TutorTutorado');
+            $tabla->foreign('idTutorTutorado')->references('idTutorTutorado')->on('TutorTutorado')
+               ->onDelete('cascade');
 
             $tabla->timestamps();
         });
@@ -55,7 +58,8 @@ class CrearTablaTutorTutorado extends Migration
 
             //Clave foranea de la tabla CategoriaHabito
             $tabla->integer('idTipoHabito')->unsigned();
-            $tabla->foreign('idTipoHabito')->references('idTipoHabito')->on('TipoHabito');
+            $tabla->foreign('idTipoHabito')->references('idTipoHabito')->on('TipoHabito')
+               ->onDelete('cascade');
         });
 
         Schema::create('DetalleHabito', function(Blueprint $tabla)
@@ -71,11 +75,13 @@ class CrearTablaTutorTutorado extends Migration
 
                 //Clave foranea de la tabla HabitoEstudio
                 $tabla->integer('idHabitoEstudio')->unsigned();
-                $tabla->foreign('idHabitoEstudio')->references('idHabitoEstudio')->on('HabitoEstudio');
+                $tabla->foreign('idHabitoEstudio')->references('idHabitoEstudio')->on('HabitoEstudio')
+                  ->onDelete('cascade');
 
                 //Clave foranea de la tabla HabitoEstudio
                 $tabla->integer('idPreguntaHabito')->unsigned();
-                $tabla->foreign('idPreguntaHabito')->references('idPreguntaHabito')->on('PreguntaHabito');
+                $tabla->foreign('idPreguntaHabito')->references('idPreguntaHabito')->on('PreguntaHabito')
+                  ->onDelete('cascade');
         });
 
 

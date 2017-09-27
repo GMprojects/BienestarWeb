@@ -139,11 +139,11 @@ if($item != null){
                      </span>
                   </a>
                   <ul class="treeview-menu">
-                     <li class="{{ $encuHabitTipoH }}"><a href="#"><i class="fa fa-circle-o"></i>Tipos de Hábitos</a></li>
-                     <li class="{{ $encuHabitPregu }}"><a href="#"><i class="fa fa-circle-o"></i>Preguntas de Hábitos</a></li>
+                     <li class="{{ $encuHabitTipoH }}"><a href="{{ url('admin/tipoHabito')}}"><i class="fa fa-circle-o"></i>Tipos de Hábitos</a></li>
+                     <li class="{{ $encuHabitPregu }}"><a href="{{ url('admin/preguntaHabito')}}"><i class="fa fa-circle-o"></i>Preguntas de Hábitos</a></li>
                   </ul>
                </li>
-               <li class="{{ $encuTodas }}"><a href="encuesta"><i class="fa fa-circle-o"></i> Todas</a></li>
+               <li class="{{ $encuTodas }}"><a href="{{ url('admin/encuesta')}}"><i class="fa fa-circle-o"></i> Todas</a></li>
                <li class="{{ $encuTipos }}"><a href="#"><i class="fa fa-circle-o"></i> Tipos</a></li>
             </ul>
          </li>

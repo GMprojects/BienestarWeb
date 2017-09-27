@@ -24,21 +24,19 @@ class CrearTablaPersona extends Migration
             $tabla->string('direccion', 100)->nullable();
             $tabla->string('telefono', 15)->nullable();
             $tabla->string('celular', 15)->nullable();
-            $tabla->mediumtext('foto');
+            $tabla->mediumtext('foto')->nullable();
             $tabla->enum('funcion', ['1', '2', '3']);
-            /*
-                Funcion (tipo de usuario)
+            /*  Funcion (tipo de usuario)
                 1. Miembro/usuario (docente, administrativo y alumno)
                 2. Programador
                 3. Administrador
             */
             $tabla->enum('estado', [0,1]);
-            /*
-            estado
-            0. Inactivo
-            1. Activo
+            /* estado
+               0. Inactivo
+               1. Activo
             */
-
+            
             //Clave foranea de la tabla TipoPersona
             $tabla->integer('idTipoPersona')->unsigned();
             $tabla->foreign('idTipoPersona')->references('idTipoPersona')->on('TipoPersona');
