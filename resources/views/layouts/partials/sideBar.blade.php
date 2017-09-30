@@ -48,7 +48,7 @@ if($item != null){
       <!-- Sidebar user panel -->
       <div class="user-panel">
          <div class="pull-left image">
-            <img src="{{ asset('images/avatar3.png') }}" class="img-circle" alt="Imagen de Usuario">
+            <img src="{{ asset('images/Usuario/') }}" class="img-circle" alt="Imagen de Usuario">
          </div>
          <div class="pull-left info">
            <p>Gaby Alvarez</p>
@@ -77,7 +77,7 @@ if($item != null){
             </a>
             <ul class="treeview-menu">
                <li class="{{ $usuTodos }}"><a href="{{ url('admin/persona') }}"><i class="fa fa-circle-o"></i> Todos</a></li>
-               <li class="{{ $usuAdmin }}"><a href="index.html"><i class="fa fa-circle-o"></i> Administrativos</a></li>
+               <li class="{{ $usuAdmin }}"><a href="{{ url('admin/persona/administrativos') }}"><i class="fa fa-circle-o"></i> Administrativos</a></li>
                <li class="{{ $usuAlumn }}"><a href="index2.html"><i class="fa fa-circle-o"></i> Alumnos</a></li>
                <li class="{{ $usuDocen }}"><a href="index2.html"><i class="fa fa-circle-o"></i> Docentes</a></li>
             </ul>

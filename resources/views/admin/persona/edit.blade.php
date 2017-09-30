@@ -13,7 +13,7 @@
 			@endif
 		</div>
 	</div>
-{!!Form::model([$persona, $tipoPersona],['method'=>'PATCH','route'=>['persona.update',$persona->idPersona]])!!}
+{!!Form::model([$persona, $tipoPersona],['method'=>'PATCH','files'=>'true', 'route'=>['persona.update',$persona->idPersona]] )!!}
 {{Form::token()}}
 
 <div class="row">

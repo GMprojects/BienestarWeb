@@ -17,6 +17,7 @@
 			<div class="table">
 				<table id="tabPersonas" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
 					<thead>
+						<th>Código</th>
 						<th>Nombre</th>
 						<th>Direccion</th>
 						<th>Telefono</th>
@@ -30,6 +31,7 @@
 					<tbody>
 						@foreach ($personas as $persona)
 						<tr>
+							<td>{{ $persona->codigo }}</td>
 							<td >{{$persona->apellidoPaterno}} {{$persona->apellidoMaterno}} {{$persona->nombre}}</td>
 							<td>{{$persona->direccion}}</td>
 							<td>{{$persona->telefono}}</td>
@@ -41,22 +43,13 @@
 								@case(1) <td><span class="badge bg-green">Miembro</span></td> @break
 							@endswitch
 							@switch( $persona->idTipoPersona)
-								@case(1) <td><span class="badge bg-green">Alumno</span></td>
-											<td>
-												<img src="{{asset('images/Usuario/Alumno/'.$persona->foto)}}" alt="{{$persona->nombre}}" height="100px" width="100px" class="img-thumbnail">
-											</td>
-											@break
-								@case(2) <td><span class="badge bg-orange">Docente</span></td>
-											<td>
-												<img src="{{asset('images/Usuario/Docente/'.$persona->foto)}}" alt="{{$persona->nombre}}" height="100px" width="100px" class="img-thumbnail">
-											</td>
-											@break
-								@case(3) <td><span class="badge bg-red">Administrativo</span></td>
-											<td>
-												<img src="{{asset('images/Usuario/Administrativo/'.$persona->foto)}}" alt="{{$persona->nombre}}" height="100px" width="100px" class="img-thumbnail">
-											</td>
-											@break
+								@case(1) <td><span class="badge bg-green">Alumno</span></td> @break
+								@case(2) <td><span class="badge bg-orange">Docente</span></td> @break
+								@case(3) <td><span class="badge bg-red">Administrativo</span></td> @break
 							@endswitch
+							<td>
+								<img src="{{ asset('images/Usuario/'.$persona->foto) }}" alt="{{$persona->nombre}}" height="100px" width="100px" class="img-thumbnail">
+							</td>
 							<td>
 								<a href="{{URL::action('PersonaController@edit',$persona->idPersona)}}"><button class="btn btn-warning">Editar</button></a>
 								<a href="" data-target="#modal-delete-{{$persona->idPersona}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>

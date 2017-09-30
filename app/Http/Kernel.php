@@ -58,6 +58,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'admin' => \BienestarWeb\Http\Middleware\MiddAdmin::class,
         'programador' => \BienestarWeb\Http\Middleware\MiddProgramador::class,
-        'miembro' => \BienestarWeb\Http\Middleware\MiddMiembro::class
+        'miembro' => \BienestarWeb\Http\Middleware\MiddMiembro::class,
+        'alumno' => \BienestarWeb\Http\Middleware\MiddAlumno::class,
+        'docente' => \BienestarWeb\Http\Middleware\MiddDocente::class,
+        'administrativo' => \BienestarWeb\Http\Middleware\MiddAdministrativo::class
     ];
 }

@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['titulo' => 'Home :D', 'nombreTabla' => '', 'item' => 'usuTodos'])
+@extends('layouts.inicio')
 
 @section('contenido')
 <div class="container">
@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    Bienvenido {{ Auth::user()->email }}
+                    Pagina de inicio
                 </div>
             </div>
         </div>

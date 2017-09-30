@@ -20,7 +20,7 @@
                   <li><!-- start message -->
                     <a href="#">
                       <div class="pull-left">
-                        <img src="{{ asset('images/avatar3.png') }}" class="img-circle" alt="User Image">
+                        <img src="{{ asset('images/Usuario/') }}" class="img-circle" alt="User Image">
                       </div>
                       <h4>
                         Support Team
@@ -206,57 +206,21 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{ asset('images/avatar3.png') }}" class="user-image" alt="User Image">
-              <span class="hidden-xs">Gaby Alvarez</span>
+              <img src="{{ asset('images/Usuario/') }}" class="user-image" alt="User Image">
+              <span class="hidden-xs"></span>
             </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-                <img src="{{ asset('images/avatar3.png') }}" class="img-circle" alt="User Image">
-
-                <p>
-                  Gaby Alvarez - Aprendiz
-                  <small>Miembro desde siempre</small>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                   <a href="{{ route('logout') }}"
-                      onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();"
-                                class="btn btn-default btn-flat">
-                      Cerrar Sesión
-                   </a>
-                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                      {{ csrf_field() }}
-                   </form>
-                </div>
-              </li>
-            </ul>
           </li>
+          <li><a href="{{ route('logout') }}"
+             onclick="event.preventDefault();
+                      document.getElementById('logout-form').submit();"
+                      >
+             <i class="fa fa-power-off"></i>
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+             {{ csrf_field() }}
+          </form></li>
           <!-- Control Sidebar Toggle Button -->
-          <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
+
         </ul>
       </div>
     </nav>

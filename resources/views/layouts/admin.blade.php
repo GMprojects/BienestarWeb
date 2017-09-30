@@ -6,6 +6,7 @@
       <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
       <title>BienestarWeb | Admin</title>
       @include('layouts.libs.losCss')
+      @include('layouts.libs.losJS')
    </head>
 
    <body class="hold-transition skin-purple-light sidebar-mini">
@@ -41,7 +42,7 @@
 
       </div>
 
-      @include('layouts.libs.losJS')
+
 
       @if( $nombreTabla != '' )
          <script>
@@ -95,9 +96,7 @@
                radioClass: 'iradio_square-green',
                increaseArea: '20%' // optional
             });
-            $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-            $("#input-id").fileinput();
-            $("#input-id").fileinput({'showUpload':false, 'previewFileType':'any'});
+            $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });            
       	});
       </script>
    </body>

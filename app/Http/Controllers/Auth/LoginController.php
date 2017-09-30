@@ -4,6 +4,7 @@ namespace BienestarWeb\Http\Controllers\Auth;
 
 use BienestarWeb\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use BienestarWeb\Persona;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/admin/persona';
 
     /**
      * Create a new controller instance.
@@ -33,8 +34,7 @@ class LoginController extends Controller
      * @return void
      */
     public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+    { $this->middleware('guest')->except('logout');
     }
 
 }

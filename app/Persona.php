@@ -10,11 +10,14 @@ class Persona extends Model
    protected $primaryKey='idPersona';
    public $timestamps=true;
    protected $fillable = [
+      'id',
+      'email',
+      'password',
       'nombre',
    	'apellidoPaterno',
    	'apellidoMaterno',
+      'fechaNacimiento',
       'codigo',
-      'email',
    	'direccion',
       'telefono',
    	'celular',

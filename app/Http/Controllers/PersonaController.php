@@ -8,7 +8,8 @@ use BienestarWeb\TipoPersona;
 use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
 use BienestarWeb\Administrativo;
-use BienestarWeb\User;
+
+use BienestarWeb\TutorTutorado;
 
 class PersonaController extends Controller
 {
@@ -46,7 +47,7 @@ class PersonaController extends Controller
            'codigo' => 'required|min:4|max:20',
            'email' => 'required|max:100',
            'direccion'=> 'max:100',
-           'telefono' => 'max:15',
+           'telefono' => 'max:15|min:6',
            'celular' => 'max:15',
            'foto' => 'file',
            'funcion' => 'required|numeric|min:1|max:3',
@@ -60,21 +61,16 @@ class PersonaController extends Controller
            //validacion si tipo = 3 (ADMINISTRATIVO)
            'cargo' => 'required_if:tipo,3|max:50'
         ]);
-        //REGISTRO DE usuario
-        $usuario = new User();
-        $usuario->email = $request->email;
-        $usuario->password = bcrypt($request->codigo);
-
-
         $file = $request->file('foto');
         $tipoPersona = TipoPersona::find($request->tipo);
-        $nuevaPersona = new Persona();
+
         if($file != null){
-           $name = 'usr_'.$tipoPersona->tipo.'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
+           $name = 'usr_'. $tipoPersona->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $path = public_path().'\\images\\Usuario\\'.$tipoPersona->tipo;
            $file->move($path, $name);
            $nuevaPersona->foto = $name;
         }
+        $nuevaPersona = new Persona();
         $nuevaPersona->nombre = $request->nombre;
         $nuevaPersona->apellidoPaterno = $request->apellidoPaterno;
         $nuevaPersona->apellidoMaterno = $request->apellidoMaterno;
@@ -86,7 +82,6 @@ class PersonaController extends Controller
         $nuevaPersona->funcion = $request->funcion;
         $nuevaPersona->estado = 1;
         $nuevaPersona->idTipoPersona = $request->tipo;
-        $usuario->save();
         $nuevaPersona->save();
         $persona = Persona::where('codigo', $request->codigo)->get();
         switch ($request->tipo) {
@@ -107,8 +102,6 @@ class PersonaController extends Controller
                      $persona[0]->administrativo()->save($nuevoAdministrativo);
                      break;
         }
-
-
         return Redirect::to('admin/persona');
     }
 
@@ -131,13 +124,13 @@ class PersonaController extends Controller
      */
     public function edit($id)
     {   $persona = Persona::findOrFail($id);
-      switch ($persona->idTipoPersona) {
-           case '1': $tipoPersona = $persona->alumno()->get(); break;
-           case '2': $tipoPersona = $persona->docente()->get(); break;
-           case '3': $tipoPersona = $persona->docente()->get(); break;
-        }
-        if(sizeof($tipoPersona)>0){
-           return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $tipoPersona[0]);
+        switch ($persona->idTipoPersona) {
+           case '1': $alumno = Alumno::findOrFail($persona->idTipoPersona);
+                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $alumno);
+           case '2': $docente = Docente::findOrFail($persona->idTipoPersona);
+                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $docente);
+           case '3': $administrativo = administrativo::findOrFail($persona->idTipoPersona);
+                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $administrativo);
         }
     }
 
@@ -149,7 +142,14 @@ class PersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   $persona = Persona::findOrFail($id);
+    {
+        $persona = Persona::findOrFail($id);
+        switch ($persona->idTipoPersona)
+        {
+           case '1': $alumno = Alumno::findOrFail($persona->idTipoPersona); break;
+           case '2': $docente = Docente::findOrFail($persona->idTipoPersona); break;
+           case '3': $administrativo = administrativo::findOrFail($persona->idTipoPersona); break;
+        }
         $persona->nombre = $request->nombre;
         $persona->apellidoPaterno = $request->apellidoPaterno;
         $persona->apellidoMaterno = $request->apellidoMaterno;
@@ -166,14 +166,12 @@ class PersonaController extends Controller
            $nuevoName = 'usr_'. $request->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $file->move($nuevoPath, $nuevoName);
            $persona->foto = $nuevoName;
-        }else {
-           //$persona->foto = null;
         }
         $persona->funcion = $request->funcion;
         $persona->idTipoPersona = $request->tipo;
         $persona->update();
 
-        switch ($persona->tipo) {
+        switch ($request->tipo) {
            case '1': $alumno = $persona->alumno()->get();
                      $alumno[0]->condicion = $request->condicion;
                      $alumno[0]->update();
@@ -202,8 +200,45 @@ class PersonaController extends Controller
      */
     public function destroy($id)
     {
-        $persona = Persona::findOrFail($id);
-        $persona->estado = 0;
-        return Redirect::to('admin/persona');
-     }
+        //
+    }
+
+    public function asignarResponsable(Request $request)
+    {
+    }
+    public function getPersonas(Request $request){
+    //    dd($request);
+      if($request->ajax()){
+        $personas = Persona::get();
+        return response()->json($personas);
+      }
+    }
+    public function getPersonasAdm(Request $request){
+    //    dd($request);
+      if($request->ajax()){
+        $personas = Persona::select('idPersona','nombre','apellidoPaterno','apellidoMaterno','codigo')
+                    ->where('idTipoPersona','=', '2')
+                    ->get();
+        return response()->json($personas);
+      }
+    }
+    public function getPersonasAdmDoc(Request $request){
+    //    dd($request);
+      if($request->ajax()){
+        $personas = Persona::select('idPersona','nombre','apellidoPaterno','apellidoMaterno','codigo')
+                    ->where('idTipoPersona','=', '1')
+                    ->where('idTipoPersona','=', '2')
+                    ->get();
+        return response()->json($personas);
+      }
+    }
+    public function getAlumnos(Request $request){
+    //    dd($request);
+      if($request->ajax()){
+        $personas = Alumno::join('persona','alumno.idPersona', '=','persona.idPersona' )
+                    ->select('alumno.idAlumno','persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','persona.codigo')
+                    ->get();
+        return response()->json($personas);
+      }
+    }
 }

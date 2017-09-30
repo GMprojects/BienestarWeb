@@ -26,13 +26,15 @@ Route::middleware(['admin', 'auth'])->prefix('admin')->group(function () {
     Route::resource('alternativa', 'AlternativaController');
     Route::resource('preguntaEncuesta', 'PreguntaEncuestaController');
     Route::resource('persona', 'PersonaController');
+
 });
 
-Route::middleware(['miembro', 'auth'])->prefix('miembro')->group(function () {
+Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
 });
+Route::middleware('auth')->get('beneficiarioComedor', 'AlumnoController@showBeneficiarioComedor');
 
-Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
+Route::prefix('programador')->group(function () {
     Route::resource('actividad', 'ActividadController');
     Route::resource('evidencia', 'EvidenciaActividadController');
     Route::resource('inscripcion', 'InscripcionADAController');
@@ -40,8 +42,18 @@ Route::middleware(['programador', 'auth'])->prefix('programador')->group(functio
     Route::resource('evidenciaActividad', 'EvidenciaActividadController');
 });
 
-Route::middleware(['miembro', 'auth'])->get('beneficiarioComedor', 'AlumnoController@showBeneficiarioComedor');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get('listaResponsablesGen','PersonaController@getPersonas');
+Route::get('listaResponsablesAdm','PersonaController@getPersonasAdm');
+Route::get('listaResponsablesAdmDoc','PersonaController@getPersonasAdmDoc');
+
+Route::get('listaAlumnos','PersonaController@getAlumnos');
+
+Route::get('listaResponsablesTutores','TutorTutoradoController@getTutores');
+Route::get('listaTutorados','TutorTutoradoController@getTutorados');
+//Route::get('listaTutorados/{idDocente}','TutorTutoradoController@getTutorados');
