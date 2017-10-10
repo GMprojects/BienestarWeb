@@ -22,25 +22,32 @@ class CrearTablaDocente extends Migration
                 1. Principal
                 2. Asociado
                 3. Auxiliar
-                4. Contratado
+                4. Jefe de Práctica
             */
             $tabla->enum('dedicacion', ['1', '2', '3']);
             /*
                 Dedicacion:
                 1. Dedicación Exclusiva
                 2. Tiempo Completo
-                3. Tiempo Parcial
+                3. Tiempo Parcial 20h
             */
             $tabla->enum('modalidad', ['1', '2']);
             /*
                 Modalidad:
-                1. Ordinario
+                1. Nombrado
                 2. Contratado
             */
-
-            //Clave foranea de la tabla Persona
-            $tabla->integer('idPersona')->unsigned();
-            $tabla->foreign('idPersona')->references('idPersona')->on('Persona')
+            $tabla->enum('deptoAcademico', ['1', '2', '3']);
+            /*  Departamento Académico:
+                1. DEPARTAMENTO ACADEMICO DE BIOQUIMICA
+                2. DEPARTAMENTO ACADEMICO DE FARMACOLOGIA
+                3. DEPARTAMENTO ACADEMICO DE FARMACOTECNIA
+            */
+            $tabla->string('maestria', 100)->nullable();
+            $tabla->string('doctorado', 100)->nullable();
+            //Clave foranea de la tabla User
+            $tabla->integer('idUser')->unsigned();
+            $tabla->foreign('idUser')->references('id')->on('User')
                ->onDelete('cascade');
 
             $tabla->timestamps();

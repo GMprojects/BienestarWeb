@@ -5,9 +5,9 @@
 		<span class="input-group-btn" id="titulo">
 			<button type="submit" class="btn btn-primary">Buscar</button>
 		</span>
-		{!!Form::hidden('idPersonaProgramador',$idPersonaProgramador)!!}
-		{!!Form::hidden('idPersonaResponsable',$idPersonaResponsable)!!}
-		{!!Form::hidden('idPersonaInscrito',$idPersonaInscrito)!!}
+		{!!Form::hidden('idUserProgramador',$idUserProgramador)!!}
+		{!!Form::hidden('idUserResponsable',$idUserResponsable)!!}
+		{!!Form::hidden('idUserInscrito',$idUserInscrito)!!}
 	</div>
 </div>
 {!! Form::close() !!}

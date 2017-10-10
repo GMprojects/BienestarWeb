@@ -1,15 +1,15 @@
-<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-delete-{{$persona->idPersona}}">
-	{{Form::open(array('action'=>array('PersonaController@destroy',$persona->idPersona),'method'=>'delete'))}}
+<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-delete-{{$user->id}}">
+	{{Form::open(array('action'=>array('UserController@destroy',$user->id),'method'=>'delete'))}}
 	<div class="modal-dialog">
 		<div class=modal-content>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">x</span>
 				</button>
-				<h4 class="modal-title">Eliminar Persona</h4>
+				<h4 class="modal-title">Eliminar Usuario</h4>
 			</div>
 			<div class="modal-body">
-				<p> Confirme si desea Eliminar la Persona</p>
+				<p> Confirme si desea Eliminar el USUARIO</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

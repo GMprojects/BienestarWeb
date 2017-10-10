@@ -5,7 +5,7 @@ namespace BienestarWeb\Http\Controllers;
 use BienestarWeb\TutorTutorado;
 use BienestarWeb\Docente;
 use BienestarWeb\Alumno;
-use BienestarWeb\Persona;
+use BienestarWeb\User;
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
 
@@ -90,29 +90,29 @@ class TutorTutoradoController extends Controller
     public function getTutores(Request $request){
     //    dd($request);
       if($request->ajax()){
-          $personas = Docente::join('tutorTutorado','docente.idDocente', '=','tutorTutorado.idDocente' )
-              ->join('persona','docente.idPersona', '=','persona.idPersona' )
+          $users = Docente::join('tutorTutorado','docente.idDocente', '=','tutorTutorado.idDocente' )
+              ->join('user','docente.idUser', '=','user.idUser' )
               ->where('tutorTutorado.numeroSemestre', '=', $request->numeroSemestre)
               ->where('tutorTutorado.anioSemestre', '=',  $request->anioSemestre)
-              ->select('persona.idPersona','persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','persona.codigo')
+              ->select('user.idUser','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
               ->distinct()
               ->get();
-          return response()->json($personas);
+          return response()->json($users);
       }
     }
 
     public function getTutorados(Request $request){
     //    dd($request);
       if($request->ajax()){
-          $idDocente = Docente::where('idPersona', '=',  $request->idPersona )->value('idDocente');
-          $personas = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
-              ->join('persona','alumno.idPersona', '=','persona.idPersona' )
+          $idDocente = Docente::where('idUser', '=',  $request->idUser )->value('idDocente');
+          $users = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
+              ->join('user','alumno.idUser', '=','user.idUser' )
               ->where('tutorTutorado.idDocente', '=', $idDocente)
               ->where('tutorTutorado.numeroSemestre', '=', $request->numeroSemestre)
               ->where('tutorTutorado.anioSemestre', '=',  $request->anioSemestre)
-              ->select('alumno.idAlumno','persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','persona.codigo')
+              ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
               ->get();
-          return response()->json($personas);
+          return response()->json($users);
       }
     }
 }

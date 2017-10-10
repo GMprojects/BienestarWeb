@@ -3,7 +3,7 @@
 namespace BienestarWeb\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use BienestarWeb\Persona;
+use BienestarWeb\User;
 use BienestarWeb\TipoPersona;
 use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
@@ -11,7 +11,7 @@ use BienestarWeb\Administrativo;
 
 use BienestarWeb\TutorTutorado;
 
-class PersonaController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,8 +20,8 @@ class PersonaController extends Controller
      */
    public function index(Request $request)
    {
-      $personas = Persona::all();
-      return view('admin.persona.index')->with('personas', $personas);
+      $users = User::all();
+      return view('admin.user.index')->with('users', $users);
    }
 
     /**
@@ -30,7 +30,7 @@ class PersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {    return view('admin.persona.create');
+    {    return view('admin.user.create');
     }
 
     /**
@@ -62,47 +62,47 @@ class PersonaController extends Controller
            'cargo' => 'required_if:tipo,3|max:50'
         ]);
         $file = $request->file('foto');
-        $tipoPersona = TipoPersona::find($request->tipo);
+        $tipoUser = TipoPersona::find($request->tipo);
 
         if($file != null){
-           $name = 'usr_'. $tipoPersona->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
-           $path = public_path().'\\images\\Usuario\\'.$tipoPersona->tipo;
+           $name = 'usr_'. $tipoUser->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
+           $path = public_path().'\\images\\Usuario\\'.$tipoUser->tipo;
            $file->move($path, $name);
-           $nuevaPersona->foto = $name;
+           $nuevaUser->foto = $name;
         }
-        $nuevaPersona = new Persona();
-        $nuevaPersona->nombre = $request->nombre;
-        $nuevaPersona->apellidoPaterno = $request->apellidoPaterno;
-        $nuevaPersona->apellidoMaterno = $request->apellidoMaterno;
-        $nuevaPersona->codigo = $request->codigo;
-        $nuevaPersona->email = $request->email;
-        $nuevaPersona->direccion = $request->direccion;
-        $nuevaPersona->telefono = $request->telefono;
-        $nuevaPersona->celular = $request->celular;
-        $nuevaPersona->funcion = $request->funcion;
-        $nuevaPersona->estado = 1;
-        $nuevaPersona->idTipoPersona = $request->tipo;
-        $nuevaPersona->save();
-        $persona = Persona::where('codigo', $request->codigo)->get();
+        $nuevaUser = new User();
+        $nuevaUser->nombre = $request->nombre;
+        $nuevaUser->apellidoPaterno = $request->apellidoPaterno;
+        $nuevaUser->apellidoMaterno = $request->apellidoMaterno;
+        $nuevaUser->codigo = $request->codigo;
+        $nuevaUser->email = $request->email;
+        $nuevaUser->direccion = $request->direccion;
+        $nuevaUser->telefono = $request->telefono;
+        $nuevaUser->celular = $request->celular;
+        $nuevaUser->funcion = $request->funcion;
+        $nuevaUser->estado = 1;
+        $nuevaUser->idTipoPersona = $request->tipo;
+        $nuevaUser->save();
+        $user = User::where('codigo', $request->codigo)->get();
         switch ($request->tipo) {
            case '1': $nuevoAlumno = new Alumno();
                      $nuevoAlumno->condicion = $request->condicion;
-                     $persona[0]->alumno()->save($nuevoAlumno);
+                     $user[0]->alumno()->save($nuevoAlumno);
                      break;
 
            case '2': $nuevoDocente = new Docente();
                      $nuevoDocente->categoria = $request->categoria;
                      $nuevoDocente->dedicacion = $request->dedicacion;
                      $nuevoDocente->modalidad = $request->modalidad;
-                     $persona[0]->docente()->save($nuevoDocente);
+                     $user[0]->docente()->save($nuevoDocente);
                      break;
 
            case '3': $nuevoAdministrativo = new Administrativo();
                      $nuevoAdministrativo->cargo = $request->cargo;
-                     $persona[0]->administrativo()->save($nuevoAdministrativo);
+                     $user[0]->administrativo()->save($nuevoAdministrativo);
                      break;
         }
-        return Redirect::to('admin/persona');
+        return Redirect::to('admin/user');
     }
 
     /**
@@ -123,14 +123,14 @@ class PersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {   $persona = Persona::findOrFail($id);
-        switch ($persona->idTipoPersona) {
-           case '1': $alumno = Alumno::findOrFail($persona->idTipoPersona);
-                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $alumno);
-           case '2': $docente = Docente::findOrFail($persona->idTipoPersona);
-                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $docente);
-           case '3': $administrativo = administrativo::findOrFail($persona->idTipoPersona);
-                     return view('admin.persona.edit')->with('persona', $persona)->with('tipoPersona', $administrativo);
+    {   $user = User::findOrFail($id);
+        switch ($user->idTipoPersona) {
+           case '1': $alumno = Alumno::findOrFail($user->idTipoPersona);
+                     return view('admin.user.edit')->with('user', $user)->with('tipoUser', $alumno);
+           case '2': $docente = Docente::findOrFail($user->idTipoPersona);
+                     return view('admin.user.edit')->with('user', $user)->with('tipoUser', $docente);
+           case '3': $administrativo = administrativo::findOrFail($user->idTipoPersona);
+                     return view('admin.user.edit')->with('user', $user)->with('tipoUser', $administrativo);
         }
     }
 
@@ -143,53 +143,53 @@ class PersonaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $persona = Persona::findOrFail($id);
-        switch ($persona->idTipoPersona)
+        $user = User::findOrFail($id);
+        switch ($user->idTipoPersona)
         {
-           case '1': $alumno = Alumno::findOrFail($persona->idTipoPersona); break;
-           case '2': $docente = Docente::findOrFail($persona->idTipoPersona); break;
-           case '3': $administrativo = administrativo::findOrFail($persona->idTipoPersona); break;
+           case '1': $alumno = Alumno::findOrFail($user->idTipoPersona); break;
+           case '2': $docente = Docente::findOrFail($user->idTipoPersona); break;
+           case '3': $administrativo = administrativo::findOrFail($user->idTipoPersona); break;
         }
-        $persona->nombre = $request->nombre;
-        $persona->apellidoPaterno = $request->apellidoPaterno;
-        $persona->apellidoMaterno = $request->apellidoMaterno;
-        $persona->codigo = $request->codigo;
-        $persona->email = $request->email;
-        $persona->direccion = $request->direccion;
-        $persona->telefono = $request->telefono;
-        $persona->celular = $request->celular;
+        $user->nombre = $request->nombre;
+        $user->apellidoPaterno = $request->apellidoPaterno;
+        $user->apellidoMaterno = $request->apellidoMaterno;
+        $user->codigo = $request->codigo;
+        $user->email = $request->email;
+        $user->direccion = $request->direccion;
+        $user->telefono = $request->telefono;
+        $user->celular = $request->celular;
 
-        $tipoPersona = TipoPersona::find($request->tipo);
+        $tipoUser = TipoPersona::find($request->tipo);
         $file = $request->file('foto');
         if($file != null){
            $nuevoPath = public_path().'\\images\\Usuario\\'.$request->tipo;
            $nuevoName = 'usr_'. $request->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $file->move($nuevoPath, $nuevoName);
-           $persona->foto = $nuevoName;
+           $user->foto = $nuevoName;
         }
-        $persona->funcion = $request->funcion;
-        $persona->idTipoPersona = $request->tipo;
-        $persona->update();
+        $user->funcion = $request->funcion;
+        $user->idTipoPersona = $request->tipo;
+        $user->update();
 
         switch ($request->tipo) {
-           case '1': $alumno = $persona->alumno()->get();
+           case '1': $alumno = $user->alumno()->get();
                      $alumno[0]->condicion = $request->condicion;
                      $alumno[0]->update();
                      break;
 
-           case '2': $docente = $persona->docente()->get();
+           case '2': $docente = $user->docente()->get();
                      $docente[0]->categoria = $request->categoria;
                      $docente[0]->dedicacion = $request->dedicacion;
                      $docente[0]->modalidad = $request->modalidad;
                      $docente[0]->update();
                      break;
 
-           case '3': $administrativo = $persona->administrativo()->get();
+           case '3': $administrativo = $user->administrativo()->get();
                      $administrativo[0]->cargo = $request->cargo;
                      $administrativo[0]->update();
                      break;
         }
-        return Redirect::to('admin/persona');
+        return Redirect::to('admin/user');
     }
 
     /**
@@ -206,39 +206,39 @@ class PersonaController extends Controller
     public function asignarResponsable(Request $request)
     {
     }
-    public function getPersonas(Request $request){
+    public function getUsers(Request $request){
     //    dd($request);
       if($request->ajax()){
-        $personas = Persona::get();
-        return response()->json($personas);
+        $users = User::get();
+        return response()->json($users);
       }
     }
-    public function getPersonasAdm(Request $request){
+    public function getUsersAdm(Request $request){
     //    dd($request);
       if($request->ajax()){
-        $personas = Persona::select('idPersona','nombre','apellidoPaterno','apellidoMaterno','codigo')
+        $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
                     ->where('idTipoPersona','=', '2')
                     ->get();
-        return response()->json($personas);
+        return response()->json($users);
       }
     }
-    public function getPersonasAdmDoc(Request $request){
+    public function getUsersAdmDoc(Request $request){
     //    dd($request);
       if($request->ajax()){
-        $personas = Persona::select('idPersona','nombre','apellidoPaterno','apellidoMaterno','codigo')
+        $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
                     ->where('idTipoPersona','=', '1')
                     ->where('idTipoPersona','=', '2')
                     ->get();
-        return response()->json($personas);
+        return response()->json($users);
       }
     }
     public function getAlumnos(Request $request){
     //    dd($request);
       if($request->ajax()){
-        $personas = Alumno::join('persona','alumno.idPersona', '=','persona.idPersona' )
-                    ->select('alumno.idAlumno','persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','persona.codigo')
+        $users = Alumno::join('user','alumno.idUser', '=','user.idUser' )
+                    ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
                     ->get();
-        return response()->json($personas);
+        return response()->json($users);
       }
     }
 }

@@ -13,14 +13,16 @@ class CrearTablaPersona extends Migration
      */
     public function up()
     {
-        Schema::create('Persona', function(Blueprint $tabla)
-        {
-            $tabla->increments('idPersona');
+        Schema::create('User', function (Blueprint $tabla) {
+            $tabla->increments('id');
             $tabla->string('nombre', 45);
             $tabla->string('apellidoPaterno', 20);
             $tabla->string('apellidoMaterno', 20);
+            $tabla->date('fechaNacimiento')->nullable();
+            $tabla->enum('sexo', ['h', 'm'])->nullable();
             $tabla->string('codigo', 20)->unique();
-            $tabla->string('email', 100);
+            $tabla->string('email', 100)->unique();
+            $tabla->string('password', 200);
             $tabla->string('direccion', 100)->nullable();
             $tabla->string('telefono', 15)->nullable();
             $tabla->string('celular', 15)->nullable();
@@ -36,11 +38,12 @@ class CrearTablaPersona extends Migration
                0. Inactivo
                1. Activo
             */
-            
-            //Clave foranea de la tabla TipoPersona
+
+            //Clave foranea de la tablais TipoPersona
             $tabla->integer('idTipoPersona')->unsigned();
             $tabla->foreign('idTipoPersona')->references('idTipoPersona')->on('TipoPersona');
 
+            $tabla->rememberToken();
             $tabla->timestamps();
         });
     }
@@ -52,6 +55,6 @@ class CrearTablaPersona extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Persona');
+        Schema::dropIfExists('User');
     }
 }

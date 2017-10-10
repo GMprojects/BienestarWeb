@@ -12,8 +12,8 @@ class TipoPersona extends Model
 
     public $timestamps = false;
 
-    public function personas(){
-    	return $this->hasMany('BienestarWeb\Persona');
+    public function users(){
+    	return $this->hasMany('BienestarWeb\User');
     }
 
     public function scopeSearch($query, $tipo){

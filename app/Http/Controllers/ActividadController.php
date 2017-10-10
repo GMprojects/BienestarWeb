@@ -7,7 +7,7 @@ use BienestarWeb\ActGrupal;
 use BienestarWeb\ActMovilidad;
 use BienestarWeb\ActComedor;
 use BienestarWeb\TipoActividad;
-use BienestarWeb\Persona;
+use BienestarWeb\User;
 use BienestarWeb\Alumno;
 use BienestarWeb\InscripcionAlumno;
 
@@ -43,9 +43,9 @@ class ActividadController extends Controller
         //dd($actividades);
         return view('programador.actividad.index')
                 ->with('actividades', $actividades)
-                ->with('idPersonaProgramador', $request->idPersonaProgramador)
-                ->with('idPersonaResponsable', $request->idPersonaResponsable)
-                ->with('idPersonaInscrito', $request->idPersonaInscrito)
+                ->with('idUserProgramador', $request->idUserProgramador)
+                ->with('idUserResponsable', $request->idUserResponsable)
+                ->with('idUserInscrito', $request->idUserInscrito)
                 ->with('estadoCancelado', $request->estadoCancelado);
     }
 
@@ -57,10 +57,10 @@ class ActividadController extends Controller
     public function create()
     {
       $tiposActividad=TipoActividad::get();
-    //  $personas=Persona::get();
+    //  $users=User::get();
       return view('programador.actividad.create')
               ->with('tiposActividad', $tiposActividad);
-            //  ->with('personas', $personas);
+            //  ->with('users', $users);
   }
 
     /**
@@ -81,7 +81,7 @@ class ActividadController extends Controller
              'numeroSemestre' => 'required',
              'rutaImagen' => 'mimes:jpeg,png'
          ]);
-         $idPersonaProg=22;
+         $idUserProg=22;
 
          if($request->file('rutaImagen')){
              $file = $request->file('rutaImagen');
@@ -114,10 +114,10 @@ class ActividadController extends Controller
                        'numeroSemestre' => $request->numeroSemestre,
                        'modalidad' => $request->modalidad,
                        'idTipoActividad' => $request->idTipoActividad,
-                       'idPersonaResp' => $idPersonaProg,
-                       'idPersonaProg' => $idPersonaProg
+                       'idUserResp' => $idUserProg,
+                       'idUserProg' => $idUserProg
                      ]);
-                     //buscar persona en alumno
+                     //buscar user en alumno
                      $alumno = Alumno::findOrFail($request->idAlumnoI);
                      $inscripcionADA = $actividad->inscripcionesADA()->create([
                      ]);
@@ -142,10 +142,10 @@ class ActividadController extends Controller
                              'numeroSemestre' => $request->numeroSemestre,
                              'modalidad' => '1',
                              'idTipoActividad' => $request->idTipoActividad,
-                             'idPersonaResp' => $request->idResponsable,
-                             'idPersonaProg' => $idPersonaProg
+                             'idUserResp' => $request->idResponsable,
+                             'idUserProg' => $idUserProg
                            ]);
-                           //buscar persona en alumno
+                           //buscar user en alumno
                            $alumno = Alumno::findOrFail($request->idAlumnoI);
                            $inscripcionADA = $actividad->inscripcionesADA()->create([
                            ]);
@@ -167,8 +167,8 @@ class ActividadController extends Controller
                              'numeroSemestre' => $request->numeroSemestre,
                              'modalidad' => '2',
                              'idTipoActividad' => $request->idTipoActividad,
-                             'idPersonaResp' => $request->idResponsable,
-                             'idPersonaProg' => $idPersonaProg
+                             'idUserResp' => $request->idResponsable,
+                             'idUserProg' => $idUserProg
                            ]);
                            $actGrupal = new ActGrupal;
                            $actGrupal->cuposDisponibles = $request->cuposTotales;
@@ -195,10 +195,10 @@ class ActividadController extends Controller
                      'numeroSemestre' => $request->numeroSemestre,
                      'modalidad' => $modalidad,
                      'idTipoActividad' => $request->idTipoActividad,
-                     'idPersonaResp' => $request->idResponsable,
-                     'idPersonaProg' => $idPersonaProg
+                     'idUserResp' => $request->idResponsable,
+                     'idUserProg' => $idUserProg
                    ]);
-                   //buscar persona en alumno
+                   //buscar user en alumno
                    for ($i = 0; $i < $nroTutorados; $i++) {
                        $alumno = Alumno::findOrFail($request->idAlumnoTutorado[$i]);
                        $inscripcionADA = $actividad->inscripcionesADA()->create([
@@ -225,8 +225,8 @@ class ActividadController extends Controller
                      'numeroSemestre' => $request->numeroSemestre,
                      'modalidad' => '2',
                      'idTipoActividad' => $request->idTipoActividad,
-                     'idPersonaResp' => $request->idResponsable,
-                     'idPersonaProg' => $idPersonaProg
+                     'idUserResp' => $request->idResponsable,
+                     'idUserProg' => $idUserProg
                    ]);
                    $actGrupal = new ActGrupal;
                    $actGrupal->cuposDisponibles = $request->cuposTotales;
@@ -250,8 +250,8 @@ class ActividadController extends Controller
                      'numeroSemestre' => $request->numeroSemestre,
                      'modalidad' => '2',
                      'idTipoActividad' => $request->idTipoActividad,
-                     'idPersonaResp' => $request->idResponsable,
-                     'idPersonaProg' => $idPersonaProg
+                     'idUserResp' => $request->idResponsable,
+                     'idUserProg' => $idUserProg
                    ]);
                    $actMovilidad = new ActMovilidad;
                    $actMovilidad->fechaInicioConvocatoria = $request->fechaInicioConvocatoria;
@@ -274,8 +274,8 @@ class ActividadController extends Controller
                      'numeroSemestre' => $request->numeroSemestre,
                      'modalidad' => '2',
                      'idTipoActividad' => $request->idTipoActividad,
-                     'idPersonaResp' => $request->idResponsable,
-                     'idPersonaProg' => $idPersonaProg
+                     'idUserResp' => $request->idResponsable,
+                     'idUserProg' => $idUserProg
                    ]);
                    $actComedor = new ActComedor;
                    $actComedor->fechaInicioConvocatoria = $fechaIC;

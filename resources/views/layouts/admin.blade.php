@@ -96,7 +96,7 @@
                radioClass: 'iradio_square-green',
                increaseArea: '20%' // optional
             });
-            $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });            
+            $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
       	});
       </script>
    </body>

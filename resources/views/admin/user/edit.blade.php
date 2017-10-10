@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['titulo' => 'Editar usuario: '.$persona->email, 'nombreTabla' => '', 'item' => 'usuTodos'])
+@extends('layouts.admin', ['titulo' => 'Editar usuario: '.$user->email, 'nombreTabla' => '', 'item' => 'usuTodos'])
 @section('contenido')
 	<div  class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
@@ -13,7 +13,7 @@
 			@endif
 		</div>
 	</div>
-{!!Form::model([$persona, $tipoPersona],['method'=>'PATCH','files'=>'true', 'route'=>['persona.update',$persona->idPersona]] )!!}
+{!!Form::model([$user, $tipoPersona],['method'=>'PATCH','files'=>'true', 'route'=>['user.update',$user->id]] )!!}
 {{Form::token()}}
 
 <div class="row">
@@ -31,10 +31,10 @@
 				<div class="row">
 					<div class="col-sm-4"></div>
 					<div class="col-sm-4">
-						@switch($persona->idTipoPersona)
-							@case(1) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/Alumno/'.$persona->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
-							@case(2) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/Docente/'.$persona->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
-							@case(3) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/Administrativo/'.$persona->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
+						@switch($user->idTipoPersona)
+							@case(1) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/'.$user->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
+							@case(2) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/'.$user->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
+							@case(3) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/'.$user->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
 						@endswitch
 					</div>
 					<div class="col-sm-4"></div>
@@ -47,7 +47,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{ $persona->nombre }}" placeholder="e.g. María Fernanda" autofocus>
+								 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{ $user->nombre }}" placeholder="e.g. María Fernanda" autofocus>
 							</div>
 						</div>
 					</div>
@@ -57,7 +57,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $persona->apellidoPaterno }}" placeholder="e.g. Guevara">
+								 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $user->apellidoPaterno }}" placeholder="e.g. Guevara">
 							</div>
 						</div>
 					</div>
@@ -67,7 +67,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required minlength="2" maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $persona->apellidoMaterno }}" placeholder="e.g. Lizárraga">
+								 <input required minlength="2" maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $user->apellidoMaterno }}" placeholder="e.g. Lizárraga">
 							</div>
 						</div>
 					</div>
@@ -77,7 +77,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-home"></i></span>
-								 <input required minlength="6" maxlength="100" type="direccion" class="form-control" name="direccion"  value="{{ $persona->direccion }}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
+								 <input maxlength="100" type="direccion" class="form-control" name="direccion"  value="{{ $user->direccion }}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
 							</div>
 						</div>
 					</div>
@@ -87,7 +87,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{ $persona->email }}" placeholder="e.g. mguevaral@unitru.edu.pe">
+								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{ $user->email }}" placeholder="e.g. mguevaral@unitru.edu.pe">
 							</div>
 						</div>
 					</div>
@@ -97,7 +97,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-								 <input pattern="[0-9]+" minlength="6" maxlength="15" type="text" class="form-control" name="telefono"  value="{{ $persona->telefono }}" placeholder="(xxx)xxxxxx">
+								 <input pattern="[0-9]+" maxlength="15" type="text" class="form-control" name="telefono"  value="{{ $user->telefono }}" placeholder="(xxx)xxxxxx">
 							</div>
 						</div>
 					</div>
@@ -107,7 +107,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-								 <input pattern="[0-9]+" minlength="9" maxlength="15" type="celular" class="form-control" name="celular" value="{{ $persona->celular }}" placeholder="(xxx)xxxxxxxxx">
+								 <input pattern="[0-9]+" maxlength="15" type="celular" class="form-control" name="celular" value="{{ $user->celular }}" placeholder="(xxx)xxxxxxxxx">
 							</div>
 						</div>
 					</div>
@@ -126,7 +126,7 @@
 			<!-- BODY de Datos Propios del TIPO_PERSONA -->
 			<div class="box-body">
 				<!-- Campo Tipo Radio (Tipo de Usuario) -->
-				<div class="row" name = "tipos de persona">
+				<div class="row" name = "tipos de user">
 					<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
 						<h3><i id="icoAlumno" class="flaticon-answer" style="color:rgba(0,0,0,0.5);"></i></h3>
 						<input type="radio" id="radioAlumno" name="tipo" value="1" onchange="cambiarColorTipo(1)"/>
@@ -150,7 +150,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
-								 <input readonly pattern="[0-9]+" minlength="4" maxlength="15" type="text" class="form-control" name="codigo"  value="{{ $persona->codigo }}" placeholder="xxxx">
+								 <input readonly pattern="[0-9]+" minlength="4" maxlength="15" type="text" class="form-control" name="codigo"  value="{{ $user->codigo }}" placeholder="xxxx">
 							</div>
 						</div>
 					</div>
@@ -178,7 +178,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
-									<select id="condicion" class="form-control" required>
+									<select id="condicion" name="condicion" class="form-control" required>
 										<option value="1">Matriculado</option>
 										<option value="2">No Matriculado</option>
 										<option value="3">Egresado</option>
@@ -195,7 +195,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-									<select id="categoria" class="form-control">
+									<select id="categoria" name="categoria" class="form-control">
 										<option value="1">Principal</option>
 										<option value="2">Asociado</option>
 										<option value="3">Auxiliar</option>
@@ -209,7 +209,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-									<select id="dedicacion" class="form-control">
+									<select id="dedicacion" name="dedicacion" class="form-control">
 										<option value="1">Exclusiva</option>
 										<option value="2">Tiempo Completo</option>
 										<option value="3">Tiempo Parcial</option>
@@ -222,7 +222,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-									<select id="modalidad" class="form-control">
+									<select id="modalidad" name="modalidad" class="form-control">
 										<option value="1">Ordinario</option>
 										<option value="2">Contratado</option>
 									</select>
@@ -286,7 +286,7 @@
 
 	function iniciar(){
 		var tipo = '', funcion = '';
-		switch({{ $persona->idTipoPersona }}){
+		switch({{ $user->idTipoPersona }}){
 			case 1: 	tipo = 'radioAlumno';
 						document.getElementById('condicion').selectedIndex = {{ $tipoPersona->condicion }} - 1;
 						break;
@@ -298,15 +298,15 @@
 			case 3: 	tipo = 'radioAdministrativo'; break;
 		}
 		document.getElementById(tipo).checked = true;
-		cambiarColorTipo({{ $persona->idTipoPersona }});
+		cambiarColorTipo({{ $user->idTipoPersona }});
 
-		switch({{ $persona->funcion }}){
+		switch({{ $user->funcion }}){
 			case 1: funcion = 'radioMiembro'; break;
 			case 2: funcion = 'radioProgramador'; break;
 			case 3: funcion = 'radioAdmin'; break;
 		}
 		document.getElementById(funcion).checked = true;
-		cambiarColorFuncion({{ $persona->idTipoPersona }});
+		cambiarColorFuncion({{ $user->idTipoPersona }});
 	}
 
 	function cambiarColorTipo(icono){

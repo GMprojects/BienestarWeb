@@ -10,11 +10,11 @@ class Alumno extends Model
     protected $primaryKey = 'idAlumno';
     protected $fillable = [
       'condicion',
-      'idPersona'];
+      'idUser'];
     public $timestamps = true;
 
-    public function persona(){
-    	return $this->belongsTo('BienestarWeb\Persona', 'idPersona');
+    public function user(){
+    	return $this->belongsTo('BienestarWeb\User', 'idUser');
     }
     public function tutores(){
       return $this->belongsToMany('BienestarWeb\Docente','tutorTutorado','idAlumno','idDocente')

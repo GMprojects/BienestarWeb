@@ -15,8 +15,7 @@ class MiddDocente
      */
     public function handle($request, Closure $next)
     {
-      $persona = (Persona::where('email', $request->user()->email)->get())[0];
-      if($persona->idTipoPersona == 2){
+      if($request->user()->idTipoPersona == 2){
          return $next($request);
       }else{
          abort(401);

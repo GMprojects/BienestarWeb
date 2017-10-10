@@ -14,8 +14,7 @@ class MiddProgramador
      * @return mixed
      */
      public function handle($request, Closure $next)
-     {    $persona = (Persona::where('email', $request->user()->email)->get())[0];
-          if($persona->funcion == 2){
+     {    if($request->user()->funcion == 2){
             return $next($request);
           }else{
             abort(401);

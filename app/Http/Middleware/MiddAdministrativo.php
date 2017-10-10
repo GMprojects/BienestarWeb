@@ -16,8 +16,7 @@ class MiddAdministrativo
      */
     public function handle($request, Closure $next)
     {
-      $persona = (Persona::where('email', $request->user()->email)->get())[0];
-      if($persona->idTipoPersona == 3){
+      if($request->user()->idTipoPersona == 3){
          return $next($request);
       }else{
          abort(401);

@@ -76,8 +76,8 @@ if($item != null){
                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
             </a>
             <ul class="treeview-menu">
-               <li class="{{ $usuTodos }}"><a href="{{ url('admin/persona') }}"><i class="fa fa-circle-o"></i> Todos</a></li>
-               <li class="{{ $usuAdmin }}"><a href="{{ url('admin/persona/administrativos') }}"><i class="fa fa-circle-o"></i> Administrativos</a></li>
+               <li class="{{ $usuTodos }}"><a href="{{ url('admin/user') }}"><i class="fa fa-circle-o"></i> Todos</a></li>
+               <li class="{{ $usuAdmin }}"><a href="{{ url('admin/user/administrativos') }}"><i class="fa fa-circle-o"></i> Administrativos</a></li>
                <li class="{{ $usuAlumn }}"><a href="index2.html"><i class="fa fa-circle-o"></i> Alumnos</a></li>
                <li class="{{ $usuDocen }}"><a href="index2.html"><i class="fa fa-circle-o"></i> Docentes</a></li>
             </ul>

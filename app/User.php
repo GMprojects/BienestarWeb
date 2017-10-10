@@ -13,21 +13,23 @@ class User extends Authenticatable
      * @var array
      */
     public $timestamps=true;
+    protected $table='user';
     protected $fillable = [
       'id',
       'email',
       'password',
       'nombre',
-     'apellidoPaterno',
-     'apellidoMaterno',
+      'apellidoPaterno',
+      'apellidoMaterno',
       'fechaNacimiento',
+      'sexo',
       'codigo',
-     'direccion',
+      'direccion',
       'telefono',
-     'celular',
+      'celular',
       'foto',
-     'funcion',
-     'estado',
+      'funcion',
+      'estado',
       'idTipoPersona'
     ];
 /**
@@ -46,17 +48,17 @@ class User extends Authenticatable
 
     public function administrativo()
     {
-    	return $this->hasOne('BienestarWeb\Administrativo', 'idPersona');
+    	return $this->hasOne('BienestarWeb\Administrativo', 'idUser');
     }
 
     public function docente()
     {
-    	return $this->hasOne('BienestarWeb\Docente', 'idPersona');
+    	return $this->hasOne('BienestarWeb\Docente', 'idUser');
     }
 
     public function alumno()
     {
-    	return $this->hasOne('BienestarWeb\Alumno', 'idPersona');
+    	return $this->hasOne('BienestarWeb\Alumno', 'idUser');
     }
 
     public function programacionActividades()

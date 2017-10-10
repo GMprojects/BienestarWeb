@@ -24,9 +24,9 @@ class CrearTablaAlumno extends Migration
                 e. Egresado
             */
 
-            //Clave foranea de la tabla Persona
-            $tabla->integer('idPersona')->unsigned();
-            $tabla->foreign('idPersona')->references('idPersona')->on('Persona')
+            //Clave foranea de la tabla User
+            $tabla->integer('idUser')->unsigned();
+            $tabla->foreign('idUser')->references('id')->on('User')
                ->onDelete('cascade');
 
             $tabla->timestamps();

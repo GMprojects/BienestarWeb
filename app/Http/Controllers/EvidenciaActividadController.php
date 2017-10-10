@@ -57,7 +57,7 @@ class EvidenciaActividadController extends Controller
         $path = public_path().'/imagenes/evidenciaActividad/'.$actividad->tipoActividad['tipo'].$request->idActividad.'/';
         //dd($path);
         $file->move($path,$name);
-        $evidenciaActividad = EvidenciaActividad::f
+        //$evidenciaActividad = EvidenciaActividad::findOrFail($id);
         return redirect()->action('EvidenciaActividadController@index', ['idActividad' => $request->idActividad]);
     }
 

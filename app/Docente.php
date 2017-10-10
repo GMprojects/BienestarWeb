@@ -12,12 +12,12 @@ class Docente extends Model
       'categoria',
       'dedicacion',
       'modalidad',
-      'idPersona'];
+      'idUser'];
 
     public $timestamps = true;
 
-    public function persona(){
-    	   return $this->belongsTo('BienestarWeb\Persona','idPersona');
+    public function user(){
+    	   return $this->belongsTo('BienestarWeb\User','idUser');
     }
     public function tutorados(){
         return $this->belongsToMany('BienestarWeb\Alumno','tutorTutorado','idDocente','idAlumno')

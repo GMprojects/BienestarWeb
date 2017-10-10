@@ -14,7 +14,7 @@
 		</div>
 	</div>
 
-{!! Form::open(['url'=>'admin/persona','method'=>'POST','autocomplete'=>'off','files'=>'true']) !!}
+{!! Form::open(['url'=>'admin/user','method'=>'POST','autocomplete'=>'off','files'=>'true']) !!}
 {{ Form::token() }}
 
 	<div class="row">
@@ -123,7 +123,7 @@
 				<!-- BODY de Datos Propios del TIPO_PERSONA -->
 				<div class="box-body">
 					<!-- Campo Tipo Radio (Tipo de Usuario) -->
-					<div class="row" name = "tipos de persona">
+					<div class="row" name = "tipos de user">
 						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
 							<h3><i id="icoAlumno" class="flaticon-answer" style="color:rgba(0,0,0,1);"></i></h3>
 							<input type="radio" id="radioAlumno" name="tipo" value="1" checked onchange="cambiarColorTipo(1)"/>

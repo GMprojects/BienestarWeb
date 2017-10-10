@@ -10,13 +10,13 @@ class Administrativo extends Model
     protected $primaryKey = 'idAdministrativo';
     protected $fillable = [
     'cargo',
-    'idPersona'
+    'idUser'
     ];
 
     public $timestamps = true;
 
-    public function persona(){
-    	return $this->belongsTo('BienestarWeb\Persona','idPersona');
+    public function user(){
+    	return $this->belongsTo('BienestarWeb\User','idUser');
     }
 
     public function inscripcionesAdministrativo(){

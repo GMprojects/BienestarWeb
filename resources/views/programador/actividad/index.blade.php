@@ -62,12 +62,12 @@
 									@break
 							@endswitch
 							<td>
-									@if($idPersonaProgramador != null)
+									@if($idUserProgramador != null)
 										<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-warning">Editar</button></a>
 										<a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-danger">Cancelar</button></a>
-						      @elseif($idPersonaResponsable != null)
+						      @elseif($idUserResponsable != null)
 										<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-success">Ejecutar</button></a>
-									@elseif($idPersonaInscrito != null)
+									@elseif($idUserInscrito != null)
 										<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-warning">Ver</button></a>
 						      @elseif($estadoCancelado != null)
 										<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-warning">Habilitar</button></a>

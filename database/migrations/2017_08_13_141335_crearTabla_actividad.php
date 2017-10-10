@@ -42,17 +42,19 @@ class CrearTablaActividad extends Migration
             $tabla->string('recomendaciones', 500)->default('Ninguna');
             $tabla->mediumtext('rutaImagen');
 
+            $tabla->string('invitado', 500);
+
             //Clave foranea de la tabla tipoActividad
             $tabla->integer('idTipoActividad')->unsigned();
             $tabla->foreign('idTipoActividad')->references('idTipoActividad')->on('TipoActividad');
 
-            //Clave foranea de la tabla Persona para asignar un RESPONSABLE
-            $tabla->integer('idPersonaResp')->unsigned();
-            $tabla->foreign('idPersonaResp')->references('idPersona')->on('Persona');
+            //Clave foranea de la tabla User para asignar un RESPONSABLE
+            $tabla->integer('idResp')->unsigned();
+            $tabla->foreign('idResp')->references('id')->on('User');
 
-            //Clave foranea de la tabla Persona para definir un PROGRAMADOR
-            $tabla->integer('idPersonaProg')->unsigned();
-            $tabla->foreign('idPersonaProg')->references('idPersona')->on('Persona');
+            //Clave foranea de la tabla User para definir un PROGRAMADOR
+            $tabla->integer('idProg')->unsigned();
+            $tabla->foreign('idProg')->references('id')->on('User');
 
             $tabla->timestamps();
         });
@@ -60,6 +62,7 @@ class CrearTablaActividad extends Migration
         Schema::create('EvidenciaActividad', function(Blueprint $tabla)
         {
             $tabla->increments('idEvidenciaActividad');
+            $tabla->string('nombre', 50);
             $tabla->mediumtext('ruta');
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
