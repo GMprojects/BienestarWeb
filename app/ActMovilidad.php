@@ -22,5 +22,5 @@ class ActMovilidad extends Model
         return $this->belongsToMany('BienestarWeb\Alumno','beneficiarioMovilidad','idActMovilidad','idAlumno')
                     ->withPivot('idBeneficiarioMovilidad','fechaInicio','fechaFin','duracionMeses','duracionAnio','institucion','pais','observaciones')
                     ->withTimestamps();
-    }
+    }    
 }

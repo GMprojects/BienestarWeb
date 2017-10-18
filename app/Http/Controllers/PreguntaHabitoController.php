@@ -20,10 +20,11 @@ class PreguntaHabitoController extends Controller
      */
     public function index(Request $request)
     {
-        $preguntasHabito = PreguntaHabito::Search($request->enunciado)->paginate(10);
-        $preguntasHabito->each(function($preguntasHabito){
+        //$preguntasHabito = PreguntaHabito::Search($request->enunciado)->paginate(10);
+        $preguntasHabito = PreguntaHabito::get();
+        /*$preguntasHabito->each(function($preguntasHabito){
             $preguntasHabito->tipoHabito;
-        });
+        });*/
         return view('admin.preguntaHabito.index')->with('preguntasHabito',$preguntasHabito);
 
     }

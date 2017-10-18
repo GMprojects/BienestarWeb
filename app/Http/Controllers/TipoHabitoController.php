@@ -17,7 +17,7 @@ class TipoHabitoController extends Controller
      */
     public function index(Request $request)
     {
-        $tiposHabito = TipoHabito::Search($request->tipo)->get();
+        $tiposHabito = TipoHabito::get();
         return view('admin.tipoHabito.index')->with('tiposHabito',$tiposHabito);
     }
 
@@ -55,7 +55,6 @@ class TipoHabitoController extends Controller
      */
     public function show($id)
     {
-        return view('admin.tipoHabito.show')->with('tipoHabito',TipoHabito::findOrFail($id));
     }
 
     /**
@@ -82,7 +81,10 @@ class TipoHabitoController extends Controller
             'tipo' => 'required'
             ]);
         $tipoHabito = TipoHabito::findOrFail($id);
-        $tipoHabito->tipo = $request->get('tipo');
+        $tipoHabito->tipo = $request->tipo;
+        if($request->estado == 'on'){
+          $tipoHabito->estado = '1';
+        }
         $tipoHabito->update();
         return Redirect::to('admin/tipoHabito');
     }
@@ -93,10 +95,11 @@ class TipoHabitoController extends Controller
      * @param  \BienestarWeb\TipoHabito  $tipoHabito
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $tipoHabito = TipoHabito::findOrFail($id);
-        $tipoHabito->delete();
-        return Redirect::to('admin/tipoHabito');
-    }
+     public function destroy($id)
+     {
+         $tipoHabito = TipoHabito::findOrFail($id);
+         $tipoHabito->estado ='0';
+         $tipoHabito->update();
+         return Redirect::to('admin/tipoHabito');
+     }
 }

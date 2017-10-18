@@ -1,4 +1,4 @@
-@extends('layouts.inicio')
+@extends('template')
 @section('contenido')
 <div class="login-box" style="background:none; text-align:center;">
    <h1> <i class="fa fa-lock"> </i> ERROR 401</h1>

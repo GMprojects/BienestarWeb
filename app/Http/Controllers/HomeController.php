@@ -4,6 +4,7 @@ namespace BienestarWeb\Http\Controllers;
 
 use Illuminate\Http\Request;
 use BienestarWeb\Persona;
+use BienestarWeb\Actividad;
 
 class HomeController extends Controller
 {
@@ -14,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -22,9 +23,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-      $persona = (Persona::where('email', $request->user()->email)->get())[0];
-      return view('home')->with('persona', $persona);
-    }
+   public function index(Request $request)
+   {  $actividades = Actividad::where([['modalidad', '2'], ['estado', '1||2']]);
+      return view('home')->with('actividades', $actividades);
+   }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['titulo' => 'Egresado', 'nombreTabla' => '', 'item' => 'egre'])
+@extends('template')
 @section ('contenido')
 <div class="row">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">

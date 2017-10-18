@@ -1,226 +1,59 @@
-<nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a>
+<header class="header-princ">
+   <nav class="navbar container-fluid navbar-fixed-top" >
+      <div class="navbar-header">
 
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="{{ asset('images/Usuario/') }}" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
-            </ul>
-          </li>
-          <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">View all</a></li>
-            </ul>
-          </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Create a nice theme
-                        <small class="pull-right">40%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">40% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Some task I need to do
-                        <small class="pull-right">60%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">60% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Make beautiful transitions
-                        <small class="pull-right">80%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">80% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
-            </ul>
-          </li>
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{ asset('images/Usuario/') }}" class="user-image" alt="User Image">
-              <span class="hidden-xs"></span>
-            </a>
-          </li>
-          <li><a href="{{ route('logout') }}"
-             onclick="event.preventDefault();
-                      document.getElementById('logout-form').submit();"
-                      >
-             <i class="fa fa-power-off"></i>
-          </a>
-          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-             {{ csrf_field() }}
-          </form></li>
-          <!-- Control Sidebar Toggle Button -->
+         <a href="{{ route('home') }}"  class="logo-facfar">
+            <span class="hidden-lg hidden-md">Facfar</span>
+            <span class="hidden-xs hidden-sm">Facfar Bienestar</span>
+         </a>
 
-        </ul>
+         <div class="div-buttons">
+            <ul class="nav navbar-nav nav-izq">
+               <li>
+                  <a href="{{ url('actividades-demo') }}" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Actividades">
+                     <i class="fa fa-calendar" aria-hidden="true"></i> <span class="hidden-sm hidden-xs">Actividades</span>
+                  </a>
+               </li>
+               <li>
+                  <a href="#" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Categorías">
+                     <i class="fa fa-tags" aria-hidden="true"></i> <span class="hidden-sm hidden-xs">Categorías</span>
+                  </a>
+               </li>
+               <li>
+                  <a href="#" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Nosotros">
+                     <i class="fa fa-star" aria-hidden="true"></i> <span class="hidden-sm hidden-xs">Nosotros</span>
+                  </a>
+               </li>
+               <li class="hidden-xs" style="overflow-x:hidden;">
+                  <form class="navbar-form">
+                    <div class="input-group">
+                       <input type="search" class="form-control" placeholder="Buscar..">
+                       <span class="input-group-btn">
+                       <button class="btn btn-default rounded-right" type="button"><i class="fa fa-search "></i></button>
+                     </span>
+                    </div>
+                  </form>
+               </li>
+            </ul>
+
+            <ul class="nav navbar-nav pull-right">
+               <li class="menu-usu">
+                  <a href="{{ route('login') }}">
+                     <i class="glyphicon glyphicon-user"></i>
+                     <span class="" style="padding-left:5px;">Iniciar Sesión</span>
+                  </a>
+               </li>
+            </ul>
+         </div>
+
       </div>
-    </nav>
+   </nav>
+</header>
+<script>
+   $(document).ready(function(){
+       $('[data-toggle="tooltip"]').tooltip();
+   });
+   $('.hamburger').on('click', function(){
+      $('#wrapper').toggleClass('toggled');
+   })
+</script>

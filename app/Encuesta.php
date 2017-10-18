@@ -18,7 +18,7 @@ class Encuesta extends Model
     return $this->belongsTo('BienestarWeb\TipoActividad','idTipoActividad');
   }
   public function alternativas(){
-    return $this->hasMany('BienestarWeb\PreguntaEncuesta','idEncuesta');
+    return $this->hasMany('BienestarWeb\Alternativa','idEncuesta');
   }
   public function actividades(){
     return $this->belongsToMany('BienestarWeb\Actividad','encuestaRespondidaResp','idEncuesta','idActividad')
@@ -31,7 +31,7 @@ class Encuesta extends Model
         ->withTimestamps();
   }
 
-  
+
   public function scopeSearch($query, $titulo){
     	return $query->where('titulo','LIKE',"%$titulo%")
                     ->orderBy('idEncuesta', 'ASC');

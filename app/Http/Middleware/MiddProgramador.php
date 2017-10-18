@@ -13,11 +13,11 @@ class MiddProgramador
      * @param  \Closure  $next
      * @return mixed
      */
-     public function handle($request, Closure $next)
-     {    if($request->user()->funcion == 2){
-            return $next($request);
-          }else{
-            abort(401);
-          }
-     }
+   public function handle($request, Closure $next)
+   {    if($request->user()->funcion == 2 || $request->user()->funcion == 3 ){
+         return $next($request);
+       }else{
+         abort(401);
+       }
+   }
 }

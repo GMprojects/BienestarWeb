@@ -19,15 +19,14 @@ class CrearTablaTutorTutorado extends Migration
             $tabla->smallInteger('anioSemestre');
             $tabla->enum('numeroSemestre', [1, 2]);
 
+            $tabla->enum('habitoEstudioRespondido', ['0', '1'])->default('0');
             //Clave foranea de la tabla Alumno
             $tabla->integer('idAlumno')->unsigned();
-            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno')
-               ->onDelete('cascade');
+            $tabla->foreign('idAlumno')->references('idAlumno')->on('Alumno');
 
             //Clave foranea de la tabla Docente
             $tabla->integer('idDocente')->unsigned();
-            $tabla->foreign('idDocente')->references('idDocente')->on('Docente')
-               ->onDelete('cascade');
+            $tabla->foreign('idDocente')->references('idDocente')->on('Docente');
 
             $tabla->timestamps();
 
@@ -39,8 +38,7 @@ class CrearTablaTutorTutorado extends Migration
 
             //Clave foranea de la tabla TutorTutorado
             $tabla->integer('idTutorTutorado')->unsigned();
-            $tabla->foreign('idTutorTutorado')->references('idTutorTutorado')->on('TutorTutorado')
-               ->onDelete('cascade');
+            $tabla->foreign('idTutorTutorado')->references('idTutorTutorado')->on('TutorTutorado');
 
             $tabla->timestamps();
         });
@@ -49,6 +47,9 @@ class CrearTablaTutorTutorado extends Migration
         {
             $tabla->increments('idTipoHabito');
             $tabla->String('tipo', 50);
+            $tabla->integer('estado')->default('1');
+            //0 desactivada
+            //1 activada
         });
 
         Schema::create('PreguntaHabito', function(Blueprint $tabla)
@@ -58,8 +59,7 @@ class CrearTablaTutorTutorado extends Migration
 
             //Clave foranea de la tabla CategoriaHabito
             $tabla->integer('idTipoHabito')->unsigned();
-            $tabla->foreign('idTipoHabito')->references('idTipoHabito')->on('TipoHabito')
-               ->onDelete('cascade');
+            $tabla->foreign('idTipoHabito')->references('idTipoHabito')->on('TipoHabito');
         });
 
         Schema::create('DetalleHabito', function(Blueprint $tabla)
@@ -75,13 +75,11 @@ class CrearTablaTutorTutorado extends Migration
 
                 //Clave foranea de la tabla HabitoEstudio
                 $tabla->integer('idHabitoEstudio')->unsigned();
-                $tabla->foreign('idHabitoEstudio')->references('idHabitoEstudio')->on('HabitoEstudio')
-                  ->onDelete('cascade');
+                $tabla->foreign('idHabitoEstudio')->references('idHabitoEstudio')->on('HabitoEstudio');
 
                 //Clave foranea de la tabla HabitoEstudio
                 $tabla->integer('idPreguntaHabito')->unsigned();
-                $tabla->foreign('idPreguntaHabito')->references('idPreguntaHabito')->on('PreguntaHabito')
-                  ->onDelete('cascade');
+                $tabla->foreign('idPreguntaHabito')->references('idPreguntaHabito')->on('PreguntaHabito');
         });
 
 

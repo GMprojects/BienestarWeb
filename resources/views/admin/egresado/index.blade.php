@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['titulo' => 'Egresados', 'nombreTabla' => '', 'item' => 'egreTodos'])
+@extends('template')
 @section('contenido')
 	<div class="box box-info">
 		<div class="box-header">
@@ -14,7 +14,7 @@
 
 		<div class="box-body">
 			<div class="table-responsive">
-				<table id="tabEgresado" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+				<table id="tabEgresados" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
 					<thead>
 						<th>Id</th>
 						<th>Codigo</th>
@@ -59,4 +59,37 @@
 			</div>
 		</div>
 	</div>
+
+	<script>
+		$(document).ready(function() {
+			$('#tabEgresados').DataTable({
+				"lengthMenu": [ 10, 25, 50, 75, 100 ],
+				"oLanguage" : {
+					"sProcessing":     "Procesando...",
+					"sLengthMenu":     "Mostrar _MENU_ registros",
+					"sZeroRecords":    "No se encontraron resultados",
+					"sEmptyTable":     "Ningún dato disponible en esta tabla",
+					"sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
+					"sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
+					"sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
+					"sInfoPostFix":    "",
+					"sSearch":         "Buscar:",
+					"sUrl":            "",
+					"sInfoThousands":  ",",
+					"sLoadingRecords": "Cargando...",
+					"oPaginate": {
+					  "sFirst":    "Primero",
+					  "sLast":     "Último",
+					  "sNext":     "Sig",
+					  "sPrevious": "Ant"
+					},
+					"oAria": {
+					  "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+					  "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+					}
+				}
+			})
+		});
+	</script>
+
 @endsection

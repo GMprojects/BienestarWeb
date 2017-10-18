@@ -55,6 +55,16 @@ return [
             'visibility' => 'public',
         ],
 
+        'actividades' => [
+          'driver' => 'local',
+          'root' => storage_path('app/public/actividades'),
+        ],
+
+        'users' => [
+          'driver' => 'local',
+          'root' => storage_path('app/public/users'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),

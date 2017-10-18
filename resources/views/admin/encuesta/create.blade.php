@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['titulo' => 'Encuestas', 'nombreTabla' => 'tabEncuestas', 'item' => 'encuTodas'])
+@extends('template')
 @section ('contenido')
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">

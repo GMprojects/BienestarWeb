@@ -8,7 +8,9 @@ class TipoHabito extends Model
 {
     protected $table = 'TipoHabito';
     protected $primaryKey = 'idTipoHabito';
-    protected $fillable = ['tipo'];
+    protected $fillable = [
+      'tipo',
+      'estado'];
 
     public $timestamps = false;
 

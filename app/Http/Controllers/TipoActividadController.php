@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 
 use BienestarWeb\TipoActividad;
+use Illuminate\Support\Facades\Storage;
+use File;
 
 
 class TipoActividadController extends Controller
@@ -18,11 +20,8 @@ class TipoActividadController extends Controller
      */
     public function index(Request $request)
     {
-        $tiposActividad = TipoActividad::Search($request->texto)->paginate(7);
-        $tiposActividad->each(function($tiposActividad){
-            $tiposActividad->actividad;
-        });
-        return view('admin.tipoActividad.index')->with('tiposActividad',$tiposActividad);
+        $tiposActividad = TipoActividad::Search($request->texto)->get();
+        return view('admin.tipoActividad.index',['tiposActividad' => $tiposActividad]);
     }
 
     /**
@@ -50,14 +49,18 @@ class TipoActividadController extends Controller
 
         $tipoActividad = new TipoActividad;
         $tipoActividad->tipo = $request->get('tipo');
-
-        if(Input::hasFile('rutaImagen'))
-        {
-            $archivo = Input::file('rutaImagen');
-            $file->move(public_path().'/imagenes/tiposActividad', $file->getClientOriginalName());
+        if($request->file('rutaImagen')){
+               $file = $request->file('rutaImagen');
+               $preRuta = 'tipoActividad/';
+               $name = 'tA'.time().'.'.$file->getClientOriginalExtension();
+               $storage = Storage::disk('actividades')->put($preRuta.$name, \File::get($file));
+               if($storage){
+                 $rutaImagen = 'actividades/'.$preRuta.$name;
+                 $tipoActividad->rutaImagen = $rutaImagen;
+                 $tipoActividad->save();
+               }
         }
 
-        $tipoActividad->save();
         return Redirect::to('admin/tipoActividad');
     }
 
@@ -94,8 +97,25 @@ class TipoActividadController extends Controller
     public function update(Request $request, $id)
     {
         $tipoActividad = TipoActividad::findOrFail($id);
-        $tipoActividad->tipo = $request->get('tipo');
-        $tipoActividad->rutaImagen = $request->get('rutaImagen');
+        if($request->file('rutaImagen')){
+                //Eliminando Foto anterior
+               $path = $tipoActividad->rutaImagen;
+               File::delete(storage_path('app/public/'.$tipoActividad->rutaImagen));
+               Storage::delete($path);
+               //Guardar la nueva imagen
+               $file = $request->file('rutaImagen');
+               $preRuta = 'tipoActividad/';
+               $name = 'tA'.time().'.'.$file->getClientOriginalExtension();
+               $storage = Storage::disk('actividades')->put($preRuta.$name, \File::get($file));
+               if($storage){
+                 $rutaImagen = 'actividades/'.$preRuta.$name;
+               }else{
+                 $rutaImagen = $actividad->rutaImagen;
+               }
+         }else {
+           $rutaImagen = $tipoActividad->rutaImagen;
+         }
+        $tipoActividad->rutaImagen = $rutaImagen;
         $tipoActividad->update();
 
         return Redirect::to('admin/tipoActividad');

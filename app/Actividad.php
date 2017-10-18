@@ -18,6 +18,9 @@ class Actividad extends Model
       	'fechaProgramacion',
       	'horaProgramacion',
         'lugar',
+        'referencia',
+        'descripcion',
+        'informacionAdicional',
         'fechaEjecutada',
         'horaEjecutada',
       	'cuposTotales',
@@ -55,17 +58,17 @@ class Actividad extends Model
           ->withPivot('idEncuestaRespondidaResp')
           ->withTimestamps();
     }
-    public function actividadesComedor(){
-      return $this->hasMany('BienestarWeb\ActComedor','idActividad');
+    public function actividadComedor(){
+      return $this->hasOne('BienestarWeb\ActComedor','idActividad');
     }
-    public function actividadesMovilidad(){
-      return $this->hasMany('BienestarWeb\ActMovilidad','idActividad');
+    public function actividadMovilidad(){
+      return $this->hasOne('BienestarWeb\ActMovilidad','idActividad');
     }
-    public function actividadesPedagogia(){
-      return $this->hasMany('BienestarWeb\ActPedagogia','idActividad');
+    public function actividadPedagogia(){
+      return $this->hasOne('BienestarWeb\ActPedagogia','idActividad');
     }
-    public function actividadesGrupal(){
-      return $this->hasMany('BienestarWeb\ActGrupal','idActividad');
+    public function actividadGrupal(){
+      return $this->hasOne('BienestarWeb\ActGrupal','idActividad');
     }
 
     public function scopeSearch($query, $request){
@@ -92,17 +95,17 @@ class Actividad extends Model
                     ->orderBy('idActividad', 'ASC');
               }
       }else if($request->idUserInscrito != null){
-              $userInscrito = User::findOrFail( $request->idUserInscrito );
-            //  dd($userInscrito->idUser);
+              $userInscrita = User::findOrFail( $request->idUserInscrito );
+            //  dd($userInscrita->idUser);
             //  dd($request->idUserInscrito);
-              //dd($userInscrito->tipoUser['idTipoUser']);
-              switch($userInscrito->tipoUser['idTipoUser']){
+              //dd($userInscrita->tipoPersona['idTipoPersona']);
+              switch($userInscrita->tipoPersona['idTipoPersona']){
                   case(1):{//docente
-                    $idDocente = Docente::where('idUser','=',$userInscrito->idUser)->value('$idDocente');
+                    $idDocente = Docente::where('idUser','=',$userInscrita->idUser)->value('idDocente');
                     //dd($idAdministrativo);
                     $inscripciones = InscripcionADA::join('inscripcionDocente','inscripcionADA.idInscripcionADA','=','inscripcionDocente.idInscripcionADA')
                                     ->where('inscripcionDocente.idDocente', '=', $idDocente)
-                                    ->pluck('idActividad');
+                                    ->pluck('inscripcionADA.idActividad');
                     //dd($inscripciones);
                     return $query
                         ->whereIn('actividad.idActividad',$inscripciones);
@@ -110,22 +113,22 @@ class Actividad extends Model
                     break;
                   }
                   case(2):{//administrativo
-                      $idAdministrativo = Administrativo::where('idUser','=',$userInscrito->idUser)->value('idAdministrativo');
+                      $idAdministrativo = Administrativo::where('idUser','=',$userInscrita->idUser)->value('idAdministrativo');
                       //dd($idAdministrativo);
                       $inscripciones = InscripcionADA::join('inscripcionAdministrativo','inscripcionADA.idInscripcionADA','=','inscripcionAdministrativo.idInscripcionADA')
                                       ->where('inscripcionAdministrativo.idAdministrativo', '=', $idAdministrativo)
-                                      ->pluck('idActividad');
+                                      ->pluck('inscripcionADA.idActividad');
                       //dd($inscripciones);
                       return $query
                           ->whereIn('actividad.idActividad',$inscripciones);
                     break;
                   }
                   case(3):{//alumno
-                    $idAlumno = Alumno::where('idUser','=',$userInscrito->idUser)->value('idAlumno');
+                    $idAlumno = Alumno::where('idUser','=',$userInscrita->idUser)->value('idAlumno');
                     //dd($idAdministrativo);
                     $inscripciones = InscripcionADA::join('inscripcionAlumno','inscripcionADA.idInscripcionADA','=','inscripcionAlumno.idInscripcionADA')
                                     ->where('inscripcionAlumno.idAlumno', '=', $idAlumno)
-                                    ->pluck('idActividad');
+                                    ->pluck('inscripcionADA.idActividad');
                     //dd($inscripciones);
                     return $query
                         ->whereIn('actividad.idActividad',$inscripciones);
@@ -150,5 +153,7 @@ class Actividad extends Model
                     ->orderBy('idActividad', 'ASC');
       }
     }
+
+
 
 }

@@ -7,6 +7,8 @@ use BienestarWeb\Actividad;
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
 
+use Illuminate\Support\Facades\Storage;
+use File;
 class EvidenciaActividadController extends Controller
 {
     /**
@@ -21,7 +23,7 @@ class EvidenciaActividadController extends Controller
         $evidenciasActividad->each(function($evidenciasActividad){
             $evidenciasActividad->actividad;
         });
-        //dd($evidenciasActividad);
+      //  dd($evidenciasActividad);
         return view('programador.evidenciaActividad.index')
                 ->with('evidenciasActividad', $evidenciasActividad)
                 ->with('idActividad',$request->idActividad);
@@ -46,19 +48,29 @@ class EvidenciaActividadController extends Controller
      */
     public function store(Request $request)
     {
-        //Manipulacion de imagesetthickness
         //dd($request);
         $request->validate([
-            'ruta' => 'file'
+            'ruta' => 'file',
+            'nombre' => 'required|max:45'
         ]);
         $actividad = Actividad::findOrFail($request->idActividad);
-        $file = $request->file('ruta');
-        $name = 'evidenciaActividad_'.$request->idActividad.'_'.time().'.'.$file->getClientOriginalExtension();
-        $path = public_path().'/imagenes/evidenciaActividad/'.$actividad->tipoActividad['tipo'].$request->idActividad.'/';
-        //dd($path);
-        $file->move($path,$name);
-        //$evidenciaActividad = EvidenciaActividad::findOrFail($id);
-        return redirect()->action('EvidenciaActividadController@index', ['idActividad' => $request->idActividad]);
+        if($request->file('ruta')){
+               $file = $request->file('ruta');
+               $preRuta = 'evidenciaActividad/'.$actividad->tipoActividad['tipo'].$request->idActividad.'/';
+               $name = 'evidenciaActividad_'.$request->idActividad.'_'.time().'.'.$file->getClientOriginalExtension();
+               $storage = Storage::disk('actividades')->put($preRuta.$name, \File::get($file));
+               if($storage){
+                 $rutaImagen = 'actividades/'.$preRuta.$name;
+               }
+        }else {
+         $rutaImagen = NULL;
+        }
+        $evidenciaActividad = new EvidenciaActividad;
+        $evidenciaActividad->ruta = $rutaImagen;
+        $evidenciaActividad->nombre = $request->nombre;
+        $evidenciaActividad->idActividad = $request->idActividad;
+        $evidenciaActividad->save();
+        return redirect()->action('EvidenciaActividadController@index',['idActividad' => $request->idActividad]);
     }
 
     /**
@@ -103,6 +115,20 @@ class EvidenciaActividadController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $evidenciaActividad = EvidenciaActividad::findOrFail($id);
+        $path = $evidenciaActividad->ruta;
+      //  unlink($path);
+        File::delete(storage_path('app/public/'.$evidenciaActividad->ruta));
+        Storage::delete($path);
+        $evidenciaActividad->delete();
+        return redirect()->back();
+    }
+
+    public function descargarEvidencia(Request $request){
+        //if($request->ajax()){
+            $evidencia = EvidenciaActividad::findOrFail($request->idEvidencia);
+            return response()->download(storage_path('app/public/'.$evidencia->ruta));
+        //}
+
     }
 }

@@ -15,7 +15,7 @@ class MiddAdmin
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {    if($request->user()->funcion == 3){
+    {      if($request->user()->funcion == 3){
             return $next($request);
          }else{
             abort(401);

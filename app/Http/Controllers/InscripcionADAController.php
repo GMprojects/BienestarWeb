@@ -17,16 +17,62 @@ class InscripcionADAController extends Controller
      */
     public function index(Request $request)
     {
-        dd($request);
-        $inscripciones = InscripcionADA::Search($request->idActividad)->get();
-        $inscripciones->each(function($inscripciones){
-            $inscripciones->inscripcionDocente;
-            $inscripciones->inscripcionAdministrativo;
-            $inscripciones->inscripcionAlumno;
-            $inscripciones->actividad;
-        });
-        return view('programador.inscripcion.index')
-            ->with('inscripciones',$inscripciones);
+      //dd($request);
+      switch ($request->opcionBuscar) {
+        case '1':
+          $inscripcionesAlumnos = InscripcionADA::SearchAlumno($request);
+          $inscripcionesDocentes = null;
+          $inscripcionesAdministrativos = null;
+          break;
+        case '2':
+          $inscripcionesDocentes = InscripcionADA::SearchDocente($request);
+          $inscripcionesAdministrativos = null;
+          $inscripcionesAlumnos = null;
+          break;
+        case '3':
+          $inscripcionesAdministrativos = InscripcionADA::SearchAdministrativo($request);
+          $inscripcionesDocentes = null;
+          $inscripcionesAlumnos = null;
+          break;
+        default:
+          $inscripcionesDocentes = InscripcionADA::SearchDocente($request);
+          $inscripcionesAlumnos = InscripcionADA::SearchAlumno($request);
+          $inscripcionesAdministrativos = InscripcionADA::SearchAdministrativo($request);
+          break;
+      }
+        //dd($inscripciones);
+        $numAsistentes = 0;    $numAusentes = 0;
+        //numero Inscritos
+        //dd($inscripcionesAlumnos);
+        $numInscritos = count($inscripcionesAlumnos)+count($inscripcionesDocentes)+count($inscripcionesAdministrativos);
+        //numero asistentes        //numero de ausentes
+        if($inscripcionesAlumnos != null){
+          foreach ($inscripcionesAlumnos as $inscripcionAlumno) {
+            ($inscripcionAlumno->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+          }
+        }
+        if($inscripcionesDocentes != null){
+          foreach ($inscripcionesDocentes as $inscripcionDocente) {
+            ($inscripcionDocente->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+          }
+        }
+        if($inscripcionesAdministrativos != null){
+          foreach ($inscripcionesAdministrativos as $inscripcionAdministrativo) {
+            ($inscripcionAdministrativo->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+          }
+        }
+        // -------------------------------------------- //
+        return view('programador.inscripcionADA.index')
+            ->with('inscripcionesDocentes',$inscripcionesDocentes)
+            ->with('inscripcionesAlumnos',$inscripcionesAlumnos)
+            ->with('inscripcionesAdministrativos',$inscripcionesAdministrativos)
+            ->with('numInscritos',$numInscritos)
+            ->with('numAsistentes',$numAsistentes)
+            ->with('numAusentes',$numAusentes)
+            ->with('cupos',$request->cupos)
+            ->with('idActividad',$request->idActividad)
+            ->with('opcionBuscar',$request->opcionBuscar)
+            ->with('nombre',$request->nombre);
     }
 
     /**
@@ -94,4 +140,5 @@ class InscripcionADAController extends Controller
     {
         //
     }
+
 }

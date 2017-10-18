@@ -20,6 +20,9 @@ class CrearTablaActividad extends Migration
             $tabla->date('fechaProgramacion');
             $tabla->time('horaProgramacion');
             $tabla->mediumtext('lugar');
+            $tabla->mediumtext('referencia')->nullable();
+            $tabla->longText('descripcion');
+            $tabla->longText('informacionAdicional')->nullable();
             $tabla->date('fechaEjecutada')->nullable();
             $tabla->time('horaEjecutada')->nullable();
             $tabla->integer('cuposTotales');
@@ -40,21 +43,19 @@ class CrearTablaActividad extends Migration
             */
             $tabla->string('observaciones', 500)->default('Ninguna');
             $tabla->string('recomendaciones', 500)->default('Ninguna');
-            $tabla->mediumtext('rutaImagen');
-
-            $tabla->string('invitado', 500);
-
+            $tabla->mediumtext('rutaImagen')->nullable();
+            $tabla->string('invitado', 500)->default('--');
             //Clave foranea de la tabla tipoActividad
             $tabla->integer('idTipoActividad')->unsigned();
             $tabla->foreign('idTipoActividad')->references('idTipoActividad')->on('TipoActividad');
 
-            //Clave foranea de la tabla User para asignar un RESPONSABLE
-            $tabla->integer('idResp')->unsigned();
-            $tabla->foreign('idResp')->references('id')->on('User');
+            //Clave foranea de la tabla Persona para asignar un RESPONSABLE
+            $tabla->integer('idUserResp')->unsigned();
+            $tabla->foreign('idUserResp')->references('id')->on('user');
 
-            //Clave foranea de la tabla User para definir un PROGRAMADOR
-            $tabla->integer('idProg')->unsigned();
-            $tabla->foreign('idProg')->references('id')->on('User');
+            //Clave foranea de la tabla Persona para definir un PROGRAMADOR
+            $tabla->integer('idUserProg')->unsigned();
+            $tabla->foreign('idUserProg')->references('id')->on('user');
 
             $tabla->timestamps();
         });
@@ -62,12 +63,11 @@ class CrearTablaActividad extends Migration
         Schema::create('EvidenciaActividad', function(Blueprint $tabla)
         {
             $tabla->increments('idEvidenciaActividad');
-            $tabla->string('nombre', 50);
-            $tabla->mediumtext('ruta');
+            $tabla->string('nombre', 100)->default('Evidencia');
+            $tabla->mediumtext('ruta')->nullable();
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
-            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')
-               ->onDelete('cascade');
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
 
             $tabla->timestamps();
         });

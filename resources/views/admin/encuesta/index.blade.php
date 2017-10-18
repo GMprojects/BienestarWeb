@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['titulo' => 'Encuestas', 'nombreTabla' => 'tabEncuestas', 'item' => 'encuTodas'])
+@extends('template')
 @section ('contenido')
 <div class="row">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -45,4 +45,37 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$(document).ready(function() {
+		$('#tabEncuestas').DataTable({
+			"lengthMenu": [ 10, 25, 50, 75, 100 ],
+			"oLanguage" : {
+				"sProcessing":     "Procesando...",
+				"sLengthMenu":     "Mostrar _MENU_ registros",
+				"sZeroRecords":    "No se encontraron resultados",
+				"sEmptyTable":     "Ningún dato disponible en esta tabla",
+				"sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
+				"sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
+				"sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
+				"sInfoPostFix":    "",
+				"sSearch":         "Buscar:",
+				"sUrl":            "",
+				"sInfoThousands":  ",",
+				"sLoadingRecords": "Cargando...",
+				"oPaginate": {
+				  "sFirst":    "Primero",
+				  "sLast":     "Último",
+				  "sNext":     "Sig",
+				  "sPrevious": "Ant"
+				},
+				"oAria": {
+				  "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+				  "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+				}
+			}
+		})
+	});
+</script>
+
 @endsection

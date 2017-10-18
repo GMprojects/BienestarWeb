@@ -9,6 +9,7 @@ use BienestarWeb\TipoPersona;
 use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
 use BienestarWeb\Administrativo;
+use Log;
 
 class UserController extends Controller
 {
@@ -206,38 +207,52 @@ class UserController extends Controller
    {
    }
    public function getUsers(Request $request){
-   //    dd($request);
-     if($request->ajax()){
-      $users = User::get();
-      return response()->json($users);
-     }
+    //    dd($request);
+      if($request->ajax()){
+        $users = User::get();
+        return response()->json($users);
+      }
    }
    public function getUsersAdm(Request $request){
-   //    dd($request);
-     if($request->ajax()){
-      $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
-                   ->where('idTipoPersona','=', '2')
-                   ->get();
-      return response()->json($users);
-     }
-   }
-   public function getUsersAdmDoc(Request $request){
-   //    dd($request);
-     if($request->ajax()){
-      $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
-                   ->where('idTipoPersona','=', '1')
-                   ->where('idTipoPersona','=', '2')
-                   ->get();
-      return response()->json($users);
-     }
-   }
-   public function getAlumnos(Request $request){
-   //    dd($request);
-     if($request->ajax()){
-      $users = Alumno::join('user','alumno.idUser', '=','user.idUser' )
-                   ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-                   ->get();
-      return response()->json($users);
-     }
-   }
+    //    dd($request);
+      if($request->ajax()){
+        $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
+                    ->where('idTipoPersona','=', '2')
+                    ->orderBy('idUser', 'asc')
+                    ->get();
+        return response()->json($users);
+      }
+    }
+    public function getUsersAdmDoc(Request $request){
+    //    dd($request);
+      if($request->ajax()){
+        $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
+                    ->where('idTipoPersona','<', '3')
+                    ->orderBy('idUser', 'asc')
+                    ->get();
+        return response()->json($users);
+      }
+    }
+    public function getAlumnos(Request $request){
+    //    dd($request);
+      if($request->ajax()){
+        $users = Alumno::join('user','alumno.idUser', '=','user.idUser' )
+                    ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+                    ->orderBy('alumno.idAlumno', 'asc')
+                    ->get();
+        return response()->json($users);
+      }
+    }
+
+    public function getUserTipo(Request $request){
+      if($request->ajax()){
+         switch($request->idTipoPersona){
+            case '1': $userTipo = Alumno::where('idUser', $request->id )->get(); break;
+            case '2': $userTipo = Docente::where('idUser', $request->id )->get(); break;
+            case '3': $userTipo = Administrativo::where('idUser', $request->id )->get(); break;
+         }
+        return response()->json($userTipo);
+      }
+    }
+
 }

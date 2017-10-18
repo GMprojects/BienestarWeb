@@ -55,17 +55,17 @@ class EgresadoController extends Controller
         ]);
 
         $egresado = new Egresado;
-        $egresado->grado = $request->get('grado');
-        $egresado->nombre = $request->get('nombre');
-        $egresado->apellidoPaterno = $request->get('apellidoPaterno');
-        $egresado->apellidoMaterno = $request->get('apellidoMaterno');
-        $egresado->direccion = $request->get('direccion');
-        $egresado->telefono = $request->get('telefono');
-        $egresado->celular = $request->get('celular');
-        $egresado->email = $request->get('email');
-        $egresado->codigo = $request->get('codigo');
-        $egresado->anioEgreso = $request->get('anioEgreso');
-        $egresado->numeroSemestre = $request->get('numeroSemestre');
+        $egresado->grado = $request->grado;
+        $egresado->nombre = $request->nombre;
+        $egresado->apellidoPaterno = $request->apellidoPaterno;
+        $egresado->apellidoMaterno = $request->apellidoMaterno;
+        $egresado->direccion = $request->direccion;
+        $egresado->telefono = $request->telefono;
+        $egresado->celular = $request->celular;
+        $egresado->email = $request->email;
+        $egresado->codigo = $request->codigo;
+        $egresado->anioEgreso = $request->anioEgreso;
+        $egresado->numeroSemestre = $request->numeroSemestre;
 
         //dd($egresado);
         $egresado->save();
@@ -81,11 +81,10 @@ class EgresadoController extends Controller
     public function show($id)
     {
         $egresado = Egresado::findOrFail($id);
-        $egresado->each(function($egresado){
-            $egresado->trabajos;
-        });
-        return view('admin.egresado.show')
-                ->with('egresado',Egresado::findOrFail($id));
+        //$egresado->each(function($egresado){
+          //  $egresado->trabajos;
+        //});
+        return view('admin.egresado.show',['egresado' => $egresado]);
     }
 
     /**
@@ -110,11 +109,11 @@ class EgresadoController extends Controller
     public function update(Request $request, $id)
     {
         $egresado = Egresado::findOrFail($id);
-        $egresado->grado = $request->get('grado');
-        $egresado->direccion = $request->get('direccion');
-        $egresado->telefono = $request->get('telefono');
-        $egresado->celular = $request->get('celular');
-        $egresado->email = $request->get('email');
+        $egresado->grado = $request->grado;
+        $egresado->direccion = $request->direccion;
+        $egresado->telefono = $request->telefono;
+        $egresado->celular = $request->celular;
+        $egresado->email = $request->email;
         $egresado->update();
 
         return Redirect::to('admin/egresado');

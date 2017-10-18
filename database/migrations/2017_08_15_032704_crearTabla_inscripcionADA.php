@@ -24,8 +24,7 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
-            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')
-               ->onDelete('cascade');
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
 
 
             $tabla->timestamps();
@@ -35,7 +34,7 @@ class CrearTablaInscripcionADA extends Migration
 
         Schema::create('InscripcionAlumno', function(Blueprint $tabla)
         {
-            $tabla->increments('idInscAlumno');
+            $tabla->increments('idInscripcionAlumno');
             $tabla->enum('asistencia', ['0', '1']);
 
             //Clave foranea de la tabla Actividad
@@ -47,8 +46,7 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
-            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA')
-               ->onDelete('cascade');
+            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
 
             $tabla->timestamps();
 
@@ -56,7 +54,7 @@ class CrearTablaInscripcionADA extends Migration
 
         Schema::create('InscripcionDocente', function(Blueprint $tabla)
         {
-            $tabla->increments('idInscDocente');
+            $tabla->increments('idInscripcionDocente');
             $tabla->enum('asistencia', ['0', '1']);
 
             //Clave foranea de la tabla Actividad
@@ -64,13 +62,11 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla Docente
             $tabla->integer('idDocente')->unsigned();
-            $tabla->foreign('idDocente')->references('idDocente')->on('Docente')
-               ->onDelete('cascade');
+            $tabla->foreign('idDocente')->references('idDocente')->on('Docente');
 
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
-            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA')
-               ->onDelete('cascade');
+            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
 
             $tabla->timestamps();
 
@@ -78,7 +74,7 @@ class CrearTablaInscripcionADA extends Migration
 
         Schema::create('InscripcionAdministrativo', function(Blueprint $tabla)
         {
-            $tabla->increments('idInscAdministrativo');
+            $tabla->increments('idInscripcionAdministrativo');
             $tabla->enum('asistencia', ['0', '1']);
 
             //Clave foranea de la tabla Actividad
@@ -86,13 +82,11 @@ class CrearTablaInscripcionADA extends Migration
 
             //Clave foranea de la tabla Administrativo
             $tabla->integer('idAdministrativo')->unsigned();
-            $tabla->foreign('idAdministrativo')->references('idAdministrativo')->on('Administrativo')
-               ->onDelete('cascade');
+            $tabla->foreign('idAdministrativo')->references('idAdministrativo')->on('Administrativo');
 
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
-            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA')
-               ->onDelete('cascade');
+            $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
 
             $tabla->timestamps();
 
