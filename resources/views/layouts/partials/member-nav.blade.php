@@ -32,7 +32,7 @@
                <li class="hidden-xs" style="overflow-x:hidden;">
                   <form class="navbar-form">
                     <div class="input-group">
-                       <input type="search" class="form-control" placeholder="Buscar..">
+                       <input type="search" class="form-control input-addon-right" placeholder="Buscar..">
                        <span class="input-group-btn">
                        <button class="btn btn-default rounded-right" type="button"><i class="fa fa-search "></i></button>
                      </span>
@@ -71,12 +71,12 @@
                               @case(3) Administrativo @break
                            @endswitch
                               <br />
-                           <small>Nov. 2016</small>
+                           <small><i class="fa fa-birthday-cake"></i> {{ date("d F",strtotime(Auth::user()->fechaNacimiento)) }}</small>
                         </p>
                      </li>
                      <li class="footer-usu">
                         <div class="pull-left">
-                           <a href="{{ url('miembro/perfil') }}" class="btn btn-default"> <i class="fa fa-user"> </i> Perfil</a>
+                           <a href="{{ action('PerfilController@show', ['id' => Auth::user()->id ]) }}" class="btn btn-default"> <i class="fa fa-user"> </i> Perfil</a>
                         </div>
                         <div class="pull-right">
                            <a class="btn btn-default" href="{{ route('logout') }}"

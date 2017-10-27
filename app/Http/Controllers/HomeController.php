@@ -24,7 +24,8 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
    public function index(Request $request)
-   {  $actividades = Actividad::where([['modalidad', '2'], ['estado', '1||2']]);
+   {  $actividades = Actividad::where('modalidad', '=', '2');
+      dd($actividades);
       return view('home')->with('actividades', $actividades);
    }
 }

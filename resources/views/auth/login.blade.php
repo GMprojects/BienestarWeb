@@ -37,7 +37,7 @@
                   <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                      <div class="input-group input-group-lg">
                            <span class="input-group-addon rounded-left"><i class="fa fa-envelope"></i></span>
-                           <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{old('email')}}" placeholder="e.g. mguevaral@unitru.edu.pe" autofocus>
+                           <input required minlength="6" maxlength="100" type="email" class="form-control input-addon-left" name="email"  value="{{old('email')}}" placeholder="e.g. mguevaral@unitru.edu.pe" autofocus>
                      </div>
                      @if ($errors->has('email'))
                         <span class="help-block">
@@ -49,7 +49,7 @@
                   <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                      <div class="input-group input-group-lg">
                         <span class="input-group-addon rounded-left"><i class="fa fa-key"></i></span>
-                        <input required minlength="6" maxlength="100" type="password" class="form-control" name="password"  value="{{old('password')}}" placeholder="***********">
+                        <input required minlength="4" maxlength="100" type="password" class="form-control input-addon-left" name="password"  value="{{old('password')}}" placeholder="***********">
                      </div>
                      @if ($errors->has('password'))
                         <span class="help-block">

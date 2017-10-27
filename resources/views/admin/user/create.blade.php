@@ -94,7 +94,7 @@
 	   					<div class="col-sm-8">
 	   						<div class="input-group">
 	   							 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-	   							 <input pattern="[0-9]+" maxlength="15" type="text" class="form-control" name="telefono"  value="{{old('telefono')}}" placeholder="(xxx)xxxxxx">
+	   							 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{old('telefono')}}" placeholder="(xxx)xxxxxx">
 	   						</div>
 	   					</div>
 	   				</div>
@@ -104,7 +104,7 @@
 	   					<div class="col-sm-8">
 	   						<div class="input-group">
 	   							 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-	   							 <input pattern="[0-9]+" maxlength="15" type="celular" class="form-control" name="celular" value="{{old('celular')}}" placeholder="(xxx)xxxxxxxxx">
+	   							 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="celular" value="{{old('celular')}}" placeholder="(xxx)xxxxxxxxx">
 	   						</div>
 	   					</div>
 	   				</div>

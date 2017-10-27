@@ -71,19 +71,15 @@ class User extends Authenticatable
     {
     	return $this->hasOne('BienestarWeb\Alumno', 'idUser');
     }
-
-    public function programacionActividades()
+    /*
+    public function actProgramador()
     {
-        return $this->hasMany('BienestarWeb\Actividad');
+        return $this->hasMany('BienestarWeb\Actividad', 'idUserProg');
     }
 
-    public function responsabilidadActividades()
+    public function actResponsable()
     {
-        return $this->hasMany('BienestarWeb\Actividad');
+        return $this->hasMany('BienestarWeb\Actividad', 'idUserResp');
     }
-
-    public function inscripcionActividades()
-    {
-        return $this->hasMany('BienestarWeb\Actividad');
-    }
+    */
 }

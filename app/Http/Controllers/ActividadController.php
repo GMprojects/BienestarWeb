@@ -1,16 +1,16 @@
 <?php
 
+
 namespace BienestarWeb\Http\Controllers;
 
 use BienestarWeb\Actividad;
 use BienestarWeb\ActGrupal;
 use BienestarWeb\ActMovilidad;
 use BienestarWeb\ActComedor;
+use BienestarWeb\ActPedagogia;
 use BienestarWeb\TipoActividad;
 use BienestarWeb\User;
 use BienestarWeb\Alumno;
-use BienestarWeb\Docente;
-use BienestarWeb\Administrativo;
 use BienestarWeb\InscripcionAlumno;
 use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
@@ -78,7 +78,7 @@ class ActividadController extends Controller
      {
         $mensajeA = 'Se le invita a participar de una actividad';
         $mensajeR = 'Ud. ha sido asignado como responsable de una actividad';
-        $idUserProg = 22;
+        $idUserProg = $request->user()->id;
         $idUserResponsable = $request->idUserResponsable;
         $request->validate([
             'titulo' => 'required|max:100',
@@ -266,11 +266,16 @@ class ActividadController extends Controller
                          $alumno = Alumno::findOrFail($request->idAlumnoTutorado[$i]);
                          $inscripcionADA = $actividad->inscripcionesADA()->create([
                          ]);
-                         $inscripcionAlumno = new InscripcionAlumno;
-                         $inscripcionAlumno->asistencia = '0';
-                         $inscripcionAlumno->idActividad = $actividad->idActividad;
-                         $inscripcionAlumno->alumno()->associate($alumno);
-                         $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
+                         $inscripcionAlumno = $inscripcionADA->inscripcionAlumno()->create([
+                            'asistencia' => '0',
+                            'idActividad' => $actividad->idActividad,
+                            'idAlumno' => $alumno->idAlumno
+                         ]);
+                         $actPed = ActPedagogia::create([
+                           'idActividad' => $actividad->idActividad,
+                           'idInscripcionAlumno' => $inscripcionAlumno->idInscripcionAlumno
+                         ]);
+                         $actPed->save();
                      }
                      $mensajeA = 'Se le ha programado una Actividad de Tutoría ';
                      $mensajeR = 'Se le ha programado sus actividades de tutoría';
@@ -370,7 +375,7 @@ class ActividadController extends Controller
            }
            $userResp = User::findOrFail($idUserResponsable);
            Log::info(' Tipo de Actividad             ->  '.$actividad->idTipoActividad);
-           $job = (new JobEnviarNuevaActEmail($actividad, $actividad->idTipoActividad, $userAl, $userResp, $mensajeR, $mensajeA, $request->idAlumnoTutorado))
+           $job = (new JobEmailNuevaAct($actividad, $actividad->idTipoActividad, $userAl, $userResp, $mensajeR, $mensajeA, $request->idAlumnoTutorado))
                   ->delay(Carbon::now()->addSeconds(5));
            dispatch($job);
            return Redirect::to('programador/actividad');
@@ -712,7 +717,7 @@ class ActividadController extends Controller
            if ($request->envioCorreos == 'on') {
              Log::info('envio de notificaciones');
              $userResp = User::findOrFail($idUserResponsable);
-             $job = (new JobEnviarActualizarActEmail($actividad, $userResp, '1'))
+             $job = (new JobEmailActualizarAct($actividad, $userResp, '1'))
                     ->delay(Carbon::now()->addSeconds(5));
              dispatch($job);
            }else {
@@ -809,7 +814,7 @@ class ActividadController extends Controller
          }
          $estadistica['inscInscripcion'] = $inscInscripcion;
          $estadistica['inscAsistencia'] = $inscAsistencia;
-         Log::info($estadistica);         
+         Log::info($estadistica);
          return response()->json($estadistica);
       }
     }

@@ -30,11 +30,11 @@
 
                @include('layouts.partials.carousel')
                <br />
-               @include('layouts.partials.act-mini-demo')
-               @include('layouts.partials.act-mini-demo')
-               @include('layouts.partials.act-mini-demo')
-               @include('layouts.partials.act-mini-demo')
-               @include('layouts.partials.act-mini-demo')
+               @include('layouts.partials.act-mini', )
+               @include('layouts.partials.act-mini', )
+               @include('layouts.partials.act-mini', )
+               @include('layouts.partials.act-mini', )
+               @include('layouts.partials.act-mini', )
                @foreach ($actividades as $actividad)
                   @include('layouts.partials.act-mini', [$actividad])
                @endforeach

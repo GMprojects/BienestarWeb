@@ -27,7 +27,7 @@
                <li class="hidden-xs" style="overflow-x:hidden;">
                   <form class="navbar-form">
                     <div class="input-group">
-                       <input type="search" class="form-control" placeholder="Buscar..">
+                       <input type="search" class="form-control input-addon-right" placeholder="Buscar..">
                        <span class="input-group-btn">
                        <button class="btn btn-default rounded-right" type="button"><i class="fa fa-search "></i></button>
                      </span>

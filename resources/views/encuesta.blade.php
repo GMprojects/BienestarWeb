@@ -19,9 +19,10 @@
          @include('layouts.partials.nav')
       </header>
       <section class="content-princ container">
-         <div class="encuesta">
+         <div class="encuesta" style="margin-top:70px;">
             <form class="" action="index.html" method="post" style="width: 100%;">
                <div class="enc-title">Aquí va el título de la encuesta no importa lo largo que sea</div>
+               <hr class="act-hr">
                <div class="row item hidden-xs hidden-sm">
                   <div class="question">
                   </div>

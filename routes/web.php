@@ -24,16 +24,27 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('alternativa', 'AlternativaController');
     Route::resource('preguntaEncuesta', 'PreguntaEncuestaController');
     Route::resource('user', 'UserController');
-    Route::resource('tutorTutorado', 'TutorTutoradoController');
+    Route::get('tutorTutorado', 'TutorTutoradoController@index');
+    Route::get('tutorTutorado/create', 'TutorTutoradoController@create');
+    Route::get('tutorTutorado/{tutorTutorado}/edit', 'TutorTutoradoController@edit');
+    Route::put('tutorTutorado/{tutorTutorado}', ['uses' => 'TutorTutoradoController@update', 'as' => 'tutorTutorado.update']);
+    Route::put('tutorTutorado', ['uses' => 'TutorTutoradoController@store', 'as' => 'tutorTutorado.store']);
+
+
 });
+
+Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
+
 
 Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
+    Route::resource('perfil','PerfilController');
 });
 
-Route::middleware('auth')->prefix('miembro')->get('perfil', function () {
-    return view('miembro.miperfil');
+Route::middleware('auth')->prefix('miembro')->get('miperfil', function(){
+   return view('miembro.miperfil');
 });
+
 Route::get('perfilTipo', 'UserController@getUserTipo');
 
 Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
@@ -54,10 +65,16 @@ Route::get('listaAlumnos','UserController@getAlumnos');
 Route::get('listaResponsablesTutores','TutorTutoradoController@getTutores');
 Route::get('listaTutorados','TutorTutoradoController@getTutorados');
 Route::get('descargarEvidencia','EvidenciaActividadController@descargarEvidencia');
+Route::get('alumnosLibres', 'TutorTutoradoController@getAlumnosLibres');
+Route::get('alumnosLibresExDoc', 'TutorTutoradoController@getAlumnosLibresExDoc');
+Route::get('docentesNoTutores', 'TutorTutoradoController@getDocentesNoTutores');
+Route::get('soyTutor', 'TutorTutoradoController@soyTutor');
+Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
+Route::post('enviarMail','TutorTutoradoController@enviarEmail');
 
 Route::get('buscarInscripciones', 'InscripcionADAController@buscarInscripciones');
 
-Route::get('send','CorreoController@send');
+//Route::get('send','CorreoController@send');
 
 Route::get('actividadesProgramadas','ActividadController@verActividadesProg');
 Route::get('actividadesResponsable','ActividadController@verActividadesResp');
@@ -67,8 +84,8 @@ Route::get('actividadesNoAsistidas','ActividadController@verActividades');
 Route::get('verMisEstadisticas','ActividadController@verMisEstadisticas');
 
 //temporal :p
-Route::get('nuevo', function () {
-    return view('nuevo');
+Route::get('encuesta', function () {
+    return view('encuesta');
 });
 Route::get('actividad-demo', function () {
     return view('actividad-demo');
@@ -76,6 +93,6 @@ Route::get('actividad-demo', function () {
 Route::get('actividades-demo', function () {
     return view('actividades-demo');
 });
-Route::get('encuesta', function () {
-    return view('encuesta');
+Route::get('pruebas', function () {
+   return view('pruebas');
 });

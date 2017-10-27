@@ -24,7 +24,7 @@ a:hover{
    width: 100%;
 }
 .header-princ .logo-facfar{
-   webkit-transition: width 0.9s cubic-bezier(0.81, -0.5, 0.24, 1.31);
+   -webkit-transition: width 0.9s cubic-bezier(0.81, -0.5, 0.24, 1.31);
    -o-transition: width 0.9s ease-in-out;
    transition: width 0.9s cubic-bezier(0.81, -0.5, 0.24, 1.31);
    display: block;
@@ -125,7 +125,6 @@ a:hover{
 
 .nav .open>a, .nav .open > a:focus, .nav .open > a:hover{
    background-color: rgba(8, 8, 8, 0.15);
-
 }
 
 @media( max-width: 768px ){
@@ -387,17 +386,18 @@ a:hover{
 /* Formulario FACFAR */
 
 .rounded{
-   border-radius: 50px !important;
+   border-radius: 25px !important;
 }
 .rounded-right{
-   border-radius: 0 50px 50px 0 !important;
+   border-radius: 0 25px 25px 0 !important;
 }
 .rounded-left{
-   border-radius: 50px 0 0 50px !important;
+   border-radius: 25px 0 0 25px !important;
    color: white;
    background-color: #4B367C;
    border: none;
 }
+/*
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -405,7 +405,7 @@ input[type="tel"],
 input[type="url"],
 select,
 textarea {
-   border-radius: 0 50px 50px 0 !important;
+   /* border-radius: 25px;
 }
 input[type="search"]{
    border-radius: 50px 0 0 50px !important;
@@ -420,11 +420,23 @@ select:focus,
 textarea:focus {
    border-color: #68439A;
 	box-shadow: 0px 0px 3px 1px rgba(106, 27, 154, 0.5);
+}*/
+
+.input-addon-left{
+   border-radius: 0 25px 25px 0 !important;
+}
+.input-addon-right{
+   border-radius: 25px 0 0 25px !important;
+}
+.input-addon-left:focus,
+.input-addon-right:focus{
+   border-color: #68439A;
+	box-shadow: 0px 0px 3px 1px rgba(106, 27, 154, 0.5);
    border-radius: 25px;
 }
 /* ff card*/
 .ff-card{
-   display: grid;
+   display: block;
    width: 100%;
    background-color: white!important;
    border-radius: 4px;
@@ -583,9 +595,6 @@ textarea:focus {
    color: white;
 }
 
-.actividad .act-title a{
-   color: #4B367C;
-}
 .actividad .act-title{
    padding: 0px;
    margin-left: 0px;
@@ -994,10 +1003,10 @@ textarea:focus {
 /* COMPONENTE PLAGIADO DE ADMINLTE MUAJAJAJA*/
 .box {
   position: relative;
-  border-radius: 3px;
+  border-radius: 4px;
   background: #ffffff;
   border-top: 3px solid #d2d6de;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 100%;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
@@ -1280,4 +1289,55 @@ textarea:focus {
   border-top: 1px solid #f4f4f4;
   padding: 10px;
   background-color: #ffffff;
+}
+
+/* common box*/
+.caja {
+   position: relative;
+   background-color: white;
+   border-radius: 5px;
+   box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+   margin-bottom: 20px;
+   padding: 0 15px 15px 15px;
+}
+.caja-header{
+   height: 40px;
+   margin-bottom: 20px;
+   border-bottom: 1px solid #eee;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+.caja-icon{
+   position: absolute;
+   text-align: center;
+   height: 40px;
+   width: 40px;
+   background-color:  #6441a4;
+   color: white;
+   font-size: 2em;
+   border-radius: 0 0 0 5px;
+}
+.caja-title{
+   margin-left: 50px;
+   height: 40px;
+   color: #6441a4;
+   font-size: 2em;
+}
+.caja-body{
+   padding-left: 50px;
+   padding-right: 50px;
+   width: 100%;
+}
+.caja-footer{
+
+}
+@media (max-width : 768px) {
+   .caja{
+      padding: 0 5px 5px 5px;
+   }
+   .caja-body{
+      padding-left: 0px;
+      padding-right: 0px;
+   }
 }

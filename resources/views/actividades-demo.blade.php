@@ -15,7 +15,12 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
    </head>
    <body>
-      @include('layouts.partials.member-nav')
+      @if(Auth::user() != null)
+         @include('layouts.partials.member-nav')
+      @else
+         @include('layouts.partials.nav')
+      @endif
+
       <div id="wrapper">
          <section id="page-content-wrapper" class="content-princ container">
             @if(Auth::user() != null)

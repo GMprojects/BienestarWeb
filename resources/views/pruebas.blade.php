@@ -51,7 +51,29 @@
             @endif
 
             <!-- aqui el contenido -->
-               @yield('contenido', 'Default')
+            <div class="row">
+               <div class="container">
+                  <div class="caja">
+                     <div class="caja-header">
+                        <span class="caja-icon">
+                           1
+                        </span>
+                        <span class="caja-title">
+                           Este es un titulo de algo
+                        </span>
+                     </div>
+                     <div class="caja-body">
+                        <div class="form-group">
+      							<label for="titulo">Título de la actividad *</label>
+      							<input type="text" name="titulo" class="form-control"  required value ="{{old('titulo')}}" placeholder="Título">
+      						</div>
+                     </div>
+                     <div class="caja-footer">
+
+                     </div>
+                  </div>
+               </div>
+            </div>
             <!-- fin del contenido -->
 
             @include('layouts.partials.footer')
@@ -79,11 +101,7 @@
                increaseArea: '20%' // optional
             });
             $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-            $("#input-id").fileinput();
-            $("#input-id").fileinput({'showUpload':false, 'previewFileType':'any'});
       	});
-
-         
       </script>
 
 </html>

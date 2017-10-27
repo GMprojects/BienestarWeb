@@ -47,7 +47,7 @@ class UserController extends Controller
            'codigo' => 'required|min:4|max:20',
            'email' => 'required|max:100',
            'direccion'=> 'max:100',
-           'telefono' => 'max:15|min:6',
+           'telefono' => 'max:15',
            'celular' => 'max:15',
            'foto' => 'file',
            'funcion' => 'required|numeric|min:1|max:3',
@@ -55,34 +55,50 @@ class UserController extends Controller
            //validacion si tipo = 1 (ALUMNO)
            'condicion' => 'required_if:tipo,1|numeric|min:1|max:3',
            //validacion si tipo = 2 (DOCENTE)
-           'categoria' => 'required_if:tipo,2|numeric|min:1|max:4',
-           'dedicacion' => 'required_if:tipo,2|numeric|min:1|max:3',
-           'modalidad' => 'required_if:tipo,2|numeric|min:1|max:2',
+           'categoria' => 'numeric|min:1|max:4',
+           'dedicacion' => 'numeric|min:1|max:3',
+           'modalidad' => 'numeric|min:1|max:2',
            //validacion si tipo = 3 (ADMINISTRATIVO)
-           'cargo' => 'required_if:tipo,3|max:50'
+           'cargo' => 'max:50'
         ]);
         $file = $request->file('foto');
         $tipoUser = TipoPersona::find($request->tipo);
 
-        if($file != null){
-           $name = 'usr_'. $tipoUser->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
-           $path = public_path().'\\images\\Usuario\\'.$tipoUser->tipo;
-           $file->move($path, $name);
-           $nuevaUser->foto = $name;
+        if($request->file('rutaImagen')){
+               $file = $request->file('rutaImagen');
+               $preRuta = 'tipoActividad/';
+               $name = 'tA'.time().'.'.$file->getClientOriginalExtension();
+               $storage = Storage::disk('actividades')->put($preRuta.$name, \File::get($file));
+               if($storage){
+                 $rutaImagen = 'actividades/'.$preRuta.$name;
+                 $tipoActividad->rutaImagen = $rutaImagen;
+                 $tipoActividad->save();
+               }
         }
-        $nuevaUser = new User();
-        $nuevaUser->nombre = $request->nombre;
-        $nuevaUser->apellidoPaterno = $request->apellidoPaterno;
-        $nuevaUser->apellidoMaterno = $request->apellidoMaterno;
-        $nuevaUser->codigo = $request->codigo;
-        $nuevaUser->email = $request->email;
-        $nuevaUser->direccion = $request->direccion;
-        $nuevaUser->telefono = $request->telefono;
-        $nuevaUser->celular = $request->celular;
-        $nuevaUser->funcion = $request->funcion;
-        $nuevaUser->estado = 1;
-        $nuevaUser->idTipoPersona = $request->tipo;
-        $nuevaUser->save();
+
+        if($file != null){
+           $file = $request->file('foto');
+           $name = 'usr_'. $tipoUser->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
+           $storage = Storage::disk('users')->put($name, \File::get($file));
+           if($storage){
+             $path = 'users/'.$name;
+             $nuevoUser->foto = $name;
+          }
+        }
+        $nuevoUser = new User();
+        $nuevoUser->nombre = $request->nombre;
+        $nuevoUser->apellidoPaterno = $request->apellidoPaterno;
+        $nuevoUser->apellidoMaterno = $request->apellidoMaterno;
+        $nuevoUser->codigo = $request->codigo;
+        $nuevoUser->email = $request->email;
+        $nuevoUser->direccion = $request->direccion;
+        $nuevoUser->telefono = $request->telefono;
+        $nuevoUser->celular = $request->celular;
+        $nuevoUser->funcion = $request->funcion;
+        $nuevoUser->estado = 1;
+        $nuevoUser->idTipoPersona = $request->tipo;
+        $nuevoUser->password = bcrypt($request->codigo);
+        $nuevoUser->save();
         $user = User::where('codigo', $request->codigo)->get();
         switch ($request->tipo) {
            case '1': $nuevoAlumno = new Alumno();

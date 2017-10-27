@@ -20,6 +20,4 @@ class TutorTutorado extends Pivot
     public function habitosEstudio(){
     	return $this->hasMany('BienestarWeb\HabitoEstudio','idTutorTutorado','idTutorTutorado');
     }
-
-
 }

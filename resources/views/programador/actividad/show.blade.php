@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['titulo' => 'Detalles de la Actividad', 'nombreTabla' => '', 'item' => 'actiTodas'])
+@extends('template')
 @section ('contenido')
 <div class="box box-info">
 		<div class="box-header">
