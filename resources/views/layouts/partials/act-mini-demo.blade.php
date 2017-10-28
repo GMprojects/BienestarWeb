@@ -1,4 +1,3 @@
-
 <div class="col-md-4 col-sm-6 act-mini-container">
 
    <div class="act-mini">

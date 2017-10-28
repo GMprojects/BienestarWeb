@@ -14,26 +14,27 @@ class Actividad extends Model
    	protected $table = 'Actividad';
       protected $primaryKey = 'idActividad';
    	protected $fillable = [
-      	'titulo',
-      	'fechaProgramacion',
-      	'horaProgramacion',
-        'lugar',
-        'referencia',
-        'descripcion',
-        'informacionAdicional',
-        'fechaEjecutada',
-        'horaEjecutada',
-      	'cuposTotales',
-      	'estado',
-        'anioSemestre',
-        'numeroSemestre',
-      	'modalidad',
-      	'recomendaciones',
-      	'observaciones',
-        'rutaImagen',
-        'idTipoActividad',
-        'idUserResp',
-        'idUserProg'
+         'titulo',
+         'fechaProgramacion',
+         'horaProgramacion',
+         'lugar',
+         'referencia',
+         'descripcion',
+         'informacionAdicional',
+         'fechaEjecutada',
+         'horaEjecutada',
+         'cuposTotales',
+         'estado',
+         'anioSemestre',
+         'numeroSemestre',
+         'modalidad',
+         'recomendaciones',
+         'observaciones',
+         'rutaImagen',
+         'idTipoActividad',
+         'idUserResp',
+         'idUserProg',
+         'invitado'
       ];
 
     public $timestamps = true;

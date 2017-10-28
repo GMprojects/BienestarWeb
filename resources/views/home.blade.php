@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-      <title>FacFar | Home</title>
+      <title>FacFar | Inicio</title>
       <link rel="stylesheet" href="{{ asset('plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('facfar/facfar.css') }}"/>
@@ -29,12 +29,7 @@
             <div class="row">
 
                @include('layouts.partials.carousel')
-               <br />
-               @include('layouts.partials.act-mini', )
-               @include('layouts.partials.act-mini', )
-               @include('layouts.partials.act-mini', )
-               @include('layouts.partials.act-mini', )
-               @include('layouts.partials.act-mini', )
+               <br />               
                @foreach ($actividades as $actividad)
                   @include('layouts.partials.act-mini', [$actividad])
                @endforeach

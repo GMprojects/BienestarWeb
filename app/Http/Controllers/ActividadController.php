@@ -46,12 +46,13 @@ class ActividadController extends Controller
     //    dd($request);
         $actividades = Actividad::Search($request)->get();
         //dd($actividades);
-        return view('programador.actividad.index',['actividades' => $actividades,
-                                                   'idUserProgramador' => $request->idUserProgramador,
-                                                   'idUserResponsable', $request->idUserResponsable,
-                                                   'idUserInscrito', $request->idUserInscrito,
-                                                   'idUserInscrito', $request->idUserInscrito,
-                                                   'estadoCancelado', $request->estadoCancelado]);
+        return view('programador.actividad.index',[
+            'actividades' => $actividades,
+            'idUserProgramador' => $request->idUserProgramador,
+            'idUserResponsable', $request->idUserResponsable,
+            'idUserInscrito', $request->idUserInscrito,
+            'idUserInscrito', $request->idUserInscrito,
+            'estadoCancelado', $request->estadoCancelado]);
     }
 
     /**
@@ -76,6 +77,7 @@ class ActividadController extends Controller
      */
      public function store(Request $request)
      {
+        dd($request);
         $mensajeA = 'Se le invita a participar de una actividad';
         $mensajeR = 'Ud. ha sido asignado como responsable de una actividad';
         $idUserProg = $request->user()->id;
@@ -916,4 +918,23 @@ class ActividadController extends Controller
         return response()->json($actividades);
       }
     }
+
+    public function member_show($id)
+  {
+      $actividad = Actividad::findOrFail($id);
+      $actividad->each(function($actividad){
+         $actividad->tipoActividad;
+         $actividad->evidenciasActividad;
+         $actividad->responsable;
+         $actividad->programador;
+         $actividad->inscripcionesADA;
+         $actividad->encuestas;
+         $actividad->actividadComedor;
+         $actividad->actividadMovilidad;
+         $actividad->actividadPedagogia;
+         $actividad->actividadGrupal;
+      });
+     //  dd($actividad->actividadesGrupal);
+      return view('actividad')->with('actividad',$actividad);
+  }
 }
