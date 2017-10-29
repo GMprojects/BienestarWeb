@@ -70,10 +70,10 @@ return [
             'model' => BienestarWeb\User::class,
         ],
 
-         'users' => [
-             'driver' => 'database',
-             'table' => 'user',
-         ],
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*
@@ -98,4 +98,5 @@ return [
             'expire' => 60,
         ],
     ],
+
 ];

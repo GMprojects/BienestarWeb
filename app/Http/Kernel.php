@@ -18,6 +18,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \BienestarWeb\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \BienestarWeb\Http\Middleware\TrustProxies::class,
     ];
 
     /**
@@ -61,6 +62,6 @@ class Kernel extends HttpKernel
         'miembro' => \BienestarWeb\Http\Middleware\MiddMiembro::class,
         'alumno' => \BienestarWeb\Http\Middleware\MiddAlumno::class,
         'docente' => \BienestarWeb\Http\Middleware\MiddDocente::class,
-        'administrativo' => \BienestarWeb\Http\Middleware\MiddAdministrativo::class
+        'administrativo' => \BienestarWeb\Http\Middleware\MiddAdministrativo::class,
     ];
 }

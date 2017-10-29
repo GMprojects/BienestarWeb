@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'HomeController@index')->name('home');
+Auth::routes();
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('tipoPersona','TipoPersonaController');
@@ -37,7 +38,7 @@ Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
 
 
 Route::middleware('auth')->prefix('miembro')->group(function () {
-    Route::resource('habitoEstudio','HabitoEstudioController');
+    Route::resource('habilogitoEstudio','HabitoEstudioController');
     Route::resource('perfil','PerfilController');
 });
 
@@ -55,7 +56,6 @@ Route::middleware(['programador', 'auth'])->prefix('programador')->group(functio
     Route::resource('evidenciaActividad', 'EvidenciaActividadController');
 });
 
-Auth::routes();
 
 /*                            AJAX                                  */
 Route::get('listaResponsablesGen','UserController@getUsers');

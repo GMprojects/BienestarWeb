@@ -60,16 +60,11 @@ return [
           'root' => storage_path('app/public/actividades'),
         ],
 
-        'users' => [
-          'driver' => 'local',
-          'root' => storage_path('app/public/users'),
-        ],
-
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_KEY'),
-            'secret' => env('AWS_SECRET'),
-            'region' => env('AWS_REGION'),
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
         ],
 

@@ -29,7 +29,7 @@
             <div class="row">
 
                @include('layouts.partials.carousel')
-               <br />               
+               <br />
                @foreach ($actividades as $actividad)
                   @include('layouts.partials.act-mini', [$actividad])
                @endforeach
