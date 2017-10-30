@@ -17,7 +17,7 @@ class CrearTablaActGrupal extends Migration
         {
             $tabla->increments('idActGrupal');
             $tabla->integer('cuposDisponibles');
-            $tabla->integer('cuposOcupados');
+            $tabla->integer('cuposOcupados')->defaul(0);
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();

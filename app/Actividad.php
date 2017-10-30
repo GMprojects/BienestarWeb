@@ -15,8 +15,10 @@ class Actividad extends Model
       protected $primaryKey = 'idActividad';
    	protected $fillable = [
          'titulo',
-         'fechaProgramacion',
-         'horaProgramacion',
+         'fechaInicio',
+         'horaInicio',
+         'fechaFin',
+         'horaFin',
          'lugar',
          'referencia',
          'descripcion',
@@ -39,9 +41,9 @@ class Actividad extends Model
 
     public $timestamps = true;
 
-   	public function tipoActividad()	{
-   		return $this->belongsTo('BienestarWeb\tipoActividad','idTipoActividad');
-   	}
+	public function tipoActividad()	{
+		return $this->belongsTo('BienestarWeb\tipoActividad','idTipoActividad');
+	}
     public function evidenciasActividad(){
       return $this->hasMany('BienestarWeb\EvidenciaActividad','idActividad');
     }

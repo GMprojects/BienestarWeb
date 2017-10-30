@@ -26,7 +26,7 @@ class CrearTablaActividad extends Migration
             $tabla->date('fechaEjecutada')->nullable();
             $tabla->time('horaEjecutada')->nullable();
             $tabla->integer('cuposTotales');
-            $tabla->enum('estado', ['1', '2', '3', '4']);
+            $tabla->enum('estado', ['1', '2', '3', '4'])->default('1');
             /*  Estado:
                 1. Programada
                 2. Ejecutada

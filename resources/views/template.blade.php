@@ -20,6 +20,7 @@
       <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/flaticon/flaticon.css') }}"/>
+      <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/square/green.css') }}"/>
 
 
       <!-- Scripts GENERALES -->
@@ -35,6 +36,7 @@
       <script src="{{ asset('plugins/select-1.12.4/dist/js/bootstrap-select.min.js') }}"></script>
       <script src="{{ asset('plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
       <script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
+      <script src="{{ asset('plugins/iCheck/icheck.js') }}"></script>
 
    </head>
    <body>
@@ -79,11 +81,9 @@
                increaseArea: '20%' // optional
             });
             $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-            $("#input-id").fileinput();
-            $("#input-id").fileinput({'showUpload':false, 'previewFileType':'any'});
       	});
 
-         
+
       </script>
 
 </html>

@@ -89,7 +89,6 @@
          data: { id : {{ Auth::user()->id }}, anioSemestre : 2017, numeroSemestre : 1 },
          dataType: 'json',
          success:function(data) {
-            console.log(data);
             if(data.tutorados > 0){
                $('#buttons-list').append('<li><a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados') }}"'+'><i class="fa fa-plus"></i>Mis Tutorados</a></li>');
             }

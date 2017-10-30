@@ -2,7 +2,7 @@
 
    <div class="act-mini">
       <div class="act-mini-header">
-         <a href="{{ url('actividad-demo') }}"><img class="img-rounded" src="{{ asset('img/img5.jpg') }}" alt="No disponible"></a>
+         <a href="{{ url('actividad-demo') }}"><img class="img-rounded" src="{{ asset('img/deportes.jpg') }}" alt="No disponible"></a>
       </div>
       <div class="act-mini-body" >
          <div class="ff-calendar">

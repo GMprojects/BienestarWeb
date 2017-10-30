@@ -44,12 +44,12 @@
                            @if($actividad->programador->foto == null)
                               <a href="#"><img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle"></a>
                            @else
-                              <a href="#"><img src="{{ asset('storage/'.$actividad->programdor->foto) }}" alt="Not found" class="img-circle"></a>
+                              <a href="#"><img src="{{ asset('storage/'.$actividad->programador->foto) }}" alt="Not found" class="img-circle"></a>
                            @endif
                         </div>
                         <div class="member-data">
-                           <div class="member-name"><a href="#">{{ $actividad->programdor->nombre }} {{ $actividad->programdor->apellidoPaterno }} </a></div>
-                           <div class="member-email"><a href="#">{{ $actividad->programdor->email }}</a></div>
+                           <div class="member-name"><a href="#">{{ $actividad->programador->nombre }} {{ $actividad->programador->apellidoPaterno }} </a></div>
+                           <div class="member-email"><a href="#">{{ $actividad->programador->email }}</a></div>
                         </div>
                      </div>
                   </div>
@@ -93,45 +93,47 @@
                <section class="col-md-6">
                   <div class="act-view">
                      <div class="act-view-header">
-                        <img class="img-thumbnail" src="{{ asset('img/img5.jpg') }}" alt="No disponible">
+                        @if($actividad->rutaImagen == null)
+                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found">
+                        @else
+                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found">
+                        @endif
                      </div>
                      <div class="act-view-body">
                         <div class="act-view-1">
-                           <span class="act-view-title">Esta es una actividad con un titulo más grande, pero demasiado grande, que no cabe</span>
+                           <span class="act-view-title">{{ $actividad->titulo }}</span>
                         </div>
                         <hr class="act-hr">
                         <div class="act-view-details">
                            <div class="act-view-2" >
                               <div class="col-sm-6">
                                  <span class="text-muted">Cuándo?</span>
-                                 <h4 class="no-mt">Sábado, 26 de Noviembre</h4>
+                                 <h4 class="no-mt">{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }}</h4>
                               </div>
                               <div class="col-sm-6">
                                  <span class="text-muted">A qué hora?</span>
-                                 <h4 class="no-mt">12:00 p.m.</h4>
+                                 <h4 class="no-mt">{{ date('G:i', strtotime( $actividad->horaInicio )) }}</h4>
                               </div>
                               <div class="col-sm-12">
                                  <span class="text-muted">Dónde?</span>
-                                 <h4 class="no-mt"><a href="#">Universidad Nacional de Trujillo</a></h4>
+                                 <h4 class="no-mt"><a href="#">{{ $actividad->lugar }}</a></h4>
                               </div>
                            </div>
                            <div class="act-view-2" style="margin-left:15px; padding-right:15px;">
                               <button type="button" class="btn btn-sm btn-ff pull-right"><i class="fa fa-star-o"></i>Asistiré</button>
                               <h5 class="no-mt">
-                                 <span class="label label-success rounded">14 asistirán</span>
-                                 <span class="label label-danger rounded">6 restantes</span>
+                                 @if( $actividad->idTipoActividad != 4 )
+                                    <span class="label label-success rounded">{{ $actividad->actividadGrupal->cuposOcupados }} asistirán</span>
+                                    <span class="label label-danger rounded">{{ $actividad->actividadGrupal->cuposDisponibles }} restantes</span>
+                                 @else
+                                    <span class="label label-danger rounded">TUTORADOS</span>
+                                 @endif
                               </h5>
                            </div>
                         </div>
                         <hr class="act-hr">
                         <div class="act-view-desc">
-                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                              reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                              Excepteur sint occaecat cupidatat non proident,
-                              sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                           <p>{{ $actividad->descripcion }}</p>
                         </div>
                      </div>
                      <div class="act-view-footer">

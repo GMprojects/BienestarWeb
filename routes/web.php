@@ -35,15 +35,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
 
-
+//PERMISOS DE MIEMBRO
 Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
     Route::resource('perfil','PerfilController');
 });
-
 Route::middleware('auth')->prefix('miembro')->get('miperfil', function(){
    return view('miembro.miperfil');
 });
+ Route::middleware('auth')->prefix('miembro')->get('actividad/{actividad}', 'ActividadController@member_show');
 
 Route::get('perfilTipo', 'UserController@getUserTipo');
 

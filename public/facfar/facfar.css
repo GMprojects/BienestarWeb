@@ -16,6 +16,9 @@ a:hover{
 .fa{
    margin-right: 5px;
 }
+.input-group-addon .fa{
+   margin-right: 0px;
+}
 .header-princ{
    max-height: 50px;
    background-color: #4B367C;
@@ -151,10 +154,10 @@ a:hover{
    }
    .div-buttons{
       padding-left: 15px;
-      padding-right: 15px;
+      padding-right: 25px;
       height: 50px;
       position: relative;
-      display: flex;
+      display: inline-block;
       top: 0;
       right: 0;
       width: 100%;
@@ -345,6 +348,7 @@ a:hover{
     margin-top: 20px;
    }
 }
+
 /* Botón FACFAR */
 .btn-facfar{
    background: #4B367C;
@@ -383,10 +387,24 @@ a:hover{
    color: white;
    background-color: #35CA7F;
 }
+
+.btn-ff-red{
+   border-radius: 0px;
+   background: #EF2109;
+   color: white;
+}
+.btn-ff-red:focus, .btn-ff-red:hover{
+   color: white;
+   background-color: #FE523E;
+}
 /* Formulario FACFAR */
 
 .rounded{
    border-radius: 25px !important;
+}
+.rounded:focus{
+   border-color: #6441a4;
+	box-shadow: 0px 0px 3px 1px rgba(106, 27, 154, 0.5);
 }
 .rounded-right{
    border-radius: 0 25px 25px 0 !important;
@@ -1297,7 +1315,7 @@ textarea:focus {
    background-color: white;
    border-radius: 5px;
    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-   margin-bottom: 20px;
+   margin-bottom: 10px;
    padding: 0 15px 15px 15px;
 }
 .caja-header{
@@ -1324,19 +1342,43 @@ textarea:focus {
    color: #6441a4;
    font-size: 2em;
 }
-.caja-body{
+.caja-tools{
+   position: absolute;
+   float: right;
+   right: 10px;
+   top: 0px;
+}
+.btn-caja {
+  padding: 5px;
+  font-size: 1.6em;
+  background: transparent;
+  color: #6441a4;
+}
+.open .btn-caja,
+.btn-caja:hover {
+  color: #7D5BBE;
+}
+.btn-caja.btn:active {
+  box-shadow: none;
+}
+.caja-body, .caja-footer{
    padding-left: 50px;
    padding-right: 50px;
    width: 100%;
+   display: inline-block;
 }
-.caja-footer{
 
+.caja-header:before,
+.caja-body:before,
+.caja-footer:before,
+.caja-header:after,
+.caja-body:after,
+.caja-footer:after {
+  content: " ";
+  display: table;
 }
 @media (max-width : 768px) {
-   .caja{
-      padding: 0 5px 5px 5px;
-   }
-   .caja-body{
+   .caja-body, .caja-footer{
       padding-left: 0px;
       padding-right: 0px;
    }

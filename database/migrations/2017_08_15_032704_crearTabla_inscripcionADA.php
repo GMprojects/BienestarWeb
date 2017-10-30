@@ -35,7 +35,7 @@ class CrearTablaInscripcionADA extends Migration
         Schema::create('InscripcionAlumno', function(Blueprint $tabla)
         {
             $tabla->increments('idInscripcionAlumno');
-            $tabla->enum('asistencia', ['0', '1']);
+            $tabla->enum('asistencia', ['0', '1'])->default('0');
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad');
@@ -55,7 +55,7 @@ class CrearTablaInscripcionADA extends Migration
         Schema::create('InscripcionDocente', function(Blueprint $tabla)
         {
             $tabla->increments('idInscripcionDocente');
-            $tabla->enum('asistencia', ['0', '1']);
+            $tabla->enum('asistencia', ['0', '1'])->default('0');
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad');
@@ -75,7 +75,7 @@ class CrearTablaInscripcionADA extends Migration
         Schema::create('InscripcionAdministrativo', function(Blueprint $tabla)
         {
             $tabla->increments('idInscripcionAdministrativo');
-            $tabla->enum('asistencia', ['0', '1']);
+            $tabla->enum('asistencia', ['0', '1'])->default('0');
 
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad');

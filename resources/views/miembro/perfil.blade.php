@@ -28,6 +28,58 @@
                @include('layouts.partials.sidebar')
             @endif
             <div class="row">
+               <div class="col-lg-3 col-md-3 perfil">
+                  <div class="ff-card">
+                     <div class="header-card" style="width:inherit !important;">
+                        <span class="label title-box"> Mi Perfil</span>
+                     </div>
+                     <div class="img-profile">
+                        @if ( $du['user']->foto != null )
+                           <img src="{{ asset('storage/'.$du['user']->foto) }}" class="img-circle img-profile-img">
+                        @else
+                           <img src="{{ asset('img/user-offline.png') }}" class="img-circle img-profile-img">
+                        @endif
+                     </div>
+                     <hr class="act-hr"/>
+                     <div class="body-card">
+                        <p><i class="fa fa-user"></i>{{ $du['user']->nombre }}</p>
+                        <p><i class="fa fa-user"></i>{{ $du['user']->apellidoPaterno }} {{ $du['user']->apellidoMaterno }}</p>
+                        <p><i class="fa fa-map-marker"></i>{{ $du['user']->direccion }}</p>
+                        <p><i class="fa fa-phone"></i>{{ $du['user']->telefono }}</p>
+                        <p><i class="fa fa-mobile-phone"></i>{{ $du['user']->celular }}</p>
+                        <p><i class="fa fa-birthday-cake"></i>{{ date("d F",strtotime($du['user']->fechaNacimiento)) }}</p>
+                        @switch ( $du['user']->idTipoPersona )
+                           @case(1) <p><i class="fa fa-graduation-cap"></i><span class="label label-success">Alumno</span></p> @break
+                           @case(2) <p><i class="fa fa-briefcase"></i><span class="label label-warning">Docente</span></p>
+                              @switch($du['user']->docente->deptoAcademico)
+                                 @case(1) <p><i class="fa fa-briefcase"></i><span>Dpto. Académico de Bioquímica</span></p> @break
+                                 @case(2) <p><i class="fa fa-briefcase"></i><span>Dpto. Académico de Farmacología</span></p> @break
+                                 @case(3) <p><i class="fa fa-briefcase"></i><span>Dpto. Académico de Farmacotecnia</span></p> @break
+                              @endswitch
+                                    <p><i class="fa fa-graduation-cap"></i><span>{{ $du['user']->docente->maestria }}</span></p>
+                                    <p><i class="fa fa-graduation-cap"></i><span>{{ $du['user']->docente->doctorado }}</span></p>@break
+                           @case(3) <p><i class="fa fa-graduation-cap"></i><span class="label label-danger">Administrativo</span></p>
+                                    <p><i class="fa fa-briefcase"></i><span>{{ $du['user']->administrativo->cargo }}</span></p>@break
+                        @endswitch
+
+                        @switch( $du['user']->funcion)
+                           @case(1) <p><i class="fa fa-key"></i><span class="label label-success">Miembro</span></p> @break
+                           @case(3) <p><i class="fa fa-key"></i><span class="label label-warning">Programador</span></p> @break
+                           @case(3) <p><i class="fa fa-key"></i><span class="label label-danger">Administrador</span></p> @break
+                        @endswitch
+
+                     </div>
+                     <hr class="act-hr"/>
+                     {{--
+                     <div class="footer-card">
+                        @if(Auth::user()->id == $du['user']->id)
+                           <a href="{{ url('admin/user/edit') }}" class="btn btn-ff" type="button" name="button"><i class="fa fa-edit"></i>Editar</a>
+                        @endif
+                     </div>
+                     --}}
+                  </div>
+               </div>
+               
                <div class="col-lg-9 col-md-9 col-xs-12">
                   <div class="inscrito" style="display: flex;">
                      <div class="ff-card">
@@ -120,7 +172,7 @@
                            @if( $du['user']->sexo == 'm' )
                               <span class="label title-box"><i class="fa fa-tasks"></i>Soy Programadora</span>
                            @else
-                              <span class="label title-box"><i class="fa fa-tasks"></i>Soy organizador</span>
+                              <span class="label title-box"><i class="fa fa-tasks"></i>Soy Programador</span>
                            @endif
                         </div>
                         <div class="body-card" style="margin-left:0px;">
@@ -186,57 +238,7 @@
 
                </div>
 
-               <div class="col-lg-3 col-md-3">
-                  <div class="ff-card">
-                     <div class="header-card" style="width:inherit !important;">
-                        <span class="label title-box"> Mi Perfil</span>
-                     </div>
-                     <div class="img-profile">
-                        @if ( $du['user']->foto != null )
-                           <img src="{{ asset('storage/'.$du['user']->foto) }}" class="img-circle img-profile-img">
-                        @else
-                           <img src="{{ asset('img/user-offline.png') }}" class="img-circle img-profile-img">
-                        @endif
-                     </div>
-                     <hr class="act-hr"/>
-                     <div class="body-card">
-                        <p><i class="fa fa-user"></i>{{ $du['user']->nombre }}</p>
-                        <p><i class="fa fa-user"></i>{{ $du['user']->apellidoPaterno }} {{ $du['user']->apellidoMaterno }}</p>
-                        <p><i class="fa fa-map-marker"></i>{{ $du['user']->direccion }}</p>
-                        <p><i class="fa fa-phone"></i>{{ $du['user']->telefono }}</p>
-                        <p><i class="fa fa-mobile-phone"></i>{{ $du['user']->celular }}</p>
-                        <p><i class="fa fa-birthday-cake"></i>{{ date("d F",strtotime($du['user']->fechaNacimiento)) }}</p>
-                        @switch ( $du['user']->idTipoPersona )
-                           @case(1) <p><i class="fa fa-graduation-cap"></i><span class="label label-success">Alumno</span></p> @break
-                           @case(2) <p><i class="fa fa-briefcase"></i><span class="label label-warning">Docente</span></p>
-                              @switch($du['user']->docente->deptoAcademico)
-                                 @case(1) <p><i class="fa fa-briefcase"></i><span>Dpto. Académico de Bioquímica</span></p> @break
-                                 @case(2) <p><i class="fa fa-briefcase"></i><span>Dpto. Académico de Farmacología</span></p> @break
-                                 @case(3) <p><i class="fa fa-briefcase"></i><span>Dpto. Académico de Farmacotecnia</span></p> @break
-                              @endswitch
-                                    <p><i class="fa fa-graduation-cap"></i><span>{{ $du['user']->docente->maestria }}</span></p>
-                                    <p><i class="fa fa-graduation-cap"></i><span>{{ $du['user']->docente->doctorado }}</span></p>@break
-                           @case(3) <p><i class="fa fa-graduation-cap"></i><span class="label label-danger">Administrativo</span></p>
-                                    <p><i class="fa fa-briefcase"></i><span>{{ $du['user']->administrativo->cargo }}</span></p>@break
-                        @endswitch
 
-                        @switch( $du['user']->funcion)
-                           @case(1) <p><i class="fa fa-key"></i><span class="label label-success">Miembro</span></p> @break
-                           @case(3) <p><i class="fa fa-key"></i><span class="label label-warning">Programador</span></p> @break
-                           @case(3) <p><i class="fa fa-key"></i><span class="label label-danger">Administrador</span></p> @break
-                        @endswitch
-
-                     </div>
-                     <hr class="act-hr"/>
-                     {{--
-                     <div class="footer-card">
-                        @if(Auth::user()->id == $du['user']->id)
-                           <a href="{{ url('admin/user/edit') }}" class="btn btn-ff" type="button" name="button"><i class="fa fa-edit"></i>Editar</a>
-                        @endif
-                     </div>
-                     --}}
-                  </div>
-               </div>
             </div>
          </section>
       </div>
