@@ -2,11 +2,19 @@
 
 namespace BienestarWeb\Http\Controllers;
 
-use BienestarWeb\InscripcionADA;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use BienestarWeb\Http\Controllers\Controller;
+
+use BienestarWeb\InscripcionADA;
+use BienestarWeb\InscripcionAlumno;
+use BienestarWeb\InscripcionDocente;
+use BienestarWeb\InscripcionAdministrativo;
+use BienestarWeb\User;
+use BienestarWeb\Actividad;
+
+use Illuminate\Support\Facades\Auth;
 
 class InscripcionADAController extends Controller
 {
@@ -62,7 +70,7 @@ class InscripcionADAController extends Controller
           }
         }
         // -------------------------------------------- //
-        return view('programador.inscripcionADA.index')
+        return view('miembro.inscripcion.index')
             ->with('inscripcionesDocentes',$inscripcionesDocentes)
             ->with('inscripcionesAlumnos',$inscripcionesAlumnos)
             ->with('inscripcionesAdministrativos',$inscripcionesAdministrativos)
@@ -91,10 +99,42 @@ class InscripcionADAController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+      public function store(Request $request){
+         $actividad = Actividad::findOrFail($request->idActividad);
+         $user =  Auth::user();
+         $inscripcionADA = $actividad->inscripcionesADA()->create([]);
+         switch ($user->idTipoPersona) {
+            case '1':
+               $alumno = User::findOrFail($user->id)->alumno;
+               $inscripcionAlumno= new InscripcionAlumno;
+               $inscripcionADA->inscripcionAlumno()->create([
+                 'idActividad' => $actividad->idActividad,
+                 'idAlumno' => $alumno->idAlumno
+               ]);
+               break;
+            case '2':
+               $docente = User::findOrFail($user->id)->docente;
+               $inscripcionDocente = new InscripcionDocente;
+               $inscripcionADA->inscripcionDocente()->create([
+                 'idActividad' => $actividad->idActividad,
+                 'idDocente' => $docente->idDocente
+               ]);
+               break;
+            case '3':
+               $administrativo = User::findOrFail($user->id)->administrativo;
+               $inscripcionAdministrativo = new InscripcionAdministrativo;
+               $inscripcionADA->inscripcionAdministrativo()->create([
+                 'idActividad' => $actividad->idActividad,
+                 'idAdministrativo' => $administrativo->idAdministrativo
+               ]);
+               break;
+         }
+         /*if($actividad->actividadGrupal != null){
+            $actividad->actividadGrupal->cuposDisponibles = $actividad->actividadGrupal->cuposDisponibles -1;
+            $actividad->actividadGrupal->cuposOcupados = $actividad->actividadGrupal->cuposOcupados +1;
+         }*/
+         return redirect()->back();
+      }
 
     /**
      * Display the specified resource.

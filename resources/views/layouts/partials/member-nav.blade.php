@@ -56,7 +56,7 @@
                      @else
                         <img src="{{ asset('img/user-offline.png') }}" class="img-usu" alt="not found">
                      @endif
-                     <span class="hidden-xs hidden-sm" style="padding-left:5px;">{{ Auth::user()->nombre }} {{ Auth::user()->apellidoPaterno }}</span>
+                     <span class="hidden-xs hidden-sm" style="padding-left:5px;">{{ Auth::user()->nombre }}</span>
                   </a>
                   <ul class="dropdown-menu">
                      <li class="header-usu">
@@ -76,7 +76,7 @@
                      </li>
                      <li class="footer-usu">
                         <div class="pull-left">
-                           <a href="{{ action('PerfilController@show', ['id' => Auth::user()->id ]) }}" class="btn btn-default"> <i class="fa fa-user"> </i> Perfil</a>
+                           <a href="{{ action('MiPerfilController@show', ['idPerfil' => Auth::user()->id ]) }}" class="btn btn-default"> <i class="fa fa-user"> </i> Perfil</a>
                         </div>
                         <div class="pull-right">
                            <a class="btn btn-default" href="{{ route('logout') }}"

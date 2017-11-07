@@ -44,7 +44,7 @@ class CrearTablaActividad extends Migration
             $tabla->string('observaciones', 500)->default('Ninguna');
             $tabla->string('recomendaciones', 500)->default('Ninguna');
             $tabla->mediumtext('rutaImagen')->nullable();
-            $tabla->string('invitado', 500)->default('--');
+            $tabla->string('invitado', 500)->nullable();
             //Clave foranea de la tabla tipoActividad
             $tabla->integer('idTipoActividad')->unsigned();
             $tabla->foreign('idTipoActividad')->references('idTipoActividad')->on('TipoActividad');

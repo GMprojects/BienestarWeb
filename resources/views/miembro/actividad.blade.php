@@ -21,13 +21,15 @@
             @if(Auth::user() != null)
                @include('layouts.partials.sidebar')
             @endif
-            <div class="row" style="margin-left:0px; margin-right:0px; margin-top: -20px;">
-               <ol class="breadcrumb">
-                  <li><a href="#">Inicio</a></li>
-                  <li><a href="#">Categorías</a></li>
-                  <li><a href="#">{{ $actividad->tipoactividad->tipo }}</a></li>
-                  <li class="active">{{ str_limit($actividad->titulo, 20) }}</li>
-               </ol>
+            <div class="row">
+               <div class="col-md-12">
+                  <ol class="breadcrumb">
+                     <li><a href="{{ route('home') }}">Inicio</a></li>
+                     <li><a href="#">Categorías</a></li>
+                     <li><a href="#">{{ $actividad->tipoactividad->tipo }}</a></li>
+                     <li class="active">{{ str_limit($actividad->titulo, 20) }}</li>
+                  </ol>
+               </div>
             </div>
             <div class="row">
                <section class="organizadores col-md-3">
@@ -67,13 +69,13 @@
                            @endif
                         </div>
                         <div class="member-data">
-                           <div class="member-name"><a href="#"></i>{{ $actividad->responsable->nombre }} {{ $actividad->responsable->apellidoPaterno }}</a></div>
+                           <div class="member-name"><a href="{{ action('PerfilController@show', ['id' =>$actividad->responsable]) }}"></i>{{ $actividad->responsable->nombre }} {{ $actividad->responsable->apellidoPaterno }}</a></div>
                            <div class="member-email"><a href="#">{{ $actividad->responsable->email }}</a></div>
                         </div>
                      </div>
                   </div>
 
-                  @if($actividad->invitado != '--')
+                  @if($actividad->invitado != null)
                      <div class="panel panel-default hidden-sm hidden-xs">
                         <div class="panel-heading">
                            <h3 class="panel-title">Invitado</h3>
@@ -83,61 +85,105 @@
                               <a href="#"><img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle"></a>
                            </div>
                            <div class="member-data">
-                              <div class="member-name"><a href="#">Un Invitado</a></div>
-                              <div class="member-email"><a href="#"></i>invitadoimpresionante@unitru.edu.pe</a></div>
+                              <div class="member-name"><a href="#">{{ preg_split("/[-]/",$actividad->invitado)[0] }} {{ preg_split("/[-]/",$actividad->invitado)[1] }}</a></div>
+                              <div class="member-email"><a href="#">{{preg_split("/[-]/",$actividad->invitado)[2] }}</a></div>
                            </div>
                         </div>
                      </div>
                   @endif
                </section>
                <section class="col-md-6">
+
                   <div class="act-view">
-                     <div class="act-view-header">
+                     <div class="act-view-img">
                         @if($actividad->rutaImagen == null)
                            <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found">
                         @else
                            <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found">
                         @endif
                      </div>
-                     <div class="act-view-body">
-                        <div class="act-view-1">
-                           <span class="act-view-title">{{ $actividad->titulo }}</span>
-                        </div>
-                        <hr class="act-hr">
-                        <div class="act-view-details">
-                           <div class="act-view-2" >
-                              <div class="col-sm-6">
-                                 <span class="text-muted">Cuándo?</span>
-                                 <h4 class="no-mt">{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }}</h4>
-                              </div>
-                              <div class="col-sm-6">
-                                 <span class="text-muted">A qué hora?</span>
-                                 <h4 class="no-mt">{{ date('G:i', strtotime( $actividad->horaInicio )) }}</h4>
-                              </div>
-                              <div class="col-sm-12">
-                                 <span class="text-muted">Dónde?</span>
-                                 <h4 class="no-mt"><a href="#">{{ $actividad->lugar }}</a></h4>
-                              </div>
+                     <div class="act-view-title">{{ $actividad->titulo }}</div>
+                     <div class="act-view-www">
+                        <div class="act-view-dt">
+                           <div class="act-view-icon pull-left text-center">
+                              <i class="fa fa-calendar text-center"></i>
                            </div>
-                           <div class="act-view-2" style="margin-left:15px; padding-right:15px;">
-                              <button type="button" class="btn btn-sm btn-ff pull-right"><i class="fa fa-star-o"></i>Asistiré</button>
-                              <h5 class="no-mt">
-                                 @if( $actividad->idTipoActividad != 4 )
-                                    <span class="label label-success rounded">{{ $actividad->actividadGrupal->cuposOcupados }} asistirán</span>
-                                    <span class="label label-danger rounded">{{ $actividad->actividadGrupal->cuposDisponibles }} restantes</span>
-                                 @else
-                                    <span class="label label-danger rounded">TUTORADOS</span>
-                                 @endif
-                              </h5>
+                           <div class="dt-txt">
+                              <span class="text-muted">Cuándo?</span>
+                              <div class="dt-txt-big">{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }}</div>
                            </div>
                         </div>
-                        <hr class="act-hr">
-                        <div class="act-view-desc">
-                           <p>{{ $actividad->descripcion }}</p>
+                        <div class="act-view-dt">
+                           <div class="act-view-icon pull-left text-center">
+                              <i class="fa fa-clock-o "></i>
+                           </div>
+                           <div class="dt-txt">
+                              <span class="text-muted">A qué hora?</span>
+                              <div class="dt-txt-big">{{ date('G:i', strtotime( $actividad->horaInicio )) }}</div>
+                           </div>
                         </div>
+                        <div class="act-view-dt">
+                           <div class="act-view-icon pull-left text-center">
+                              <i class="fa fa-map-marker "></i>
+                           </div>
+                           <div class="dt-txt">
+                              <span class="text-muted">Dónde?</span>
+                              <div class="dt-txt-big"><a href="#">{{ $actividad->lugar }}</a></div>
+                           </div>
+                        </div>
+                        @if($actividad->referencia != null)
+                           <div class="act-view-dt">
+                              <div class="act-view-icon pull-left text-center">
+                                 <i class="fa fa-map-marker "></i>
+                              </div>
+                              <div class="dt-txt">
+                                 <span class="text-muted">Y si mi pierdo?</span>
+                                 <div class="dt-txt-big">{{ $actividad->referencia }}</div>
+                              </div>
+                           </div>
+                        @endif
                      </div>
+                     <div class="act-view-nums">
+                        <div class="act-view-insc pull-left">
+                           @if( $actividad->actividadGrupal!= null )
+                              <span class="label label-success">{{ $actividad->actividadGrupal->cuposOcupados }} asistirán</span>
+                              <span class="label label-danger">{{ $actividad->actividadGrupal->cuposDisponibles }} restantes</span>
+                           @else
+                              <span class="label label-danger">TUTORADOS</span>
+                           @endif
+                        </div>
+                        @if(in_array($actividad->idActividad, $list_insc))
+                           <a class="btn btn-ff pull-right" href="{{ action('ActividadController@member_show', $actividad->idActividad) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
+                              <i class="fa fa-check-circle"></i> Asistiré
+                           </a>
+                        @else
+                           @if(Auth::user() == null || $actividad->idActividad != 4 || $actividad->actividadGrupal->cuposDisponibles > 0)
+                              <a class="btn btn-ff pull-right" href="{{ route('inscripcion.store') }}"
+                                 onclick="event.preventDefault();
+                                 document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                                 <i class="fa fa-circle-o"></i> Deseo Asistir
+                              </a>
+                              <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
+                                 {{ csrf_field() }}
+                              </form>
+                           @else
+                              <a class="act-mini-txt pull-right" href="#" data-toggle="tooltip" data-placement="bottom" title="Click para contactar con el programador?">
+                                 <i class="fa fa-times-circle"></i> Inscripcion no disponible
+                              </a>
+                           @endif
+                        @endif
+                     </div>
+                     <div class="act-view-desc">
+                        <div class="dt-txt-big">Descripción</div>
+                        <p>{{ $actividad->descripcion }}</p>
+                     </div>
+                     @if($actividad->informacionAdicional != null)
+                        <div class="act-view-info">
+                           <div class="dt-txt-big">Información Adicional</div>
+                           <p>{{ $actividad->informacionAdicional }}</p>
+                        </div>
+                     @endif
                      <div class="act-view-footer">
-
                      </div>
                   </div>
                </section>

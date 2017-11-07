@@ -235,15 +235,15 @@
 			</div>
 			<div class="caja-body">
 				<div class="form-group">
-					<label for="nombreResponsable">Nombres</label>
+					<label for="nombreResponsable">Nombres *</label>
 					<input type="text"  name="nombreResponsable" class="form-control" value ="{{old('nombreResponsable')}}" placeholder="Nombres">
 				</div>
 				<div class="form-group">
-					<label for="apellidosResponsable">Apellidos</label>
+					<label for="apellidosResponsable">Apellidos *</label>
 					<input type="text" name="apellidosResponsable" class="form-control" value ="{{old('apellidosResponsable')}}" placeholder="Apellidos">
 				</div>
 				<div class="form-group">
-					<label for="emailResponsable">Correo</label>
+					<label for="emailResponsable">Correo *</label>
 					<input type="email" name="emailResponsable" class="form-control" value ="{{old('emailResponsable')}}" placeholder="xxx@xxx.xx">
 				</div>
 			</div>
@@ -280,7 +280,13 @@
 		startDate :  '-3d',
 		format: 'dd/mm/yyyy'
 	})
-
+	$('#daterangepicker').daterangepicker({
+		//autoUpdateInput: false,
+		locale: {
+			format: 'DD/MM/YYYY'
+		},
+		minDate :  '{{ date("d")-2 }}',
+	});
 	$("#selectIdTipoActividad").change(function(){
 		console.log("Val "+ $(this).val()+ "tuputamadre");
 		document.getElementById('boxDatosEspecificos').style.display = 'block';

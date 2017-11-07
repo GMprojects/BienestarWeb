@@ -64,22 +64,22 @@
 
                         @switch( $du['user']->funcion)
                            @case(1) <p><i class="fa fa-key"></i><span class="label label-success">Miembro</span></p> @break
-                           @case(3) <p><i class="fa fa-key"></i><span class="label label-warning">Programador</span></p> @break
+                           @case(2) <p><i class="fa fa-key"></i><span class="label label-warning">Programador</span></p> @break
                            @case(3) <p><i class="fa fa-key"></i><span class="label label-danger">Administrador</span></p> @break
                         @endswitch
 
                      </div>
                      <hr class="act-hr"/>
-                     {{--
+
                      <div class="footer-card">
                         @if(Auth::user()->id == $du['user']->id)
-                           <a href="{{ url('admin/user/edit') }}" class="btn btn-ff" type="button" name="button"><i class="fa fa-edit"></i>Editar</a>
+                           <a href="{{ action('MiPerfilController@member_edit', ['id' => Auth::user()->id]) }}" class="btn btn-ff" type="button" name="button"><i class="fa fa-edit"></i>Editar</a>
                         @endif
                      </div>
-                     --}}
+
                   </div>
                </div>
-               
+
                <div class="col-lg-9 col-md-9 col-xs-12">
                   <div class="inscrito" style="display: flex;">
                      <div class="ff-card">
@@ -88,7 +88,7 @@
                            @if( $du['user']->sexo == 'm' )
                               <span class="label title-box"><i class="fa fa-child"></i>Estoy Inscrita</span>
                            @else
-                              <span class="label title-box">Estoy Inscrito</span>
+                              <span class="label title-box"><i class="fa fa-child"></i>Estoy Inscrito</span>
                            @endif
                         </div>
 

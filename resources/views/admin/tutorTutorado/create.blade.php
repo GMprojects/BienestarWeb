@@ -236,7 +236,7 @@ $(document).ready(function() {
 			 //$('input[type=checkbox]').css("margin", "3px");,
 		 },
 		 error:function() {
-				 console.log("Error ");
+				 console.log("Error ajaxAlumno");
 		 }
 	 });
 	}
@@ -254,7 +254,7 @@ $(document).ready(function() {
 		 data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 		 dataType: 'json',
 		 success:function(data) {
-			 console.log(data);
+			 //console.log(data);
 			 for (var i = 0; i < data.length; i++) {
 				 table.row.add( [data[i].codigo,
 												 data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre,
@@ -264,7 +264,7 @@ $(document).ready(function() {
 			 //$('input[type=checkbox]').css("margin", "3px");,
 		 },
 		 error:function() {
-				 console.log("Error ");
+				 console.log("Error AjaxDocente");
 		 }
 	 });
 	}

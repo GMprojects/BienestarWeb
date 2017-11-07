@@ -61,6 +61,7 @@ class Kernel extends HttpKernel
         'miembro' => \BienestarWeb\Http\Middleware\MiddMiembro::class,
         'alumno' => \BienestarWeb\Http\Middleware\MiddAlumno::class,
         'docente' => \BienestarWeb\Http\Middleware\MiddDocente::class,
+        'perfil' => \BienestarWeb\Http\Middleware\MiddPerfil::class,
         'administrativo' => \BienestarWeb\Http\Middleware\MiddAdministrativo::class
     ];
 }

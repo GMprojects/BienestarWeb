@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-      <title>FacFar | Nueva Actividad</title>
+      <title>FacFar</title>
       <!-- CSS GENERALES -->
       <link rel="stylesheet" href="{{ asset('plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}"/>
@@ -22,7 +22,6 @@
       <link rel="stylesheet" href="{{ asset('plugins/flaticon/flaticon.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/square/green.css') }}"/>
 
-
       <!-- Scripts GENERALES -->
       <script src="{{ asset('plugins/jQuery-3.2.1/jquery-3.2.1.min.js') }}"></script>
       <script src="{{ asset('plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
@@ -32,6 +31,8 @@
       <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
       <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.responsive.min.js') }}"></script>
       <script src="{{ asset('plugins/datatables.net-bs/js/responsive.bootstrap.min.js') }}"></script>
+      <script src="{{ asset('plugins/daterangepicker/moment.min.js') }}"></script>
+      <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>      
       <script src="{{ asset('plugins/datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
       <script src="{{ asset('plugins/select-1.12.4/dist/js/bootstrap-select.min.js') }}"></script>
       <script src="{{ asset('plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
@@ -62,28 +63,29 @@
    </body>
 
    <script>
-         $('.dropify').dropify({
-          messages: {
-         	  'default': 'Click o arrastrar y soltar',
-         	  'replace': 'Click o arrastrar y soltar',
-         	  'remove':  'Quitar',
-         	  'error':   'Ops! Ha ocurrido un error'
-          },
-          error: {
-              'imageFormat': 'Formato de Imagen no permitido (solo .png .jpg y .jpge).'
-           }
+      $(document).ready(function(){
+         $('[data-toggle="tooltip"]').tooltip();
+      });
+      $('.dropify').dropify({
+       messages: {
+      	  'default': 'Click o arrastrar y soltar',
+      	  'replace': 'Click o arrastrar y soltar',
+      	  'remove':  'Quitar',
+      	  'error':   'Ops! Ha ocurrido un error'
+       },
+       error: {
+           'imageFormat': 'Formato de Imagen no permitido (solo .png .jpg y .jpge).'
+        }
+      });
+
+   	$(document).ready(function(){
+         $('input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+            increaseArea: '20%' // optional
          });
-
-      	$(document).ready(function(){
-            $('input').iCheck({
-               checkboxClass: 'icheckbox_square-green',
-               radioClass: 'iradio_square-green',
-               increaseArea: '20%' // optional
-            });
-            $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-      	});
-
-
-      </script>
+         $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+   	});
+   </script>
 
 </html>

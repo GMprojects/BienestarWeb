@@ -74,11 +74,66 @@ class ActividadController extends Controller
       * @param  \Illuminate\Http\Request  $request
       * @return \Illuminate\Http\Response
       */
-      function fecha($fechaIn){
+      function getFecha($fechaIn){
          $dia = substr( $fechaIn,0 ,2);
          $mes =substr( $fechaIn,3 ,2);
          $anio=substr( $fechaIn,-4 ,4);
          return $anio."-".$mes."-".$dia;
+      }
+      function getRutaImagen($request){
+         if($request->file('rutaImagen')){
+            $file = $request->file('rutaImagen');
+            $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
+            $storage = Storage::disk('actividades')->put($name, \File::get($file));
+            if($storage){
+               return 'actividades/'.$name;
+            }else{
+               return NULL;
+            }
+         }
+
+      }
+      function getInivitado($request){
+         if($request->nombreResponsable != NULL){
+            return $request->nombreResponsable.'-'.$request->apellidosResponsable.'-'.$request->emailResponsable;
+         }else{
+            return NULL;
+         }
+      }
+      function getModalidad($request){
+         switch($request->idTipoActividad) {
+            case '1': case '2': return 1;
+            case '4':
+               if(count($request->idAlumnoTutorado) > 1){
+                  return '2';
+               }else{
+                  return '1';
+               }
+            case '5': case '6': case '7': return 2;
+            default:
+               return $request->modalidad;
+         }
+      }
+      function getCuposTotales($request){
+         switch($request->idTipoActividad) {
+            case '1':
+            case '2': return 1;
+            case '4': return count($request->idAlumnoTutorado);
+            case '5':
+            case '6':
+            case '7': return $request->cuposTotales;
+            default:
+               if($request->modalidad == 1)
+                  return 1;
+               else return $request->cuposTotales;
+         }
+      }
+      function getResp($request){
+         if($request->idUserResp == null){
+            return $request->user()->id;
+         }else{
+            return $request->idUserResp;
+         }
       }
       public function store(Request $request){
          //dd($request);
@@ -93,52 +148,24 @@ class ActividadController extends Controller
             'modalidad' => 'required',
             'rutaImagen' => 'image|mimes:jpeg,png,jpg'
          ]);
-         $rutaImagen = null;
-         if($request->file('rutaImagen')){
-            $file = $request->file('rutaImagen');
-            $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
-            $storage = Storage::disk('actividades')->put($name, \File::get($file));
-            if($storage){
-               $rutaImagen = 'actividades/'.$name;
-            }else{
-               $rutaImagen = NULL;
-            }
-         }
-         if($request->nombreResponsable != NULL){
-            $invitado = $request->nombreResponsable.'-'.$request->apellidosResponsable.'-'.$request->emailResponsable;
-         }else{
-            $invitado = '--';
-         }
-         switch($request->idTipoActividad) {
-            case '1': case '2': $modalidad = 1; break;
-            case '4':
-               $nroTutorados = count($request->idAlumnoTutorado);
-               if($nroTutorados > 1){
-                  $modalidad = '2';
-               }else{
-                  $modalidad = '1';
-               }
-            case '5': case '6': case '7': $modalidad = 2; break;
-            default: $modalidad = $request->modalidad; break;
-         }
          $actividad = Actividad::create([
             'titulo' => $request->titulo,
-            'fechaInicio' => ActividadController::fecha($request->fechaInicio),
+            'fechaInicio' => ActividadController::getFecha($request->fechaInicio),
             'horaInicio' => (Carbon::parse($request->horaInicio))->toTimeString(),
-            'fechaFin' =>  ActividadController::fecha($request->fechaFin),
+            'fechaFin' =>  ActividadController::getFecha($request->fechaFin),
             'horaFin' => (Carbon::parse($request->horaFin))->toTimeString(),
             'lugar' => $request->lugar,
             'referencia' => $request->referencia,
             'descripcion' => $request->descripcion,
             'informacionAdicional' => $request->informacionAdicional,
-            'rutaImagen' => $rutaImagen,
-            'invitado' => $invitado,
-            'cuposTotales' => $request->cuposTotales,
+            'rutaImagen' => ActividadController::getRutaImagen($request),
+            'invitado' => ActividadController::getInivitado($request),
+            'cuposTotales' => ActividadController::getCuposTotales($request),
             'anioSemestre' => 2017,
             'numeroSemestre' => 2,
-            'modalidad' => $modalidad,
+            'modalidad' => ActividadController::getModalidad($request),
             'idTipoActividad' => $request->idTipoActividad,
-            'idUserResp' => $request->idUserResp,
+            'idUserResp' => ActividadController::getResp($request),
             'idUserProg' => $request->user()->id
          ]);
 
@@ -171,7 +198,7 @@ class ActividadController extends Controller
             break;
             case '4':
             //buscar user en alumno
-               for ($i = 0; $i < $nroTutorados; $i++) {
+               for ($i = 0; $i < count($request->idAlumnoTutorado); $i++) {
                   $alumno = Alumno::findOrFail($request->idAlumnoTutorado[$i]);
                   $inscripcionADA = $actividad->inscripcionesADA()->create([]);
                   $inscripcionAlumno = $inscripcionADA->inscripcionAlumno()->create([
@@ -219,7 +246,7 @@ class ActividadController extends Controller
          $job = (new JobEmailNuevaAct($actividad, $actividad->idTipoActividad, $userAl, $userResp, $mensajeR, $mensajeA, $request->idAlumnoTutorado))
             ->delay(Carbon::now()->addSeconds(5));
          dispatch($job);
-         return Redirect::to('programador/actividad');
+         return redirect('/');
          //}
      }
     /**
@@ -758,22 +785,10 @@ class ActividadController extends Controller
       }
     }
 
-    public function member_show($id)
-  {
-      $actividad = Actividad::findOrFail($id);
-      /*$actividad->each(function($actividad){
-         $actividad->tipoActividad;
-         $actividad->evidenciasActividad;
-         $actividad->responsable;
-         $actividad->programador;
-         $actividad->inscripcionesADA;
-         $actividad->encuestas;
-         $actividad->actividadComedor;
-         $actividad->actividadMovilidad;
-         $actividad->actividadPedagogia;
-         $actividad->actividadGrupal;
-      });*/
-       //dd($actividad);
-      return view('miembro.actividad')->with('actividad',$actividad);
-  }
+   public function member_show(Request $request){
+      //dd($request);
+      $actividad = Actividad::findOrFail($request->id);
+      return view('miembro.actividad')->with('actividad',$actividad)->with('list_insc', $request->list_insc);
+      //return view('miembro.actividad')->with('actividad',$actividad);
+   }
 }

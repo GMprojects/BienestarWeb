@@ -1,11 +1,10 @@
 <div class="col-md-4 col-sm-6 act-mini-container">
-
    <div class="act-mini">
       <div class="act-mini-header">
          @if($actividad->rutaImagen == null)
-            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found"></a>
+            <a href="{{ action('ActividadController@member_show', $list_insc, $actividad->idActividad) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found"></a>
          @else
-            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}"><img class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
+            <a href="{{ action('ActividadController@member_show', $list_insc, $actividad->idActividad) }}"><img class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
          @endif
       </div>
       <div class="act-mini-body" >
@@ -15,7 +14,7 @@
          </div>
          <div class="act-mini-details">
             <div class="act-mini-1">
-               <span class="act-mini-title"><a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="{{ $actividad->titulo }}">{{ $actividad->titulo }}</a></span>
+               <span class="act-mini-title"><a href="{{ action('ActividadController@member_show', $list_insc, $actividad->idActividad) }}" data-toggle="tooltip" data-placement="bottom" title="{{ $actividad->titulo }}">{{ $actividad->titulo }}</a></span>
             </div>
             <div class="act-mini-2">
                <span>{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }} - </span>
@@ -39,10 +38,10 @@
          @if($actividad->idTipoActividad != 4)
             @if(Auth::user() == null || $actividad->idUserResp != Auth::user()->id )
                @if(Auth::user() != null && Auth::user()->idTipoPersona != 1 && $actividad->idTipoActividad != '5' && $actividad->idTipoActividad != '6' && $actividad->idTipoActividad != '7')
-                  <div class="act-mini-txt pull-right">Exclusiva: Estudiantes</div>
+                  <div class="act-mini-txt pull-right">Exclusiva para Estudiantes</div>
                @else
                   @if(in_array($actividad->idActividad, $list_insc))
-                     <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
+                     <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', $list_insc, $actividad->idActividad) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
                         <i class="fa fa-check-circle"></i> Asistiré
                      </a>
                   @else
@@ -66,9 +65,8 @@
                <div class="act-mini-txt pull-right">Soy Responsable</div>
             @endif
          @else
-            <div class="act-mini-txt pull-right">Exclusiva: Tutorados</div>
+            <div class="act-mini-txt pull-right">Exclusiva para Tutorados</div>
          @endif
       </div>
    </div>
-
 </div>
