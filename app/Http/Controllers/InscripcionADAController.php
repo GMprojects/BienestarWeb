@@ -3,6 +3,16 @@
 namespace BienestarWeb\Http\Controllers;
 
 use BienestarWeb\InscripcionADA;
+use BienestarWeb\InscripcionAlumno;
+use BienestarWeb\InscripcionDocente;
+use BienestarWeb\InscripcionAdministrativo;
+use BienestarWeb\Alumno;
+use BienestarWeb\Docente;
+use BienestarWeb\Administrativo;
+use BienestarWeb\Actividad;
+
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Redirect;
@@ -82,7 +92,7 @@ class InscripcionADAController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -93,7 +103,39 @@ class InscripcionADAController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $actividad = Actividad::findOrFail($request->idActividad);
+         $user =  Auth::user();
+         $inscripcionADA = $actividad->inscripcionesADA()->create([
+         ]);
+         switch ($user->idTipoPersona) {
+             case '1':
+                $docente = Docente::findOrFail($user->id);
+                $inscripcionDocente = new InscripcionDocente;
+                $inscripcionADA->inscripcionDocente()->create([
+                  'asistencia' => '0',
+                  'idActividad' => $actividad->idActividad,
+                  'idDocente' => $docente->idDocente
+                ]);
+                break;
+             case '2':
+                $administrativo = Administrativo::findOrFail($user->id);
+                $inscripcionAdministrativo = new InscripcionAdministrativo;
+                $inscripcionADA->inscripcionAdministrativo()->create([
+                  'asistencia' => '0',
+                  'idActividad' => $actividad->idActividad,
+                  'idAdministrativo' => $administrativo->idAdministrativo
+                ]);
+                break;
+             case '3':
+                $alumno = Alumno::findOrFail($user->id);
+                $inscripcionAlumno= new InscripcionAlumno;
+                $inscripcionADA->inscripcionDocente()->create([
+                  'asistencia' => '0',
+                  'idActividad' => $actividad->idActividad,
+                  'idAlumno' => $alumno->idAlumno
+                ]);
+                break;
+         }
     }
 
     /**
