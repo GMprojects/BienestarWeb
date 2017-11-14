@@ -1,6 +1,6 @@
 <div id="carousel-generic"
    class="carousel slide"
-   data-ride="carousel" 
+   data-ride="carousel"
    style="margin-right:15px; margin-left:15px;">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -12,7 +12,7 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
    <div class="item active text-center">
-      <img src="{{ asset('img/img3.jpg') }}" alt="" style="margin-right:auto; margin-left:auto; max-height:300px;">
+      <img src="{{ asset('img/frontis.jpg') }}" alt="" style="margin-right:auto; margin-left:auto">
       <div class="carousel-caption" >
          <p>Este es un caption si pues yo lo pongo</p>
          <p><span class="btn btn-facfar">Este es un botón</span></p>
@@ -20,25 +20,27 @@
    </div>
 
    <div class="item text-center">
-      <img src="{{ asset('img/img2.jpg') }}" alt="" style="margin-right:auto; margin-left:auto; max-height:300px;">
+      <img src="{{ asset('img/panel-equipos.jpg') }}" alt="" style="margin-right:auto; margin-left:auto">
       <div class="carousel-caption" >
 
       </div>
    </div>
 
    <div class="item text-center">
-      <img src="{{ asset('img/img3.jpg') }}" alt="" style="margin-right:auto; margin-left:auto; max-height:300px;">
+      <img src="{{ asset('img/panel-docentes.jpg') }}" alt="" style="margin-right:auto; margin-left:auto">
       <div class="carousel-caption" >
 
       </div>
    </div>
 
    <div class="item text-center">
-      <img src="{{ asset('img/img4.jpg') }}" alt="" style="margin-right:auto; margin-left:auto; max-height:300px;">
+      <img src="{{ asset('img/panel-calidad.jpg') }}" alt="" style="margin-right:auto; margin-left:auto">
       <div class="carousel-caption" >
 
       </div>
    </div>
+
+
 
   </div>
 

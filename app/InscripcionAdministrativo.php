@@ -19,4 +19,7 @@ class InscripcionAdministrativo extends Model
     public function actividad(){
       return $this->belongsTo('BienestarWeb\Actividad','idActividad');
     }
+    public function administrativo(){
+      return $this->belongsTo('BienestarWeb\Administrativo', 'idAdministrativo');      
+   }
 }

@@ -20,8 +20,10 @@
 										<thead>
 														<th>Id</th>
 														<th>Título</th>
-														<th>Fecha Programada</th>
-														<th>Hora Programada</th>
+														<th>Fecha Inicio</th>
+														<th>Hora Inicio</th>
+														<th>Fecha Fin</th>
+														<th>Hora Fin</th>
 														<th>Fecha de Ejecución</th>
 														<th>Hora de Ejecución</th>
 														<th>Cupos</th>
@@ -35,8 +37,10 @@
 															<tr>
 																<td>{{ $actividad->idActividad }}</td>
 																<td>{{ $actividad->titulo }}</td>
-																<td>{{ date("d/m/Y",strtotime($actividad->fechaProgramacion)) }}</td>
-																<td>{{ date("g:i A",strtotime($actividad->horaProgramacion)) }}</td>
+																<td>{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}</td>
+																<td>{{ date("g:i A",strtotime($actividad->horaInicio)) }}</td>
+																<td>{{ date("d/m/Y",strtotime($actividad->fechaFin)) }}</td>
+																<td>{{ date("g:i A",strtotime($actividad->horaFin)) }}</td>
 																<td>{{ $actividad->fechaEjecutada }}</td>
 																<td>{{ $actividad->horaEjecutada }}</td>
 																@if ($actividad->cuposTotales == 0)
@@ -46,7 +50,7 @@
 																@endif
 																@switch($actividad->estado)
 																	@case(1)
-																		<td><small class="label pull-right bg-yellow">Programada</small></td>
+																		<td><small class="label pull-right bg-yellow">Inicio</small></td>
 																		@break
 																	@case(2)
 																		<td><small class="label pull-right bg-green">Ejecutada</small></td>

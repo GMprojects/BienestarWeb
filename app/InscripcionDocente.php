@@ -16,7 +16,10 @@ class InscripcionDocente extends Model
 
     public $timestamps = true;
 
-    public function actividad(){
+   public function actividad(){
       return $this->belongsTo('BienestarWeb\Actividad','idActividad');
-    }
+   }
+   public function docente(){
+      return $this->belongsTo('BienestarWeb\Docente', 'idDocente');
+   }
 }

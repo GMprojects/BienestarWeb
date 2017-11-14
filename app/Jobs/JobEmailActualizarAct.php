@@ -7,17 +7,18 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Notifications\Notifiable;
 
 
 use BienestarWeb\Mail\ActividadActualizadaMail;
 use BienestarWeb\Notifications\ActividadActualizadaNotif;
 use BienestarWeb\Actividad;
 use BienestarWeb\User;
-use BienestarWeb\Alumno;
 use BienestarWeb\InscripcionAlumno;
 use BienestarWeb\InscripcionAdministrativo;
 use BienestarWeb\InscripcionDocente;
 use Log;
+
 class JobEmailActualizarAct implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -62,7 +63,7 @@ class JobEmailActualizarAct implements ShouldQueue
         if($inscripcionesAlumnos != null){
           $i = 0;
           foreach ($inscripcionesAlumnos as $inscripcionAlumno) {
-            $alumnos[$i] = $inscripcionAlumno->alumno;
+            $alumnos[$i] = $inscripcionAlumno->alumno->user;
             $i++;
           }
         }else {
@@ -71,7 +72,7 @@ class JobEmailActualizarAct implements ShouldQueue
         if($inscripcionesAdministrativos != null){
           $i = 0;
           foreach ($inscripcionesAdministrativos as $inscripcionAdministrativo) {
-            $administrativos[$i] = $inscripcionAdministrativo->administrativo;
+            $administrativos[$i] = $inscripcionAdministrativo->administrativo->user;
             $i++;
           }
         }else {
@@ -80,7 +81,7 @@ class JobEmailActualizarAct implements ShouldQueue
         if($inscripcionesDocentes != null){
           $i = 0;
           foreach ($inscripcionesDocentes as $inscripcionDocente) {
-            $docentes[$i] = $inscripcionDocente->docente;
+            $docentes[$i] = $inscripcionDocente->docente->user;
             $i++;
           }
         }else {

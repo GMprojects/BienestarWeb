@@ -43,55 +43,55 @@ class InscripcionADA extends Model
     //  dd($idActividad);
       if($request->nombre != null){
         $listaDocentes = Docente::join('inscripcionDocente','docente.idDocente', '=','inscripcionDocente.idDocente' )
-              ->join('persona','docente.idPersona', '=','persona.idPersona' )
+              ->join('user','docente.idUser', '=','user.id' )
               ->where('inscripcionDocente.idActividad', '=', $request->idActividad)
-              ->where('persona.nombre','LIKE',"%$request->nombre%")
-              ->orwhere('persona.apellidoPaterno','LIKE',"%$request->nombre%")
-              ->orwhere('persona.apellidoMaterno','LIKE',"%$request->nombre%")
-              ->select('persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','inscripcionDocente.asistencia','inscripcionDocente.idActividad','inscripcionDocente.idInscripcionADA')->get();
+              ->where('user.nombre','LIKE',"%$request->nombre%")
+              ->orwhere('user.apellidoPaterno','LIKE',"%$request->nombre%")
+              ->orwhere('user.apellidoMaterno','LIKE',"%$request->nombre%")
+              ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionDocente.asistencia','inscripcionDocente.idActividad','inscripcionDocente.idInscripcionADA')->get();
         return $listaDocentes;
       }else{
         //dd($idActividad);
         $listaDocentes = Docente::join('inscripcionDocente','docente.idDocente', '=','inscripcionDocente.idDocente' )
-              ->join('persona','docente.idPersona', '=','persona.idPersona' )
+              ->join('user','docente.idUser', '=','user.id' )
               ->where('inscripcionDocente.idActividad', '=', $request->idActividad)
-              ->select('persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','inscripcionDocente.asistencia','inscripcionDocente.idActividad','inscripcionDocente.idInscripcionADA')->get();
+              ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionDocente.asistencia','inscripcionDocente.idActividad','inscripcionDocente.idInscripcionADA')->get();
         return $listaDocentes;
       }
     }
     public function scopeSearchAlumno($query, $request){
       if($request->nombre != null){
         $listaAlumnos = Alumno::join('inscripcionAlumno','alumno.idAlumno', '=','inscripcionAlumno.idAlumno' )
-              ->join('persona','alumno.idPersona', '=','persona.idPersona' )
+              ->join('user','alumno.idUser', '=','user.id' )
               ->where('inscripcionAlumno.idActividad', '=', $request->idActividad)
-              ->where('persona.nombre','LIKE',"%$request->nombre%")
-              ->orwhere('persona.apellidoPaterno','LIKE',"%$request->nombre%")
-              ->orwhere('persona.apellidoMaterno','LIKE',"%$request->nombre%")
-              ->select('persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','inscripcionAlumno.asistencia','inscripcionAlumno.idActividad','inscripcionAlumno.idInscripcionADA')->get();
+              ->where('user.nombre','LIKE',"%$request->nombre%")
+              ->orwhere('user.apellidoPaterno','LIKE',"%$request->nombre%")
+              ->orwhere('user.apellidoMaterno','LIKE',"%$request->nombre%")
+              ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionAlumno.asistencia','inscripcionAlumno.idActividad','inscripcionAlumno.idInscripcionADA')->get();
         return $listaAlumnos;
       }else{
         $listaAlumnos = Alumno::join('inscripcionAlumno','alumno.idAlumno', '=','inscripcionAlumno.idAlumno' )
-              ->join('persona','alumno.idPersona', '=','persona.idPersona' )
+              ->join('user','alumno.idUser', '=','user.id' )
               ->where('inscripcionAlumno.idActividad', '=', $request->idActividad)
-              ->select('persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','inscripcionAlumno.asistencia','inscripcionAlumno.idActividad','inscripcionAlumno.idInscripcionADA')->get();
+              ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionAlumno.asistencia','inscripcionAlumno.idActividad','inscripcionAlumno.idInscripcionADA')->get();
         return $listaAlumnos;
       }
     }
     public function scopeSearchAdministrativo($query, $request){
       if($request->nombre != null){
         $listaAdministrativos = Administrativo::join('inscripcionAdministrativo','administrativo.idAdministrativo', '=','inscripcionAdministrativo.idAdministrativo' )
-              ->join('persona','administrativo.idPersona', '=','persona.idPersona' )
+              ->join('user','administrativo.idUser', '=','user.id' )
               ->where('inscripcionAdministrativo.idActividad', '=', $request->idActividad)
-              ->where('persona.nombre','LIKE',"%$request->nombre%")
-              ->orwhere('persona.apellidoPaterno','LIKE',"%$request->nombre%")
-              ->orwhere('persona.apellidoMaterno','LIKE',"%$request->nombre%")
-              ->select('persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','inscripcionAdministrativo.asistencia','inscripcionAdministrativo.idActividad','inscripcionAdministrativo.idInscripcionADA')->get();
+              ->where('user.nombre','LIKE',"%$request->nombre%")
+              ->orwhere('user.apellidoPaterno','LIKE',"%$request->nombre%")
+              ->orwhere('user.apellidoMaterno','LIKE',"%$request->nombre%")
+              ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionAdministrativo.asistencia','inscripcionAdministrativo.idActividad','inscripcionAdministrativo.idInscripcionADA')->get();
         return $listaAdministrativos;
       }else{
         $listaAdministrativos = Administrativo::join('inscripcionAdministrativo','administrativo.idAdministrativo', '=','inscripcionAdministrativo.idAdministrativo' )
-              ->join('persona','administrativo.idPersona', '=','persona.idPersona' )
+              ->join('user','administrativo.idUser', '=','user.id' )
               ->where('inscripcionAdministrativo.idActividad', '=', $request->idActividad)
-              ->select('persona.nombre','persona.apellidoPaterno','persona.apellidoMaterno','inscripcionAdministrativo.asistencia','inscripcionAdministrativo.idActividad','inscripcionAdministrativo.idInscripcionADA')->get();
+              ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionAdministrativo.asistencia','inscripcionAdministrativo.idActividad','inscripcionAdministrativo.idInscripcionADA')->get();
         return $listaAdministrativos;
       }
     }

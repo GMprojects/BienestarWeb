@@ -85,17 +85,16 @@
    $(document).ready(function (){
       $.ajax({
          type:'GET',
-         url: '/soyTutor',
-         data: { id : {{ Auth::user()->id }}, anioSemestre : 2017, numeroSemestre : 1 },
+         url: '{{ action('TutorTutoradoController@soyTutor') }}',
+         data: { id: {{ Auth::user()->id }} },
          dataType: 'json',
          success:function(data) {
-            console.log(data);
             if(data.tutorados > 0){
-               $('#buttons-list').append('<li><a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados') }}"'+'><i class="fa fa-plus"></i>Mis Tutorados</a></li>');
+               $('#buttons-list').append('<li><a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados') }}"><i class="fa fa-plus"></i>Mis Tutorados</a></li>');
             }
          },
          error:function() {
-            console.log("error AJAX - misTutorados");
+            console.log("error AJAX - soyTutor");
          }
       });
    //Fin del AJAX

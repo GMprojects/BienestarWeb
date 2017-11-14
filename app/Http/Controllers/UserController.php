@@ -223,7 +223,7 @@ class UserController extends Controller
     public function getUsersAdm(Request $request){
     //    dd($request);
       if($request->ajax()){
-        $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
+        $users = User::select('id','nombre','apellidoPaterno','apellidoMaterno','codigo')
                     ->where('idTipoPersona','=', '2')
                     ->get();
         return response()->json($users);
@@ -232,7 +232,7 @@ class UserController extends Controller
     public function getUsersAdmDoc(Request $request){
     //    dd($request);
       if($request->ajax()){
-        $users = User::select('idUser','nombre','apellidoPaterno','apellidoMaterno','codigo')
+        $users = User::select('id','nombre','apellidoPaterno','apellidoMaterno','codigo')
                     ->where('idTipoPersona','=', '1')
                     ->where('idTipoPersona','=', '2')
                     ->get();
@@ -242,7 +242,7 @@ class UserController extends Controller
     public function getAlumnos(Request $request){
     //    dd($request);
       if($request->ajax()){
-        $users = Alumno::join('user','alumno.idUser', '=','user.idUser' )
+        $users = Alumno::join('user','alumno.idUser', '=','user.id' )
                     ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
                     ->get();
         return response()->json($users);

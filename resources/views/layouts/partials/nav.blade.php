@@ -49,10 +49,7 @@
       </div>
    </nav>
 </header>
-<script>
-   $(document).ready(function(){
-       $('[data-toggle="tooltip"]').tooltip();
-   });
+<script>   
    $('.hamburger').on('click', function(){
       $('#wrapper').toggleClass('toggled');
    })

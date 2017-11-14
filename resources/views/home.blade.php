@@ -30,9 +30,16 @@
 
                @include('layouts.partials.carousel')
                <br />
+               {{-- @include('layouts.partials.act-mini-demo') --}}
+
                @foreach ($actividades as $actividad)
-                  @include('layouts.partials.act-mini', [$actividad])
+                  @if(Auth::user() != null)
+                     @include('layouts.partials.act-mini', [$actividad, $list_insc])
+                  @else
+                     @include('layouts.partials.act-mini', [$actividad])
+                  @endif
                @endforeach
+
             </div>
             @include('layouts.partials.footer')
          </section>

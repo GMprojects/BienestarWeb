@@ -12,7 +12,6 @@
 */
 
 Route::get('/', 'HomeController@index')->name('home');
-Auth::routes();
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('tipoPersona','TipoPersonaController');
@@ -25,37 +24,41 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('alternativa', 'AlternativaController');
     Route::resource('preguntaEncuesta', 'PreguntaEncuestaController');
     Route::resource('user', 'UserController');
-    Route::get('tutorTutorado', 'TutorTutoradoController@index');
+    Route::resource('tutorTutorado', 'TutorTutoradoController');
+   /* Route::get('tutorTutorado', 'TutorTutoradoController@index');
     Route::get('tutorTutorado/create', 'TutorTutoradoController@create');
     Route::get('tutorTutorado/{tutorTutorado}/edit', 'TutorTutoradoController@edit');
     Route::put('tutorTutorado/{tutorTutorado}', ['uses' => 'TutorTutoradoController@update', 'as' => 'tutorTutorado.update']);
-    Route::put('tutorTutorado', ['uses' => 'TutorTutoradoController@store', 'as' => 'tutorTutorado.store']);
-
-
+    Route::put('tutorTutorado', ['uses' => 'TutorTutoradoController@store', 'as' => 'tutorTutorado.store']);*/
 });
 
 Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
-
-
-Route::middleware('auth')->prefix('miembro')->group(function () {
-    Route::resource('habilogitoEstudio','HabitoEstudioController');
-    Route::resource('perfil','PerfilController');
-});
-
-Route::middleware('auth')->prefix('miembro')->get('miperfil', function(){
-   return view('miembro.miperfil');
-});
 
 Route::get('perfilTipo', 'UserController@getUserTipo');
 
 Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
     Route::get('actividad/{idActividad}/execute', 'ActividadController@execute');
     Route::resource('actividad', 'ActividadController');
-    Route::resource('inscripcion', 'InscripcionADAController');
     Route::resource('beneficiarioMovilidad', 'BeneficiarioMovilidadController');
     Route::resource('evidenciaActividad', 'EvidenciaActividadController');
 });
 
+//PERMISOS DE MIEMBRO
+Route::middleware('auth')->prefix('miembro')->group(function () {
+    Route::resource('habitoEstudio','HabitoEstudioController');
+    Route::resource('perfil','MiPerfilController');
+    Route::resource('inscripcion', 'InscripcionADAController');
+});
+Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', 'ActividadController@member_show');
+
+//PERMISOS DE MIEMBRO - PERFIL
+
+Route::middleware('auth')->prefix('miembro')->group(function () {
+   Route::resource('perfil', 'MiPerfilController');
+   Route::get('mis-actividades/{id}', 'MiPerfilController@mis_actividades');
+});
+
+Auth::routes();
 
 /*                            AJAX                                  */
 Route::get('listaResponsablesGen','UserController@getUsers');
@@ -86,6 +89,9 @@ Route::get('verMisEstadisticas','ActividadController@verMisEstadisticas');
 //temporal :p
 Route::get('encuesta', function () {
     return view('encuesta');
+});
+Route::get('habitos', function () {
+    return view('habitos');
 });
 Route::get('actividad-demo', function () {
     return view('actividad-demo');
