@@ -28,10 +28,10 @@ class CrearTablaActividad extends Migration
             $tabla->integer('cuposTotales');
             $tabla->enum('estado', ['1', '2', '3', '4'])->default('1');
             /*  Estado:
-                1. Programada
-                2. Ejecutada
-                3. Cancelada
-                4. No Ejecutada
+                1. Programada    Pendiente
+                2. Ejecutada     Ejecutada
+                3. Cancelada     Cancelada
+                4. No Ejecutada  Expirada
             */
             $tabla->smallInteger('anioSemestre');
             $tabla->enum('numeroSemestre', ['1', '2', '3']);

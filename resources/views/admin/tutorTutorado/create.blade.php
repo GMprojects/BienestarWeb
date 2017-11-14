@@ -222,7 +222,7 @@ $(document).ready(function() {
 		//Preparando el AJAX
 	 $.ajax({
 		 type:'GET',
-		 url: '/alumnosLibres',
+		 url: '{{ action('TutorTutoradoController@getAlumnosLibres') }}',
 		 data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 		 dataType: 'json',
 		 success:function(data) {
@@ -250,7 +250,7 @@ $(document).ready(function() {
 		//Preparando el AJAX
 	 $.ajax({
 		 type:'GET',
-		 url: '/docentesNoTutores',
+		 url: '{{ action('TutorTutoradoController@getDocentesNoTutores') }}',
 		 data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 		 dataType: 'json',
 		 success:function(data) {

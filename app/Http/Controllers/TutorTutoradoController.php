@@ -229,9 +229,8 @@ class TutorTutoradoController extends Controller
     }
 
     public function soyTutor(Request $request){
-      //dd($request);
-      $dt = [];
       if($request->ajax()){
+         $dt = [];
          $idDocente = Docente::where('idUser', '=',  $request->id )->value('idDocente');
          $tutorados = tutorTutorado::where('idDocente', $idDocente)
                ->count('idDocente');
@@ -242,7 +241,7 @@ class TutorTutoradoController extends Controller
     }
 
     public function misTutorados(Request $request){
-
+      Log::info('Buscando mis tutorados'.$request);
       $docente = Docente::where('idUser', Auth::user()->id )->get()[0];
       $tutorados = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
            ->join('user','alumno.idUser', '=','user.id' )

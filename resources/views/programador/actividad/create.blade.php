@@ -288,10 +288,8 @@
 		minDate :  '{{ date("d")-2 }}',
 	});
 	$("#selectIdTipoActividad").change(function(){
-		console.log("Val "+ $(this).val()+ "tuputamadre");
 		document.getElementById('boxDatosEspecificos').style.display = 'block';
       //console.log("esta cambiando");
-      console.log("Val "+ $(this).val());
 
       var tamSelectIdResponsable=document.getElementById("selectIdResponsable").length;
       var tamSelectIdAlumno=document.getElementById("selectIdAlumnoI").length;
@@ -329,7 +327,7 @@
 			//PSICOLOGÍA
 			case '2':
 				document.getElementById('selectAlumnosI').style.display = 'block';
-				dListaAlumnos('listaAlumnos','Alumnos');
+				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumnos');
 				break;
 			//SERVICIO SOCIAL
 			case '3':
@@ -337,8 +335,8 @@
 				document.getElementById('divModalidad').style.display = 'block';
 				document.getElementById('selectAlumnosI').style.display = 'block';
 				document.getElementById('rIndividual').checked = true;
-				dListaResponsables('listaResponsablesAdm','Responsable');
-				dListaAlumnos('listaAlumnos','Alumnos');
+				dListaResponsables('{{ action('UserController@getUsersAdm') }}');
+				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumnos');
 				break;
 			//TUTORÍA
 			case '4':
@@ -347,7 +345,7 @@
 				document.getElementById('etiquetaResponsable').innerHTML = 'Tutor *';
 				var numeroSemestre = $('#numeroSemestre').val();
 				var anioSemestre = $('#anioSemestre').val();
-				dListaTutores('listaResponsablesTutores','Tutor',anioSemestre,numeroSemestre);
+				dListaTutores('{{ action('TutorTutoradoController@getTutores') }}','Tutor',anioSemestre,numeroSemestre);
 				break;
 			//DEPORTES
 			case '5':
@@ -357,21 +355,21 @@
 				document.getElementById('selectResponsables').style.display = 'block';
 				document.getElementById('divCuposTotales').style.display = 'block';
 				document.getElementById('enlaceRespInvitado').style.display = 'block';
-				dListaResponsables('listaResponsablesGen','Responsable');
+				dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
 				break;
 			//MOVILIDAD
 			case '8':
 				document.getElementById('selectResponsables').style.display = 'block';
 				//document.getElementById('boxDatosAdicionales').style.display = 'block';
 				document.getElementById('fechasConvocatoria').style.display = 'block';
-				dListaResponsables('listaResponsablesAdmDoc','Responsable');
+				dListaResponsables('{{ action('UserController@getUsersAdmDoc') }}','Responsable');
 				break;
 			//COMEDOR
 			case '9':
 				document.getElementById('selectResponsables').style.display = 'block';
 				//document.getElementById('boxDatosAdicionales').style.display = 'block';
 				document.getElementById('fechaInicioConvocatoria').style.display = 'block';
-				dListaResponsables('listaResponsablesAdm','Responsable');
+				dListaResponsables('{{ action('UserController@getUsersAdm') }}','Responsable');
 				break;
 			//REFORZAMIENTO
 			case '10':
@@ -379,12 +377,10 @@
 				document.getElementById('divModalidad').style.display = 'block';
 				document.getElementById('enlaceRespInvitado').style.display = 'block';
 				document.getElementById('selectAlumnosI').style.display = 'block';
-				dListaResponsables('listaResponsablesGen','Responsable');
-				dListaAlumnos('listaAlumnos','Alumnos');
+				dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
+				dListaAlumnos('{{ action('UserController@getAlumnos') }}');
 				break;
       }
-		console.log('La modalidad es: ');
-		console.log($('input:radio[name=modalidad]').val());
 	});
 
 	var dListaResponsables = function(url, placeholder) {
@@ -397,7 +393,7 @@
 			//Preparando el AJAX
 	    $.ajax({
 	      type:'GET',
-	      url: '/'+url+'',
+	      url: url,
 	      data: '',
 	      dataType: 'json',
 	      success:function(data) {
@@ -427,7 +423,7 @@
 	    //Preparando el AJAX
 	    $.ajax({
 	      type:'GET',
-	      url: '/'+url+'',
+	      url: url,
 	      data: "",
 	      dataType: 'json',
 	      success:function(data) {
@@ -452,7 +448,7 @@
 	    //Preparando el AJAX
 		 $.ajax({
 	      type:'GET',
-	      url: '/'+url+'',
+	      url: url,
 	      data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 	      dataType: 'json',
 	      success:function(data) {
@@ -497,7 +493,7 @@
 			console.log("TutorTutoradoooo");
 			$.ajax({
 				type:'GET',
-				url: '/listaTutorados',
+				url: '{{ action('TutorTutoradoController@getTutorados') }}',
 				data: {id:$(this).val(), anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 				dataType: 'json',
 				success:function(data) {
@@ -524,7 +520,7 @@
 	        //Preparando el AJAX
 	        $.ajax({
 	          type:'GET',
-	          url: '/listaResponsablesTutores',
+	          url: '{{ action('TutorTutoradoController@getTutores') }}',
 	          data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 	          dataType: 'json',
 	          success:function(data) {

@@ -2,10 +2,10 @@
 
    <div class="act-mini">
       <div class="act-mini-header">
-         @if($actividad->rutaImagen == null)
+         @if( $actividad->rutaImagen == null )
             <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found"></a>
          @else
-            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}"><img class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
+            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
          @endif
       </div>
       <div class="act-mini-body" >
@@ -47,14 +47,18 @@
                      </a>
                   @else
                      @if(Auth::user() == null || $actividad->actividadGrupal->cuposDisponibles > 0)
-                        <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
+                        {{--<a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
                            onclick="event.preventDefault();
                            document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
                            <i class="fa fa-circle-o"></i> Deseo Asistir
                         </a>
                         <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
                            {{ csrf_field() }}
-                        </form>
+                        </form>--}}
+                        <a class="btn-footer pull-right" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}"
+                           href="{{ route('inscripcion.store') }}">
+                           <i class="fa fa-circle-o"></i> Deseo Asistir
+                        </a>
                      @else
                         <a class="act-mini-txt pull-right" href="#" data-toggle="tooltip" data-placement="bottom" title="Click para contactar con el programador?">
                            <i class="fa fa-times-circle"></i> Inscripcion no disponible
@@ -70,5 +74,27 @@
          @endif
       </div>
    </div>
-
+</div>
+<div class="modal fade" id="confirmModal-{{ $actividad->idActividad }}" tabindex="-1" role="dialog" aria-labelledby="lb-confMod-{{ $actividad->idActividad }}">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="lb-confMod-{{ $actividad->idActividad }}">Confirme su Inscripción</h4>
+         </div>
+         <div class="modal-body">
+            Quiero inscribirme en :(
+         </div>
+         <div class="modal-footer">
+            <a class="btn btn-success" href="{{ route('inscripcion.store') }}"
+               onclick="event.preventDefault(); document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+               <i class="fa fa-check-o"></i> Confirmar
+            </a>
+            <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
+               {{ csrf_field() }}
+            </form>
+            <button type="button" class="btn btn-primary">Cancelar</button>
+         </div>
+      </div>
+   </div>
 </div>

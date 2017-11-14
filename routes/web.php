@@ -52,9 +52,10 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
 Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', 'ActividadController@member_show');
 
 //PERMISOS DE MIEMBRO - PERFIL
-Route::middleware('auth')->prefix('miembro')->get('perfil/{perfil}','MiPerfilController@show');
-Route::middleware(['auth', 'perfil'])->prefix('miembro')->group(function () {
-   Route::get('perfil/member_edit', 'MiPerfilController@member_edit');
+
+Route::middleware('auth')->prefix('miembro')->group(function () {
+   Route::resource('perfil', 'MiPerfilController');
+   Route::get('mis-actividades/{id}', 'MiPerfilController@mis_actividades');
 });
 
 Auth::routes();

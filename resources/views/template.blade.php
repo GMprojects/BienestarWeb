@@ -21,7 +21,6 @@
       <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/flaticon/flaticon.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/square/green.css') }}"/>
-
       <!-- Scripts GENERALES -->
       <script src="{{ asset('plugins/jQuery-3.2.1/jquery-3.2.1.min.js') }}"></script>
       <script src="{{ asset('plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
@@ -32,7 +31,7 @@
       <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.responsive.min.js') }}"></script>
       <script src="{{ asset('plugins/datatables.net-bs/js/responsive.bootstrap.min.js') }}"></script>
       <script src="{{ asset('plugins/daterangepicker/moment.min.js') }}"></script>
-      <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>      
+      <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
       <script src="{{ asset('plugins/datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
       <script src="{{ asset('plugins/select-1.12.4/dist/js/bootstrap-select.min.js') }}"></script>
       <script src="{{ asset('plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>

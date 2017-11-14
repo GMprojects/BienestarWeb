@@ -73,7 +73,7 @@
 
                      <div class="footer-card">
                         @if(Auth::user()->id == $du['user']->id)
-                           <a href="{{ action('MiPerfilController@member_edit', ['id' => Auth::user()->id]) }}" class="btn btn-ff" type="button" name="button"><i class="fa fa-edit"></i>Editar</a>
+                           <a href="{{ action('MiPerfilController@edit', ['id'=>Auth::user()->id]) }}" class="btn btn-ff" type="button" name="button"><i class="fa fa-edit"></i>Editar</a>
                         @endif
                      </div>
 
@@ -103,7 +103,7 @@
                                  <div class="icon">
                                     <i class="fa fa-calendar-plus-o"></i>
                                  </div>
-                                 <a href="#" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id]) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
                               </div>
                            </div>
 

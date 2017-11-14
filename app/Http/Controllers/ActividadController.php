@@ -786,7 +786,6 @@ class ActividadController extends Controller
     }
 
    public function member_show(Request $request){
-      //dd($request);
       $actividad = Actividad::findOrFail($request->id);
       return view('miembro.actividad')->with('actividad',$actividad)->with('list_insc', $request->list_insc);
       //return view('miembro.actividad')->with('actividad',$actividad);

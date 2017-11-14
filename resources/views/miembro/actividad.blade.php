@@ -69,7 +69,7 @@
                            @endif
                         </div>
                         <div class="member-data">
-                           <div class="member-name"><a href="{{ action('PerfilController@show', ['id' =>$actividad->responsable]) }}"></i>{{ $actividad->responsable->nombre }} {{ $actividad->responsable->apellidoPaterno }}</a></div>
+                           <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"></i>{{ $actividad->responsable->nombre }} {{ $actividad->responsable->apellidoPaterno }}</a></div>
                            <div class="member-email"><a href="#">{{ $actividad->responsable->email }}</a></div>
                         </div>
                      </div>

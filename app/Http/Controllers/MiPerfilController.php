@@ -16,7 +16,7 @@ use BienestarWeb\InscripcionAdministrativo;
 class MiPerfilController extends Controller
 {
    public function show($id){
-     $user = User::findOrFail($id);
+      $user = User::findOrFail($id);
      $du['user'] = $user;
          //SI SOY PROGRAMADOR(organizador) o ADMINISTRADOR
      if($user->funcion != 1){
@@ -57,16 +57,57 @@ class MiPerfilController extends Controller
      //dd($du);
     return view('miembro.perfil')->with('du', $du);
    }
-   public function member_edit(Request $request){
-      dd($request);
+   public function edit(Request $request, $id){
+      if($id == $request->user()->id){ //FUNCION DE middleware QUE NO PUDE IMPLEMENTAR EN UNMIDDLEWARE :(
+         return ('aqui editare mi perfil');
+      }else{
+         return abort(401);
+      }
    }
-   public function misActInscrito(){
+   public function misActInscrito($tipo, $id){
+      $list_insc = array('hd');
+      switch ($tipo) {
+         case '1'://Alumno
+            $idAlumno = Alumno::where('idUser', $id)->value('idAlumno');
+            $inscripciones = InscripcionAlumno::where('idAlumno', $idAlumno)->pluck('idActividad');
+            $actividades = Actividad::whereIn('idActividad', $inscripciones)->get();
+            break;
+         case '2'://Docente
+            $idDocente = Docente::where('idUser', $id)->value('idDocente');
+            $inscripciones = InscripcionDocente::where('idDocente', $idDocente)->pluck('idActividad');
+            $actividades = Actividad::whereIn('idActividad', $inscripciones)->get();
+            break;
+         case '3'://Administrativo
+            $idAdministrativo = Administrativo::where('idUser', $id)->value('idAdministrativo');
+            $inscripciones = InscripcionAdministrativo::where('idAdministrativo', $idAdministrativo)->pluck('idActividad');
+            $actividades = Actividad::whereIn('idActividad', $inscripciones)->get();
+            break;
+      }
+      for ($i=0; $i < count($inscripciones) ; $i++) {
+         array_push ( $list_insc,  $inscripciones[$i] );
+      }
+      return array($actividades, $list_insc);
+   }
+   public function misActResponsable($id){
+      $actividades = Actividad::where('idUserResp', $id)->get();
+      return $actividades;
+   }
+   public function misActProgramador($id){
+      $actividades = Actividad::where('idUserProg', $id)->get();
+      return $actividades;
 
    }
-   public function misActResponsable(){
 
-   }
-   public function misActProgramador(){
-
+   public function mis_actividades(Request $request, $id){
+      if($id == $request->user()->id){ //FUNCION DE middleware QUE NO PUDE IMPLEMENTAR EN UNMIDDLEWARE :(
+         $aux = MiPerfilController::misActInscrito($request->user()->idTipoPersona, $request->user()->id);
+         $list_insc = $aux[1];
+         $mis_insc = $aux[0];
+         $mis_resp = MiPerfilController::misActResponsable($request->user()->id);
+         $mis_prog = MiPerfilController::misActProgramador($request->user()->id);
+         return view('miembro.mis-actividades')->with('mis_insc', $mis_insc)->with('mis_resp', $mis_resp)->with('mis_prog', $mis_prog)->with('list_insc', $list_insc);
+      }else{
+         return abort(401);
+      }
    }
 }

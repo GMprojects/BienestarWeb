@@ -16,10 +16,10 @@ class MiddPerfil
    */
    public function handle(Request $request, Closure $next) {
       dd($request);
-      if($request->user()->id == $request->id ){
+      //if($request->user()->id == $request->id ){
        return $next($request);
-      }else{
-         abort(401);
-      }
+      //}else{
+      //   abort(401);
+      //}
    }
 }
