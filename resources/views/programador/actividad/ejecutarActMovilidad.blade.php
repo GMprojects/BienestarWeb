@@ -77,7 +77,7 @@
 									<td>{{ $beneficiario->user->codigo }}</td>
 									<td>{{ $beneficiario->user->nombre.' '.$beneficiario->user->apellidoPaterno.' '.$beneficiario->user->apellidoMaterno }}</td>
 									<td>
-										<a href="{{ action('BeneficiarioController@editBeneficiario',[$actividad->idActividad,  $beneficiario->pivot->idBeneficiarioMovilidad ]) }}"><button class="btn btn-ff-yellow">  <i class="fa fa-eye"></i> Ver Detalles </button></a>
+										<a href="{{ action('BeneficiarioController@editBeneficiario',[$actividad->idActividad,  $beneficiario->pivot->idBeneficiarioMovilidad ]) }}"><button class="btn btn-ff-blues">  <i class="fa fa-eye"></i> Ver Detalles </button></a>
 										<a href="" data-target = "#modal-deletebm-{{ $beneficiario->pivot->idBeneficiarioComedor }}" data-toggle = "modal"><button class="btn btn-ff-red"> <i class="fa fa-remove"></i> Eliminar</button></a>
 									</td>
 								</tr>
