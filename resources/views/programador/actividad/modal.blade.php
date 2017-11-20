@@ -4,7 +4,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label = "close">
-						<span aria-hidden = "true">x</span>
+						<span aria-hidden = "true" class="fa fa-remove"></span>
 					</button>
 					<h4 class="modal-title">Eliminar Actividad con el ID: {{ $actividad->idActividad }}</h4>
 				</div>

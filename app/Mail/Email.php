@@ -15,16 +15,20 @@ class Email extends Mailable
     public $subject;
     private $mensaje;
     private $remitente;
+    private $opcion;
+    private $nombreDestinatario;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($subject, $mensaje, $remitente)
+    public function __construct($subject, $mensaje, $remitente, $opcion, $nombreDestinatario)
     {
          $this->mensaje = $mensaje;
          $this->subject = $subject;
          $this->remitente = $remitente;
+         $this->opcion = $opcion;
+         $this->nombreDestinatario = $nombreDestinatario;
     }
 
     /**
@@ -34,8 +38,18 @@ class Email extends Mailable
      */
     public function build()
     {
-        Log::info('Email');
-        return $this->markdown('emails.emailSimple',['subject' => $this->subject, 'mensaje' => $this->mensaje, 'remitente' => $this->remitente])
+        Log::info("Email");
+        Log::info("Remitente");
+        Log::info($this->remitente);
+        Log::info("Email Remitente    ".$this->remitente->email);
+        $nombreRemitente = $this->remitente->nombre.' '.$this->remitente->apellidoPaterno.' '.$this->remitente->apellidoMaterno;
+
+        return $this->from($this->remitente->email)
+                    ->markdown('emails.emailSimple',['subject' => $this->subject,
+                                                     'mensaje' => $this->mensaje,
+                                                     'remitente' => $nombreRemitente,
+                                                     'destinatario' => $this->nombreDestinatario,
+                                                     'opcion' => $this->opcion ])
                     ->subject($this->subject);
     }
 }

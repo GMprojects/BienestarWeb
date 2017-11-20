@@ -67,8 +67,8 @@ class Actividad extends Model
     public function actividadMovilidad(){
       return $this->hasOne('BienestarWeb\ActMovilidad','idActividad');
     }
-    public function actividadPedagogia(){
-      return $this->hasOne('BienestarWeb\ActPedagogia','idActividad');
+    public function actividadesPedagogia(){
+      return $this->hasMany('BienestarWeb\ActPedagogia','idActividad');
     }
     public function actividadGrupal(){
       return $this->hasOne('BienestarWeb\ActGrupal','idActividad');

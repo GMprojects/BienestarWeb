@@ -37,10 +37,8 @@ Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
 Route::get('perfilTipo', 'UserController@getUserTipo');
 
 Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
-    Route::get('actividad/{idActividad}/execute', 'ActividadController@execute');
-    Route::resource('actividad', 'ActividadController');
-    Route::resource('beneficiarioMovilidad', 'BeneficiarioMovilidadController');
-    Route::resource('evidenciaActividad', 'EvidenciaActividadController');
+   Route::resource('actividad', 'ActividadController');
+
 });
 
 //PERMISOS DE MIEMBRO
@@ -48,6 +46,23 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
     Route::resource('perfil','MiPerfilController');
     Route::resource('inscripcion', 'InscripcionADAController');
+    
+   Route::resource('beneficiarioMovilidad', 'BeneficiarioMovilidadController');
+   Route::resource('evidenciaActividad', 'EvidenciaActividadController');
+
+    Route::get('actividad/{idActividad}/execute', 'ActividadController@execute');
+    Route::get('actividad/{idActividad}/execute/{idInsAlumno}/tutoria', 'ActPedagogiaController@create');
+    Route::get('actividad/{id}/beneficiario/create', 'BeneficiarioController@createBeneficiario');
+    Route::post('actividad/{id}/beneficiario', ['uses' => 'BeneficiarioController@storeBeneficiario','as' => 'beneficiario.store']);
+    Route::get('actividad/{id}/beneficiario/{idBeneficiario}/edit', 'BeneficiarioController@editBeneficiario');
+    Route::post('actividad/{id}/beneficiario/{idBeneficiario}', ['uses' => 'BeneficiarioController@updateBeneficiario','as' => 'beneficiario.update']);
+    Route::delete('actividad/{id}/beneficiario/{idBeneficiario}','BeneficiarioController@destroyBeneficiario');
+
+
+    Route::post('actividad/execute/{idActividad}', ['uses' => 'ActividadController@updateExecute','as' => 'actividad.updateExecute']);
+    Route::post('actividad/registrarAsistencias/{idActividad}', ['uses' => 'InscripcionADAController@registrarAsistencias','as' => 'actividad.registrarAsistencias']);
+    Route::post('actividad/nuevoMotivo/{idActividad}', ['uses' => 'DetallePedagogiaController@store',  'as' => 'detallePedagogia.store']);
+    Route::post('actividad/actualizarActPedagogia/{idActividadPedagogia}', ['uses' => 'ActPedagogiaController@update', 'as' => 'actPedagogia.update']);
 });
 Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', 'ActividadController@member_show');
 

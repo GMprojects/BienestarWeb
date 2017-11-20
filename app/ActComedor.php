@@ -17,7 +17,7 @@ class ActComedor extends Model
   public function actividad(){
       return $this->belongsTo('BienestarWeb\Actividad','idActividad');
   }
-  public function alumnos(){
+  public function beneficiariosComedor(){
       return $this->belongsToMany('BienestarWeb\Alumno','beneficiarioComedor','idActComedor','idAlumno')
                   ->withPivot('idBeneficiarioComedor','fechaBeneficio','tipoBeneficio')
                   ->withTimestamps();

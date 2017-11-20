@@ -105,7 +105,8 @@ class MiPerfilController extends Controller
          $mis_insc = $aux[0];
          $mis_resp = MiPerfilController::misActResponsable($request->user()->id);
          $mis_prog = MiPerfilController::misActProgramador($request->user()->id);
-         return view('miembro.mis-actividades')->with('mis_insc', $mis_insc)->with('mis_resp', $mis_resp)->with('mis_prog', $mis_prog)->with('list_insc', $list_insc);
+         $opcion = $request->opcion;
+         return view('miembro.mis-actividades')->with('mis_insc', $mis_insc)->with('mis_resp', $mis_resp)->with('mis_prog', $mis_prog)->with('list_insc', $list_insc)->with('opcion', $opcion);
       }else{
          return abort(401);
       }

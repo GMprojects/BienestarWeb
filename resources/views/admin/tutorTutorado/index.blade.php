@@ -7,7 +7,7 @@
 				<h3 class="box-title">Tutores </h3>
 			</div>
 			<div class="col-xs-6" style="text-align:right;">
-				<a href="tutorTutorado/create"><button class="btn btn-success">Nuevo Tutor - Tutorados</button></a>
+				<a href="tutorTutorado/create"><button class="btn btn-ff-green">Nuevo Tutor - Tutorados</button></a>
 			</div>
 		</div>
 
@@ -30,17 +30,19 @@
 							<tr>
                 			<td>{{ $i }}</td>
 								<td>{{ $tutor->codigo }}</td>
-								<td>{{ $tutor->apellidoPaterno.' '.$tutor->apellidoMaterno.' '.$tutor->nombre }}</td>
+								<td>{{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</td>
 								<td>{{ $tutor->anioSemestre.'-'.$tutor->numeroSemestre }}</td>
 								<td>{{ $tutor->nroTutorados }}
 								<td>
 			                  <a href="{{ action('TutorTutoradoController@show',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ])}}">
 			                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-default">
-			                      <!--<i class="fa  fa-eye"></i>--> Ver
+			                    		<i class="fa fa-eye"></i>
 			                    </button>
 			                  </a>
 									<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
-										<button class="btn btn-warning">Editar</button>
+										<button class="btn btn-warning">
+											<i class="fa fa-edit"></i>
+										</button>
 									</a>
                 		  </td>
                 		@php($i++)

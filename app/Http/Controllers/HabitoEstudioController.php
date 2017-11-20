@@ -53,7 +53,7 @@ class HabitoEstudioController extends Controller
         $preguntasHabito->each(function($preguntasHabito){
             $preguntasHabito->tipoHabito;
         });
-        return view('usuario.habitoEstudio.create')->with('preguntasHabito',$preguntasHabito);
+        return view('miembro.habitoEstudio.create')->with('preguntasHabito',$preguntasHabito);
     }
 
     /**

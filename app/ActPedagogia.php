@@ -11,17 +11,19 @@ class ActPedagogia extends Model
     protected $fillable = [
       'formaTutoria',
       'canalizacion',
+      'idInscripcionAlumno',
       'idActividad'];
 
     public $timestamps = true;
 
     public function actividad(){
-        return $this->belongsTo('BienestarWeb\Actividad','idActividad');
+      return $this->belongsTo('BienestarWeb\ActPedagogia','idActividad');
     }
-    public function recomendacionesTutor(){
-        return $this->belongsToMany('BienestarWeb\RecomendacionTutor','detallePedagogia','idActPedagogia','idRecomendacionTutor')
-                    ->withPivot('idDetallePedagogia','motivo','situacionEspecifica','recomendacion')
-                    ->withTimestamps();
+    public function inscripcionAlumno(){
+     return $this->belongsTo('BienestarWeb\ActPedagogia','idInscripcionAlumno');
+    }
+    public function detallesPedagogia(){
+        return $this->hasMany('BienestarWeb\DetallePedagogia','idActPedagogia','idActPedagogia');
     }
 
 

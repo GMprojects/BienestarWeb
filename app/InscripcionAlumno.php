@@ -16,11 +16,15 @@ class InscripcionAlumno extends Model
 
     public $timestamps = true;
 
-   public function actividad(){
-      return $this->belongsTo('BienestarWeb\Actividad','idActividad');
+    public function alumno(){
+      return $this->belongsTo('BienestarWeb\Alumno','idAlumno');
     }
 
-   public function alumno(){
-      return $this->belongsTo('BienestarWeb\Alumno', 'idAlumno');
-   }
+    public function inscripcionADA(){
+      return $this->belongsTo('BienestarWeb\InscripcionADA','idInscripcionADA');
+    }
+
+    public function actividadesPedagogia(){
+      return $this->hasMany('BienestarWeb\ActPedagogia','idInscripcionAlumno');
+    }
 }

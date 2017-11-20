@@ -380,12 +380,12 @@ a:hover{
 
 .btn-ff-green{
    border-radius: 0px;
-   background: #14b866;
+   background: #4CAE4C;
    color: white;
 }
 .btn-ff-green:focus, .btn-ff-green:hover{
    color: white;
-   background-color: #35CA7F;
+   background-color: #5CB85C;
 }
 
 .btn-ff-red{
@@ -396,6 +396,36 @@ a:hover{
 .btn-ff-red:focus, .btn-ff-red:hover{
    color: white;
    background-color: #FE523E;
+}
+
+.btn-ff-yellow{
+   border-radius: 0px;
+   background: #F0AD4E;
+   color: white;
+}
+.btn-ff-yellow:focus, .btn-ff-yellow:hover{
+   color: white;
+   background-color: #F0B663;
+}
+
+.btn-ff-blues{
+   border-radius: 0px;
+   background: #2E6DA4;
+   color: white;
+}
+.btn-ff-blues:focus, .btn-ff-blues:hover{
+   color: white;
+   background-color: #337AB7;
+}
+
+.btn-ff-default{
+   border-radius: 0px;
+   background: #4C4C4C;
+   color: white;
+}
+.btn-ff-default:focus, .btn-ff-default:hover{
+   color: white;
+   background-color: #7A7A7A;
 }
 /* Formulario FACFAR */
 

@@ -45,41 +45,18 @@
                             </a>
                           </td>
                         @endif
-  								<td><a href="#"><button class="btn btn-danger">Desvincular</button></a></td>
+  								<td><a href="" data-target = "#modal-delete-{{ $tutorado->idTutorTutorado }}" data-toggle = "modal"><button class="btn btn-danger">Desvincular</button></a></td>
                      @php($i++)
   							</tr>
                      @include('admin.tutorTutorado.modalEmail')
+                     @include('admin.tutorTutorado.modal')
   							@endforeach
   						</table>
   					</div>
   		   </div>
   	 </div>
   </div>
-  <!--<a href="" data-target = "#modal-delete-{/{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-danger">ELiminar</button></a>
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">-->
 
-<!-- /.modal -->
-<div class="modal fade" id="modal-default">
-   <!-- /.modal-dialog -->
-   <div class="modal-dialog">
-       <!-- /.modal-content -->
-      <div class="modal-content">
-         <div class="modal-header">
-           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-           <h4 class="modal-title"><b>Enviar Email</b></h4>
-         </div>
-         <div class="modal-body">
-           <p>Seleccione esta opción si desea comunicar a todos los inscritos de esta actividad los cambios realizados.</p>
-         </div>
-         <div class="modal-footer">
-           <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cerrar</button>
-         </div>
-      </div>
-      <!-- /.modal-content -->
-   </div>
-   <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
 <script>
 	$(document).ready(function() {
 		$('#tabTutores').DataTable({

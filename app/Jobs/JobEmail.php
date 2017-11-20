@@ -8,6 +8,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\Mail\Mailer;
 use BienestarWeb\Mail\Email;
 use BienestarWeb\User;
 use Log;
@@ -16,19 +18,21 @@ class JobEmail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     private $idReceptor;
     private $mensaje;
-    public $subject;
+    private $subject;
     private $idUserRemitente;
+    private $opcion;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($idReceptor, $mensaje, $subject, $idUserRemitente)
+    public function __construct($idReceptor, $mensaje, $subject, $idUserRemitente, $opcion)
     {
          $this->idReceptor = $idReceptor;
          $this->mensaje = $mensaje;
          $this->subject = $subject;
          $this->idUserRemitente = $idUserRemitente;
+         $this->opcion = $opcion;
     }
     /**
      * Execute the job.
@@ -38,10 +42,13 @@ class JobEmail implements ShouldQueue
     public function handle()
     {
          Log::info("enviar Email Simple");
-         $receptorEmail = User::where('id', $this->idReceptor)->value('email');
+         Log::info("Subject    ".$this->subject);
+
+         $destinatario = User::findOrFail($this->idReceptor);
+         $nombreDestinatario = $destinatario->nombre.' '.$destinatario->apellidoPaterno.' '.$destinatario->apellidoMaterno;
          $remitente = User::findOrFail($this->idUserRemitente);
-         $nombreRemitente = $remitente->nombre.' '.$remitente->apellidoPaterno.' '.$remitente->apellidoMaterno;
-         Mail::to($receptorEmail)
-              ->send(new Email($this->subject, $this->mensaje, $nombreRemitente));
+
+         Mail::to($destinatario->email)
+              ->send(new Email($this->subject, $this->mensaje, $remitente, $this->opcion, $nombreDestinatario));
     }
 }

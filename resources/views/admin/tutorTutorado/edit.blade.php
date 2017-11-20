@@ -1,50 +1,69 @@
 @extends('template')
 @section ('contenido')
-{!! Form::open(['route'=>['tutorTutorado.update', $tutor[0]->idDocente], 'method'=>'PATCH', 'autocomplete'=>'off', 'onsubmit'=>'return validar()']) !!}
+{!!Form::open(['route'=>['tutorTutorado.update', $tutor->idDocente], 'method'=>'PATCH', 'autocomplete'=>'off', 'onsubmit'=>'return validar()']) !!}
 {{ Form::token() }}
-<div class="box box-success">
-	<div class="box-header">
-		<div class="row">
-			<div class="col-xs-6">
-				<h3 class="box-title">Editar Tutorados</h3>
+
+{!!Form::hidden('anioSemestre',$anioSemestre)!!}
+{!!Form::hidden('numeroSemestre',$numeroSemestre)!!}
+
+<div class="caja">
+	<div class="caja-header">
+      <div class="caja-icon"><i class="fa fa-users"></i></div>
+      <div class="caja-title">Tutorados</div>
+   </div>
+
+	<div class="caja-body">
+	   <div class="row">
+			<h4>
+				<b>Docente: </b> <b>  &nbsp; &nbsp; {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</b>&nbsp; &nbsp;
+			   <div class="pull-right"><label><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $anioSemestre.'-'.$numeroSemestre }}</div>
+			</h4>
+
+	      <br> <br>
+			<div id="divNoHayAlumnos" class="alert alert-danger" style='display:none;'>
+					<a href="" class="close" data-dismiss="alert" aria-label="close">X</a>
+					<h4>Error</h4>
+					<p>Debe al menos elegir un alumno</p>
 			</div>
-		</div>
-	</div>
-
-	<div class="box-body">
-		{!!Form::hidden('anioSemestre',$anioSemestre)!!}
-		{!!Form::hidden('numeroSemestre',$numeroSemestre)!!}
-    <label><b>Tutor: </b> </label> <b>  &nbsp; &nbsp; {{ $tutor[0]->nombre.' '.$tutor[0]->apellidoPaterno.' '.$tutor[0]->apellidoMaterno }}</b>&nbsp; &nbsp;
-    <div class="pull-right"><label><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $anioSemestre.'-'.$numeroSemestre }}</div>
-    <br> <br>
-		<div id="divNoHayAlumnos" class="alert alert-danger" style='display:none;'>
-				<a href="" class="close" data-dismiss="alert" aria-label="close">X</a>
-				<h4>Error</h4>
-				<p>Debe al menos elegir un alumno</p>
-		</div>
+	   </div>
 		<div class="row">
-			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-0"></div>
-			<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-	       <label for="tabModAlumnos">Alumnos</label>
-				 <div class="table">
-						 <div class="table-responsive">
-							 <table id="tabModAlumnos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
-								 <thead>
-									 <th>Código</th>
-									 <th>Alumno</th>
-									 <th>Opciones</th>
-								 </thead>
-								 <tbody>
-								 </tobody>
-							 </table>
-						</div>
-	     		</div>
-		 </div>
-	 </div>
-	 <button class="btn btn-primary" type="submit"> Programar</button>
-  </div>
+	       <label for="tabModAlumnos" style="color: #4B367C;">Seleccione a los alumnos que serán tutorados</label>
+			 <div class="table">
+					 <div class="table-responsive">
+						 <table id="tabModAlumnos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+							 <thead>
+								 <th>Código</th>
+								 <th>Alumno</th>
+								 <th>Opciones</th>
+							 </thead>
+							 <tbody>
+								 @foreach ($tutorados as $tutorado)
+									 <tr>
+										 @if (in_array($tutorado->idAlumno, $idTutorados->toArray()))
+											 <td>{{ $tutorado->codigo }}</td>
+											 <td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
+											 <td><input type="checkbox" checked onchange="ocultarError(this)" style="" value={{ $tutorado->idAlumno }} name="alumnos[]"></td>
+										 @else
+											 <td>{{ $tutorado->codigo }}</td>
+											 <td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
+											 <td><input type="checkbox" onchange="ocultarError(this)" style="" value={{ $tutorado->idAlumno }} name="alumnos[]"></td>
+										 @endif
+									 </tr>
+								 @endforeach
+							 </tobody>
+						 </table>
+					</div>
+	 		</div>
+	   </div>
+	</div>
+   <div class="caja-footer">
+		<div class="pull-right">
+			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Asignar </button>
+			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+		</div>
+   </div>
 </div>
-
+{!! Form::close() !!}
 <script type="text/javascript">
 $(document).ready(function() {
 		 $('#tabModAlumnos').DataTable({
@@ -73,9 +92,9 @@ $(document).ready(function() {
 						 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 					 }
 				},
-				"order": [[ 1, 'asc' ]]
+				"order": [[ 2,'asc' ]]
 		 });
-		 ajaxAlumnosLibres();
+		// ajaxAlumnosLibres();
  		//FalumnosLibres
 	});
 
@@ -90,46 +109,6 @@ $(document).ready(function() {
 						$('#nombreApellidos').val(res[2]);
           }
 	   });
-	}
-
-	$('#anioSemestre').change(function(){
-			ajaxAlumnosLibres();
-	});
-
-	$('#numeroSemestre').change(function(){
-			ajaxAlumnosLibres();
-	});
-
-	function ajaxAlumnosLibres(){
-		var numeroSemestre = {{ $numeroSemestre }}
-		var anioSemestre = {{ $anioSemestre }}
-    var idDocente = {{ $tutor[0]->idDocente }}
-		var table = $('#tabModAlumnos').DataTable();
-		 table.clear();
-		 table.draw();
-		//Preparando el AJAX
-	 $.ajax({
-		 type:'GET',
-		 url: '/alumnosLibresExDoc',
-		 data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre, idDocente:idDocente},
-		 dataType: 'json',
-		 success:function(data) {
-			 for (var i = 0; i < data.length; i++) {
-				 if(in_array(data[i].idAlumno,{{ $idTutorados }})){
-					 table.row.add( [data[i].codigo,
-													 data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre,
-												   '<input type="checkbox" checked onchange="ocultarError(this)" style="" value='+data[i].idAlumno +' name="alumnos[]">']).draw(false);
-				 }else {
-					 table.row.add( [data[i].codigo,
-  												 data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre,
-  											   '<input type="checkbox" onchange="ocultarError(this)" style="" value='+data[i].idAlumno +' name="alumnos[]">']).draw(false);
-				 }
-			 }
-		 },
-		 error:function() {
-				 console.log("Error ");
-		 }
-	 });
 	}
 
 	function ocultarError(){

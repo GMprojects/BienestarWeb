@@ -93,6 +93,25 @@ class ActividadController extends Controller
          }
 
       }
+      function getRutaImagenUpdate($request, $rutaImgAnterior){
+   		 //Eliminando Foto anterior
+          $path = $rutaImgAnterior;
+   		 File::delete(storage_path('app/public/'.$rutaImgAnterior));
+   		 Storage::delete($path);
+   		 //Guardar la nueva imagen
+            if($request->file('rutaImagen')){
+               $file = $request->file('rutaImagen');
+               $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
+               $storage = Storage::disk('actividades')->put($name, \File::get($file));
+               if($storage){
+                  return 'actividades/'.$name;
+               }else{
+                  return NULL;
+               }
+            }else {
+                $rutaImagen = $rutaImgAnterior;
+            }
+      }
       function getInivitado($request){
          if($request->nombreResponsable != NULL){
             return $request->nombreResponsable.'-'.$request->apellidosResponsable.'-'.$request->emailResponsable;
@@ -114,6 +133,17 @@ class ActividadController extends Controller
                return $request->modalidad;
          }
       }
+      function getModalidadUpdate($request, $actividad){
+         if($actividad->idTipoActividad == '4'){
+            if(count($request->idAlumnoTutorado) > 1){
+               return '2';
+            }else{
+               return '1';
+            }
+         }else{
+            return $actividad->modalidad;
+         }
+      }
       function getCuposTotales($request){
          switch($request->idTipoActividad) {
             case '1':
@@ -124,6 +154,22 @@ class ActividadController extends Controller
             case '7': return $request->cuposTotales;
             default:
                if($request->modalidad == 1)
+                  return 1;
+               else return $request->cuposTotales;
+         }
+      }
+      function getCuposTotalesUpdate($request, $actividad){
+         switch($actividad->idTipoActividad) {
+            case '1':
+            case '2': return 1;
+            case '4': return count($request->idAlumnoTutorado);
+            case '5':
+            case '6':
+            case '7': return $request->cuposTotales;
+            case '8':
+            case '9': return 1;
+            default:
+               if($actividad->modalidad == 1)
                   return 1;
                else return $request->cuposTotales;
          }
@@ -143,6 +189,8 @@ class ActividadController extends Controller
             'titulo' => 'required|max:100',
             'fechaInicio' => 'required|date_format:d/m/Y',
             'horaInicio' => 'required',
+			'fechaFin' => 'required|date_format:d/m/Y',
+            'horaFin' => 'required',
             'lugar' => 'required|max:200',
             'descripcion' => 'required',
             'modalidad' => 'required',
@@ -164,6 +212,7 @@ class ActividadController extends Controller
             'anioSemestre' => 2017,
             'numeroSemestre' => 2,
             'modalidad' => ActividadController::getModalidad($request),
+            'asistenciaRegistrada' => 0,
             'idTipoActividad' => $request->idTipoActividad,
             'idUserResp' => ActividadController::getResp($request),
             'idUserProg' => $request->user()->id
@@ -221,15 +270,15 @@ class ActividadController extends Controller
                break;
             case '8':
                $array = preg_split('[ ]', $request->fechasConvocatoria);
-               $fechaIC = fecha($array[0]);
-               $fechaFC = fecha($array[2]);
+               $fechaIC = ActividadController::getFecha($array[0]);
+               $fechaFC = ActividadController::getFecha($array[2]);
                $actMovilidad = new ActMovilidad;
                $actMovilidad->fechaInicioConvocatoria = $fechaIC;
                $actMovilidad->fechaFinConvocatoria = $fechaFC;
                $actividad->actividadMovilidad()->save($actMovilidad);
                break;
             case '9':
-            $fechaIC = fecha($request->fechaInicioConvocatoria);
+            $fechaIC = ActividadController::getFecha($request->fechaInicioConvocatoria);
             $actComedor = new ActComedor;
             $actComedor->fechaConvocatoria = $fechaIC;
             $actividad->actividadComedor()->save($actComedor);
@@ -293,7 +342,9 @@ class ActividadController extends Controller
      */
     public function edit($id)
     {
+      //dd(count(InscripcionAlumno::where('idActividad', '35')->get()));
         $actividad = Actividad::findOrFail($id);
+        //dd(count(preg_split("/[-]/",$actividad->invitado)));
         switch ($actividad->idTipoActividad) {
           case '1':          case '3':        case '2':         case '4':       case '10':
               if (($actividad->idTipoActividad) == 4 || $actividad->modalidad == 1) {
@@ -323,286 +374,128 @@ class ActividadController extends Controller
      */
     public function update(Request $request, $id)
     {
-          $idUserProg = 22;
-          $idUserResponsable = $request->idUserResponsable;
           $request->validate([
               'titulo' => 'required|max:100',
-              'fechaProgramacion' => 'required|date_format:d/m/Y',
-              'horaProgramacion' => 'required',
+              'fechaInicio' => 'required|date_format:d/m/Y',
+              'horaInicio' => 'required',
+              'fechaFin' => 'required|date_format:d/m/Y',
+              'horaFin' => 'required',
               'lugar' => 'required|max:200',
-              'anioSemestre' => 'required',
-              'numeroSemestre' => 'required',
               'rutaImagen' => 'image|mimes:jpeg,png,jpg'
           ]);
           Log::info('Actualizar actividad');
           $actividad = Actividad::findOrFail($id);
           Log::info($actividad);
-           //----------------------- subir imagen usando Storage ----------------
-          if($request->file('rutaImagen')){
-                  //Eliminando Foto anterior
-                 $path = $actividad->rutaImagen;
-                 File::delete(storage_path('app/public/'.$actividad->rutaImagen));
-                 Storage::delete($path);
-                 //Guardar la nueva imagen
-                 $file = $request->file('rutaImagen');
-                 $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
-                 $storage = Storage::disk('actividades')->put($name, \File::get($file));
-                 if($storage){
-                   $rutaImagen = 'actividades/'.$name;
-                 }else{
-                   $rutaImagen = $actividad->rutaImagen;
-                 }
-           }else {
-             $rutaImagen = $actividad->rutaImagen;
-           }
-           Log::info('Ruta Imagen  '.$rutaImagen);
-           $dia =substr( $request->fechaProgramacion,0 ,2); $mes =substr( $request->fechaProgramacion,3 ,2); $anio=substr( $request->fechaProgramacion,-4 ,4);
-           $fechaP = $anio."-".$mes."-".$dia;
-           $horaP = (Carbon::parse($request->horaProgramacion))->toTimeString();
-           if($request->nombreResponsable != NULL || $request->nombreResponsable != ''){
-             $invitado = $request->nombreResponsable.'-'.$request->apellidosResponsable.'-'.$request->emailResponsable;
-           }else{
-             $invitado = '--';
-           }
+
+           $actividad->titulo = $request->titulo;
+           $actividad->fechaInicio = ActividadController::getFecha($request->fechaInicio);
+           $actividad->horaInicio = (Carbon::parse($request->horaInicio))->toTimeString();
+           $actividad->fechaFin = ActividadController::getFecha($request->fechaFin);
+           $actividad->horaFin = (Carbon::parse($request->horaFin))->toTimeString();
+           $actividad->lugar = $request->lugar;
+           $actividad->referencia = $request->referencia;
+           $actividad->descripcion = $request->descripcion;
+           $actividad->informacionAdicional = $request->informacionAdicional;
+           $actividad->rutaImagen = ActividadController::getRutaImagenUpdate($request, $actividad->rutaImagen);
+           $actividad->invitado = ActividadController::getInivitado($request);
+           $actividad->cuposTotales = ActividadController::getCuposTotalesUpdate($request, $actividad);
+           $actividad->estado = '1';
+           $actividad->modalidad = ActividadController::getModalidadUpdate($request, $actividad);
+           $actividad->idUserResp = ActividadController::getResp($request);
+           $actividad->update();
+
            switch ($actividad->idTipoActividad) {
              case '1':
              case '2':
-                       $idUserResponsable = $idUserProg;
-                       $actividad->titulo = $request->titulo;
-                       $actividad->fechaProgramacion = $fechaP;
-                       $actividad->horaProgramacion = $horaP;
-                       $actividad->lugar = $request->lugar;
-                       $actividad->referencia = $request->referencia;
-                       $actividad->descripcion = $request->descripcion;
-                       $actividad->informacionAdicional = $request->informacionAdicional;
-                       $actividad->rutaImagen = $rutaImagen;
-                       $actividad->invitado = $invitado;
-                       $actividad->cuposTotales = '1';
-                       $actividad->estado = '1';
-                       $actividad->anioSemestre = $request->anioSemestre;
-                       $actividad->numeroSemestre = $request->numeroSemestre;
-                       $actividad->modalidad = '1';
-                       $actividad->idTipoActividad = $actividad->idTipoActividad;
-                       $actividad->idUserResp = $idUserResponsable;
-                       $actividad->idUserProg = $idUserProg;
-                       $actividad->update();
-                       //Eliminar Inscripciones anteriores
-                       $inscripcionAlumno = InscripcionAlumno::where('idAlumno', $request->idAlumno)->where('idActividad', $actividad->idActividad)->first();
-                       if($inscripcionAlumno == null){ //NO Existe esta Inscripcion Alumno
-                         Log::info('NO Existe esta inscripcion');
-                         $alumno = Alumno::findOrFail($request->idAlumno);
-                         $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->first();
-                         Log::info($inscripcionAlumno);
-                         Log::info('inscripcion alumno  '.$inscripcionAlumno->idInscripcionAlumno);
-                         $inscripcionAlumno->asistencia = '0';
-                         $inscripcionAlumno->alumno()->associate($alumno);
-                         $inscripcionAlumno->update();
-                       }
-                       Log::info('Actualizando act 1      ----          2');
+                 //Eliminar Inscripciones anteriores
+                 $inscripcionAlumno = InscripcionAlumno::where('idAlumno', $request->idAlumno)->where('idActividad', $actividad->idActividad)->first();
+                 if($inscripcionAlumno == null){ //NO Existe esta Inscripcion Alumno
+                   Log::info('NO Existe esta inscripcion');
+                   $alumno = Alumno::findOrFail($request->idAlumno);
+                   $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->first();
+                   Log::info($inscripcionAlumno);
+                   Log::info('inscripcion alumno  '.$inscripcionAlumno->idInscripcionAlumno);
+                   $inscripcionAlumno->asistencia = '0';
+                   $inscripcionAlumno->alumno()->associate($alumno);
+                   $inscripcionAlumno->update();
+                 }
+                 Log::info('Actualizando act 1      ----          2');
                break;
              case '3':
              case '10':
-                       if($actividad->modalidad == 1){//INDIVIDUAL
-                             Log::info('Individual');
-                             $actividad->titulo = $request->titulo;
-                             $actividad->fechaProgramacion = $fechaP;
-                             $actividad->horaProgramacion = $horaP;
-                             $actividad->lugar = $request->lugar;
-                             $actividad->referencia = $request->referencia;
-                             $actividad->descripcion = $request->descripcion;
-                             $actividad->informacionAdicional = $request->informacionAdicional;
-                             $actividad->rutaImagen = $rutaImagen;
-                             $actividad->invitado = $invitado;
-                             $actividad->cuposTotales = '1';
-                             $actividad->estado = '1';
-                             $actividad->anioSemestre = $request->anioSemestre;
-                             $actividad->numeroSemestre = $request->numeroSemestre;
-                             $actividad->modalidad = '1';
-                             $actividad->idTipoActividad = $actividad->idTipoActividad;
-                             $actividad->idUserResp = $idUserResponsable;
-                             $actividad->idUserProg = $idUserProg;
-                             $actividad->update();
-                             //Eliminar Inscripciones anteriores
-                             $inscripcionAlumno = InscripcionAlumno::where('idAlumno', $request->idAlumno)->where('idActividad', $actividad->idActividad)->first();
-                             if($inscripcionAlumno == null){ //NO Existe esta Inscripcion Alumno
-                               Log::info('NO Existe esta inscripcion');
-                               $alumno = Alumno::findOrFail($request->idAlumno);
-                               $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->first();
-                               Log::info($inscripcionAlumno);
-                               Log::info('inscripcion alumno  '.$inscripcionAlumno->idInscripcionAlumno);
-                               $inscripcionAlumno->asistencia = '0';
-                               $inscripcionAlumno->alumno()->associate($alumno);
-                               $inscripcionAlumno->update();
-                             }
-                             Log::info('Actualizando act 3      ----          Individual');
-                       }else{//GRUPAL
-                             Log::info('Grupal');
-                             $actividad->titulo = $request->titulo;
-                             $actividad->fechaProgramacion = $fechaP;
-                             $actividad->horaProgramacion = $horaP;
-                             $actividad->lugar = $request->lugar;
-                             $actividad->referencia = $request->referencia;
-                             $actividad->descripcion = $request->descripcion;
-                             $actividad->informacionAdicional = $request->informacionAdicional;
-                             $actividad->rutaImagen = $rutaImagen;
-                             $actividad->invitado = $invitado;
-                             $actividad->cuposTotales = $request->cuposTotales;
-                             $actividad->estado = '1';
-                             $actividad->anioSemestre = $request->anioSemestre;
-                             $actividad->numeroSemestre = $request->numeroSemestre;
-                             $actividad->modalidad = '2';
-                             $actividad->idTipoActividad = $actividad->idTipoActividad;
-                             $actividad->idUserResp = $idUserResponsable;
-                             $actividad->idUserProg = $idUserProg;
-                             $actividad->update();
-
-                             $actGrupal = ActGrupal::where('idActividad', $actividad->idActividad)->first();
-                             $actGrupal->cuposDisponibles = $request->cuposTotales;
-                             $actGrupal->cuposOcupados = '0';
-                             $actGrupal->update();
-                             Log::info('Actualizando act 3      ----          Grupal');
+                 if($actividad->modalidad == 1){//INDIVIDUAL
+                       //Eliminar Inscripciones anteriores
+                       $inscripcionAlumno = InscripcionAlumno::where('idAlumno', $request->idAlumno)->where('idActividad', $actividad->idActividad)->first();
+                       if($inscripcionAlumno == null){ //NO Existe esta Inscripcion Alumno
+                            Log::info('NO Existe esta inscripcion');
+                            $alumno = Alumno::findOrFail($request->idAlumno);
+                            $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->first();
+                            Log::info($inscripcionAlumno);
+                            Log::info('inscripcion alumno  '.$inscripcionAlumno->idInscripcionAlumno);
+                            $inscripcionAlumno->asistencia = '0';
+                            $inscripcionAlumno->alumno()->associate($alumno);
+                            $inscripcionAlumno->update();
                        }
+                       Log::info('Actualizando act 3      ----          Individual');
+                 }else{//GRUPAL
+                       $actGrupal = ActGrupal::where('idActividad', $actividad->idActividad)->first();
+                       $actGrupal->cuposDisponibles = $request->cuposTotales;
+                       $actGrupal->update();
+                       Log::info('Actualizando act 3      ----          Grupal');
+                 }
                break;
              case '4':
-                       $nroTutorados = count($request->idAlumnoTutorado);
-                       if($nroTutorados > 1){
-                          $modalidad = '2';
-                       }else{
-                         $modalidad = '1';
-                       }
-                       $actividad->titulo = $request->titulo;
-                       $actividad->fechaProgramacion = $fechaP;
-                       $actividad->horaProgramacion = $horaP;
-                       $actividad->lugar = $request->lugar;
-                       $actividad->referencia = $request->referencia;
-                       $actividad->descripcion = $request->descripcion;
-                       $actividad->informacionAdicional = $request->informacionAdicional;
-                       $actividad->rutaImagen = $rutaImagen;
-                       $actividad->invitado = $invitado;
-                       $actividad->cuposTotales = $nroTutorados;
-                       $actividad->estado = '1';
-                       $actividad->anioSemestre = $request->anioSemestre;
-                       $actividad->numeroSemestre = $request->numeroSemestre;
-                       $actividad->modalidad = $modalidad;
-                       $actividad->idTipoActividad = $actividad->idTipoActividad;
-                       $actividad->idUserResp = $idUserResponsable;
-                       $actividad->idUserProg = $idUserProg;
-                       $actividad->update();
-                       //eliminar inscripciones anteriores
-                       $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->delete();
-                       $inscripcionADA = InscripcionADA::where('idActividad', $actividad->idActividad)->delete();
-                       //realizar inscripciones
-                       for ($i = 0; $i < $nroTutorados; $i++) {
-                           $alumno = Alumno::findOrFail($request->idAlumnoTutorado[$i]);
-                           $inscripcionADA = $actividad->inscripcionesADA()->create([
-                           ]);
-                           $inscripcionAlumno = new InscripcionAlumno;
-                           $inscripcionAlumno->asistencia = '0';
-                           $inscripcionAlumno->idActividad = $actividad->idActividad;
-                           $inscripcionAlumno->alumno()->associate($alumno);
-                           $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
-                       }
+                 //eliminar inscripciones anteriores
+                 $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->delete();
+                 $inscripcionADA = InscripcionADA::where('idActividad', $actividad->idActividad)->delete();
+                 //realizar inscripciones
+                 for ($i = 0; $i < $actividad->cuposTotales; $i++) {
+                     $alumno = Alumno::findOrFail($request->idAlumnoTutorado[$i]);
+                     $inscripcionADA = $actividad->inscripcionesADA()->create([
+                     ]);
+                     $inscripcionAlumno = new InscripcionAlumno;
+                     $inscripcionAlumno->asistencia = '0';
+                     $inscripcionAlumno->idActividad = $actividad->idActividad;
+                     $inscripcionAlumno->alumno()->associate($alumno);
+                     $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
+                 }
                break;
              case '5':           case '6':           case '7':
-                     $actividad->titulo = $request->titulo;
-                     $actividad->fechaProgramacion = $fechaP;
-                     $actividad->horaProgramacion = $horaP;
-                     $actividad->lugar = $request->lugar;
-                     $actividad->referencia = $request->referencia;
-                     $actividad->descripcion = $request->descripcion;
-                     $actividad->informacionAdicional = $request->informacionAdicional;
-                     $actividad->rutaImagen = $rutaImagen;
-                     $actividad->invitado = $invitado;
-                     $actividad->cuposTotales = $request->cuposTotales;
-                     $actividad->estado = '1';
-                     $actividad->anioSemestre = $request->anioSemestre;
-                     $actividad->numeroSemestre = $request->numeroSemestre;
-                     $actividad->modalidad = '2';
-                     $actividad->idTipoActividad = $actividad->idTipoActividad;
-                     $actividad->idUserResp = $idUserResponsable;
-                     $actividad->idUserProg = $idUserProg;
-                     $actividad->update();
-
-                     $actGrupal = ActGrupal::where('idActividad', $actividad->idActividad)->first();
-                     $actGrupal->cuposDisponibles = $request->cuposTotales;
-                     $actGrupal->cuposOcupados = '0';
-                     $actGrupal->update();
+                  $actGrupal = ActGrupal::where('idActividad', $actividad->idActividad)->first();
+                  $actGrupal->cuposDisponibles = $request->cuposTotales;
+                  $actGrupal->update();
                break;
              case '8':
-                     $array = preg_split('[ ]', $request->fechasConvocatoria);
-                     $dia=substr($array[0],0 ,2); $mes=substr($array[0],3 ,2); $anio=substr($array[0],-4 ,4);
-                     $fechaIC = $anio."-".$mes."-".$dia;
-                     $dia=substr($array[2],0 ,2); $mes=substr($array[2],3 ,2); $anio=substr($array[2],-4 ,4);
-                     $fechaFC = $anio."-".$mes."-".$dia;
-                     $actividad->titulo = $request->titulo;
-                     $actividad->fechaProgramacion = $fechaP;
-                     $actividad->horaProgramacion = $horaP;
-                     $actividad->lugar = $request->lugar;
-                     $actividad->referencia = $request->referencia;
-                     $actividad->descripcion = $request->descripcion;
-                     $actividad->informacionAdicional = $request->informacionAdicional;
-                     $actividad->rutaImagen = $rutaImagen;
-                     $actividad->invitado = $invitado;
-                     $actividad->cuposTotales = '0';
-                     $actividad->estado = '1';
-                     $actividad->anioSemestre = $request->anioSemestre;
-                     $actividad->numeroSemestre = $request->numeroSemestre;
-                     $actividad->modalidad = '2';
-                     $actividad->idTipoActividad = $actividad->idTipoActividad;
-                     $actividad->idUserResp = $idUserResponsable;
-                     $actividad->idUserProg = $idUserProg;
-                     Log::info($actividad);
-                     $actividad->update();
+                  $array = preg_split('[ ]', $request->fechasConvocatoria);
+                  $fechaIC = ActividadController::getFecha($array[0]);
+                  $fechaFC = ActividadController::getFecha($array[2]);
 
-                     $actMovilidad = ActMovilidad::where('idActividad', $actividad->idActividad)->first();
-                     $actMovilidad->fechaInicioConvocatoria = $fechaIC;
-                     $actMovilidad->fechaFinConvocatoria = $fechaFC;
-                     Log::info($actMovilidad);
-                     $actMovilidad->update();
+                  $actMovilidad = ActMovilidad::where('idActividad', $actividad->idActividad)->first();
+                  $actMovilidad->fechaInicioConvocatoria = $fechaIC;
+                  $actMovilidad->fechaFinConvocatoria = $fechaFC;
+                  $actMovilidad->update();
                break;
              case '9':
-                     $dia=substr($request->fechaInicioConvocatoria,0 ,2); $mes=substr($request->fechaInicioConvocatoria,3 ,2); $anio=substr($request->fechaInicioConvocatoria,-4 ,4);
-                     $fechaIC = $anio."-".$mes."-".$dia;
-                     $actividad->titulo = $request->titulo;
-                     $actividad->fechaProgramacion = $fechaP;
-                     $actividad->horaProgramacion = $horaP;
-                     $actividad->lugar = $request->lugar;
-                     $actividad->referencia = $request->referencia;
-                     $actividad->descripcion = $request->descripcion;
-                     $actividad->informacionAdicional = $request->informacionAdicional;
-                     $actividad->rutaImagen = $rutaImagen;
-                     $actividad->invitado = $invitado;
-                     $actividad->cuposTotales = '0';
-                     $actividad->estado = '1';
-                     $actividad->anioSemestre = $request->anioSemestre;
-                     $actividad->numeroSemestre = $request->numeroSemestre;
-                     $actividad->modalidad = '2';
-                     $actividad->idTipoActividad = $actividad->idTipoActividad;
-                     $actividad->idUserResp = $idUserResponsable;
-                     $actividad->idUserProg = $idUserProg;
-                     Log::info($actividad);
-                     $actividad->update();
+                  $fechaIC = ActividadController::getFecha($request->fechaInicioConvocatoria);
 
-                     $actComedor = ActComedor::where('idActividad', $actividad->idActividad)->first();
-                     $actComedor->fechaConvocatoria = $fechaIC;
-                     Log::info($actComedor);
-                     $actComedor->update();
+                  $actComedor = ActComedor::where('idActividad', $actividad->idActividad)->first();
+                  $actComedor->fechaConvocatoria = $fechaIC;
+                  $actComedor->update();
                break;
-             default:
-             # code...
-             break;
            }
            //---------------Notificacion o E-Mail-------------------//
            if ($request->envioCorreos == 'on') {
              Log::info('envio de notificaciones Actualizar Actividad');
-             $userResp = User::findOrFail($idUserResponsable);
+             $userResp = User::findOrFail($request->idUserResp);
              $job = (new JobEmailActualizarAct($actividad, $userResp, '1'))
                     ->delay(Carbon::now()->addSeconds(5));
              dispatch($job);
            }else {
              Log::info('No hay envio de notificaciones');
            }
-           return Redirect::to('programador/actividad');
+           //return Redirect::to('programador/actividad');
+           //action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id])
+           return redirect()->action('MiPerfilController@mis_actividades', ['id' => $request->user()->id, 'opcion'=>'3']);
     }
 
     /**
@@ -618,40 +511,108 @@ class ActividadController extends Controller
         $actividad->update();
         //---------------Notificacion o E-Mail-------------------//
         Log::info('envio de notificaciones');
-        $userResp = User::findOrFail($idUserResponsable);
-        $job = (new JobEnviarActualizarActEmail($actividad, $userResp, '2'))
+        $userResp = User::findOrFail($actividad->idUserResp);
+        $job = (new JobEmailActualizarAct($actividad, $userResp, '2'))
                ->delay(Carbon::now()->addSeconds(5));
         dispatch($job);
-        return Redirect::to('programador/actividad');
+        return redirect()->back();
     }
 
     public function execute($id) //ejecutar una actividad
     {
-        $actividad = Actividad::findOrFail($id);
-        /*switch ($actividad->idTipoActividad) {
-          case '1':          case '3':        case '2':         case '4':       case '10':
-              if (($actividad->idTipoActividad) == 4 || $actividad->modalidad == 1) {
-                for ($i=0; $i < count($actividad->inscripcionesADA); $i++) {
-                  $idInscripcionesADA[$i]=$actividad->inscripcionesADA[$i]->idInscripcionADA;
-                }
-                $idAlumnos = InscripcionAlumno::whereIn('idInscripcionADA', $idInscripcionesADA)->pluck('idAlumno');
-              } else {
-                $idAlumnos = null;
-              }
-              return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
-            break;
-          default:
-              $idAlumnos = null;
-              return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
-          break;*
-        }*/
-        return view('programador.actividad.execute', ['actividad' => $actividad]);
+         $actividad = Actividad::findOrFail($id);
+         $inscAlumnos = InscripcionADA::join('inscripcionAlumno','inscripcionADA.idInscripcionADA','=','inscripcionAlumno.idInscripcionADA')
+                                        ->join('alumno','inscripcionAlumno.idAlumno','=','alumno.idAlumno')
+                                        ->join('user','alumno.idUser','=','user.id')
+                                        ->where('inscripcionADA.idActividad', $id)
+                                        ->select('inscripcionADA.idInscripcionADA','alumno.idAlumno as idInscrito','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo', 'inscripcionAlumno.asistencia', 'user.idTipoPersona')
+                                        ->get();
+         $inscDocentes = InscripcionADA::join('inscripcionDocente','inscripcionADA.idInscripcionADA','=','inscripcionDocente.idInscripcionADA')
+                                         ->join('docente','inscripcionDocente.idDocente','=','docente.idDocente')
+                                         ->join('user','docente.idUser','=','user.id')
+                                         ->where('inscripcionADA.idActividad', $id)
+                                         ->select('inscripcionADA.idInscripcionADA','docente.idDocente as idInscrito','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo', 'inscripcionDocente.asistencia', 'user.idTipoPersona')
+                                         ->get();
+         $inscAdministrativos = InscripcionADA::join('inscripcionAdministrativo','inscripcionADA.idInscripcionADA','=','inscripcionAdministrativo.idInscripcionADA')
+                                                 ->join('administrativo','inscripcionAdministrativo.idAdministrativo','=','administrativo.idAdministrativo')
+                                                 ->join('user','administrativo.idUser','=','user.id')
+                                                 ->where('inscripcionADA.idActividad', $id)
+                                                 ->select('inscripcionADA.idInscripcionADA','administrativo.idAdministrativo as idInscrito','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo', 'inscripcionAdministrativo.asistencia', 'user.idTipoPersona')
+                                                 ->get();
+         $inscAlDoc = $inscAlumnos->merge($inscDocentes);
+         $inscritos = $inscAlDoc->merge($inscAdministrativos);
+         // --------------------------------------------------------------------------------------------------
+         //dd($inscripciones);
+         $numAsistentes = 0;    $numAusentes = 0;
+         //numero Inscritos
+         //dd($inscripcionesAlumnos);
+         $numInscritos = count($inscAlumnos)+count($inscDocentes)+count($inscAdministrativos);
+         //numero asistentes        //numero de ausentes
+         if($inscAlumnos != null){
+            foreach ($inscAlumnos as $inscripcionAlumno) {
+              ($inscripcionAlumno->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+            }
+         }
+         if($inscDocentes != null){
+            foreach ($inscDocentes as $inscripcionDocente) {
+              ($inscripcionDocente->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+            }
+         }
+         if($inscAdministrativos != null){
+            foreach ($inscAdministrativos as $inscripcionAdministrativo) {
+              ($inscripcionAdministrativo->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+            }
+         }
+
+         return view('programador.actividad.execute', ['actividad' => $actividad, 'inscripciones' => $inscritos, 'numAsistentes' => $numAsistentes]);
     }
 
-    public function updateExecute($id) //ejecutar una actividad
+    public function updateExecute(Request $request, $id) //ejecutar una actividad
     {
-        $actividad = Actividad::findOrFail($id);
-        return Redirect::to('programador/actividad');
+         $actividad = Actividad::findOrFail($id);
+         if ($request->horaEjecutada != null) {
+            $actividad->horaEjecutada = (Carbon::parse($request->horaEjecutada))->toTimeString();
+            $actividad->fechaEjecutada = ActividadController::getFecha($request->fechaEjecutada);
+         }
+         $actividad->estado = '2';
+
+         switch ($actividad->idTipoActividad) {
+             case '4':
+                if ($request->observaciones == null) {
+                   $actividad->observaciones = 'Ninguna';
+                } else {
+                   $actividad->observaciones = $request->observaciones;
+                }
+                if ($request->recomendaciones == null) {
+                   $actividad->recomendaciones = 'Ninguna';
+                } else {
+                   $actividad->recomendaciones = $request->recomendaciones;
+                }
+                foreach ($actividad->actividadesPedagogia as $actPedagogia) {
+                   $actPedagogia->formaTutoria = $request->formaTutoria;
+                   $actPedagogia->update();
+                }
+             break;
+             case '8':
+             case '9':
+                $actividad->observaciones = 'Ninguna';
+                $actividad->recomendaciones = 'Ninguna';
+             break;
+             default:
+                if ($request->observaciones == null) {
+                   $actividad->observaciones = 'Ninguna';
+                } else {
+                   $actividad->observaciones = $request->observaciones;
+                }
+                if ($request->recomendaciones == null) {
+                   $actividad->recomendaciones = 'Ninguna';
+                } else {
+                   $actividad->recomendaciones = $request->recomendaciones;
+                }
+             break;
+         }
+         $actividad->update();
+         return redirect()->back();
     }
 
     public function verMisEstadisticas(Request $request){

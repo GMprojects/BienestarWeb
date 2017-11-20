@@ -100,6 +100,7 @@ class InscripcionADAController extends Controller
      * @return \Illuminate\Http\Response
      */
       public function store(Request $request){
+         dd($request);
          $actividad = Actividad::findOrFail($request->idActividad);
          $user =  Auth::user();
          $inscripcionADA = $actividad->inscripcionesADA()->create([]);
@@ -180,5 +181,30 @@ class InscripcionADAController extends Controller
     {
         //
     }
+
+    public function registrarAsistencias(Request $request, $id){
+      //dd($id);
+      for ($i = 0; $i < count($request->asistencia) ; $i++) {
+         $array = preg_split("/[-]/",$request->asistencia[$i]);
+         if($array[1] == '1'){//alumno 1
+            $inscripcionAlumno = InscripcionAlumno::where('idInscripcionADA', $array[0])->get();
+            $inscripcionAlumno[0]->asistencia = '1';
+            $inscripcionAlumno[0]->update();
+         }elseif ($array[1] == '2') {//docente 2
+            $inscripcionDocente = InscripcionDocente::where('idInscripcionADA', $array[0])->get();
+            $inscripcionDocente[0]->asistencia = '1';
+            $inscripcionDocente[0]->update();
+         }else {//administrativo 3
+            $inscripcionAdministrativo = InscripcionAdministrativo::where('idInscripcionADA', $array[0])->get();
+            $inscripcionAdministrativo[0]->asistencia = '1';
+            $inscripcionAdministrativo[0]->update();
+         }
+      }
+      $actividad = Actividad::findOrFail($id);
+      $actividad->asistenciaRegistrada = 1;
+      $actividad->update();
+
+      return redirect()->back();
+   }
 
 }

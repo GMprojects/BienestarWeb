@@ -53,8 +53,8 @@
 			</div>
 	      <div class="caja-footer">
 				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-check"></i> Publicar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-remove"></i> Cancelar</button>
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Publicar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
 				</div>
 	      </div>
 	   </div>
@@ -86,7 +86,7 @@
 									<div class="input-group-addon">
 									  <i class="fa fa-clock-o"></i>
 									</div>
-									<input type="text" name="horaInicio"  required  class="form-control timepicker">
+									<input type="text" name="horaInicio"    placeholder="{{ date("h:i A") }}"  required  class="form-control timepicker">
 								</div>
 							</div>
 						</div>
@@ -112,7 +112,7 @@
 									<div class="input-group-addon">
 									  <i class="fa fa-clock-o"></i>
 									</div>
-									<input type="text" name="horaFin"  required  class="form-control timepicker">
+									<input type="text" name="horaFin"  required    placeholder="{{ date("h:i A") }}" class="form-control timepicker">
 								</div>
 							</div>
 						</div>
@@ -215,8 +215,7 @@
 						<div class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 						</div>
-						<input type="text" name="fechaInicioConvocatoria" class="form-control pull-right" value ="{{old('fechaInicioConvocatoria')}}" placeholder="{{ date("d/m/Y") }}" id="
-						2">
+						<input type="text" name="fechaInicioConvocatoria" class="form-control pull-right" value ="{{old('fechaInicioConvocatoria')}}" placeholder="{{ date("d/m/Y") }}" id="datepicker2">
 					</div>
 				</div>
 			</div>
@@ -320,7 +319,7 @@
 		document.getElementById('enlaceRespInvitado').style.display = 'none';
 		document.getElementById('divNoHayTutor').style.display = 'none';
 		document.getElementById('etiquetaResponsable').innerHTML = 'Responsable *';
-
+console.log($(this).val());
       switch ($(this).val()) {
 			//ATENCIÓN MÉDICA
 			case '1':
@@ -335,7 +334,7 @@
 				document.getElementById('divModalidad').style.display = 'block';
 				document.getElementById('selectAlumnosI').style.display = 'block';
 				document.getElementById('rIndividual').checked = true;
-				dListaResponsables('{{ action('UserController@getUsersAdm') }}');
+				dListaResponsables('{{ action('UserController@getUsersAdm') }}', 'responsable');
 				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumnos');
 				break;
 			//TUTORÍA
@@ -362,7 +361,7 @@
 				document.getElementById('selectResponsables').style.display = 'block';
 				//document.getElementById('boxDatosAdicionales').style.display = 'block';
 				document.getElementById('fechasConvocatoria').style.display = 'block';
-				dListaResponsables('{{ action('UserController@getUsersAdmDoc') }}','Responsable');
+				dListaResponsables('{{ action('UserController@getUsersAdm') }}','Responsable');
 				break;
 			//COMEDOR
 			case '9':

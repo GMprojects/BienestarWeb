@@ -1,10 +1,18 @@
 @component('mail::message')
   # {{$subject}}
   <br>
-  Estimado,
+  EstimadX {{ ucwords(strtolower($destinatario)) }},
   <br>
   {{ $mensaje }}
-  <br>
+  @switch($opcion)
+     @case(1)
+      @component('mail::button', ['url' => url(route('habitoEstudio.create')), 'color' => 'blue'])
+         Llenar Hábito Estudio
+      @endcomponent
+     @break
+  @endswitch()
+
+  <br><br><br>
 
   Atentamente, {{ $remitente }}
 

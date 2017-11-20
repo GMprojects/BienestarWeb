@@ -46,13 +46,18 @@ class JobEmailActualizarAct implements ShouldQueue
      */
     public function handle()
     {
-        Log::info("enviar Responsable");
-        $this->userResp->notify(new ActividadActualizadaNotif($this->actividad));
-        //Mail::to($this->userResp->email)
-                    //  ->send(new ActividadActualizadaMail($this->actividad, $this->mensajeR));
+         Log::info("---------------------------------------------------------------------------------- ");
+         if ($this->opcion == '1') {
+              $subject = 'Actividad Actualizada';
+         } else {
+              $subject = 'Actividad Cancelada';
+         }
+        Log::info("JobEmailActualizarAct ");
+        Log::info("Inicio enviar Responsable");
+        $this->userResp->notify(new ActividadActualizadaNotif($this->actividad, $subject));
         Log::info($this->userResp->email);
         Log::info("Fin enviar Responsable");
-        Log::info("Enviar correo a los inscritos");
+        // -------------------------------------------------------------------------------------------------------------------
         //verificar si existe inscripciones de Alumnos
         $inscripcionesAlumnos = InscripcionAlumno::where('idActividad', $this->actividad->idActividad)->get();
         //verificar si existe inscripciones de Administrativos
@@ -60,7 +65,7 @@ class JobEmailActualizarAct implements ShouldQueue
         //verificar si existe inscripciones de Docentes
         $inscripcionesDocentes = InscripcionDocente::where('idActividad', $this->actividad->idActividad)->get();
         //--------------------------------------------------------------------------------------------------------------------
-        if($inscripcionesAlumnos != null){
+        if(count($inscripcionesAlumnos)>0){
           $i = 0;
           foreach ($inscripcionesAlumnos as $inscripcionAlumno) {
             $alumnos[$i] = $inscripcionAlumno->alumno->user;
@@ -69,7 +74,7 @@ class JobEmailActualizarAct implements ShouldQueue
         }else {
           $alumnos = array();
         }
-        if($inscripcionesAdministrativos != null){
+        if(count($inscripcionesAdministrativos)>0){
           $i = 0;
           foreach ($inscripcionesAdministrativos as $inscripcionAdministrativo) {
             $administrativos[$i] = $inscripcionAdministrativo->administrativo->user;
@@ -78,7 +83,7 @@ class JobEmailActualizarAct implements ShouldQueue
         }else {
           $administrativos = array();
         }
-        if($inscripcionesDocentes != null){
+        if(count($inscripcionesDocentes)>0){
           $i = 0;
           foreach ($inscripcionesDocentes as $inscripcionDocente) {
             $docentes[$i] = $inscripcionDocente->docente->user;
@@ -89,17 +94,13 @@ class JobEmailActualizarAct implements ShouldQueue
         }
         $users = array_merge($alumnos, $administrativos);
         $users = array_merge($users, $docentes);
-        if ($this->opcion == '1') {
-          $subject = 'Actividad Actualizada';
-        } else {
-          $subject = 'Actividad Cancelada';
-        }
+
         //-----------enviar los emails-------------------------------------------------------------------------
-        Log::info('Enviar Correos');
+        Log::info("---------------------------------------------------------------------------------- ");
+        Log::info("Enviar correo a los inscritos ");
         foreach ($users as $user) {
-          Log::info($user);
-          $user->notify(new ActividadActualizadaNotif($this->actividad));
-          //Mail::to($email)->send(new ActividadActualizadaMail($this->actividad, $this->mensajeA));
+             Log::info($user->email);
+             $user->notify(new ActividadActualizadaNotif($this->actividad, $subject));
         }
         Log::info("Fin Enviar Correos");
     }
