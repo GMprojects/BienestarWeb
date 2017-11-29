@@ -17,6 +17,7 @@ class CrearTablaTipoActividad extends Migration
         {
             $tabla->increments('idTipoActividad');
             $tabla->string('tipo', 45)->unique();
+            $tabla->string('dirigidoA', 4);
             /*
                 Categoría:
                 1. ActAtencionMedica
@@ -30,7 +31,7 @@ class CrearTablaTipoActividad extends Migration
                 9. ActComedor
                 10. ActReforzamiento
             */
-            $tabla->mediumtext('rutaImagen');                     
+            $tabla->mediumtext('rutaImagen');
         });
     }
 

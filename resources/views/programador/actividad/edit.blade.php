@@ -1,5 +1,6 @@
 @extends('template')
 @section('contenido')
+@include('programador.actividad.modalAyuda')
 <div class="row">
 	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 		@if($errors->any())
@@ -13,7 +14,7 @@
 		@endif
    </div>
 </div>
-{!! Form::model($actividad, ['method'=>'PATCH', 'route'=>['actividad.update', $actividad->idActividad], 'files'=>'true']) !!}
+{!! Form::model($actividad, ['method'=>'PATCH', 'route'=>['actividad.update', $actividad->idActividad], 'files'=>'true', 'onsubmit'=>'return validar()']) !!}
 {{ Form::token() }}
 <div class="row">
 	<div class="col-md-6 col-sm-6">
@@ -23,6 +24,15 @@
 	         <div class="caja-title">Datos Generales</div>
 	      </div>
 	      <div class="caja-body">
+				<div>
+					<p style="color:red;"> <span class="ast">*</span> Requerido
+						<span>
+							<button type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#modal-ayuda">
+								<i class="fa fa-question" style="padding-left:4px;"></i>
+							</button>
+						</span>
+					</p>
+				</div>
 	         <div class="form-control-file">
 					<label for="rutaImagen">Imagen</label>
 					@if ($actividad->rutaImagen != null)
@@ -35,7 +45,7 @@
 				</div>
 				<br>
             <div class="form-group">
-               <label for="titulo">Título de la actividad *</label>
+               <label for="titulo">Título de la actividad </label><span class="ast">*</span>
                <input type="text" name="titulo" class="form-control"  required value ="{{$actividad->titulo}}" placeholder="De preferencia un título corto y llamativo">
             </div>
 
@@ -43,7 +53,7 @@
 					<label for="idTipoActividad">Categoría </label>&nbsp; &nbsp;&nbsp; &nbsp;
 					<span style="color: #4B367C;"> <b>{{ $actividad->tipoActividad->tipo }}</b> &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</span>
 					<label >Modalidad </label>&nbsp; &nbsp;&nbsp; &nbsp;
-					@if ($actividad->actividadMovilidad == null||$actividad->actividadComedor == null)
+					@if ($actividad->idTipoActividad < 8 ||$actividad->idTipoActividad > 9)
 						@if ($actividad->modalidad == '1')
 								<td><small class="label bg-aqua">Individual</small></td>
 						@else
@@ -55,7 +65,7 @@
 				</div>
 
 				<div class="form-group">
-				  <label for="titulo">Descripción *</label>
+				  <label for="titulo">Descripción </label><span class="ast">*</span>
 					<textarea style="resize: none;" name="descripcion"  class="form-control" required rows="6" cols="30">{{ $actividad->descripcion }}</textarea>
 			  	</div>
 				<div class="form-group">
@@ -89,50 +99,50 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="fechaInicio">Fecha de Inicio *</label>
+							<label for="fechaInicio" id="lblFechaInicio">Fecha de Inicio </label><span class="ast">*</span>
 							<div class="input-group date">
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaInicio" class="form-control" required  value="{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}" id="datepicker1">
+								<input type="text" name="fechaInicio" class="form-control" required  value="{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}" id="fechaInicio">
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6" id="divHoraInicio">
 						<div class="bootstrap-timepicker">
 							<div class="form-group">
-								<label for="horaInicio">Hora de Inicio *</label>
+								<label for="horaInicio">Hora de Inicio </label><span class="ast">*</span>
 								<div class="input-group">
 									<div class="input-group-addon">
 									  <i class="fa fa-clock-o"></i>
 									</div>
-									<input type="text" name="horaInicio"  required value="{{ date('g:i A',strtotime($actividad->horaInicio)) }}" class="form-control timepicker" id="timepicker1">
+									<input type="text" name="horaInicio"  id="horaInicio"   required value="{{ date('g:i A',strtotime($actividad->horaInicio)) }}" class="form-control timepicker" id="timepicker1">
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-6" id="divFechaFin">
 						<div class="form-group">
-							<label for="fechaFin">Fecha de Fin *</label>
+							<label for="fechaFin" id="lblFechaFin">Fecha de Fin </label><span class="ast">*</span>
 							<div class="input-group date">
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaFin" class="form-control" required  value="{{ date("d/m/Y",strtotime($actividad->fechaFin)) }}" id="datepicker2">
+								<input type="text" name="fechaFin" class="form-control" required  value="{{ date("d/m/Y",strtotime($actividad->fechaFin)) }}" id="fechaFin">
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6" id="divHoraFin">
 						<div class="bootstrap-timepicker">
 							<div class="form-group">
-								<label for="horaFin">Hora de Fin *</label>
+								<label for="horaFin">Hora de Fin </label><span class="ast">*</span>
 								<div class="input-group">
 									<div class="input-group-addon">
 									  <i class="fa fa-clock-o"></i>
 									</div>
-									<input type="text" name="horaFin"  required value="{{ date('g:i A',strtotime($actividad->horaFin)) }}" class="form-control timepicker" id="timepicker2">
+									<input type="text" name="horaFin"  id="horaFin"   required value="{{ date('g:i A',strtotime($actividad->horaFin)) }}" class="form-control timepicker" id="timepicker2">
 								</div>
 							</div>
 						</div>
@@ -150,7 +160,7 @@
 			</div>
 			<div class="caja-body">
 				<div class="form-group">
-					<label for="lugar">Lugar *</label>
+					<label for="lugar">Lugar </label><span class="ast">*</span>
 					<div class="input-group">
 					  <div class="input-group-addon">
 						<i class="fa fa-location-arrow"></i>
@@ -178,65 +188,41 @@
 				<div class="caja-title"> Datos Específicos</div>
 			</div>
 			<div class="caja-body">
+				<div id="divError" class="alert alert-danger" style='display:none;'>
+						<h4><b>Error</b></h4>
+						<p id="pError">Debe elegir a un docente para que sea tutor</p>
+				</div>
 				<div id="selectResponsables" style='display:none;'>
 					<div class="form-group">
-						<label for="idUserResp" id="etiquetaResponsable">Responsable *</label>
-						<select name="idUserResp" id="selectIdResponsable" class="selectpicker form-control" data-size="15" data-live-search="true" data-show-subtext="true"> </select>
+						<label for="idUserResp" id="etiquetaResponsable">Responsable </label><span class="ast">*</span>
+						<select name="idUserResp" id="selectIdResponsable" onchange="ocultar()" class="selectpicker form-control" data-size="15" data-live-search="true" data-show-subtext="true"> </select>
 						<a id="enlaceRespInvitado" onclick="mostrarNuevoResponsable()" style='display:none;'>Añadir Responsable Invitado</a>
 					</div>
 				</div>
-				<div id="selectAlumnosI" style='display:none;'>
+				<div id="selectAlumnos" style='display:none;'>
 					<div class="form-group">
-						<label id="lbAlumno" for="idAlumnoI">Alumno *</label>
-						<select name="idAlumno" id="selectIdAlumnoI"  class="selectpicker form-control" data-size="15" data-live-search="true" data-show-subtext="true"> </select>
+						<label id="lbAlumno" for="idAlumnoI">Alumno </label><span class="ast">*</span>
+						<select name="idAlumno" id="selectIdAlumno" onchange="ocultar()" class="selectpicker form-control" data-size="15" data-live-search="true" data-show-subtext="true"> </select>
 					</div>
 				</div>
 				<div id="selectAlumnosTutorados" style='display:none;'>
 					<div class="form-group">
-						<label for="idAlumnoTutorado">Tutorados *</label>
-						<select name="idAlumnoTutorado[]" id="selectIdAlumnoTutorado"  class="selectpicker form-control" multiple title="Selecciona Tutorado.."data-size="15" data-live-search="true" data-show-subtext="true"> </select>
+						<label for="idAlumnoTutorado">Tutorados </label><span class="ast">*</span>
+						<select name="idAlumnoTutorado[]" id="selectIdAlumnoTutorado" onchange="ocultar()" class="selectpicker form-control" multiple title="Selecciona Tutorado.."data-size="15" data-live-search="true" data-show-subtext="true"> </select>
 					</div>
 				</div>
 				<div id="divNoHayTutor" class="callout callout-danger" style='display:none;'>
 		         <h4>Tutores</h4>
 		         <p id="mensajeTutor">No hay tutor dentro del bla bla.</p>
          	</div>
+				@if ($actividad->cuposTotales != 1)
 				<div id="divCuposTotales" style='display:none;'>
 					<div class="form-group">
-						<label for="cuposTotales">N° Cupos *</label>
-						@if ($actividad->idTipoActividad >2 && $actividad->idTipoActividad != 4 && $actividad->idTipoActividad !=3 &&  $actividad->modalidad !=1 && $actividad->idTipoActividad !=10 )
+						<label for="cuposTotales">N° Cupos </label><span class="ast">*</span>
 							<input type="number" id="cuposTotales" min="2" name="cuposTotales" class="form-control" value ="{{ $actividad->cuposTotales }}">
-						@else
-							<input type="number" id="cuposTotales" min="2" name="cuposTotales" class="form-control">
-						@endif
 					</div>
 				</div>
-				<div class="form-group" style='display:none;'id="fechasConvocatoria">
-					<label for="fechasConvocatoria">Rango de la Convocatoria *</label>
-					<div class="input-group">
-						<div class="input-group-addon">
-							<i class="fa fa-calendar"></i>
-						</div>
-						@if ($actividad->actividadMovilidad != null)
-						 	 <input type="text" name="fechasConvocatoria" class="form-control pull-right" value="{{date("d/m/Y",strtotime($actividad->actividadMovilidad['fechaInicioConvocatoria'])).' - '.date("d/m/Y",strtotime($actividad->actividadMovilidad['fechaFinConvocatoria']))}}" id="daterangepicker">
-						@else
-							 <input type="text" name="fechasConvocatoria" class="form-control pull-right" value="" id="daterangepicker">
-						@endif
-					</div>
-				</div>
-				<div class="form-group" style='display:none;' id="fechaInicioConvocatoria">
-					<label for="fechaInicioConvocatoria">Fecha de Inicio Convocatoria *</label>
-					<div class="input-group date">
-						<div class="input-group-addon">
-							<i class="fa fa-calendar"></i>
-						</div>
-						@if ($actividad->actividadComedor != null)
-					 		 <input type="text" name="fechaInicioConvocatoria" class="form-control pull-right" value="{{ date("d/m/Y",strtotime($actividad->actividadComedor['fechaConvocatoria'])) }}" id="datepicker4">
-					   @else
-							 <input type="text" name="fechaInicioConvocatoria" class="form-control pull-right" value="" id="datepicker4">
-					   @endif
-					</div>
-				</div>
+				@endif
 			</div>
 		</div>
 	</div>
@@ -253,15 +239,15 @@
 			</div>
 			<div class="caja-body">
 				<div class="form-group">
-				  <label for="nombreResponsable">Nombres *</label>
+				  <label for="nombreResponsable">Nombres </label><span class="ast">*</span>
 				  <input type="text" id="nombreResponsable" name="nombreResponsable" class="form-control" placeholder="Nombres">
 			  </div>
 			  <div class="form-group">
-				  <label for="apellidosResponsable">Apellidos *</label>
+				  <label for="apellidosResponsable">Apellidos </label><span class="ast">*</span>
 				  <input type="text" id="apellidosResponsable" name="apellidosResponsable" class="form-control" placeholder="Apellidos">
 			  </div>
 			  <div class="form-group">
-				  <label for="emailResponsable">Correo *</label>
+				  <label for="emailResponsable">Correo </label><span class="ast">*</span>
 				  <input type="email" id="emailResponsable" name="emailResponsable" class="form-control" placeholder="xxx@xxx.xx">
 			  </div>
 			</div>
@@ -301,57 +287,44 @@
 	$('.timepicker').timepicker({
 		showInputs: false
 	})
-	$('#datepicker1').datepicker({
+	$('#fechaInicio').datepicker({
 		autoclose: true,
 		todayHighlight: true,
-		startDate :  '-3d',
+		startDate :  '-1d',
 		format: 'dd/mm/yyyy'
 	})
-	$('#datepicker2').datepicker({
+	$('#fechaFin').datepicker({
 		autoclose: true,
 		todayHighlight: true,
-		startDate :  '-3d',
+		startDate :  '-1d',
 		format: 'dd/mm/yyyy'
 	})
-	$('#datepicker3').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		startDate :  '-3d',
-		format: 'dd/mm/yyyy'
-	})
-	$('#datepicker4').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		startDate :  '-3d',
-		format: 'dd/mm/yyyy'
-	})
-	$('#daterangepicker').daterangepicker({
-		//autoUpdateInput: false,
-		locale: {
-			format: 'DD/MM/YYYY'
-		},
-		minDate :  '{{ date("d")-2 }}',
-	});
 	$(document).ready(function(){
 		document.getElementById('boxDatosEspecificos').style.display = 'block';
       console.log("elegir actividad");
 		//ATENCIÓN MÉDICA       PSICOLOGÍA
 		if ({{ $actividad->idTipoActividad }} == '1' || {{ $actividad->idTipoActividad }} == '2') {
 			console.log("1-2");
-			document.getElementById('selectAlumnosI').style.display = 'block';
-			dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumnos');
+			document.getElementById('divFechaFin').style.display = 'none';
+			document.getElementById('divHoraFin').style.display = 'none';
+
+			document.getElementById('selectAlumnos').style.display = 'block';
+			dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
 			//SERVICIO SOCIAL
 		}else if ({{ $actividad->idTipoActividad }} == '3') {
 			document.getElementById('selectResponsables').style.display = 'block';
-			document.getElementById('selectAlumnosI').style.display = 'block';
-			document.getElementById('rIndividual').checked = true;
-			dListaResponsables('{{ action('UserController@getUsersAdm') }}', 'responsable');
-			dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumnos');
+			dListaResponsables('{{ action('UserController@getUsersAdm') }}','Responsable');
+			if ('{{ $actividad->cuposTotales }}' == 1) {//INDIVIDUAL
+				document.getElementById('selectAlumnos').style.display = 'block';
+				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
+			} else {//GRUPAL
+				document.getElementById('divCuposTotales').style.display = 'block';
+			}
 			//TUTORIA
 		}else if ({{ $actividad->idTipoActividad }} == '4') {
 			document.getElementById('selectResponsables').style.display = 'block';
 			document.getElementById('selectAlumnosTutorados').style.display = 'block';
-			document.getElementById('etiquetaResponsable').innerHTML = 'Tutor *';
+			document.getElementById('etiquetaResponsable').innerHTML = 'Tutor';
 			var numeroSemestre = $('#numeroSemestre').val();
 			var anioSemestre = $('#anioSemestre').val();
 			dListaTutores('{{ action('TutorTutoradoController@getTutores') }}','Tutor',anioSemestre,numeroSemestre);
@@ -385,6 +358,7 @@
 			document.getElementById('selectResponsables').style.display = 'block';
 			document.getElementById('divCuposTotales').style.display = 'block';
 			document.getElementById('enlaceRespInvitado').style.display = 'block';
+			$('#cuposTotales').attr('required', 'true');
 			if ( ('{{ $actividad->invitado }}') != '' ) {
 				 console.log("tamaño de "+('{{ $actividad->invitado }}').length);
 	          document.getElementById('boxResponsableInvitado').style.display = 'block';
@@ -395,24 +369,44 @@
 			}
 			dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
 			//MOVILIDAD
-		}else if ({{ $actividad->idTipoActividad }} == '8') {
+		}else if ({{ $actividad->idTipoActividad }} == '8' || {{ $actividad->idTipoActividad }} == '9') {
 			document.getElementById('selectResponsables').style.display = 'block';
-			//document.getElementById('boxDatosAdicionales').style.display = 'block';
-			document.getElementById('fechasConvocatoria').style.display = 'block';
-			dListaResponsables('{{ action('UserController@getUsersAdm') }}','Responsable');
-			//COMEDOR
-		}else if ({{ $actividad->idTipoActividad }} == '9') {
-			document.getElementById('selectResponsables').style.display = 'block';
-			//document.getElementById('boxDatosAdicionales').style.display = 'block';
-			document.getElementById('fechaInicioConvocatoria').style.display = 'block';
+			document.getElementById('lblFechaInicio').innerHTML = 'Inicio de la Convocatoria';
+			document.getElementById('lblFechaFin').innerHTML = 'Fin de la Convocatoria';
+
 			dListaResponsables('{{ action('UserController@getUsersAdm') }}','Responsable');
 			//REFORZAMIENTO
+		}else if ({{ $actividad->idTipoActividad }} == '10'){
+			document.getElementById('selectResponsables').style.display = 'block';
+			dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
+			document.getElementById('enlaceRespInvitado').style.display = 'block';
+			if ('{{ $actividad->cuposTotales }}' == 1) {//INDIVIDUAL
+				document.getElementById('selectAlumnos').style.display = 'block';
+				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
+			} else {//GRUPAL
+				document.getElementById('divCuposTotales').style.display = 'block';
+			}
+			if ( ('{{ $actividad->invitado }}') != '' ) {
+				 console.log("tamaño de "+('{{ $actividad->invitado }}').length);
+	          document.getElementById('boxResponsableInvitado').style.display = 'block';
+				 var invitado = ('{{ $actividad->invitado }}').split("-");
+				 $('#nombreResponsable').attr('value', invitado[0]);
+	          $('#apellidosResponsable').attr('value', invitado[1]);
+	          $('#emailResponsable').attr('value', invitado[2]);
+			}
 		}else{
+			document.getElementById('divCuposTotales').style.display = 'block';
 			document.getElementById('selectResponsables').style.display = 'block';
 			document.getElementById('enlaceRespInvitado').style.display = 'block';
-			document.getElementById('selectAlumnosI').style.display = 'block';
 			dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
-			dListaAlumnos('{{ action('UserController@getAlumnos') }}');
+			if ( ('{{ $actividad->invitado }}') != '' ) {
+				 console.log("tamaño de "+('{{ $actividad->invitado }}').length);
+	          document.getElementById('boxResponsableInvitado').style.display = 'block';
+				 var invitado = ('{{ $actividad->invitado }}').split("-");
+				 $('#nombreResponsable').attr('value', invitado[0]);
+	          $('#apellidosResponsable').attr('value', invitado[1]);
+	          $('#emailResponsable').attr('value', invitado[2]);
+			}
 		}
 	});
 
@@ -468,9 +462,9 @@
 
 	var dListaAlumnos = function(url, placeholder) {
 	    var op ="";
-		var tamSelectIdAlumno=document.getElementById("selectIdAlumnoI").length;
+		var tamSelectIdAlumno=document.getElementById("selectIdAlumno").length;
 		if(tamSelectIdAlumno>0){
-			$("#selectIdAlumnoI").children('option').remove();
+			$("#selectIdAlumno").children('option').remove();
 			console.log('Borrando');
 		}
 	    //Preparando el AJAX
@@ -481,7 +475,7 @@
 	      dataType: 'json',
 			success:function(data) {
 	          op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
-	          $("#selectIdAlumnoI").append(op);
+	          $("#selectIdAlumno").append(op);
 				 console.log('Cantidad de alumnos'+data.length);
 	          for (var i = 0; i < data.length; i++) {
 						if({{ count($actividad->inscripcionesADA) }} !=0 ){
@@ -492,9 +486,9 @@
 									op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" value="'+data[i].idAlumno+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
 								}
 						}
-		            $("#selectIdAlumnoI").append(op);
+		            $("#selectIdAlumno").append(op);
 	          }
-	          $("#selectIdAlumnoI").selectpicker("refresh");
+	          $("#selectIdAlumno").selectpicker("refresh");
 	      },
 	      error:function() {
 	          console.log("Error ");
@@ -541,9 +535,9 @@
 		console.log($(this).val());
 		if({{ $actividad->idTipoActividad }} == 4){
 			var op ="";
-			var tamSelectIdAlumno=document.getElementById("selectIdAlumnoI").length;
+			var tamSelectIdAlumno=document.getElementById("selectIdAlumno").length;
 			if(tamSelectIdAlumno>0){
-				$("#selectIdAlumnoI").children('option').remove();
+				$("#selectIdAlumno").children('option').remove();
 				console.log('Borrando');
 			}
 			var tamSelectIdAlumno=document.getElementById("selectIdAlumnoTutorado").length;
@@ -561,7 +555,6 @@
 				data: {id:$(this).val(), anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 				dataType: 'json',
 				success:function(data) {
-					console.log($('input:radio[name=modalidad]').val());
 					console.log('Cantidad de Tutorados'+data.length);
 					for (var i = 0; i < data.length; i++) {
 						op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" title="'+data[i].codigo+'" value="'+data[i].idAlumno+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
@@ -621,7 +614,7 @@
 	}
 
 	function mostrarSegunModalidad(modalidad){
-			document.getElementById('selectAlumnosI').style.display = 'none';
+			document.getElementById('selectAlumnos').style.display = 'none';
 			document.getElementById('selectAlumnosTutorados').style.display = 'none';
 			document.getElementById('divCuposTotales').style.display = 'none';
 			switch (modalidad) {
@@ -629,7 +622,7 @@
 							if(document.getElementById('selectIdTipoActividad').value == 4){
 									document.getElementById('selectAlumnosTutorados').style.display = 'block';
 							}else {
-									document.getElementById('selectAlumnosI').style.display = 'block';
+									document.getElementById('selectAlumnos').style.display = 'block';
 							}
 					break;
 				case 2:
@@ -637,6 +630,90 @@
 					break;
 				default:
 			}
+	}
+
+	function ocultar(){
+		document.getElementById('divError').style.display = 'none';
+	}
+
+	function validar(){
+		var todoBien = true;
+		switch ('{{ $actividad->idTipoActividad }}') {
+			case '1'://ATENCIÓN MÉDICA
+			case '2'://PSICOLOGÍA
+				var selectIdAlumno = document.getElementById('selectIdAlumno');
+				var pro = selectIdAlumno.options[selectIdAlumno.selectedIndex].value;
+				if ( pro == '') {
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno para quien será la actividad que esta programando';
+					document.getElementById('divError').style.display = 'block';
+					todoBien = false;
+				}
+				//document.getElementById('selectIdAlumno').style.display = 'block';
+				break;
+			case '3'://SERVICIO SOCIAL
+			case '10'://REFORZAMIENTO
+				var selectIdResponsable = document.getElementById('selectIdResponsable');
+				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
+				if ( '{{  $actividad->modalidad }}' == '1' ) {//INDIVIDUAL
+					var selectIdAlumno = document.getElementById('selectIdAlumno');
+					var pro2 = selectIdAlumno.options[selectIdAlumno.selectedIndex].value;
+					if ( pro1 == '' || pro2 == '') {
+						document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno y un responsable para quien será la actividad que esta programando';
+						document.getElementById('divError').style.display = 'block';
+						todoBien = false;
+					}
+				} else if ( '{{  $actividad->modalidad }}' == '2' ) {//GRUPAL
+					if ( pro1 == '' ) {
+						document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+						document.getElementById('divError').style.display = 'block';
+						todoBien = false;
+					}
+				}
+				//document.getElementById('selectIdAlumno').style.display = 'block';
+				break;
+			case '4'://TUTORÍA
+				var selectIdResponsable = document.getElementById('selectIdResponsable');
+				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
+				if ( pro1 == '' ) {
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un tutor para quien será la actividad que esta programando';
+					document.getElementById('divError').style.display = 'block';
+					todoBien = false;
+				}else {
+					var selectIdAlumnoTutorado = document.getElementById('selectIdAlumnoTutorado');
+					if ( selectIdAlumnoTutorado.selectedIndex == -1) {
+						document.getElementById('pError').innerHTML = 'Debe seleccionar al menos un tutorado';
+						document.getElementById('divError').style.display = 'block';
+						todoBien = false;
+					}
+				}
+				//document.getElementById('selectResponsables').style.display = 'block';
+				//document.getElementById('selectAlumnosTutorados').style.display = 'block';
+				break;
+			case '5'://DEPORTES
+			case '6'://CULTURALES
+			case '7'://ESPARCIMIENTO
+			case '8'://MOVILIDAD
+			case '9'://COMEDOR
+				var selectIdResponsable = document.getElementById('selectIdResponsable');
+				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
+				if ( pro1 == '' ) {
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+					document.getElementById('divError').style.display = 'block';
+					todoBien = false;
+				}
+				//document.getElementById('selectResponsables').style.display = 'block';
+				break;
+			default:
+				var selectIdResponsable = document.getElementById('selectIdResponsable');
+				if ( selectIdResponsable.selectedIndex == -1) {
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+					document.getElementById('divError').style.display = 'block';
+					todoBien = false;
+				}
+				//document.getElementById('selectResponsables').style.display = 'block';
+				break;
+		}
+		return todoBien;
 	}
 </script>
 
@@ -662,6 +739,10 @@
 		border-radius: 25px;
 		padding: 0px 0px 0px 0.4px;
 		font-size: 15px;
+	}
+	.ast{
+		color: red;
+		font-size: 20px;
 	}
 </style>
 

@@ -25,7 +25,7 @@ class Alumno extends Model
             ->withPivot('idInscAlumno','asistencia','idActividad');
     }
     public function actividadesMovilidad(){
-        return $this->belongsToMany('BienestarWeb\ActMovilidad','beneficiarioMovilidad','idAlumno','idActMovilidad')
+        return $this->belongsToMany('BienestarWeb\ActMovilidad','beneficiarioMovilidad','idAlumno','idActividad')
                     ->withPivot('idBeneficiarioMovilidad','fechaInicio','fechaFin','duracionMeses','duracionAnio','institucion','pais','observaciones')
                     ->withTimestamps();
     }

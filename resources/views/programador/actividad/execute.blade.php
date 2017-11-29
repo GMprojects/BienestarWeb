@@ -23,7 +23,7 @@
 								<label>Categoría </label>&nbsp; &nbsp;&nbsp; &nbsp;
 								<span style="color: #4B367C;"> <b>{{ $actividad->tipoActividad->tipo }}</b> &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</span>
 								<label >Modalidad </label>&nbsp; &nbsp;&nbsp; &nbsp;
-								@if ($actividad->idTipoActividad != 8 || $actividad->idTipoActividad  != 9)
+								@if ($actividad->idTipoActividad != 8 && $actividad->idTipoActividad  != 9)
 									@if ($actividad->modalidad == '1')
 											<td><small class="label bg-aqua">Individual</small></td>
 									@else

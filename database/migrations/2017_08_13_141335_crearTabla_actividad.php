@@ -44,7 +44,6 @@ class CrearTablaActividad extends Migration
                 1. Individual
                 2. Grupal
             */
-            $tabla->enum('asistenciaRegistrada', ['0', '1'])->default('0');
             $tabla->string('observaciones', 500)->default('Ninguna');
             $tabla->string('recomendaciones', 500)->default('Ninguna');
             $tabla->mediumtext('rutaImagen')->nullable();

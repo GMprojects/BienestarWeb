@@ -70,7 +70,7 @@ class EvidenciaActividadController extends Controller
         $evidenciaActividad->nombre = $request->nombre;
         $evidenciaActividad->idActividad = $request->idActividad;
         $evidenciaActividad->save();
-        return redirect()->action('EvidenciaActividadController@index',['idActividad' => $request->idActividad]);
+        return redirect()->back();
     }
 
     /**
@@ -115,6 +115,7 @@ class EvidenciaActividadController extends Controller
      */
     public function destroy($id)
     {
+        dd($id);
         $evidenciaActividad = EvidenciaActividad::findOrFail($id);
         $path = $evidenciaActividad->ruta;
       //  unlink($path);

@@ -1,41 +1,81 @@
 @extends('template')
 @section('contenido')
-	<div class="row">
-		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-			<h3>Listado de Tipos de Actividades <a href="tipoActividad/create"><button class="btn btn-success">Nuevo Tipo</button></a></h3>
-			@include('admin.tipoActividad.search')
-
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="table-responsive">
-				<table id="tabTipoActividad" class="table table-striped table-bordered table-condensed table-hover">
-					<thead>
-						<th>Id</th>
-						<th>Tipo Actividad</th>
-						<th>Imagen</th>
-						<th>Opciones</th>
-					</thead>
-
-					@foreach($tiposActividad as $tipoActividad)
-						<tr>
-							<td>{{ $tipoActividad->idTipoActividad }}</td>
-							<td>{{ $tipoActividad->tipo }}</td>
-							<td>{{ $tipoActividad->rutaImagen }}</td>
-							<td>
-								<a href="{{ action('TipoActividadController@edit',$tipoActividad->idTipoActividad) }}"><button class="btn btn-info">Editar</button></a>
-								<a href="" data-target = "#modal-delete-{{ $tipoActividad->idTipoActividad }}" data-toggle = "modal"><button class="btn btn-danger">Eliminar</button></a>
-							</td>
-						</tr>
-						@include('admin.tipoActividad.modal')
-					@endforeach
-
-				</table>
+	<div class="box box-info">
+		<div class="box-header">
+			<div class="row">
+				<div class="col-xs-6">
+					<h3 class="box-title">Lista de Categorías</h3>
+				</div>
+				<div class="col-xs-6" style="text-align:right;">
+					<a href="tipoActividad/create"><button class="btn btn-ff-green"><i class="fa fa-plus "></i> Nueva Categoría</button></a>
+				</div>
 			</div>
 
 		</div>
+
+		<div class="box-body">
+				<div class="table">
+						<div class="table-responsive">
+								<table id="tabTipoActividad" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+
+										<thead>
+											<th>Id</th>
+											<th>Nombre Categoría</th>
+											<th>Dirigido A</th>
+											<th>Imagen</th>
+											<th>Opciones</th>
+										</thead>
+										<tbody>
+											@foreach($tiposActividad as $tipoActividad)
+												<tr>
+													<td>{{ $tipoActividad->idTipoActividad }}</td>
+													<td>{{ $tipoActividad->tipo }}</td>
+													<td>
+														<ul>
+															@if (strlen($tipoActividad->dirigidoA) == 1)
+																@switch($tipoActividad->dirigidoA[0])
+																	@case('1')
+																		<li>Alumnos</li>
+																	@break
+																	@case('2')
+																		<li>Docentes</li>
+																	@break
+																	@case('3')
+																		<li>Administrativos</li>
+																	@break
+																@endswitch
+															@elseif (strlen($tipoActividad->dirigidoA) == 2)
+																@if ($tipoActividad->dirigidoA[0] == 1 && $tipoActividad->dirigidoA[1] == 2)
+																	<li>Alumnos</li>
+																	<li>Docentes</li>
+																@elseif ($tipoActividad->dirigidoA[0] == 1 && $tipoActividad->dirigidoA[1] == 3)
+																	<li>Alumnos</li>
+																	<li>Administrativos</li>
+																@else{{-- 2 y 3 --}}
+																	<li>Docentes</li>
+																	<li>Administrativos</li>
+																@endif
+															@else
+																<li>Alumnos</li>
+																<li>Docentes</li>
+																<li>Administrativos</li>
+															@endif
+														</ul>
+													</td>
+													<td><img src="{{ asset('storage/'.$tipoActividad->rutaImagen) }}" width="100px" alt="Not found"></td>
+													<td>
+														<a href="{{ action('TipoActividadController@edit',$tipoActividad->idTipoActividad) }}" class="btn btn-ff-yellow"><i class="fa fa-edit"></i></a>
+														<a href="" data-target = "#modal-delete-{{ $tipoActividad->idTipoActividad }}" data-toggle = "modal" class="btn btn-ff-red"><i class="fa fa-remove"></i></a>
+													</td>
+												</tr>
+												@include('admin.tipoActividad.modal')
+											@endforeach
+										</tbody>
+
+									</table>
+							</div>
+					</div>
+			</div>
 	</div>
 
 	<script>
@@ -64,7 +104,8 @@
 					"oAria": {
 					  "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
 					  "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-					}
+				  },
+				  "order": [[1, "asc"]]
 				}
 			})
 		});

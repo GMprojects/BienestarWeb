@@ -128,9 +128,10 @@ class ActividadController extends Controller
                }else{
                   return '1';
                }
-            case '5': case '6': case '7': return 2;
+            case '5': case '6': case '7': case '8': case '9': return 2;
+            case '3': case '10': return $request->modalidad;
             default:
-               return $request->modalidad;
+               return 2;
          }
       }
       function getModalidadUpdate($request, $actividad){
@@ -182,15 +183,12 @@ class ActividadController extends Controller
          }
       }
       public function store(Request $request){
-         //dd($request);
          $mensajeA = 'Estimad@ alumn@, se le invita a participar de una actividad';
          $mensajeR = 'Ud. ha sido asignado como responsable de una actividad';
          $request->validate([
             'titulo' => 'required|max:100',
             'fechaInicio' => 'required|date_format:d/m/Y',
             'horaInicio' => 'required',
-			'fechaFin' => 'required|date_format:d/m/Y',
-            'horaFin' => 'required',
             'lugar' => 'required|max:200',
             'descripcion' => 'required',
             'modalidad' => 'required',
@@ -268,20 +266,12 @@ class ActividadController extends Controller
                $actGrupal->cuposDisponibles = $request->cuposTotales;
                $actividad->actividadGrupal()->save($actGrupal);
                break;
-            case '8':
-               $array = preg_split('[ ]', $request->fechasConvocatoria);
-               $fechaIC = ActividadController::getFecha($array[0]);
-               $fechaFC = ActividadController::getFecha($array[2]);
-               $actMovilidad = new ActMovilidad;
-               $actMovilidad->fechaInicioConvocatoria = $fechaIC;
-               $actMovilidad->fechaFinConvocatoria = $fechaFC;
-               $actividad->actividadMovilidad()->save($actMovilidad);
-               break;
-            case '9':
-            $fechaIC = ActividadController::getFecha($request->fechaInicioConvocatoria);
-            $actComedor = new ActComedor;
-            $actComedor->fechaConvocatoria = $fechaIC;
-            $actividad->actividadComedor()->save($actComedor);
+            case '8':           case '9':
+            break;
+            default:
+               $actGrupal = new ActGrupal;
+               $actGrupal->cuposDisponibles = $request->cuposTotales;
+               $actividad->actividadGrupal()->save($actGrupal);
             break;
          }
          //---------------Notificacion o E-Mail-------------------//
@@ -315,8 +305,7 @@ class ActividadController extends Controller
      * @param  \BienestarWeb\Actividad  $actividad
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $actividad = Actividad::findOrFail($id);
         $actividad->each(function($actividad){
             $actividad->tipoActividad;
@@ -340,8 +329,7 @@ class ActividadController extends Controller
      * @param  \BienestarWeb\Actividad  $actividad
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
       //dd(count(InscripcionAlumno::where('idActividad', '35')->get()));
         $actividad = Actividad::findOrFail($id);
         //dd(count(preg_split("/[-]/",$actividad->invitado)));
@@ -372,14 +360,11 @@ class ActividadController extends Controller
      * @param  \BienestarWeb\Actividad  $actividad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
           $request->validate([
               'titulo' => 'required|max:100',
               'fechaInicio' => 'required|date_format:d/m/Y',
               'horaInicio' => 'required',
-              'fechaFin' => 'required|date_format:d/m/Y',
-              'horaFin' => 'required',
               'lugar' => 'required|max:200',
               'rutaImagen' => 'image|mimes:jpeg,png,jpg'
           ]);
@@ -465,23 +450,13 @@ class ActividadController extends Controller
                   $actGrupal->cuposDisponibles = $request->cuposTotales;
                   $actGrupal->update();
                break;
-             case '8':
-                  $array = preg_split('[ ]', $request->fechasConvocatoria);
-                  $fechaIC = ActividadController::getFecha($array[0]);
-                  $fechaFC = ActividadController::getFecha($array[2]);
-
-                  $actMovilidad = ActMovilidad::where('idActividad', $actividad->idActividad)->first();
-                  $actMovilidad->fechaInicioConvocatoria = $fechaIC;
-                  $actMovilidad->fechaFinConvocatoria = $fechaFC;
-                  $actMovilidad->update();
-               break;
-             case '9':
-                  $fechaIC = ActividadController::getFecha($request->fechaInicioConvocatoria);
-
-                  $actComedor = ActComedor::where('idActividad', $actividad->idActividad)->first();
-                  $actComedor->fechaConvocatoria = $fechaIC;
-                  $actComedor->update();
-               break;
+             case '8':           case '9':
+             break;
+             default:
+                $actGrupal = ActGrupal::where('idActividad', $actividad->idActividad)->first();
+                $actGrupal->cuposDisponibles = $request->cuposTotales;
+                $actGrupal->update();
+             break;
            }
            //---------------Notificacion o E-Mail-------------------//
            if ($request->envioCorreos == 'on') {
@@ -504,8 +479,7 @@ class ActividadController extends Controller
      * @param  \BienestarWeb\Actividad  $actividad
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id)  {
         $actividad = Actividad::findOrFail($id);
         $actividad->estado ='3';
         $actividad->update();
@@ -518,8 +492,7 @@ class ActividadController extends Controller
         return redirect()->back();
     }
 
-    public function execute($id) //ejecutar una actividad
-    {
+    public function execute($id){ //ejecutar una actividad
          $actividad = Actividad::findOrFail($id);
          $inscAlumnos = InscripcionADA::join('inscripcionAlumno','inscripcionADA.idInscripcionADA','=','inscripcionAlumno.idInscripcionADA')
                                         ->join('alumno','inscripcionAlumno.idAlumno','=','alumno.idAlumno')
@@ -567,8 +540,7 @@ class ActividadController extends Controller
          return view('programador.actividad.execute', ['actividad' => $actividad, 'inscripciones' => $inscritos, 'numAsistentes' => $numAsistentes]);
     }
 
-    public function updateExecute(Request $request, $id) //ejecutar una actividad
-    {
+    public function updateExecute(Request $request, $id){ //ejecutar una actividad
          $actividad = Actividad::findOrFail($id);
          if ($request->horaEjecutada != null) {
             $actividad->horaEjecutada = (Carbon::parse($request->horaEjecutada))->toTimeString();

@@ -13,6 +13,21 @@ use File;
 
 class TipoActividadController extends Controller
 {
+
+    function getDirigidoA(Request $request){
+      $dirigidoA = "";
+      if ($request->dirgidoA1 == 'on') {
+         $dirigidoA = $dirigidoA + '1';
+      }
+      if ($request->dirgidoA2 == 'on') {
+         $dirigidoA = $dirigidoA + '2';
+      }
+      if ($request->dirgidoA3 == 'on') {
+         $dirigidoA = $dirigidoA + '3';
+      }
+      dd($dirigidoA);
+      return $dirigidoA;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -57,6 +72,7 @@ class TipoActividadController extends Controller
                if($storage){
                  $rutaImagen = 'actividades/'.$preRuta.$name;
                  $tipoActividad->rutaImagen = $rutaImagen;
+                 $tipoActividad->dirigidoA = TipoActividadController::getDirigidoA($request);
                  $tipoActividad->save();
                }
         }
@@ -115,6 +131,7 @@ class TipoActividadController extends Controller
          }else {
            $rutaImagen = $tipoActividad->rutaImagen;
          }
+        $tipoActividad->dirigidoA = TipoActividadController::getDirigidoA($request);
         $tipoActividad->rutaImagen = $rutaImagen;
         $tipoActividad->update();
 

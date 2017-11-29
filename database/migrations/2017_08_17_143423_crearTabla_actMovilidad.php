@@ -13,7 +13,7 @@ class CrearTablaActMovilidad extends Migration
      */
     public function up()
     {
-        Schema::create('ActMovilidad', function(Blueprint $tabla)
+        /*Schema::create('ActMovilidad', function(Blueprint $tabla)
         {
             $tabla->increments('idActMovilidad');
             $tabla->date('fechaInicioConvocatoria');
@@ -22,11 +22,11 @@ class CrearTablaActMovilidad extends Migration
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
             $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
-            
-            $tabla->timestamps();                        
-        });
-        
-        
+
+            $tabla->timestamps();
+        });*/
+
+
     }
 
     /**
@@ -36,6 +36,6 @@ class CrearTablaActMovilidad extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ActMovilidad');
+        //Schema::dropIfExists('ActMovilidad');
     }
 }

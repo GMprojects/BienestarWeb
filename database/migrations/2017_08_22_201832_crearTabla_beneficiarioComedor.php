@@ -25,8 +25,12 @@ class CrearTablaBeneficiarioComedor extends Migration
             */
 
             //Clave foranea de la tabla ActComedor
-            $tabla->integer('idActComedor')->unsigned();
-            $tabla->foreign('idActComedor')->references('idActComedor')->on('ActComedor');
+            /*$tabla->integer('idActComedor')->unsigned();
+            $tabla->foreign('idActComedor')->references('idActComedor')->on('ActComedor');*/
+
+            //Clave foranea de la tabla actividad
+            $tabla->integer('idActividad')->unsigned();
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
 
             //Clave foranea de la tabla Alumno
             $tabla->integer('idAlumno')->unsigned();

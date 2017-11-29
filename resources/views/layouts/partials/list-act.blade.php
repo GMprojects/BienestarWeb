@@ -23,7 +23,11 @@
             @elseif($actividad->idTipoActividad == 4)
                <span class="label label-danger">TUTORADOS</span>
             @else
-               <span class="label label-info">Inidividual</span>
+               @if ($actividad->idTipoActividad != 8 && $actividad->idTipoActividad  != 9)
+                  <span class="label label-info">Inidividual</span>
+               @else
+                  <small class="label label-info">Libre</small>
+               @endif
             @endif
          </h5>
       </div>

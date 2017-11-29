@@ -25,8 +25,12 @@ class CrearTablaBeneficiarioMovilidad extends Migration
             $tabla->mediumtext('observaciones')->nullable();
 
             //Clave foranea de la tabla ActMovilidad
-            $tabla->integer('idActMovilidad')->unsigned();
-            $tabla->foreign('idActMovilidad')->references('idActMovilidad')->on('ActMovilidad');
+            /*$tabla->integer('idActMovilidad')->unsigned();
+            $tabla->foreign('idActMovilidad')->references('idActMovilidad')->on('ActMovilidad');*/
+
+            //Clave foranea de la tabla actividad
+            $tabla->integer('idActividad')->unsigned();
+            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
 
             //Clave foranea de la tabla Alumno
             $tabla->integer('idAlumno')->unsigned();

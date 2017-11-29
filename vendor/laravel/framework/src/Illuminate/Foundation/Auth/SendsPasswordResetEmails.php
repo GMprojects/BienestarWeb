@@ -14,7 +14,7 @@ trait SendsPasswordResetEmails
      */
     public function showLinkRequestForm()
     {
-        return view('auth.passwords.email');
+        return view('auth.passwords.mail');
     }
 
     /**
@@ -42,7 +42,7 @@ trait SendsPasswordResetEmails
     /**
      * Validate the email for the given request.
      *
-     * @param \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return void
      */
     protected function validateEmail(Request $request)
@@ -64,7 +64,7 @@ trait SendsPasswordResetEmails
     /**
      * Get the response for a failed password reset link.
      *
-     * @param  \Illuminate\Http\Request
+     * @param  \Illuminate\Http\Request  $request
      * @param  string  $response
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */

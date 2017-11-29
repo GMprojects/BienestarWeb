@@ -3,9 +3,9 @@
 
       <!-- PERMISOS DE ADMINISTRADOR/PROGRAMADOR -->
       @if( Auth::user()->funcion != 1)
-         <li>
+         {{---<li>
             <a class="ff-li-a" href="{{ url('programador/actividad/create') }}"><i class="fa fa-plus"></i> Crear Actividad</a>
-         </li>
+         </li>--}}
          {{--
          <li>
             @if( Auth::user()->sexo='m' )
@@ -26,7 +26,7 @@
             <ul class="dropdown-menu" role="menu">
                <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('admin/tutorTutorado/create') }}"><i class="fa fa-circle-o"></i> Asignar Tutores</a></li>
                <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/tutorTutorado') }}"><i class="fa fa-circle-o"></i> Tutores</a></li>
-               <li class="ff-li-nav"><a class="ff-li-b" href="#"><i class="fa fa-circle-o"></i> Tutorados</a></li>
+               {{--<li class="ff-li-nav"><a class="ff-li-b" href="#"><i class="fa fa-circle-o"></i> Tutorados</a></li>--}}
             </ul>
          </li>
 
@@ -47,7 +47,8 @@
                <i class="fa fa-calendar"></i> Actividades <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-               <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('programador/actividad') }}"><i class="fa fa-circle-o"></i> Todas</a></li>
+               <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('programador/actividad/create') }}"><i class="fa fa-plus"></i> Crear Actividad</a></li>
+               <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('programador/actividad') }}"><i class="fa fa-circle-o"></i> Todas</a></li>
                <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/tipoActividad') }}"><i class="fa fa-circle-o"></i> Tipos</a></li>
             </ul>
          </li>

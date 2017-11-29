@@ -30,7 +30,7 @@
          <dt> {{ $actividad->descripcion }} </dt>
          @if($actividad->informacionAdicional != null)
             <dt> Información Adicional: </dt>
-            <dd> {{ $actividad->cuposTotales }} </dd>
+            <dd> {{ $actividad->informacionAdicional }} </dd>
          @endif
          <dt> Fecha y Hora Inicio:</dt>
          <dd> {{ date("d",strtotime($actividad->fechaInicio))." de ".date("F",strtotime($actividad->fechaInicio))." del ".date("Y",strtotime($actividad->fechaInicio))." a las ".date('g:i A',strtotime($actividad->horaInicio)) }} </dd>

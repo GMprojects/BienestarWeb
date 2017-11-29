@@ -46,8 +46,7 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
     Route::resource('perfil','MiPerfilController');
     Route::resource('inscripcion', 'InscripcionADAController');
-    
-   Route::resource('beneficiarioMovilidad', 'BeneficiarioMovilidadController');
+
    Route::resource('evidenciaActividad', 'EvidenciaActividadController');
 
     Route::get('actividad/{idActividad}/execute', 'ActividadController@execute');

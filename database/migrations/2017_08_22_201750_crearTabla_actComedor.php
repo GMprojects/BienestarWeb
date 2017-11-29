@@ -13,7 +13,7 @@ class CrearTablaActComedor extends Migration
      */
     public function up()
     {
-        Schema::create('ActComedor', function(Blueprint $tabla)
+       /* Schema::create('ActComedor', function(Blueprint $tabla)
         {
             $tabla->increments('idActComedor');
             $tabla->date('fechaConvocatoria');
@@ -21,11 +21,11 @@ class CrearTablaActComedor extends Migration
             //Clave foranea de la tabla Actividad
             $tabla->integer('idActividad')->unsigned();
             $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');
-            
-            $tabla->timestamps();                        
-        });
-        
-        
+
+            $tabla->timestamps();
+        });*/
+
+
     }
     /**
      * Reverse the migrations.
@@ -34,6 +34,6 @@ class CrearTablaActComedor extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ActComedor');
+        //Schema::dropIfExists('ActComedor');
     }
 }

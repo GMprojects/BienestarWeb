@@ -27,6 +27,8 @@
                   @if($actividad->actividadGrupal != null)
                      <span class="label label-success">{{ $actividad->actividadGrupal->cuposOcupados }} Asistirán</span>
                      <span class="label label-danger">{{ $actividad->actividadGrupal->cuposDisponibles }} Disponibles</span>
+                  @elseif ($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
+                     <span class="label label-danger">ABIERTO</span>
                   @else
                      <span class="label label-danger">TUTORADOS</span>
                   @endif
@@ -47,18 +49,18 @@
                      </a>
                   @else
                      @if(Auth::user() == null || $actividad->actividadGrupal->cuposDisponibles > 0)
-                        {{--<a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
+                        <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
                            onclick="event.preventDefault();
                            document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
                            <i class="fa fa-circle-o"></i> Deseo Asistir
                         </a>
                         <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
                            {{ csrf_field() }}
-                        </form>--}}
-                        <a class="btn-footer pull-right" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}"
+                        </form>
+                        {{--<a class="btn-footer pull-right" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}"
                            href="{{ route('inscripcion.store') }}">
                            <i class="fa fa-circle-o"></i> Deseo Asistir
-                        </a>
+                        </a> --}}
                      @else
                         <a class="act-mini-txt pull-right" href="#" data-toggle="tooltip" data-placement="bottom" title="Click para contactar con el programador?">
                            <i class="fa fa-times-circle"></i> Inscripcion no disponible

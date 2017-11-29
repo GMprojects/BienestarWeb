@@ -61,17 +61,29 @@ class Actividad extends Model
           ->withPivot('idEncuestaRespondidaResp')
           ->withTimestamps();
     }
-    public function actividadComedor(){
+    /*public function actividadComedor(){
       return $this->hasOne('BienestarWeb\ActComedor','idActividad');
     }
     public function actividadMovilidad(){
       return $this->hasOne('BienestarWeb\ActMovilidad','idActividad');
-    }
+   }*/
     public function actividadesPedagogia(){
       return $this->hasMany('BienestarWeb\ActPedagogia','idActividad');
     }
     public function actividadGrupal(){
       return $this->hasOne('BienestarWeb\ActGrupal','idActividad');
+    }
+    //Actividad ActComedor
+    public function beneficiariosComedor(){
+       return $this->belongsToMany('BienestarWeb\Alumno','beneficiarioComedor','idActividad','idAlumno')
+                   ->withPivot('idBeneficiarioComedor','fechaBeneficio','tipoBeneficio')
+                   ->withTimestamps();
+    }
+    //Actividad ActMovilidad
+    public function beneficiariosMovilidad(){
+      return $this->belongsToMany('BienestarWeb\Alumno','beneficiarioMovilidad','idActividad','idAlumno')
+                   ->withPivot('idBeneficiarioMovilidad','fechaInicio','fechaFin','duracionMeses','duracionAnio','institucion','pais','observaciones')
+                   ->withTimestamps();
     }
 
     public function scopeSearch($query, $request){
