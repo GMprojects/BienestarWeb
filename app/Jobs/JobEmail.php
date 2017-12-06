@@ -49,6 +49,6 @@ class JobEmail implements ShouldQueue
          $remitente = User::findOrFail($this->idUserRemitente);
 
          Mail::to($destinatario->email)
-              ->send(new Email($this->subject, $this->mensaje, $remitente, $this->opcion, $nombreDestinatario));
+              ->send(new Email($this->subject, $this->mensaje, $remitente, $this->opcion, $nombreDestinatario, $destinatario->sexo));
     }
 }

@@ -8,6 +8,11 @@
             Relación de Tutorados
           </h3>
   			</div>
+         <div class="col-xs-6" style="text-align:right;">
+				<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $idTutor, 'anioSemestre' => $tutorados[0]->anioSemestre, 'numeroSemestre' => $tutorados[0]->numeroSemestre ]) }}">
+               <button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Tutorado</button>
+            </a>
+			</div>
   		</div>
 
   	</div>
@@ -23,7 +28,7 @@
   								<th>Id</th>
                         <th>Código</th>
 								<th>Nombres y Apellidos</th>
-                        <th>Habito Estudio</th>
+                        <!--<th>Habito Estudio</th>-->
   								<th>Opciones</th>
   							</thead>
                      @php($i = 1)
@@ -32,7 +37,7 @@
                         <td>{{ $i }}</td>
                         <td>{{ $tutorado->codigo }}</td>
   								<td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
-                        @if ($tutorado->habitoEstudioRespondido == '0')
+                        {{--@if ($tutorado->habitoEstudioRespondido == '0')
                           <td>
                             <a href="" data-target = "#modal-email-{{ $tutorado->idAlumno }}-{{ $idTutor }}" data-toggle = "modal">
                               <button class="btn btn-info" ><i class="fa fa-envelope" aria-hidden="true"></i></i> Enviar Mensaje</button>
@@ -44,8 +49,8 @@
                               <button type="button" class="btn btn-info" ><i class="fa  fa-eye" aria-hidden="true"></i> Ver Hábitos  </button>
                             </a>
                           </td>
-                        @endif
-  								<td><a href="" data-target = "#modal-delete-{{ $tutorado->idTutorTutorado }}" data-toggle = "modal"><button class="btn btn-danger">Desvincular</button></a></td>
+                       @endif--}}
+  								<td><a href="" data-target = "#modal-delete-{{ $tutorado->idTutorTutorado }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa  fa-remove" aria-hidden="true"></i> Desvincular</button></a></td>
                      @php($i++)
   							</tr>
                      @include('admin.tutorTutorado.modalEmail')

@@ -2,12 +2,30 @@
    <nav class="navbar container-fluid navbar-fixed-top" >
       <div class="navbar-header">
 
-         <a href="{{ route('home') }}"  class="logo-facfar">
+         {{--<a href="{{ route('home') }}"  class="logo-facfar">
             <span class="hidden-lg hidden-md">Facfar</span>
             <span class="hidden-xs hidden-sm">Facfar Bienestar</span>
-         </a>
+         </a>--}}
+         <span  class="logo-facfar">
+            <span class="hidden-lg hidden-md">Bienestar Web</span>
+            <span class="hidden-xs hidden-sm">Bweb</span>
+         </span>
 
          <div class="div-buttons">
+            <ul class="nav navbar-nav nav-izq">
+               <li>
+                  <a class="hamburger" href="#">
+                     <i class="fa fa-bars" style="font-size: 1.4em;"  aria-hidden="true"></i>
+                  </a>
+               </li>
+               <li>
+                  <a href="{{ route('home') }}" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Inicio">
+                     <i class="fa fa-home" style="font-size: 1.6em;" aria-hidden="true"></i> <span class="hidden-sm hidden-xs" style="font-size: 1.3em;">Inicio</span>
+                  </a>
+               </li>
+            </ul>
+
+         {{--<div class="div-buttons">
             <ul class="nav navbar-nav nav-izq">
                <li>
                   <a class="hamburger" href="#">
@@ -40,14 +58,14 @@
                   </form>
                </li>
             </ul>
-
+--}}
             <ul class="nav navbar-nav pull-right">
-               <li class="dropdown menu-notificaciones">
+               {{--<li class="dropdown menu-notificaciones">
                   <a href="#" class="dropdown-toggle icon-nav" data-toggle="dropdown">
                      <i class="fa fa-bell-o"></i>
                      <span class="label label-danger">4</span>
                   </a>
-               </li>
+               </li>--}}
 
                <li class="dropdown menu-usu">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">

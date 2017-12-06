@@ -1,58 +1,79 @@
 @extends('template')
 @section ('contenido')
-<div class="row">
-	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-		<h3>
-				Trabajos
-				<a href="{{ action('TrabajoController@create',['idEgresado' => $idEgresado ])}}">
-					<button class="btn btn-success">Nuevo </button>
-				</a>
-		</h3>
-		@include('admin.trabajo.search')
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-		<div class="table">
-			<table id="tabTrabajos" class="table table-striped table-bordered table-condensed table-hover dt-responsive">
-				<thead>
-					<th>Id</th>
-					<th>Institución</th>
-					<th>Lugar</th>
-					<th>Inicio</th>
-					<th>Fin</th>
-					<th>Nivel Satisfacción</th>
-					<th>Recomendaciones</th>
-					<th>Observaciones</th>
-					<th>Opciones</th>
-				</thead>
-
-				@foreach($trabajos as $trabajo)
-					<tr>
-						<td>{{ $trabajo->idTrabajo }}</td>
-						<td>{{ $trabajo->institucion }}</td>
-						<td>{{ $trabajo->lugar }}</td>
-						<td>{{ $trabajo->fechaInicio }}</td>
-						<td>{{ $trabajo->fechaFin }}</td>
-						<td>{{ $trabajo->nivelSatisfaccion }}</td>
-						<td>{{ $trabajo->recomendaciones }}</td>
-						<td>{{ $trabajo->observaciones }}</td>
-						<td>
-							@if ($idEgresado == null)
-								<a href="{{URL::action('EgresadoController@show',$trabajo->idEgresado) }}"><button class="btn btn-info">Ver Egresado</button></a>
-							@else
-								<a href="{{URL::action('TrabajoController@edit',$trabajo->idTrabajo)}}"><button class="btn btn-warning">Editar</button></a>
-								<a href="" data-target = "#modal-delete-{{ $trabajo->idTrabajo }}" data-toggle = "modal"><button class="btn btn-danger">Eliminar</button></a>
-							@endif
-							</td>
-					</tr>
-					@include('admin.trabajo.modal')
-				@endforeach
-
-			</table>
+	<div class="box box-info">
+		<div class="box-header">
+			<div class="row">
+				<div class="col-xs-6">
+					<h3 class="box-title">Trabajos</h3>
+				</div>
+				<div class="col-xs-6" style="text-align:right;">
+					@if ($op == 1)
+						<a href="{{ action('TrabajoController@create',['op' => $op, 'idEgresado' => $egresado->idEgresado ]) }}"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Trabajo</button></a>
+					@else
+						<a href="{{ action('TrabajoController@create',['op' => $op ]) }}"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Trabajo</button></a>
+					@endif
+				</div>
+			</div>
 		</div>
-	</div>
+
+		<div class="box-body">
+			@if ($op == 1)
+				<h4><b>Lista de Trabajos del egresado: </b> <b style="color:#4B367C">  &nbsp; &nbsp; {{ $egresado->nombre.' '.$egresado->apellidoPaterno.' '.$egresado->apellidoMaterno }}</b>&nbsp; &nbsp;</h4>
+				<br>
+			@endif
+			<div class="table">
+				<div class="table-responsive">
+					<table id="tabTrabajos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+							<thead>
+								<th>Id</th>
+								@if ($op == 2)
+									<th>Egresado</th>
+								@endif
+								<th>Institución</th>
+								<th>Lugar</th>
+								<th>Inicio</th>
+								<th>Fin</th>
+								<th>Nivel Satisfacción</th>
+								<th>Recomendaciones</th>
+								<th>Observaciones</th>
+								<th>Opciones</th>
+							</thead>
+							@php($i = 0)
+							@foreach($trabajos as $trabajo)
+								@php($i++)
+								<tr>
+									<td>{{ $i }}</td>
+									@if ($op == 2)
+										<td>{{ $trabajo->egresado->nombre.' '.$trabajo->egresado->apellidoPaterno.' '.$trabajo->egresado->apellidoMaterno }}</td>
+									@endif
+									<td>{{ $trabajo->institucion }}</td>
+									<td>{{ $trabajo->lugar }}</td>
+									<td>{{ date("d/m/Y",strtotime($trabajo->fechaInicio)) }}</td>
+									<td>
+										@if ($trabajo->fechaFin != null)
+											{{ date("d/m/Y",strtotime($trabajo->fechaFin)) }}
+										@else
+											Hasta la actualidad
+										@endif
+									</td>
+									<td>{{ $trabajo->nivelSatisfaccion }}</td>
+									<td>{{ $trabajo->recomendaciones }}</td>
+									<td>{{ $trabajo->observaciones }}</td>
+									<td>
+										{{--@if ($idEgresado == null)
+											<a href="{{URL::action('EgresadoController@show',$trabajo->idEgresado) }}"><button class="btn btn-info">Ver Egresado</button></a>
+										@else--}}
+										<a href="{{ action('TrabajoController@edit',$trabajo->idTrabajo) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
+										<a href="" data-target = "#modal-delete-{{ $trabajo->idTrabajo }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
+										{{--@endif--}}
+									</td>
+								</tr>
+								@include('admin.trabajo.modal')
+							@endforeach
+					</table>
+				</div>
+			</div>
+		</div>
 </div>
 
 <script>

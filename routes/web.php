@@ -32,7 +32,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('tutorTutorado', ['uses' => 'TutorTutoradoController@store', 'as' => 'tutorTutorado.store']);*/
 });
 
-Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
+//Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
 
 Route::get('perfilTipo', 'UserController@getUserTipo');
 
@@ -47,7 +47,7 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('perfil','MiPerfilController');
     Route::resource('inscripcion', 'InscripcionADAController');
 
-   Route::resource('evidenciaActividad', 'EvidenciaActividadController');
+    Route::resource('evidenciaActividad', 'EvidenciaActividadController');
 
     Route::get('actividad/{idActividad}/execute', 'ActividadController@execute');
     Route::get('actividad/{idActividad}/execute/{idInsAlumno}/tutoria', 'ActPedagogiaController@create');
@@ -62,15 +62,21 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::post('actividad/registrarAsistencias/{idActividad}', ['uses' => 'InscripcionADAController@registrarAsistencias','as' => 'actividad.registrarAsistencias']);
     Route::post('actividad/nuevoMotivo/{idActividad}', ['uses' => 'DetallePedagogiaController@store',  'as' => 'detallePedagogia.store']);
     Route::post('actividad/actualizarActPedagogia/{idActividadPedagogia}', ['uses' => 'ActPedagogiaController@update', 'as' => 'actPedagogia.update']);
+    Route::get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
+    Route::resource('perfil', 'MiPerfilController');
+    Route::get('mis-actividades/{id}', ['uses' => 'MiPerfilController@mis_actividades', 'as' => 'miembro.misActividades']);
+
+
+    Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
 });
-Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', 'ActividadController@member_show');
+//Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
 
 //PERMISOS DE MIEMBRO - PERFIL
 
-Route::middleware('auth')->prefix('miembro')->group(function () {
+/*Route::middleware('auth')->prefix('miembro')->group(function () {
    Route::resource('perfil', 'MiPerfilController');
-   Route::get('mis-actividades/{id}', 'MiPerfilController@mis_actividades');
-});
+   Route::get('mis-actividades/{id}', ['uses' => 'MiPerfilController@mis_actividades', 'as' => 'miembro.misActividades']);
+});*/
 
 Auth::routes();
 
@@ -86,7 +92,6 @@ Route::get('alumnosLibres', 'TutorTutoradoController@getAlumnosLibres');
 Route::get('alumnosLibresExDoc', 'TutorTutoradoController@getAlumnosLibresExDoc');
 Route::get('docentesNoTutores', 'TutorTutoradoController@getDocentesNoTutores');
 Route::get('soyTutor', 'TutorTutoradoController@soyTutor');
-Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
 Route::post('enviarMail','TutorTutoradoController@enviarEmail');
 
 Route::get('buscarInscripciones', 'InscripcionADAController@buscarInscripciones');
@@ -113,6 +118,6 @@ Route::get('actividad-demo', function () {
 Route::get('actividades-demo', function () {
     return view('actividades-demo');
 });
-Route::get('pruebas', function () {
-   return view('pruebas');
+Route::get('basura', function () {
+   return view('basura');
 });

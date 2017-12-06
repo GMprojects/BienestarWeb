@@ -7,26 +7,28 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 
 use BienestarWeb\TipoActividad;
+use BienestarWeb\Actividad;
 use Illuminate\Support\Facades\Storage;
 use File;
+use Log;
+use Illuminate\Support\Collection;
 
 
 class TipoActividadController extends Controller
 {
 
     function getDirigidoA(Request $request){
-      $dirigidoA = "";
-      if ($request->dirgidoA1 == 'on') {
-         $dirigidoA = $dirigidoA + '1';
-      }
-      if ($request->dirgidoA2 == 'on') {
-         $dirigidoA = $dirigidoA + '2';
-      }
-      if ($request->dirgidoA3 == 'on') {
-         $dirigidoA = $dirigidoA + '3';
-      }
-      dd($dirigidoA);
-      return $dirigidoA;
+         $dirigidoA = "";
+         if ($request->dirigidoA1 == 'on') {
+            $dirigidoA = $dirigidoA.'1';
+         }
+         if ($request->dirigidoA2 == 'on') {
+            $dirigidoA = $dirigidoA.'2';
+         }
+         if ($request->dirigidoA3 == 'on') {
+            $dirigidoA = $dirigidoA.'3';
+         }
+         return $dirigidoA;
     }
     /**
      * Display a listing of the resource.
@@ -36,7 +38,8 @@ class TipoActividadController extends Controller
     public function index(Request $request)
     {
         $tiposActividad = TipoActividad::Search($request->texto)->get();
-        return view('admin.tipoActividad.index',['tiposActividad' => $tiposActividad]);
+        $idTiposActividad = Actividad::select('idTipoActividad')->distinct()->pluck('idTipoActividad');
+        return view('admin.tipoActividad.index',['tiposActividad' => $tiposActividad, 'idTiposActividad' => Collection::unwrap($idTiposActividad)]);
     }
 
     /**
@@ -55,8 +58,7 @@ class TipoActividadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'tipo' => 'required|max:45',
             'rutaImagen' => 'required'

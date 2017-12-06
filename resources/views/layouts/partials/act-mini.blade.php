@@ -25,54 +25,71 @@
             <div class="act-mini-2">
                <h5 style="margin-top:0px;">
                   @if($actividad->actividadGrupal != null)
-                     <span class="label label-success">{{ $actividad->actividadGrupal->cuposOcupados }} Asistirán</span>
-                     <span class="label label-danger">{{ $actividad->actividadGrupal->cuposDisponibles }} Disponibles</span>
+                     <span class="label ff-bg-green">{{ $actividad->actividadGrupal->cuposOcupados }} Asistirán</span>
+                     <span class="label ff-bg-red">{{ $actividad->actividadGrupal->cuposDisponibles }} Disponibles</span>
                   @elseif ($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
-                     <span class="label label-danger">ABIERTO</span>
+                     <span class="label ff-bg">LIBRE</span>
                   @else
-                     <span class="label label-danger">TUTORADOS</span>
+                     <span class="label ff-bg-blue">TUTORADOS</span>
                   @endif
                </h5>
             </div>
          </div>
       </div>
       <div class="act-mini-footer act-{{ $actividad->idTipoActividad }}">
-         <div class="act-mini-txt pull-left">Categoría: <a href="#">{{ $actividad->tipoActividad->tipo }}</a></div>
-         @if($actividad->idTipoActividad != 4)
-            @if(Auth::user() == null || $actividad->idUserResp != Auth::user()->id )
-               @if(Auth::user() != null && Auth::user()->idTipoPersona != 1 && $actividad->idTipoActividad != '5' && $actividad->idTipoActividad != '6' && $actividad->idTipoActividad != '7')
-                  <div class="act-mini-txt pull-right">Exclusiva: Estudiantes</div>
+         <div class="act-mini-txt pull-left">Categoría: <span style="color: white;">{{ $actividad->tipoActividad->tipo }}</span> {{--<a href="#">{{ $actividad->tipoActividad->tipo }}</a>--}}</div>
+{{-- --}}
+         @if( $actividad->idTipoActividad == 4 )
+            @if(Auth::user()!= null && in_array($actividad->idActividad, $list_insc))
+               <div class="act-mini-txt pull-right">DEBO ASISTIR</div>
+            @else
+               <div class="act-mini-txt pull-right">Exclusiva: Tutorados</div>
+            @endif
+         @elseif($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
+            <div class="act-mini-txt pull-right">Presentar documentos</div>
+         @elseif(Auth::user()!=null)
+            @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
+               @if(in_array($actividad->idActividad, $list_insc))
+                  <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
+                     <i class="fa fa-check-circle"></i> Asistiré
+                  </a>
                @else
-                  @if(in_array($actividad->idActividad, $list_insc))
-                     <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
-                        <i class="fa fa-check-circle"></i> Asistiré
-                     </a>
-                  @else
-                     @if(Auth::user() == null || $actividad->actividadGrupal->cuposDisponibles > 0)
-                        <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
-                           onclick="event.preventDefault();
-                           document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-                           <i class="fa fa-circle-o"></i> Deseo Asistir
-                        </a>
-                        <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
-                           {{ csrf_field() }}
-                        </form>
-                        {{--<a class="btn-footer pull-right" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}"
-                           href="{{ route('inscripcion.store') }}">
-                           <i class="fa fa-circle-o"></i> Deseo Asistir
-                        </a> --}}
+                  @if( $actividad->estado == 1 )
+                     @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
+                        @if( $actividad->idUserResp != Auth::user()->id )
+                           <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
+                              onclick="event.preventDefault();
+                              document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                              <i class="fa fa-circle-o"></i> Quiero Asistir
+                           </a>
+                        @else
+                           <div class="act-mini-txt pull-right">
+                              <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">Soy Responsable</span>
+                           </div>
+                        @endif
                      @else
-                        <a class="act-mini-txt pull-right" href="#" data-toggle="tooltip" data-placement="bottom" title="Click para contactar con el programador?">
-                           <i class="fa fa-times-circle"></i> Inscripcion no disponible
-                        </a>
+                        <div class="act-mini-txt pull-right">
+                           <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No hay vacantes</span>
+                        </div>
                      @endif
+                  @else
+                     <div class="act-mini-txt pull-right">
+                        <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No disponible</span>
+                     </div>
                   @endif
+
                @endif
             @else
-               <div class="act-mini-txt pull-right">Soy Responsable</div>
+               <div class="act-mini-txt pull-right">
+                  <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No disponible</span>
+               </div>
             @endif
          @else
-            <div class="act-mini-txt pull-right">Exclusiva: Tutorados</div>
+            <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
+               onclick="event.preventDefault();
+               document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+               <i class="fa fa-circle-o"></i> Quiero Asistir
+            </a>
          @endif
       </div>
    </div>

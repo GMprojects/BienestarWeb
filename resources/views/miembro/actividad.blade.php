@@ -148,10 +148,13 @@
                            @if( $actividad->actividadGrupal!= null )
                               <span class="label label-success">{{ $actividad->actividadGrupal->cuposOcupados }} asistirán</span>
                               <span class="label label-danger">{{ $actividad->actividadGrupal->cuposDisponibles }} restantes</span>
-                           @else
-                              <span class="label label-danger">TUTORADOS</span>
+                           @elseif( $actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
+                              <span class="label label-success">Libre</span>
+                           @elseif( $actividad->idTipoActividad == 4 )
+                              <span class="btn ff-bg-red">TUTORADOS</span>
                            @endif
                         </div>
+                        {{--
                         @if(in_array($actividad->idActividad, $list_insc))
                            <a class="btn btn-ff pull-right" href="{{ action('ActividadController@member_show', $actividad->idActividad) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
                               <i class="fa fa-check-circle"></i> Asistiré
@@ -172,6 +175,51 @@
                               </a>
                            @endif
                         @endif
+                     --}}
+                     @if( $actividad->idTipoActividad == 4 )
+                        @if(Auth::user()!= null && in_array($actividad->idActividad, $list_insc))
+                           <h5><span class="label ff-bg-red">DEBO ASISTIR</span></h5>
+                        @endif
+                     @elseif($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
+                        <span class="pull-right label ff-bg-red rounded" style="font-size: 1.3em;">Presentar documentos</span>
+                     @elseif(Auth::user()!=null)
+                        @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
+                           @if(in_array($actividad->idActividad, $list_insc))
+                              <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
+                                 <i class="fa fa-check-circle"></i> Asistiré
+                              </a>
+                           @else
+                              @if( $actividad->estado == 1 )
+                                 @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
+                                    <a class="btn btn-ff pull-right" href="{{ route('inscripcion.store') }}"
+                                       onclick="event.preventDefault();
+                                       document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                                       <i class="fa fa-circle-o"></i> Quiero Asistir
+                                    </a>
+                                 @else
+                                    <span class="label ff-red">
+                                       <i class="fa fa-times-circle"></i> No hay vacantes
+                                    </span>
+                                 @endif
+                              @else
+                                 <span class="label ff-red">
+                                    <i class="fa fa-times-circle"></i> No disponible
+                                 </span>
+                              @endif
+
+                           @endif
+                        @else
+                           <div class="act-mini-txt pull-right">
+                              <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No es para mí</span>
+                           </div>
+                        @endif
+                     @else
+                        <a class="btn btn-ff pull-right" href="{{ route('inscripcion.store') }}"
+                           onclick="event.preventDefault();
+                           document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                           <i class="fa fa-circle-o"></i> Quiero Asistir
+                        </a>
+                     @endif
                      </div>
                      <div class="act-view-desc">
                         <div class="dt-txt-big">Descripción</div>

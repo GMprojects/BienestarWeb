@@ -15,15 +15,17 @@ class ActividadActualizadaNotif extends Notification
 
     private $actividad;
     private $subject;
+    private $url;
     /**
     * Create a new notification instance.
     *
     * @return void
     */
-    public function __construct(Actividad $actividad, $subject)
+    public function __construct(Actividad $actividad, $subject,  $url)
     {
          $this->actividad = $actividad;
          $this->subject = $subject;
+         $this->url = $url;
     }
 
     /**
@@ -51,8 +53,8 @@ class ActividadActualizadaNotif extends Notification
                     ->line('Thank you for using our application!');*/
         Log::info('ActividadActualizadaNotif');
         Log::info($this->subject);
-        return (new MailMessage)->markdown('emails.actividadActualizadaEmail',['actividad' => $this->actividad])
-                                ->with('actividad', $this->actividad)
+        return (new MailMessage)->markdown('emails.actividadActualizadaEmail',['actividad' => $this->actividad,
+                                                                               'url' => $this->url])
                                 ->subject($this->subject);
     }
 

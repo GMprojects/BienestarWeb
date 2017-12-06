@@ -183,7 +183,7 @@ class ActividadController extends Controller
          }
       }
       public function store(Request $request){
-         $mensajeA = 'Estimad@ alumn@, se le invita a participar de una actividad';
+         $mensajeA = 'Se le invita a participar de una actividad';
          $mensajeR = 'Ud. ha sido asignado como responsable de una actividad';
          $request->validate([
             'titulo' => 'required|max:100',
@@ -210,7 +210,6 @@ class ActividadController extends Controller
             'anioSemestre' => 2017,
             'numeroSemestre' => 2,
             'modalidad' => ActividadController::getModalidad($request),
-            'asistenciaRegistrada' => 0,
             'idTipoActividad' => $request->idTipoActividad,
             'idUserResp' => ActividadController::getResp($request),
             'idUserProg' => $request->user()->id
@@ -225,7 +224,7 @@ class ActividadController extends Controller
                $inscripcionAlumno->idActividad = $actividad->idActividad;
                $inscripcionAlumno->alumno()->associate($alumno);
                $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
-               $mensajeA = 'Estimad@ alumn@, ud. ha sido inscrito en una actividad';
+               $mensajeA = 'Ud. ha sido inscrito en una actividad';
                break;
             case '3':
             case '10':
@@ -236,7 +235,7 @@ class ActividadController extends Controller
                   $inscripcionAlumno->idActividad = $actividad->idActividad;
                   $inscripcionAlumno->alumno()->associate($alumno);
                   $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
-                  $mensajeA = 'Estimad@ alumn@, ud. ha sido inscrito en una actividad';
+                  $mensajeA = 'Ud. ha sido inscrito en una actividad';
                }else{//GRUPAL
                   $actGrupal = new ActGrupal;
                   $actGrupal->cuposDisponibles = $request->cuposTotales;
@@ -258,8 +257,8 @@ class ActividadController extends Controller
                   ]);
                   $actPed->save();
                }
-               $mensajeA = 'Estimad@ alumn@, se le ha programado una sesión de tutoría ';
-               $mensajeR = 'Estimado tutor, se le ha programado una sesión de tutoría';
+               $mensajeA = 'Se le ha programado una sesión de tutoría ';
+               $mensajeR = 'Se le ha programado una sesión de tutoría';
                break;
             case '5':           case '6':           case '7':
                $actGrupal = new ActGrupal;
@@ -294,7 +293,7 @@ class ActividadController extends Controller
 
          Log::info(' Tipo de Actividad             ->  '.$actividad->idTipoActividad);
          $job = (new JobEmailNuevaAct($actividad, $actividad->idTipoActividad, $userAl, $userResp, $mensajeR, $mensajeA, $request->idAlumnoTutorado))
-            ->delay(Carbon::now()->addSeconds(30));
+            ->delay(Carbon::now()->addSeconds(1));
          dispatch($job);
          return redirect('/');
          //}
@@ -404,7 +403,7 @@ class ActividadController extends Controller
                    $inscripcionAlumno->alumno()->associate($alumno);
                    $inscripcionAlumno->update();
                  }
-                 Log::info('Actualizando act 1      ----          2');
+                 Log::info('Actualizando act 1      -ooooo-          2');
                break;
              case '3':
              case '10':
@@ -461,20 +460,23 @@ class ActividadController extends Controller
            //---------------Notificacion o E-Mail-------------------//
            if ($request->envioCorreos == 'on') {
              Log::info('envio de notificaciones Actualizar Actividad');
-             $userResp = User::findOrFail($request->idUserResp);
+             if ($actividad->idTipoActividad < 2) {
+                $idUserResp = $actividad->idUserResp;
+             } else {
+                $idUserResp = ActividadController::getResp($request);
+             }
+
+             $userResp = User::findOrFail($idUserResp);
              $job = (new JobEmailActualizarAct($actividad, $userResp, '1'))
-                    ->delay(Carbon::now()->addSeconds(5));
+                    ->delay(Carbon::now()->addSeconds(1));
              dispatch($job);
            }else {
              Log::info('No hay envio de notificaciones');
            }
-           //return Redirect::to('programador/actividad');
-           //action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id])
            return redirect()->action('MiPerfilController@mis_actividades', ['id' => $request->user()->id, 'opcion'=>'3']);
     }
-
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage.s
      *
      * @param  \BienestarWeb\Actividad  $actividad
      * @return \Illuminate\Http\Response
@@ -487,7 +489,7 @@ class ActividadController extends Controller
         Log::info('envio de notificaciones');
         $userResp = User::findOrFail($actividad->idUserResp);
         $job = (new JobEmailActualizarAct($actividad, $userResp, '2'))
-               ->delay(Carbon::now()->addSeconds(5));
+               ->delay(Carbon::now()->addSeconds(1));
         dispatch($job);
         return redirect()->back();
     }
@@ -514,30 +516,8 @@ class ActividadController extends Controller
                                                  ->get();
          $inscAlDoc = $inscAlumnos->merge($inscDocentes);
          $inscritos = $inscAlDoc->merge($inscAdministrativos);
-         // --------------------------------------------------------------------------------------------------
-         //dd($inscripciones);
-         $numAsistentes = 0;    $numAusentes = 0;
-         //numero Inscritos
-         //dd($inscripcionesAlumnos);
-         $numInscritos = count($inscAlumnos)+count($inscDocentes)+count($inscAdministrativos);
-         //numero asistentes        //numero de ausentes
-         if($inscAlumnos != null){
-            foreach ($inscAlumnos as $inscripcionAlumno) {
-              ($inscripcionAlumno->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
-            }
-         }
-         if($inscDocentes != null){
-            foreach ($inscDocentes as $inscripcionDocente) {
-              ($inscripcionDocente->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
-            }
-         }
-         if($inscAdministrativos != null){
-            foreach ($inscAdministrativos as $inscripcionAdministrativo) {
-              ($inscripcionAdministrativo->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
-            }
-         }
 
-         return view('programador.actividad.execute', ['actividad' => $actividad, 'inscripciones' => $inscritos, 'numAsistentes' => $numAsistentes]);
+         return view('programador.actividad.execute', ['actividad' => $actividad, 'inscripciones' => $inscritos]);
     }
 
     public function updateExecute(Request $request, $id){ //ejecutar una actividad

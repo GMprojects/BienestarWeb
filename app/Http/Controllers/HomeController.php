@@ -29,6 +29,7 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
    public function index(Request $request){
+
       $actividades = Actividad::where([['modalidad', '=', '2'],['estado', '<', '3']])->get();
       $list_insc = array('hd');
       if($request->user() != null){

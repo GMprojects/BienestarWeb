@@ -1,49 +1,48 @@
 @extends('template')
 @section('contenido')
-	<div  class="row">
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
-			@if (count($errors) >0)
-			<div class="alert alert-danger">
-				<ul>
-				@foreach($errors->all() as $error)
-					<li>{{$error}}</li>
-				@endforeach
-				</ul>
-			</div>
-			@endif
-		</div>
-	</div>
 {!!Form::model([$user, $tipoPersona],['method'=>'PATCH','files'=>'true', 'route'=>['user.update',$user->id]] )!!}
 {{Form::token()}}
-
-	<div class="row">
-		<div class="col-md-6">
-			<!-- CAJA de Datos Personales -->
-			<div class="box box-success">
-				<!-- HEADER de CAJA de Datos Personales -->
-				<div class="box-header with-border">
-					<i class="fa fa-address-card"></i>
-					<h3 class="box-title">Datos Personales</h3>
+<div class="row">
+	<div class="col-md-6">
+		<div class="caja">
+	      <div class="caja-header">
+	         <div class="caja-icon">	<i class="fa fa-address-card"></i></div>
+	         <div class="caja-title">Datos Personales
 				</div>
-				<!-- BODY de CAJA de Datos Personales -->
-				<div class="box-body">
-					<!-- Imagen de usuario -->
+	      </div>
+	      <div class="caja-body">
+					<div  class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
+							@if (count($errors) >0)
+							<div class="alert alert-danger">
+								<ul>
+								@foreach($errors->all() as $error)
+									<li>{{$error}}</li>
+								@endforeach
+								</ul>
+							</div>
+							@endif
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-sm-4"></div>
 						<div class="col-sm-4">
-							@switch($user->idTipoPersona)
-								@case(1) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/'.$user->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
-								@case(2) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/'.$user->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
-								@case(3) <input type="file" name="foto" class="dropify" data-default-file="{{ asset('images/Usuario/'.$user->foto) }}" data-allowed-file-extensions="png jpg jpge" /> @break;
-							@endswitch
+							@if ($user->foto != null)
+								<input type="file" name="foto" class="form-control dropify"data-default-file="{{ asset('storage/'.$user->foto) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+							@else
+								<input type="file" name="foto" class="form-control dropify"data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+							@endif
 						</div>
 						<div class="col-sm-4"></div>
 					</div><br/>
+					<div class="form-horizontal">
+						<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
+					</div>
 					<!-- Campos Tipo Texto -->
 					<div class="form-horizontal">
 						<!-- Campo Nombre -->
 						<div class="form-group">
-							<label for="nombre" class="col-sm-3 control-label">Nombre</label>
+							<label for="nombre" class="col-sm-3 control-label">Nombre <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -53,7 +52,7 @@
 						</div>
 						<!-- Campo Apellido Paterno -->
 						<div class="form-group">
-							<label for="apellidoPaterno" class="col-sm-3 control-label">Ap. Paterno</label>
+							<label for="apellidoPaterno" class="col-sm-3 control-label">Ap. Paterno <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -63,7 +62,7 @@
 						</div>
 						<!-- Campo Apellido Materno -->
 						<div class="form-group">
-							<label for="apellidoMaterno" class="col-sm-3 control-label">Ap. Materno </label>
+							<label for="apellidoMaterno" class="col-sm-3 control-label">Ap. Materno <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -83,7 +82,7 @@
 						</div>
 						<!-- Campo Email -->
 						<div class="form-group">
-							<label for="email" class="col-sm-3 control-label">Email </label>
+							<label for="email" class="col-sm-3 control-label">Email <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
@@ -97,7 +96,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-									 <input pattern="[0-9]+" maxlength="15" type="text" class="form-control" name="telefono"  value="{{ $user->telefono }}" placeholder="(xxx)xxxxxx">
+									 <input pattern="[0-9]+" maxlength="15" type="text" class="form-control" name="telefono"  value="{{ $user->telefono }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxx">
 								</div>
 							</div>
 						</div>
@@ -107,7 +106,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-									 <input pattern="[0-9]+" maxlength="15" type="celular" class="form-control" name="celular" value="{{ $user->celular }}" placeholder="(xxx)xxxxxxxxx">
+									 <input pattern="[0-9]+" maxlength="15" type="celular" class="form-control" name="celular" value="{{ $user->celular }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxxxxx">
 								</div>
 							</div>
 						</div>
@@ -117,14 +116,14 @@
 		</div>
 		<div class="col-md-6">
 			<!-- CAJA de Datos Propios del TIPO_PERSONA -->
-			<div class="box box-success" name "nuevoUsuario">
-				<!-- HEADER de Datos Propios del TIPO_PERSONA -->
-				<div class="box-header with-border">
-					<i class="glyphicon glyphicon-user"></i>
-					<h3 class="box-title" id = "tituloCamposPropios">Datos de Alumno</h3>
-				</div>
+			<div class="caja" name "nuevoUsuario">
+		      <div class="caja-header">
+		         <div class="caja-icon">	<i class="glyphicon glyphicon-user"></i></div>
+		         <div class="caja-title" id="tituloCamposPropios">Datos de Alumno
+					</div>
+		      </div>
 				<!-- BODY de Datos Propios del TIPO_PERSONA -->
-				<div class="box-body">
+				<div class="caja-body">{{--
 					<!-- Campo Tipo Radio (Tipo de Usuario) -->
 					<div class="row" name = "tipos de user">
 						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
@@ -143,7 +142,7 @@
 							<h5>Administrativo</h5>
 						</div>
 					</div>
-					<br>
+					<br>--}}
 					<div class="form-horizontal">
 						<div class="form-group">
 							<label for="codigo" class="col-sm-3 control-label">Código </label>
@@ -159,7 +158,7 @@
 					<div class="form-horizontal">
 
 						<!-- Campos para el tipo ADMINISTRATIVO -->
-						<div class="camposAdministrativo" id = "formAdministrativo" style='display:none;'>
+						<div class="camposAdministrativo" id="formAdministrativo" style='display:none;'>
 							<div class="form-group">
 								<label for="cargo" class="col-sm-3 control-label">Cargo </label>
 								<div class="col-sm-8">
@@ -172,7 +171,7 @@
 						</div>
 
 						<!-- Campos para el tipo ALUMNO -->
-						<div class="camposAlumno" id = "formAlumno" style='display:block;'>
+						<div class="camposAlumno" id="formAlumno" style='display:block;'>
 							<div class="form-group">
 								<label for="condicion" class="col-sm-3 control-label">Condición </label>
 								<div class="col-sm-8">
@@ -189,7 +188,7 @@
 						</div>
 
 						<!-- Campos para el tipo DOCENTE -->
-						<div class="camposDocente" id = "formDocente" style='display:none;'>
+						<div class="camposDocente" id="formDocente" style='display:none;'>
 							<div class="form-group">
 								<label for="categoria" class="col-sm-3 control-label">Categoría </label>
 								<div class="col-sm-8">
@@ -236,14 +235,14 @@
 
 			</div>
 			<!-- CAJA de FUNCION de usuario -->
-			<div class="box box-success" name "nuevoUsuario">
-				<!-- HEADER de CAJA de FUNCION de usuario -->
-				<div class="box-header with-border">
-					<i class="glyphicon glyphicon-lock"></i>
-					<h3 class="box-title">Privilegios</h3>
-				</div>
+			<div class="caja" name "nuevoUsuario">
+		      <div class="caja-header">
+		         <div class="caja-icon">	<i class="glyphicon glyphicon-lock"></i></div>
+		         <div class="caja-title">Privilegios
+					</div>
+		      </div>
 				<!-- BODY de CAJA de FUNCION de usuario -->
-				<div class="box-body">
+				<div class="caja-body">
 					<div class="row">
 						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
 							<h3><i id="icoMiembro" class="flaticon-band" style="color:rgba(0,0,0,0.5);"></i></h3>
@@ -262,13 +261,14 @@
 						</div>
 					</div>
 				</div>
+				<br><br>
 				<!-- FOOTER de CAJA de FUNCION de usuario -->
-				<div class="box-footer">
-					<div class="form-group">
-						<button class="btn btn-success" type="submit"> Guardar</button>
-						<a href=""><button class="btn btn-danger" type="reset"> Cancelar</button></a>
+		      <div class="caja-footer">
+					<div class="pull-right">
+						<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
 					</div>
-				</div>
+		      </div>
 			</div>
 		</div>
 	</div>
@@ -279,7 +279,7 @@
 
 		function iniciar(){
 			var tipo = '', funcion = '';
-			switch({{ $user->idTipoPersona }}){
+	{{--		switch({{ $user->idTipoPersona }}){
 				case 1: 	tipo = 'radioAlumno';
 							document.getElementById('condicion').selectedIndex = {{ $tipoPersona->condicion }} - 1;
 							break;
@@ -291,7 +291,7 @@
 				case 3: 	tipo = 'radioAdministrativo'; break;
 			}
 			document.getElementById(tipo).checked = true;
-			cambiarColorTipo({{ $user->idTipoPersona }});
+			cambiarColorTipo({{ $user->idTipoPersona }});--}}
 
 			switch({{ $user->funcion }}){
 				case 1: funcion = 'radioMiembro'; break;
@@ -303,14 +303,14 @@
 		}
 
 		function cambiarColorTipo(icono){
-			document.getElementById('icoAlumno').style.color = 'rgba(0,0,0, 0.5)';
+			/*document.getElementById('icoAlumno').style.color = 'rgba(0,0,0, 0.5)';
 			document.getElementById('icoDocente').style.color = 'rgba(0,0,0, 0.5)';
-			document.getElementById('icoAdministrativo').style.color = 'rgba(0,0,0, 0.5)';
+			document.getElementById('icoAdministrativo').style.color = 'rgba(0,0,0, 0.5)';*/
 			var iconoElegido = "";
 			document.getElementById('formAdministrativo').style.display = 'none';
 			document.getElementById('formAlumno').style.display = 'none';
 			document.getElementById('formDocente').style.display = 'none';
-			switch (icono) {
+			switch ({{ $user->idTipoPersona }}) {
 				case 1: 	iconoElegido = 'icoAlumno';
 							document.getElementById('formAlumno').style.display = 'block';
 							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Alumno";break;
@@ -337,5 +337,10 @@
 			document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 		}
 	</script>
-
+	<style type="text/css">
+		.ast{
+			color: red;
+			font-size: 20px;
+		}
+	</style>
 @endsection

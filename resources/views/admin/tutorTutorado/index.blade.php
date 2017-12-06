@@ -7,7 +7,7 @@
 				<h3 class="box-title">Tutores </h3>
 			</div>
 			<div class="col-xs-6" style="text-align:right;">
-				<a href="tutorTutorado/create"><button class="btn btn-ff-green">Nuevo Tutor - Tutorados</button></a>
+				<a href="tutorTutorado/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Tutor - Tutorados</button></a>
 			</div>
 		</div>
 
@@ -18,34 +18,30 @@
 					<div class="table-responsive">
 						<table id="tabTutores" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
 							<thead>
-								<th>Id</th>
 								<th>Código</th>
 								<th>Nombres y Apellidos</th>
 								<th>Semestre Académico</th>
 								<th>Nro. Tutorados</th>
 								<th>Opciones</th>
 							</thead>
-              			@php($i = 1)
 							@foreach($tutores as $tutor)
 							<tr>
-                			<td>{{ $i }}</td>
 								<td>{{ $tutor->codigo }}</td>
 								<td>{{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</td>
 								<td>{{ $tutor->anioSemestre.'-'.$tutor->numeroSemestre }}</td>
 								<td>{{ $tutor->nroTutorados }}
 								<td>
 			                  <a href="{{ action('TutorTutoradoController@show',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ])}}">
-			                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-default">
+			                    <button type="button" class="btn btn-ff-blues" data-toggle="modal" data-target="#modal-default">
 			                    		<i class="fa fa-eye"></i>
 			                    </button>
 			                  </a>
 									<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
-										<button class="btn btn-warning">
+										<button class="btn btn-ff-yellow">
 											<i class="fa fa-edit"></i>
 										</button>
 									</a>
                 		  </td>
-                		@php($i++)
 							</tr>
 							@endforeach
 						</table>

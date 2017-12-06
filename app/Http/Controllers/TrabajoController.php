@@ -11,6 +11,17 @@ use BienestarWeb\Http\Controllers\Controller;
 
 class TrabajoController extends Controller
 {
+      function getFecha($fechaIn){
+         if( $fechaIn == null ){
+            return null;
+         }else{
+         $dia = substr( $fechaIn,0 ,2);
+         $mes =substr( $fechaIn,3 ,2);
+         $anio=substr( $fechaIn,-4 ,4);
+         return $anio."-".$mes."-".$dia;
+
+         }
+      }
     /**
      * Display a listing of the resource.
      *
@@ -18,13 +29,20 @@ class TrabajoController extends Controller
      */
     public function index(Request $request)
     {
-        $trabajos = Trabajo::Search($request)->get();
-        $trabajos->each(function($trabajos){
-            $trabajos->egresado;
-        });
-        return view('admin.trabajo.index')
-            ->with('trabajos',$trabajos)
-            ->with('idEgresado',$request->idEgresado);
+         if ($request->op == 1) { //viene desde egresado
+            $trabajos = Trabajo::where('idEgresado',$request->idEgresado)->get();
+            $egresado = Egresado::findOrFail($request->idEgresado);
+            return view('admin.trabajo.index')
+                ->with('op',$request->op)
+                ->with('trabajos',$trabajos)
+                ->with('egresado', $egresado);
+         } else {
+             $trabajos = Trabajo::get();
+             return view('admin.trabajo.index')
+                ->with('op',$request->op)
+                ->with('trabajos',$trabajos);
+         }
+
     }
 
     /**
@@ -34,8 +52,18 @@ class TrabajoController extends Controller
      */
     public function create(Request $request)
     {
-        return view('admin.trabajo.create')
-              ->with('idEgresado',$request->idEgresado);
+         if ($request->op == 1) { //viene desde egresado
+         $egresado = Egresado::findOrFail($request->idEgresado);
+            return view('admin.trabajo.create')
+                  ->with('op',$request->op)
+                  ->with('idEgresado', $request->idEgresado)
+                  ->with('egresado', $egresado);
+         } else {
+            $egresados = Egresado::get();
+            return view('admin.trabajo.create')
+                  ->with('op',$request->op)
+                  ->with('egresados',$egresados);
+         }
     }
 
     /**
@@ -46,19 +74,18 @@ class TrabajoController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
         $request->validate([
             'institucion' => 'required',
             'lugar' => 'required',
             'fechaInicio' => 'required|date',
-            'fechaFin' => 'required|date|nullable',
+            'fechaFin' => 'date|nullable',
             'nivelSatisfaccion' => 'required'
         ]);
         $trabajo = new Trabajo;
         $trabajo->institucion = $request->get('institucion');
         $trabajo->lugar = $request->get('lugar');
-        $trabajo->fechaInicio = $request->get('fechaInicio');
-        $trabajo->fechaFin = $request->get('fechaFin');
+        $trabajo->fechaInicio = TrabajoController::getFecha($request->fechaInicio);
+        $trabajo->fechaFin =TrabajoController::getFecha($request->fechaFin);
         $trabajo->nivelSatisfaccion = $request->get('nivelSatisfaccion');
         $trabajo->recomendaciones = $request->get('recomendaciones');
         $trabajo->observaciones = $request->get('observaciones');
@@ -66,7 +93,12 @@ class TrabajoController extends Controller
         $egresado = Egresado::findOrFail($request->idEgresado);
         $egresado->trabajos()->save($trabajo);
       //return Redirect::to('admin/preguntaEncuesta');
-        return redirect()->action('TrabajoController@index', ['idEgresado' => $request->idEgresado]);
+        if ($request->op == 2) {
+           return redirect()->action('TrabajoController@index', ['op' => $request->op]);
+       } else {
+           return redirect()->action('TrabajoController@index', ['idEgresado' => $request->idEgresado, 'op' => $request->op]);
+        }
+
     }
 
     /**
@@ -104,8 +136,8 @@ class TrabajoController extends Controller
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->institucion = $request->get('institucion');
         $trabajo->lugar = $request->get('lugar');
-        $trabajo->fechaInicio = $request->get('fechaInicio');
-        $trabajo->fechaFin = $request->get('fechaFin');
+        $trabajo->fechaInicio = TrabajoController::getFecha($request->fechaInicio);
+        $trabajo->fechaFin = TrabajoController::getFecha($request->fechaFin);
         $trabajo->nivelSatisfaccion = $request->get('nivelSatisfaccion');
         $trabajo->recomendaciones = $request->get('recomendaciones');
         $trabajo->observaciones = $request->get('observaciones');

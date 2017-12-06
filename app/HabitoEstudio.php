@@ -15,7 +15,7 @@ class HabitoEstudio extends Model
     public function tutorTutorado(){
         return $this->belongsTo('BienestarWeb\TutorTutorado','idTutorTutorado','idTutorTutorado');
     }
-    public function preguntasHabito(){
+    public function respuestasHabito(){
         return $this->belongsToMany('BienestarWeb\PreguntaHabito','detalleHabito','idHabitoEstudio','idPreguntaHabito')
             ->withPivot('idDetalleHabito','rpta');
     }

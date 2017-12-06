@@ -56,7 +56,7 @@
 		var todoBien = true;
 		if ($('input[type=checkbox]').is(':checked')) {
 		} else {
-			document.getElementById('pError').innerHTML = 'Debe dirigir las activid de esta categoría a al menos uno';
+			document.getElementById('pError').innerHTML = 'Debe dirigir las actividad de esta categoría a al menos uno';
 			document.getElementById('divError').style.display = 'block';
 			todoBien = false;
 		}

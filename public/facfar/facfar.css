@@ -7,6 +7,27 @@ body{
 .ff-color{
    color: #4B367C;
 }
+.ff-bg{
+   background-color: #4B367C;
+}
+.ff-bg-green{
+   background-color: #4CAE4C;
+}
+.ff-bg-red{
+   background-color: #C3301F;
+}
+.ff-bg-green2{
+   background-color: #006400;
+}
+.ff-bg-aqua{
+   background-color: #00C0EF;
+}
+.ff-bg-blue{
+   background-color: #173CA1;
+}
+.ff-bg-purple{
+   background-color: #605CA8;
+}
 a{
    color: #6441a4;
 }
@@ -20,7 +41,7 @@ a:hover{
    margin-right: 0px;
 }
 .header-princ{
-   max-height: 50px;
+   max-height: 55px;
    background-color: #4B367C;
 }
 .nav-header{
@@ -33,9 +54,9 @@ a:hover{
    display: block;
    position: relative;
    float: left;
-   height: 50px;
+   height: 55px;
    font-size: 20px;
-   line-height: 50px;
+   line-height: 55px;
    text-align: center;
    width: 100px;
    font-family: 'Raleway', sans-serif;
@@ -65,7 +86,7 @@ a:hover{
    padding: 0px;
 }
 .header-princ .navbar .nav > li > a {
-   height: 50px;
+   height: 55px;
    border-style: hidden;
    color: #D3C7E8;
 }
@@ -246,6 +267,7 @@ a:hover{
    text-decoration: none;
    padding: 10px 15px 10px 30px;
    height: 40px;
+   margin-top: 5px;
 }
 .ff-li-a:hover, .ff-li-a:active, .ff-li-a:focus{
    background-color: #6441a4 !important;
@@ -386,6 +408,26 @@ a:hover{
 .btn-ff-green:focus, .btn-ff-green:hover{
    color: white;
    background-color: #5CB85C;
+}
+
+.btn-ff-orange{
+   border-radius: 0px;
+   background: #C26919;
+   color: white;
+}
+.btn-ff-orange:focus, .btn-ff-orange:hover{
+   color: white;
+   background-color: #F5A872;
+}
+
+.btn-ff-greenOs{
+   border-radius: 0px;
+   background: #006C3B;
+   color: white;
+}
+.btn-ff-greenOs:focus, .btn-ff-greenOs:hover{
+   color: white;
+   background-color: #65C094;
 }
 
 .btn-ff-red{
@@ -657,6 +699,33 @@ textarea:focus {
 }
 .act-10{
    background-color: #E91E63;
+}
+.act-11{
+   background-color: #46560A;
+}
+.act-12{
+   background-color: #0C4D21;
+}
+.act-13{
+   background-color: #560A53;
+}
+.act-14{
+   background-color: #0A5456;
+}
+.act-15{
+   background-color: #5A9837;
+}
+.act-16{
+   background-color: #EA3413;
+}
+.act-17{
+   background-color: #42FBC2;
+}
+.act-18{
+   background-color: #5D4037;
+}
+.act-19{
+   background-color: #E976BC;
 }
 .actividad .act-title{
    padding: 0px;
@@ -1434,6 +1503,10 @@ textarea:focus {
    font-size: 2em;
    border-radius: 0 0 0 5px;
 }
+.caja-icon>i{
+   font-size: 1.3em;
+}
+
 .caja-title{
    margin-left: 50px;
    height: 40px;

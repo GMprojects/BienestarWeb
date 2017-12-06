@@ -61,13 +61,13 @@
 	});
 	$('.timepicker').timepicker({
 		showInputs: false
-	})
+	});
 	$('#datepicker1').datepicker({
 		autoclose: true,
 		todayHighlight: true,
 		startDate :  '-3d',
 		format: 'dd/mm/yyyy'
-	})
+	});
 	$(document).ready(function() {
 			 $('#tabAsistentes').DataTable({
 					"lengthMenu": [ 15, 25, 50, 75, 100 ],
@@ -123,7 +123,24 @@
 						 }
 					},
 			 });
+			 init_contador('#observaciones', '#contadorObservaciones');
+			 init_contador('#recomendaciones', '#contadorRecomendaciones');
 	});
+
+	function init_contador(idTextArea, idContador){
+		function update_Contador(idTextArea, idContador){
+			var contador = $(idContador);
+			var ta = $(idTextArea);
+			contador.html(ta.val().length+'/500');
+		}
+		$(idTextArea).keyup(function(){
+			update_Contador(idTextArea, idContador);
+		});
+		$(idTextArea).change(function(){
+			update_Contador(idTextArea, idContador);
+		});
+	}
+
 </script>
 
 <style type="text/css">

@@ -30,12 +30,12 @@ class CrearTablaEgresado extends Migration
             $tabla->string('direccion', 50)->nullable();
             $tabla->string('telefono', 15)->nullable();
             $tabla->string('celular', 15)->nullable();
-            $tabla->string('email', 100)->unique();
+            $tabla->string('email', 100)->nullable();
             $tabla->string('codigo', 20)->unique();
             $tabla->smallInteger('anioEgreso');
-            $tabla->enum('numeroSemestre', ['1', '2', '3']);  
-            $tabla->timestamps();        
-            
+            $tabla->enum('numeroSemestre', ['1', '2', '3']);
+            $tabla->timestamps();
+
         });
 
         Schema::create('Trabajo', function(Blueprint $tabla)
@@ -63,6 +63,6 @@ class CrearTablaEgresado extends Migration
     public function down()
     {
         Schema::dropIfExists('Egresado');
-        Schema::dropIfExists('Trabajo'); 
+        Schema::dropIfExists('Trabajo');
     }
 }

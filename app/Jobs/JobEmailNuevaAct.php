@@ -11,9 +11,14 @@ use Illuminate\Notifications\Notifiable;
 
 use BienestarWeb\Notifications\ActividadProgramadaNotif;
 use BienestarWeb\Actividad;
+use BienestarWeb\TipoActividad;
 use BienestarWeb\User;
 use BienestarWeb\Alumno;
-use BienestarWeb\TipoActividad;
+use BienestarWeb\Docente;
+use BienestarWeb\Administrativo;
+use BienestarWeb\InscripcionAlumno;
+use BienestarWeb\InscripcionDocente;
+use BienestarWeb\InscripcionAdministrativo;
 use Log;
 
 class JobEmailNuevaAct implements ShouldQueue
@@ -41,6 +46,29 @@ class JobEmailNuevaAct implements ShouldQueue
         $this->tutorados = $tutorados;
         $this->tipoActividad = $tipoActividad;
     }
+
+   function getListInsc($user){
+      $list_insc = array('hd');
+         switch ($user->idTipoPersona) {
+            case '1'://Alumno
+              $idAlumno = Alumno::where('idUser', $user->id)->value('idAlumno');
+              $inscripciones = InscripcionAlumno::where('idAlumno', $idAlumno)->get();
+              break;
+            case '2'://Docente
+               $idDocente = Docente::where('idUser', $user->id)->pluck('idDocente');
+               $inscripciones = InscripcionDocente::where('idDocente', $idDocente)->get();
+               break;
+            case '3'://Administrativo
+               $idAdministrativo = Administrativo::where('idUser', $user->id)->pluck('idAdministrativo');
+               $inscripciones = InscripcionAdministrativo::where('idAdministrativo', $idAdministrativo)->get();
+               break;
+         }
+
+         for ($i=0; $i < count($inscripciones) ; $i++) {
+            array_push ( $list_insc,  $inscripciones[$i]->idActividad );
+         }
+         return $list_insc;
+   }
     /**
      * Execute the job.
      *
@@ -50,7 +78,8 @@ class JobEmailNuevaAct implements ShouldQueue
       Log::info('JobEnviarNuevaActEmail');
       if( $this->userAl != null){
           Log::info("Enviar mail Alumno   ". $this->userAl->email);
-          $this->userAl->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA));
+          $url = action('MiPerfilController@mis_actividades', ['id' => $this->userAl->id , 'opcion' => 3]);
+          $this->userAl->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $this->userAl->sexo, $url, '0', '1'));
           Log::info("Fin de enviar mail Alumno   ". $this->userAl->email);
       }else{
           Log::info('Job Enviar -> tipo de la actividad'.$this->tipoActividad);
@@ -76,7 +105,8 @@ class JobEmailNuevaAct implements ShouldQueue
                         if ($alumno != null) {
                            Log::info("i = ".$i);
                            Log::info("enviar Alumno  ");
-                           $alumno->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA));
+                           $url = action('MiPerfilController@mis_actividades', ['id' => $alumno->id , 'opcion' => 3]);
+                           $alumno->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $alumno->sexo, $url, '0', '1'));
                            Log::info("Fin enviar Alumno ".$i);
                        }else{
                           Log::info('ALumno no tiene correo');
@@ -92,7 +122,8 @@ class JobEmailNuevaAct implements ShouldQueue
                        $i++;
                        Log::info("i = ".$i);
                        Log::info("enviar mail  ");
-                       $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA));
+                       $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad, 'list_insc'=>JobEmailNuevaAct::getListInsc($user)]);
+                       $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, '0', '0'));
                        Log::info("Fin enviar de enviar mail");
                   }
              }
@@ -116,7 +147,8 @@ class JobEmailNuevaAct implements ShouldQueue
                   $i++;
                   Log::info("i = ".$i);
                   Log::info("enviar mail  ");
-                  $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA));
+                  $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad, 'list_insc'=>JobEmailNuevaAct::getListInsc($user)]);
+                  $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, '0', '0'));
                   Log::info("Fin enviar de enviar mail");
              }
           }else{ //Alumnos-Docentes-Administrativos
@@ -128,7 +160,8 @@ class JobEmailNuevaAct implements ShouldQueue
                $i++;
                Log::info("i = ".$i);
                Log::info("enviar mail  ");
-               $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA));
+               $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad, 'list_insc'=>JobEmailNuevaAct::getListInsc($user)]);
+               $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, '0', '0'));
                Log::info("Fin enviar de enviar mail");
             }
           }
@@ -136,7 +169,8 @@ class JobEmailNuevaAct implements ShouldQueue
 
       if($this->tipoActividad > 2){
          Log::info("enviar Responsable");
-         $this->userResp->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeR));
+         $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad, 'list_insc'=>JobEmailNuevaAct::getListInsc($this->userResp)]);
+         $this->userResp->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeR, $this->userResp->sexo, $url, '1', '0'));
          Log::info("Fin enviar Responsable");
       }
 

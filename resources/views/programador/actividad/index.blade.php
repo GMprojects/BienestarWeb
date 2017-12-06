@@ -7,7 +7,7 @@
 					<h3 class="box-title">Lista de Actividades</h3>
 				</div>
 				<div class="col-xs-6" style="text-align:right;">
-					<a href="actividad/create"><button class="btn btn-success">Nueva Actividad</button></a>
+					<a href="actividad/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nueva Actividad</button></a>
 				</div>
 			</div>
 

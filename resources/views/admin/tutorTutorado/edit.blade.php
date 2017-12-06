@@ -8,7 +8,7 @@
 
 <div class="caja">
 	<div class="caja-header">
-      <div class="caja-icon"><i class="fa fa-users"></i></div>
+      <div class="caja-icon"><i style="font-size: 1em;" class="fa fa-users"></i></div>
       <div class="caja-title">Tutorados</div>
    </div>
 

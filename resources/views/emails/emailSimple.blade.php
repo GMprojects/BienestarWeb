@@ -1,7 +1,11 @@
 @component('mail::message')
   # {{$subject}}
   <br>
-  EstimadX {{ ucwords(strtolower($destinatario)) }},
+  @if ($sexo = 'm')
+  Estimada
+  @else
+  Estimado
+  @endif {{ ucwords(strtolower($destinatario)) }},
   <br>
   {{ $mensaje }}
   @switch($opcion)

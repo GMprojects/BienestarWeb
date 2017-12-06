@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 use BienestarWeb\TutorTutorado;
+use BienestarWeb\Alumno;
 use BienestarWeb\Http\Controllers\Controller;
 
+use DB;
 class HabitoEstudioController extends Controller
 {
     /**
@@ -27,15 +29,9 @@ class HabitoEstudioController extends Controller
         //FALTA EL FILTRO POr SER TUTORTUTORADO
         //Search($request->idTutorTutorado)->
 
-        $habitosEstudio = HabitoEstudio::paginate(10);
-        $habitosEstudio->each(function($habitosEstudio){
-            $habitosEstudio->tutorTutorado;
-        });
+        $habitosEstudio = HabitoEstudio::get();
 
-        $tutorTutorados = TutorTutorado::where('habitoEstudioRespondido','=','0')->paginate(10);
-        $tutorTutorados->each(function($tutorTutorados){
-        $tutorTutorados->habitoEstudio;
-        });
+        $tutorTutorados = TutorTutorado::get();
         //dd($tutorTutorados);
         return view('usuario.habitoEstudio.index')
                 ->with('habitosEstudio',$habitosEstudio)
@@ -49,11 +45,9 @@ class HabitoEstudioController extends Controller
      */
     public function create()
     {
-        $preguntasHabito = PreguntaHabito::orderBy('idTipoHabito')->get();
-        $preguntasHabito->each(function($preguntasHabito){
-            $preguntasHabito->tipoHabito;
-        });
-        return view('miembro.habitoEstudio.create')->with('preguntasHabito',$preguntasHabito);
+        //$preguntasHabito = PreguntaHabito::orderBy('idTipoHabito')->get();
+        $preguntasHabito = PreguntaHabito::get();
+        return view('miembro.tutorado.habitoEstudio.create')->with('preguntasHabito',$preguntasHabito);
     }
 
     /**
@@ -69,6 +63,7 @@ class HabitoEstudioController extends Controller
         $idTutorTutorado='7';
 
         $tutorTutorado = TutorTutorado::findOrFail($idTutorTutorado);
+        //$user->roles()->updateExistingPivot($roleId, $attributes);
         //$tutorTutorado->habitoEstudioRespondido = '1';
         //$tutorTutorado->update();
         $habitoEstudio = new HabitoEstudio;
@@ -80,7 +75,7 @@ class HabitoEstudioController extends Controller
             $id =$pH->idPreguntaHabito;
             $rpta = $request->input('respuestasHabito.'.$i);
             //sdd($request->input('respuestasHabito.'.$i));
-            $habitoEstudio->preguntasHabito()->attach($id,['rpta'=>$rpta]);
+            $habitoEstudio->respuestasHabito()->attach($id,['rpta'=>$rpta]);
         }
         //dd($habitoEstudio);
         return Redirect::to('usuario/habitoEstudio');
@@ -92,15 +87,19 @@ class HabitoEstudioController extends Controller
      * @param  \BienestarWeb\HabitoEstudio  $habitoEstudio
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $habitoEstudio = HabitoEstudio::findOrFail($id);
-        $habitoEstudio->each(function($habitoEstudio){
-            $habitoEstudio->preguntasHabito;
-            $habitoEstudio->tutorTutorado;
-        });
-        //dd($habitoEstudio->preguntasHabito);
-        return view('usuario.habitoEstudio.show')->with('habitoEstudio',$habitoEstudio);
+    public function show($id) {
+        $tutorTutorado = TutorTutorado::findOrFail($id);
+        $alumno = Alumno::findOrFail($tutorTutorado->idAlumno);
+        $respuesta_cantidad = HabitoEstudio::join('detalleHabito','habitoEstudio.idHabitoEstudio', '=','detalleHabito.idHabitoEstudio' )
+                  ->where([['habitoEstudio.idHabitoEstudio', $tutorTutorado->habitoEstudio->idHabitoEstudio]])
+                  ->select('detalleHabito.rpta',DB::raw('count(detalleHabito.rpta) as cantidad'))
+                  ->groupBy('detalleHabito.rpta')->get();
+
+         //dd($si->toArray()[0]['rpta']);
+        //dd($si);
+        return view('miembro.tutor.habitoEstudio.show')->with('tutorTutorado', $tutorTutorado)
+                                                       ->with('alumno', $alumno->user)
+                                                       ->with('respuesta_cantidad', $respuesta_cantidad->toArray());
     }
 
     /**
@@ -109,8 +108,7 @@ class HabitoEstudioController extends Controller
      * @param  \BienestarWeb\HabitoEstudio  $habitoEstudio
      * @return \Illuminate\Http\Response
      */
-    public function edit(HabitoEstudio $habitoEstudio)
-    {
+    public function edit($id) {
         //
     }
 
@@ -121,8 +119,7 @@ class HabitoEstudioController extends Controller
      * @param  \BienestarWeb\HabitoEstudio  $habitoEstudio
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, HabitoEstudio $habitoEstudio)
-    {
+    public function update(Request $request, $id)  {
         //
     }
 
@@ -132,7 +129,7 @@ class HabitoEstudioController extends Controller
      * @param  \BienestarWeb\HabitoEstudio  $habitoEstudio
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HabitoEstudio $habitoEstudio)
+    public function destroy($id)
     {
         //
     }

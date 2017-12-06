@@ -1,14 +1,18 @@
 @component('mail::message')
   # Nueva Actividad Programada
-  {{ $mensaje }}  **{{ $actividad->tipoActividad['tipo'] }}**
-  <br>
+  @if ($sexo = 'm')
+  Estimada
+  @else
+  Estimado
+  @endif
+  {{ $mensaje }} {{ $actividad->tipoActividad['tipo'] }}
   @component('mail::panel')
-    ![Imagen de la Actividad][imagenActividad]
-    @if($actividad->rutaImagen != null)
-      [imagenActividad]: {{ asset('storage/'.$actividad->rutaImagen) }} "Actividad"
-    @else
-      [imagenActividad]: {{ asset('storage/'.$actividad->tipoActividad['rutaImagen']) }} "Actividad"
-    @endif
+   ![Imagen de la Actividad][imagenActividad]
+   @if($actividad->rutaImagen != null)
+    [imagenActividad]: {{ asset('storage/'.$actividad->rutaImagen) }} "Actividad"
+   @else
+    [imagenActividad]: {{ asset('storage/'.$actividad->tipoActividad['rutaImagen']) }} "Actividad"
+   @endif
   @endcomponent
   # **{{ $actividad->titulo }}** #
   <dl>
@@ -34,10 +38,21 @@
     @endif
   </dl>
   <br>
-  @component('mail::button', ['url' => '', 'color' => 'green'])
+  @if ($soyResponsable == 0 && $soyInscrito == 0)
+  @component('mail::button', ['url' => $url, 'color' => 'green'])
   Inscribirme
   @endcomponent
+  @elseif ($soyResponsable == 0 && $soyInscrito == 1)
+  @component('mail::button', ['url' => $url, 'color' => 'blue'])
+  Ver mis actividades como inscrito
+  @endcomponent
+  @elseif($soyResponsable == 1 && $soyInscrito == 0)
+  @component('mail::button', ['url' => $url, 'color' => 'blue'])
+  Ver mis actividades como responsable
+  @endcomponent
+  @endif
+
   Gracias,<br>
   {{ config('app.name') }}
-  [Pagina Web](www)
+  [Pagina Web]({{ config('app.url') }})
 @endcomponent

@@ -14,10 +14,10 @@ class CrearTriggerHabitoEstudioRespuesta extends Migration
     public function up()
     {
       DB::unprepared('
-           CREATE TRIGGER habitoEstudioRespuesta AFTER INSERT ON `habitoEstudio` FOR EACH ROW
-           BEGIN
-             UPDATE tutorTutorado SET `habitoEstudioRespondido` = 1 WHERE tutorTutorado.idTutorTutorado = NEW.idTutorTutorado;
-           END
+           CREATE TRIGGER `farmaciabd`.`habitoestudio_AFTER_INSERT` AFTER INSERT ON `habitoestudio` FOR EACH ROW
+         BEGIN
+         	UPDATE tutorTutorado SET `habitoEstudioRespondido` = ´1´  WHERE tutorTutorado.idTutorTutorado = NEW.idTutorTutorado;
+         END
           ');
     }
 

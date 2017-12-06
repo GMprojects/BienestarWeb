@@ -14,8 +14,8 @@ role="dialog" tabindex="-1" id="modal-delete-{{$tipoPersona->idTipoPersona}}">
 				<p>Confirme si desea ELIMINAR el tipo persona "{{$tipoPersona->tipo}}"</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-				<button type="submit" class="btn btn-primary">Confirmar</button>
+				<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>
+				<button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
 			</div>
 		</div>
 	</div>

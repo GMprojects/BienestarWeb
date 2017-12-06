@@ -38,6 +38,9 @@
       <script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
       <script src="{{ asset('plugins/iCheck/icheck.js') }}"></script>
 
+      <script src="{{ asset('plugins/flot/jquery.flot.min.js') }}"></script>
+      <script src="{{ asset('plugins/flot/jquery.flot.time.js') }}"></script>
+      <script src="{{ asset('plugins/flot/jquery.flot.symbol.js') }}"></script>
    </head>
    <body>
       @if(Auth::user() == null)

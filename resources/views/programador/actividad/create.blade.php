@@ -319,8 +319,8 @@
 				document.getElementById('divModalidad').style.display = 'block';
 				document.getElementById('selectAlumnos').style.display = 'block';
 				document.getElementById('rIndividual').checked = true;
-				dListaResponsables('{{ action('UserController@getUsersAdm') }}', 'responsable');
-				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumnos');
+				dListaResponsables('{{ action('UserController@getUsersAdm') }}', 'Responsable');
+				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
 				break;
 			case '4'://TUTORÍA
 				document.getElementById('selectResponsables').style.display = 'block';
@@ -352,7 +352,7 @@
 				document.getElementById('enlaceRespInvitado').style.display = 'block';
 				document.getElementById('selectAlumnos').style.display = 'block';
 				dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
-				dListaAlumnos('{{ action('UserController@getAlumnos') }}');
+				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
 				break;
 			default:
 				document.getElementById('divCuposTotales').style.display = 'block';

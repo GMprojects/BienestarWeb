@@ -37,22 +37,11 @@
 						<div class="form-group">
 							<label for="horaEjecutada">Asistencias &nbsp; &nbsp; <i class="fa fa-check-square-o" aria-hidden="true"></i></label>
 							<div class="input-group">
-								@if ($numAsistentes == 0)
-									<button type="button" name="button" data-target="#modal-asistencia" data-toggle="modal" class="btn btn-ff-yellow">Registrar</button> &nbsp;
-									<span>
-										<button type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#modal-default">
-											<i class="fa fa-question" style="padding-left:4px;"></i>
-				           			</button>
-									</span>
-								@else
-									<a href="{{ action('InscripcionADAController@index',['idActividad' => $actividad->idActividad,'opcionBuscar' => '4','cupos' => $actividad->cuposTotales]) }}">
-										<button type="button" class="btn btn-success">Ver Asistencias </button>
-									</a>
-								@endif
+									<button type="button" name="button" data-target="#modal-asistencia" data-toggle="modal" class="btn btn-ff-yellow">Registrar</button>
 							</div>
 						</div>
 					</div>
-			</div>			
+			</div>
 			<div class="form-group">
 				@if ($actividad->fechaEjecutada != null)
 					<label><b>Fecha de Ejecución: </b> </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaEjecutada)) }} &nbsp;- &nbsp;{{ date("h:i A",strtotime($actividad->horaEjecutada)) }}<br>
@@ -61,18 +50,20 @@
 			<div class="form-group">
 			  <label for="titulo">Observaciones: </label>
 			  @if ($actividad->observaciones != 'Ninguna')
-				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" placeholder="Añadir algunas observaciones de la Actividad realizada">{{ $actividad->observaciones }}</textarea>
+				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas observaciones de la Actividad realizada">{{ $actividad->observaciones }}</textarea>
 			  @else
-				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" placeholder="Añadir algunas observaciones de la Actividad realizada"></textarea>
+				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas observaciones de la Actividad realizada"></textarea>
 			  @endif
+				  <p id="contadorObservaciones">0/500</p>
 		  </div>
 		  <div class="form-group">
 			  <label for="titulo">Recomendaciones: </label>
 			  @if ($actividad->recomendaciones != 'Ninguna')
-				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad">{{ $actividad->recomendaciones }}</textarea>
+				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad">{{ $actividad->recomendaciones }}</textarea>
 			  @else
-				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad"></textarea>
+				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad"></textarea>
 			  @endif
+				  <p id="contadorRecomendaciones">0/500</p>
 		  </div>
 		</div>
 		<div class="caja-footer">
@@ -93,7 +84,7 @@
 					<i class="fa fa-plus "></i>Nueva Evidencia
 				 </button>
 			</div>
-			@include('programador.actividad.modalEvidencia')
+			@include('programador.evidenciaActividad.modalNueva')
    	</div>
 		<div class="caja-body">
 			<div class="panel-body">
@@ -161,7 +152,7 @@
 									</div>
 								@else
 									<div class="panel-body">
-										<img src="{{asset('images/Iconos/otro.png')}}" alt=""  height="80px" width="50px" class="img-responsive">
+										<img src="{{asset('images/Iconos/otro.png')}}" alt=""  height="80px" width="50px" alt="Otro Archivo" class="img-responsive">
 									</div>
 									<div class="panel-footer">
 										{{ $evidenciaActividad->nombre }}
@@ -178,26 +169,4 @@
 				</div>
 			</div>
 		</div>
-	</div>
-<!-- MODALES -->
-	<div class="modal fade" id="modal-default">
-		 <!-- /.modal-dialog -->
-		 <div class="modal-dialog">
-			   <!-- /.modal-content -->
-			   <div class="modal-content">
-			        <div class="modal-header">
-				          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				            <span aria-hidden="true" class="fa fa-remove"></span></button>
-				          <h4 class="modal-title"><b>Ayuda</b></h4>
-			        </div>
-			        <div class="modal-body">
-			          	<p>Sólo podrá registrar una vez la lista de asistencia, si comete algun error o desea añadir mas asistentes luego de haber registrado contactese con el programador.</p>
-			        </div>
-			        <div class="modal-footer">
-			          	<button type="button" class="btn btn-ff-default pull-right" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
-			        </div>
-			   </div>
-		      <!-- /.modal-content -->
-		 </div>
-	    <!-- /.modal-dialog -->
 	</div>

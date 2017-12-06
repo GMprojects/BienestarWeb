@@ -15,15 +15,23 @@ class ActividadProgramadaNotif extends Notification
 
     private $actividad;
     private $mensaje;
+    private $sexo;
+    private $url;
+    private $soyResponsable;
+    private $soyInscrito;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Actividad $actividad,  $mensaje)
+    public function __construct(Actividad $actividad,  $mensaje, $sexo, $url, $soyResponsable, $soyInscrito)
     {
           $this->actividad = $actividad;
           $this->mensaje = $mensaje;
+          $this->sexo = $sexo;
+          $this->url = $url;
+          $this->soyResponsable = $soyResponsable;
+          $this->soyInscrito = $soyInscrito;
     }
 
     /**
@@ -50,9 +58,12 @@ class ActividadProgramadaNotif extends Notification
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');*/
         Log::info('ActividadProgramadaNotificacion');
-        return (new MailMessage)->markdown('emails.actividadProgramadaEmail',['actividad' => $this->actividad, 'mensaje' => $this->mensaje])
-                                ->action('Inscribirme', url('/'))
-                                ->with('actividad', $this->actividad)
+        return (new MailMessage)->markdown('emails.actividadProgramadaEmail',['actividad' => $this->actividad,
+                                                                              'mensaje' => $this->mensaje,
+                                                                              'sexo' => $this->sexo,
+                                                                              'url' => $this->url,
+                                                                              'soyResponsable' => $this->soyResponsable,
+                                                                              'soyInscrito' => $this->soyInscrito  ])
                                 ->subject('Nueva Programada Actividad');
     }
 

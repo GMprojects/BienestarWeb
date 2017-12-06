@@ -8,11 +8,33 @@ use BienestarWeb\TipoPersona;
 use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
 use BienestarWeb\Administrativo;
-
 use BienestarWeb\TutorTutorado;
+
+use Illuminate\Support\Facades\Storage;
+use File;
 
 class UserController extends Controller
 {
+
+   function getRutaImagenUpdate($request, $rutaImgAnterior){
+       //Eliminando Foto anterior
+       $path = $rutaImgAnterior;
+       File::delete(storage_path('app/public/'.$rutaImgAnterior));
+       Storage::delete($path);
+       //Guardar la nueva imagen
+         if($request->file('foto')){
+            $file = $request->file('foto');
+            $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
+            $storage = Storage::disk('actividades')->put($name, \File::get($file));
+            if($storage){
+               return 'actividades/'.$name;
+            }else{
+               return NULL;
+            }
+         }else {
+             $foto = $rutaImgAnterior;
+         }
+   }
     /**
      * Display a listing of the resource.
      *
@@ -39,8 +61,8 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {    $request->validate([
+    public function store(Request $request) {
+       $request->validate([
            'nombre'=>'required|min:2|max:45',
            'apellidoPaterno' => 'required|min:2|max:20',
            'apellidoMaterno' => 'required|min:2|max:20',
@@ -77,13 +99,13 @@ class UserController extends Controller
         $nuevoUser->estado = 1;
         $nuevoUser->idTipoPersona = $request->tipo;
         $nuevoUser->password = bcrypt($request->codigo);
+        $file = $request->file('foto');
         if($file != null){
-           $file = $request->file('foto');
            $name = 'usr_'. $tipoUser->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $storage = Storage::disk('users')->put($name, \File::get($file));
            if($storage){
              $path = 'users/'.$name;
-             $nuevoUser->foto = $name;
+             $nuevoUser->foto = $path;
           }
         }
         $nuevoUser->save();
@@ -164,18 +186,8 @@ class UserController extends Controller
         $user->celular = $request->celular;
 
         $tipoUser = TipoPersona::find($request->tipo);
-        $file = $request->file('foto');
-        if($file != null){
-           $file = $request->file('foto');
-           $name = 'usr_'. $tipoUser->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
-           $storage = Storage::disk('users')->put($name, \File::get($file));
-           if($storage){
-             $path = 'users/'.$name;
-             $user->foto = $name;
-          }
-        }
+        $user->foto = UserController::getRutaImagenUpdate($request, $user->foto);
         $user->funcion = $request->funcion;
-        $user->idTipoPersona = $request->tipo;
         $user->update();
 
         switch ($request->tipo) {

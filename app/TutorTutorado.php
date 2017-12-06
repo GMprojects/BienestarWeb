@@ -17,7 +17,7 @@ class TutorTutorado extends Pivot
 
     public $timestamps = true;
 
-    public function habitosEstudio(){
-    	return $this->hasMany('BienestarWeb\HabitoEstudio','idTutorTutorado','idTutorTutorado');
+    public function habitoEstudio(){
+    	return $this->hasOne('BienestarWeb\HabitoEstudio','idTutorTutorado','idTutorTutorado');
     }
 }

@@ -1,275 +1,272 @@
 @extends('template')
 @section('contenido')
-	<div  class="row">
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
-			@if (count($errors) >0)
-			<div class="alert alert-danger">
-				<ul>
-				@foreach($errors->all() as $error)
-					<li>{{$error}}</li>
-				@endforeach
-				</ul>
-			</div>
-			@endif
-		</div>
-	</div>
-
 {!! Form::open(['url'=>'admin/user','method'=>'POST','autocomplete'=>'off','files'=>'true']) !!}
 {{ Form::token() }}
+<div class="row">
+	<div class="col-md-6">
+		<div class="caja">
+	      <div class="caja-header">
+	         <div class="caja-icon">	<i class="fa fa-address-card"></i></div>
+	         <div class="caja-title">Datos Personales
+				</div>
+	      </div>
+	      <div class="caja-body">
+				<!-- Imagen de usuario -->
+				<div  class="row">
+					<div class="col-lg-6 col-sm-6 col-xs-13">
+						@if (count($errors) >0)
+						<div class="alert alert-danger">
+							<ul>
+							@foreach($errors->all() as $error)
+								<li>{{$error}}</li>
+							@endforeach
+							</ul>
+						</div>
+						@endif
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4"></div>
 
-	<div class="row">
-		<div class="col-md-6">
-			<!-- CAJA de Datos Personales -->
-			<div class="box box-success" name "nuevoUsuario">
-				<!-- HEADER de CAJA de Datos Personales -->
-				<div class="box-header with-border">
-					<i class="fa fa-address-card"></i>
-					<h3 class="box-title">Datos Personales</h3>
+					<div class="col-sm-4">
+						<input type="file" name="foto" class="form-control dropify" value="{{old('foto')}}" data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+					</div>
+					<div class="col-sm-4"></div>
+				</div><br />
+				<div class="form-horizontal">
+					<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
 				</div>
-				<!-- BODY de CAJA de Datos Personales -->
-				<div class="box-body">
-					<!-- Imagen de usuario -->
-					<div class="row">
-						<div class="col-sm-4"></div>
-						<div class="col-sm-4">
-							<input type="file" name="foto" class="dropify" value="{{old('foto')}}" data-default-file="{{ asset('images/avatar3.png') }}" data-allowed-file-extensions="png jpg jpge" />
-						</div>
-						<div class="col-sm-4"></div>
-					</div><br />
-					<!-- Campos Tipo Texto -->
-	            <div class="form-horizontal">
-						<!-- Campo Nombre -->
-						<div class="form-group">
-							<label for="nombre" class="col-sm-3 control-label">Nombre</label>
-	   					<div class="col-sm-8">
-	   						<div class="input-group">
-	   							 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-	   							 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{old('nombre')}}" placeholder="e.g. María Fernanda" autofocus>
-	   						</div>
-	   					</div>
-	   				</div>
-						<!-- Campo Apellido Paterno -->
-	   				<div class="form-group">
-	   					<label for="apellidoPaterno" class="col-sm-3 control-label">Ap. Paterno</label>
-	   					<div class="col-sm-8">
-	   						<div class="input-group">
-	   							 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-	   							 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{old('apellidoPaterno')}}" placeholder="e.g. Guevara">
-	   						</div>
-	   					</div>
-	   				</div>
-						<!-- Campo Apellido Materno -->
-	   				<div class="form-group">
-	   					<label for="apellidoMaterno" class="col-sm-3 control-label">Ap. Materno </label>
-	   					<div class="col-sm-8">
-	   						<div class="input-group">
-	   							 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-	   							 <input maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" placeholder="e.g. Lizárraga">
-	   						</div>
-	   					</div>
-	   				</div>
-						<!-- Campo Direccion -->
-						<div class="form-group">
-	   					<label for="direccion" class="col-sm-3 control-label">Direccion </label>
-	   					<div class="col-sm-8">
-	   						<div class="input-group">
-	   							 <span class="input-group-addon"><i class="fa fa-home"></i></span>
-	   							 <input maxlength="100" type="direccion" class="form-control" name="direccion"  value="{{old('direccion')}}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
-	   						</div>
-	   					</div>
-	   				</div>
-						<!-- Campo Email -->
-	   				<div class="form-group">
-	   					<label for="email" class="col-sm-3 control-label">Email </label>
-	   					<div class="col-sm-8">
-	   						<div class="input-group">
-	   							 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-	   							 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{old('email')}}" placeholder="e.g. mguevaral@unitru.edu.pe">
-	   						</div>
-	   					</div>
-	   				</div>
-						<!-- Campo Telefono -->
-	   				<div class="form-group">
-	   					<label for="telefono" class="col-sm-3 control-label">Teléfono </label>
-	   					<div class="col-sm-8">
-	   						<div class="input-group">
-	   							 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-	   							 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{old('telefono')}}" placeholder="(xxx)xxxxxx">
-	   						</div>
-	   					</div>
-	   				</div>
-						<!-- Campo Celular -->
-	   				<div class="form-group">
-	   					<label for="celular" class="col-sm-3 control-label">Celular </label>
-	   					<div class="col-sm-8">
-	   						<div class="input-group">
-	   							 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-	   							 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="celular" value="{{old('celular')}}" placeholder="(xxx)xxxxxxxxx">
-	   						</div>
-	   					</div>
-	   				</div>
-		   		</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<!-- CAJA de Datos Propios del TIPO_PERSONA -->
-			<div class="box box-success" name "nuevoUsuario">
-				<!-- HEADER de Datos Propios del TIPO_PERSONA -->
-				<div class="box-header with-border">
-					<i class="glyphicon glyphicon-user"></i>
-					<h3 class="box-title" id = "tituloCamposPropios">Datos de Alumno</h3>
-				</div>
-				<!-- BODY de Datos Propios del TIPO_PERSONA -->
-				<div class="box-body">
-					<!-- Campo Tipo Radio (Tipo de Usuario) -->
-					<div class="row" name = "tipos de user">
-						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoAlumno" class="flaticon-answer" style="color:rgba(0,0,0,1);"></i></h3>
-							<input type="radio" id="radioAlumno" name="tipo" value="1" checked onchange="cambiarColorTipo(1)"/>
-							<h5>Alumno</h5>
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoDocente" class="flaticon-classroom" style="color:rgba(0,0,0,0.5);"></i></h3>
-							<input type="radio" id="radioDocente" name="tipo" value="2" onchange="cambiarColorTipo(2)"/>
-							<h5>Docente</h5>
-						</div>
-						<div class="col-md-4 colsm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoAdministrativo" class="flaticon-teacher" style="color:rgba(0,0,0,0.5);"></i></h3>
-							<input type="radio" id="radioAdministrativo" name="tipo" value="3" onchange="cambiarColorTipo(3)" />
-							<h5>Administrativo</h5>
+				<!-- Campos Tipo Texto -->
+				<div class="form-horizontal">
+					<!-- Campo Nombre -->
+					<div class="form-group">
+						<label for="nombre" class="col-sm-3 control-label">Nombre <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
+								 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{old('nombre')}}" placeholder="e.g. María Fernanda" autofocus>
+							</div>
 						</div>
 					</div>
-					<br>
-					<div class="form-horizontal">
+					<!-- Campo Apellido Paterno -->
+					<div class="form-group">
+						<label for="apellidoPaterno" class="col-sm-3 control-label">Ap. Paterno <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
+								 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{old('apellidoPaterno')}}" placeholder="e.g. Guevara">
+							</div>
+						</div>
+					</div>
+					<!-- Campo Apellido Materno -->
+					<div class="form-group">
+						<label for="apellidoMaterno" class="col-sm-3 control-label">Ap. Materno <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
+								 <input required maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" placeholder="e.g. Lizárraga">
+							</div>
+						</div>
+					</div>
+					<!-- Campo Direccion -->
+					<div class="form-group">
+						<label for="direccion" class="col-sm-3 control-label">Direccion </label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-home"></i></span>
+								 <input maxlength="100" type="direccion" class="form-control" name="direccion"  value="{{old('direccion')}}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
+							</div>
+						</div>
+					</div>
+					<!-- Campo Email -->
+					<div class="form-group">
+						<label for="email" class="col-sm-3 control-label">Email <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{old('email')}}" placeholder="e.g. ejemplo@ejemplo.com">
+							</div>
+						</div>
+					</div>
+					<!-- Campo Telefono -->
+					<div class="form-group">
+						<label for="telefono" class="col-sm-3 control-label">Teléfono </label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+								 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{old('telefono')}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxx">
+							</div>
+						</div>
+					</div>
+					<!-- Campo Celular -->
+					<div class="form-group">
+						<label for="celular" class="col-sm-3 control-label">Celular </label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+								 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="celular" value="{{old('celular')}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxxxxx">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	   </div>
+	</div>
+
+	<div class="col-md-6">
+		<div class="caja" name "nuevoUsuario">
+	      <div class="caja-header">
+	         <div class="caja-icon">	<i class="glyphicon glyphicon-user"></i></div>
+	         <div class="caja-title" id="tituloCamposPropios">Datos de Alumno
+				</div>
+	      </div>
+			<div class="caja-body">
+				<!-- Campo Tipo Radio (Tipo de Usuario) -->
+				<div class="row" name = "tipos de user">
+					<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
+						<h3><i id="icoAlumno" class="flaticon-answer" style="color:rgba(0,0,0,1);"></i></h3>
+						<input type="radio" id="radioAlumno" name="tipo" value="1" checked onchange="cambiarColorTipo(1)"/>
+						<h5>Alumno</h5>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
+						<h3><i id="icoDocente" class="flaticon-classroom" style="color:rgba(0,0,0,0.5);"></i></h3>
+						<input type="radio" id="radioDocente" name="tipo" value="2" onchange="cambiarColorTipo(2)"/>
+						<h5>Docente</h5>
+					</div>
+					<div class="col-md-4 colsm-4 col-xs-4" style="text-align: center;">
+						<h3><i id="icoAdministrativo" class="flaticon-teacher" style="color:rgba(0,0,0,0.5);"></i></h3>
+						<input type="radio" id="radioAdministrativo" name="tipo" value="3" onchange="cambiarColorTipo(3)" />
+						<h5>Administrativo</h5>
+					</div>
+				</div>
+				<br>
+				<div class="form-horizontal">
+					<div class="form-group">
+						<label for="codigo" class="col-sm-3 control-label">Código <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
+								 <input required pattern="[0-9]+" minlength="4" maxlength="15" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control" name="codigo"  value="{{old('codigo')}}" placeholder="xxxx">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-horizontal">
+					<!-- Campos para el tipo ADMINISTRATIVO -->
+					<div class="camposAdministrativo" id="formAdministrativo" style='display:none;'>
 						<div class="form-group">
-							<label for="codigo" class="col-sm-3 control-label">Código </label>
+							<label for="cargo" class="col-sm-3 control-label">Cargo </label>
 							<div class="col-sm-8">
 								<div class="input-group">
-									 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
-									 <input pattern="[0-9]+" minlength="4" maxlength="15" type="text" class="form-control" name="codigo"  value="{{old('codigo')}}" placeholder="xxxx">
+									 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+									 <input type="cargo" class="form-control" name="cargo" value="{{old('cargo')}}" placeholder="Cargo">
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="form-horizontal">
-
-						<!-- Campos para el tipo ADMINISTRATIVO -->
-						<div class="camposAdministrativo" id = "formAdministrativo" style='display:none;'>
-							<div class="form-group">
-								<label for="cargo" class="col-sm-3 control-label">Cargo </label>
-								<div class="col-sm-8">
-									<div class="input-group">
-										 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-										 <input type="cargo" class="form-control" name="cargo" value="{{old('cargo')}}" placeholder="Cargo">
-									</div>
+					<!-- Campos para el tipo ALUMNO -->
+					<div class="camposAlumno" id="formAlumno" style='display:block;'>
+						<div class="form-group">
+							<label for="condicion" class="col-sm-3 control-label">Condición </label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
+									<select name="condicion" class="form-control" required>
+					 					<option value="1">Matriculado</option>
+					 					<option value="2">No Matriculado</option>
+										<option value="3">Egresado</option>
+					 				</select>
 								</div>
 							</div>
-						</div>
-
-						<!-- Campos para el tipo ALUMNO -->
-						<div class="camposAlumno" id = "formAlumno" style='display:block;'>
-							<div class="form-group">
-								<label for="condicion" class="col-sm-3 control-label">Condición </label>
-								<div class="col-sm-8">
-									<div class="input-group">
-										<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
-										<select name="condicion" class="form-control" required>
-						 					<option value="1">Matriculado</option>
-						 					<option value="2">No Matriculado</option>
-											<option value="3">Egresado</option>
-						 				</select>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Campos para el tipo DOCENTE -->
-						<div class="camposDocente" id = "formDocente" style='display:none;'>
-							<div class="form-group">
-								<label for="categoria" class="col-sm-3 control-label">Categoría </label>
-								<div class="col-sm-8">
-									<div class="input-group">
-										<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-										<select name="categoria" class="form-control">
-						 					<option value="1">Principal</option>
-						 					<option value="2">Asociado</option>
-											<option value="3">Auxiliar</option>
-											<option value="4">Contratado</option>
-						 				</select>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="dedicacion" class="col-sm-3 control-label">Dedicación </label>
-								<div class="col-sm-8">
-									<div class="input-group">
-										<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-										<select name="dedicacion" class="form-control">
-						 					<option value="1">Exclusiva</option>
-						 					<option value="2">Tiempo Completo</option>
-											<option value="3">Tiempo Parcial</option>
-						 				</select>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="modalidad" class="col-sm-3 control-label">Modalidad </label>
-								<div class="col-sm-8">
-									<div class="input-group">
-										<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-										<select name="modalidad" class="form-control">
-						 					<option value="1">Ordinario</option>
-						 					<option value="2">Contratado</option>
-						 				</select>
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
-			<!-- CAJA de FUNCION de usuario -->
-			<div class="box box-success" name "nuevoUsuario">
-				<!-- HEADER de CAJA de FUNCION de usuario -->
-				<div class="box-header with-border">
-					<i class="glyphicon glyphicon-lock"></i>
-					<h3 class="box-title">Privilegios</h3>
-				</div>
-				<!-- BODY de CAJA de FUNCION de usuario -->
-				<div class="box-body">
-					<div class="row">
-						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoMiembro" class="flaticon-band" style="color:rgba(0,0,0,1);"></i></h3>
-							<input type="radio" id="radioMiembro" name="funcion" value="1" checked onchange="cambiarColorFuncion(1)"/>
-							<h5>Miembro</h5>
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoProgramador" class="flaticon-learning" style="color:rgba(0,0,0,0.5);"></i></h3>
-							<input type="radio" id="radioProgramador" name="funcion" value="2" onchange="cambiarColorFuncion(2)"/>
-							<h5>Programador</h5>
-						</div>
-						<div class="col-md-4 colsm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoAdmin" class="flaticon-problem" style="color:rgba(0,0,0,0.5);"></i></h3>
-							<input type="radio" id="radioAdmin" name="funcion" value="3" onchange="cambiarColorFuncion(3)" />
-							<h5>Administrador</h5>
 						</div>
 					</div>
-				</div>
-				<!-- FOOTER de CAJA de FUNCION de usuario -->
-				<div class="box-footer">
-					<div class="form-group">
-						<button class="btn btn-success" type="submit"> Guardar</button>
-						<a href="#"><button class="btn btn-danger" type="reset"> Cancelar</button></a>
+
+					<!-- Campos para el tipo DOCENTE -->
+					<div class="camposDocente" id="formDocente" style='display:none;'>
+						<div class="form-group">
+							<label for="categoria" class="col-sm-3 control-label">Categoría </label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+									<select name="categoria" class="form-control">
+					 					<option value="1">Principal</option>
+					 					<option value="2">Asociado</option>
+										<option value="3">Auxiliar</option>
+										<option value="4">Contratado</option>
+					 				</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="dedicacion" class="col-sm-3 control-label">Dedicación </label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+									<select name="dedicacion" class="form-control">
+					 					<option value="1">Exclusiva</option>
+					 					<option value="2">Tiempo Completo</option>
+										<option value="3">Tiempo Parcial</option>
+					 				</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="modalidad" class="col-sm-3 control-label">Modalidad </label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+									<select name="modalidad" class="form-control">
+					 					<option value="1">Ordinario</option>
+					 					<option value="2">Contratado</option>
+					 				</select>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
+		<!-- CAJA de FUNCION de usuario -->
+		<div class="caja" name "nuevoUsuario">
+	      <div class="caja-header">
+	         <div class="caja-icon">	<i class="glyphicon glyphicon-lock"></i></div>
+	         <div class="caja-title">Privilegios
+				</div>
+	      </div>
+			<!-- BODY de CAJA de FUNCION de usuario -->
+			<div class="caja-body">
+				<div class="row">
+					<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
+						<h3><i id="icoMiembro" class="flaticon-band" style="color:rgba(0,0,0,1);"></i></h3>
+						<input type="radio" id="radioMiembro" name="funcion" value="1" checked onchange="cambiarColorFuncion(1)"/>
+						<h5>Miembro</h5>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
+						<h3><i id="icoProgramador" class="flaticon-learning" style="color:rgba(0,0,0,0.5);"></i></h3>
+						<input type="radio" id="radioProgramador" name="funcion" value="2" onchange="cambiarColorFuncion(2)"/>
+						<h5>Programador</h5>
+					</div>
+					<div class="col-md-4 colsm-4 col-xs-4" style="text-align: center;">
+						<h3><i id="icoAdmin" class="flaticon-problem" style="color:rgba(0,0,0,0.5);"></i></h3>
+						<input type="radio" id="radioAdmin" name="funcion" value="3" onchange="cambiarColorFuncion(3)" />
+						<h5>Administrador</h5>
+					</div>
+				</div>
+			</div>
+			<br><br>
+			<!-- FOOTER de CAJA de FUNCION de usuario -->
+	      <div class="caja-footer">
+				<div class="pull-right">
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+				</div>
+	      </div>
+		</div>
 	</div>
+
+</div>
 
 {!! Form::close() !!}
 
@@ -309,4 +306,10 @@
 		document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 	}
 </script>
+<style type="text/css">
+	.ast{
+		color: red;
+		font-size: 20px;
+	}
+</style>
 @endsection

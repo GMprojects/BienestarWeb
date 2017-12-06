@@ -115,7 +115,6 @@ class EvidenciaActividadController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
         $evidenciaActividad = EvidenciaActividad::findOrFail($id);
         $path = $evidenciaActividad->ruta;
       //  unlink($path);

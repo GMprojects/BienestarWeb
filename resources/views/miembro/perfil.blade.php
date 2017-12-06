@@ -116,7 +116,7 @@
                                  <div class="icon">
                                     <i class="fa fa-thumbs-o-up"></i>
                                  </div>
-                                 <a href="#" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
                               </div>
                            </div>
 
@@ -155,7 +155,7 @@
                                  <div class="icon">
                                     <i class="fa fa-thumbs-o-up"></i>
                                  </div>
-                                 <a href="#" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'2']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
                               </div>
                            </div>
 
@@ -199,7 +199,7 @@
                                  <div class="icon">
                                     <i class="fa fa-thumbs-o-up"></i>
                                  </div>
-                                 <a href="#" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'3']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
                               </div>
                            </div>
 

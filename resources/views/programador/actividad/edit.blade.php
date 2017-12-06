@@ -55,12 +55,12 @@
 					<label >Modalidad </label>&nbsp; &nbsp;&nbsp; &nbsp;
 					@if ($actividad->idTipoActividad < 8 ||$actividad->idTipoActividad > 9)
 						@if ($actividad->modalidad == '1')
-								<td><small class="label bg-aqua">Individual</small></td>
+								<span class="label ff-bg-aqua">INDIVIDUAL</span>
 						@else
-								<td><small class="label bg-purple">Grupal</small></td>
+								<span class="label ff-bg-green2">GRUPAL</span>
 						@endif
 					@else
-						<td><small class="label bg-green">Libre</small></td>
+						<span class="label ff-bg">LIBRE</span>
 					@endif
 				</div>
 

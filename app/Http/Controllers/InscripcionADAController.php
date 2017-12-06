@@ -100,7 +100,7 @@ class InscripcionADAController extends Controller
      * @return \Illuminate\Http\Response
      */
       public function store(Request $request){
-         
+
          $actividad = Actividad::findOrFail($request->idActividad);
          $user =  Auth::user();
          $inscripcionADA = $actividad->inscripcionesADA()->create([]);
@@ -201,7 +201,7 @@ class InscripcionADAController extends Controller
          }
       }
       $actividad = Actividad::findOrFail($id);
-      $actividad->asistenciaRegistrada = 1;
+      $actividad->estado = 2;
       $actividad->update();
 
       return redirect()->back();

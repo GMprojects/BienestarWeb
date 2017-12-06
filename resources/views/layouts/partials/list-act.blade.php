@@ -18,15 +18,15 @@
       <div class="act-mini-2">
          <h5 style="margin-top:0px; margin-bottom:7px;">
             @if($actividad->actividadGrupal != null)
-               <span class="label label-success">{{ $actividad->actividadGrupal->cuposOcupados }} Asistirán</span>
-               <span class="label label-danger">{{ $actividad->actividadGrupal->cuposDisponibles }} Disponibles</span>
+               <span class="label ff-bg-green">{{ $actividad->actividadGrupal->cuposOcupados }} Asistirán</span>
+               <span class="label ff-bg-red">{{ $actividad->actividadGrupal->cuposDisponibles }} Disponibles</span>
             @elseif($actividad->idTipoActividad == 4)
-               <span class="label label-danger">TUTORADOS</span>
+               <span class="label ff-bg-blue">TUTORADOS</span>
             @else
                @if ($actividad->idTipoActividad != 8 && $actividad->idTipoActividad  != 9)
-                  <span class="label label-info">Inidividual</span>
+                  <span class="label ff-bg-aqua">INDIVIDUAL</span>
                @else
-                  <small class="label label-info">Libre</small>
+                  <span class="label ff-bg">LIBRE</span>
                @endif
             @endif
          </h5>

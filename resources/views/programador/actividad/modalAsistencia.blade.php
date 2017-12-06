@@ -6,7 +6,7 @@
 		<!-- /.modal-content -->
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
 				<h4 class="modal-title"><b>Registrar asistencia</b></h4>
 			</div>
 			<div class="modal-body">
@@ -20,22 +20,20 @@
 							</thead>
 							<tbody>
 								@php($i=0)
-			               @if($inscripciones != null)
-		                     @foreach($inscripciones as $inscripcion)
-		                       <tr>
-   	                           @php($i++)
-   	                           <td> {{ $inscripcion->codigo }} </td>
-   	                           <td> {{ $inscripcion->nombre }}  {{ $inscripcion->apellidoPaterno }}  {{ $inscripcion->apellidoMaterno }} </td>
-   	                           <td>
-                                    @if ($inscripcion->asistencia == 0)
-                                       <input id="check" type="checkbox" value={{ $inscripcion->idInscripcionADA.'-'.$inscripcion->idTipoPersona }} name="asistencia[]">
-                                    @else
-                                       <input id="check" type="checkbox" checked value={{ $inscripcion->idInscripcionADA.'-'.$inscripcion->idTipoPersona }} name="asistencia[]">
-                                    @endif
-   	                           </td>
-		                       </tr>
-		                     @endforeach
-			               @endif
+	                     @foreach($inscripciones as $inscripcion)
+	                       <tr>
+	                           @php($i++)
+	                           <td> {{ $inscripcion->codigo }} </td>
+	                           <td> {{ $inscripcion->nombre }}  {{ $inscripcion->apellidoPaterno }}  {{ $inscripcion->apellidoMaterno }} </td>
+	                           <td>
+                                 @if ($inscripcion->asistencia == 0)
+                                    <input id="check" type="checkbox" value={{ $inscripcion->idInscripcionADA.'-'.$inscripcion->idTipoPersona }} name="asistencia[]">
+                                 @else
+                                    <input id="check" type="checkbox" checked value={{ $inscripcion->idInscripcionADA.'-'.$inscripcion->idTipoPersona }} name="asistencia[]">
+                                 @endif
+	                           </td>
+	                       </tr>
+	                     @endforeach
 							</tobody>
 						</table>
 					</div>

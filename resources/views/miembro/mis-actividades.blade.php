@@ -29,7 +29,11 @@
                            <div class="col-md-2 pull-right">
                              <div class="mis-act-op" valign="middle">
                                 @if ( Auth::user()->id == $actividad->idUserResp)
-                                    <a href="{{ action('ActividadController@execute',$actividad->idActividad) }}" class="btn btn-success"> <i class="fa fa-cogs"></i> </a>
+                                    <a href="{{ action('ActividadController@execute',$actividad->idActividad) }}" class="btn btn-ff-green" data-toggle="tooltip" data-placement="bottom" title="Ejecutar Actividad">
+                                       <span>
+                                         <i class="fa fa-play"><i class="fa fa-cogs"></i></i>
+                                       </span>
+                                    </a>
                                 @endif
                             </div>
                            </div>
@@ -46,11 +50,12 @@
                            </div>
                            <div class="col-md-2 pull-right">
                              <div class="mis-act-op" valign="middle">
-                               <a href="{{ action('ActividadController@edit',$actividad->idActividad) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
-                               @if ($actividad->estado != 3 && $actividad->estado != 2)
-                                  <a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal" class="btn btn-danger"><i class="fa fa-remove"></i></a>
+                               @if ($actividad->estado != 2)
+                                  <a href="{{ action('ActividadController@edit',$actividad->idActividad) }}" class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar Actividad"><i class="fa fa-edit"></i></a>
                                @endif
-
+                               @if ($actividad->estado != 3 && $actividad->estado != 2)
+                                  <a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal" class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-remove"></i></a>
+                               @endif
                             </div>
                            </div>
                         </div>

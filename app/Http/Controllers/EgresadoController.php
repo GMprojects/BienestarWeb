@@ -48,7 +48,6 @@ class EgresadoController extends Controller
             'nombre' => 'required|max:45',
             'apellidoPaterno' => 'required|max:20',
             'apellidoMaterno' => 'required|max:20',
-            'email' => 'required|max:100',
             'codigo' => 'required|max:20|unique:egresado',
             'anioEgreso' => 'required',
             'numeroSemestre' => ['required', Rule::in('1','2')],
@@ -110,10 +109,16 @@ class EgresadoController extends Controller
     {
         $egresado = Egresado::findOrFail($id);
         $egresado->grado = $request->grado;
+        $egresado->nombre = $request->nombre;
+        $egresado->apellidoPaterno = $request->apellidoPaterno;
+        $egresado->apellidoMaterno = $request->apellidoMaterno;
         $egresado->direccion = $request->direccion;
         $egresado->telefono = $request->telefono;
         $egresado->celular = $request->celular;
         $egresado->email = $request->email;
+        $egresado->codigo = $request->codigo;
+        $egresado->anioEgreso = $request->anioEgreso;
+        $egresado->numeroSemestre = $request->numeroSemestre;
         $egresado->update();
 
         return Redirect::to('admin/egresado');

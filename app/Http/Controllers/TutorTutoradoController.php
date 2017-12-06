@@ -79,12 +79,12 @@ class TutorTutoradoController extends Controller
      */
     public function show(Request $request, $idTutor)
     {
-
         $tutor = Docente::findOrFail($idTutor);
         $tutorados = TutorTutorado::join('alumno','tutorTutorado.idAlumno','=','alumno.idAlumno')
                                   ->join('user','alumno.idUser', '=','user.id' )
                                   ->where([['idDocente',  $idTutor],['anioSemestre',  $request->anioSemestre],['numeroSemestre',  $request->numeroSemestre]])
                                   ->select('tutorTutorado.idTutorTutorado', 'alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo','tutorTutorado.anioSemestre','tutorTutorado.numeroSemestre','tutorTutorado.habitoEstudioRespondido')
+                                  ->orderBy('user.nombre', 'asc')
                                   ->get();
         return view('admin.tutorTutorado.show',['tutor' => $tutor->user,'idTutor' => $tutor->idDocente, 'tutorados' => $tutorados ]);
     }
@@ -139,16 +139,24 @@ class TutorTutoradoController extends Controller
      * @param  \BienestarWeb\TutorTutorado  $tutorTutorado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $idTutor)
-    {
-        //dd($request);
+    public function update(Request $request, $idTutor){
         $docente = Docente::findOrFail($idTutor);
-        $tutorTutorados = TutorTutorado::where([['idDocente',  $idTutor],['anioSemestre',  $request->anioSemestre],['numeroSemestre',  $request->numeroSemestre]])->delete();
+        Log::info($docente);
+        $tutorTutorados = TutorTutorado::where([['idDocente',  $idTutor],['anioSemestre',  $request->anioSemestre],['numeroSemestre',  $request->numeroSemestre]])->get();
         foreach ($tutorTutorados as $tutorTutorado) {
            if ($tutorTutorado->habitoEstudioRespondido == 1) {
-              HabitoEstudio::where('idTutorTutorado', $tutorTutorado->idTutorTutorado)->delete();
-           }
-
+              Log::info('Habito d e Estudio Respondido');
+              $habitoEstudio = HabitoEstudio::where('idTutorTutorado', $tutorTutorado->idTutorTutorado);
+              $preguntasHabito = PreguntaHabito::get();
+              foreach ($preguntasHabito as $preguntaHabito){
+                 $habitoEstudio->respuestasHabito()->detach($preguntaHabito);
+              }
+              $habitoEstudio->delete();
+           }else{
+             Log::info('Habito d e Estudio NO Respondido');
+          }
+          Log::info('BORRAR tutorTUTORADO');
+           $docente->tutorados()->detach($tutorTutorado->idAlumno);
         }
 
 
@@ -281,8 +289,8 @@ class TutorTutoradoController extends Controller
       $tutorados = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
            ->join('user','alumno.idUser', 'user.id' )
            ->where([['tutorTutorado.idDocente', $docente->idDocente]])
-           ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+           ->select('tutorTutorado.idTutorTutorado', 'alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo','tutorTutorado.anioSemestre','tutorTutorado.numeroSemestre', 'tutorTutorado.habitoEstudioRespondido')
            ->get();
-      return view('admin.tutorTutorado.show',['tutor' => $docente->user,'idTutor' => $docente->idDocente, 'tutorados' => $tutorados ]);
+      return view('miembro.tutor.indexTutorado',['tutor' => $docente->user,'idTutor' => $docente->idDocente, 'tutorados' => $tutorados ]);
    }
 }

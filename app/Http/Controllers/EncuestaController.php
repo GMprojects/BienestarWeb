@@ -22,11 +22,10 @@ class EncuestaController extends Controller
      */
     public function index(Request $request)
     {
-        $encuestas = Encuesta::Search($request->titulo)->get();
-        $encuestas->each(function($encuestas){
-            $encuestas->tipoActividad;
-        });
-        return view('admin.encuesta.index')->with('encuestas',$encuestas);
+        $tiposActividad=TipoActividad::get();
+        $encuestas = Encuesta::get();
+        return view('admin.encuesta.index')->with('encuestas',$encuestas)
+                                           ->with('tiposActividad',$tiposActividad);
     }
 
     /**

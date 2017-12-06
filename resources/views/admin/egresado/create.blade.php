@@ -1,98 +1,99 @@
 @extends('template')
 @section('contenido')
-	<div  class="row">
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
-			@if (count($errors) >0)
-			<div class="alert alert-danger">
-				<ul>
-				@foreach($errors->all() as $error)
-					<li> {{ $error }} </li>
-				@endforeach
-				</ul>
-			</div>
-			@endif
-		</div>
-	</div>
-
 {!! Form::open(['url'=>'admin/egresado', 'method'=>'POST', 'autocomplete'=>'off']) !!}
 {{ Form::token() }}
-
-	<div class="row">
-		<div class="col-md-6">
-			<div class="box box-success">
-				<div class="box-header with-border">
-					<i class="fa fa-address-card"></i>
-					<h3 class="box-title">Datos Personales</h3>
+<div  class="row">
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
+		@if (count($errors) >0)
+		<div class="alert alert-danger">
+			<ul>
+			@foreach($errors->all() as $error)
+				<li> {{ $error }} </li>
+			@endforeach
+			</ul>
+		</div>
+		@endif
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="caja">
+	      <div class="caja-header">
+	         <div class="caja-icon"><i class="fa fa-address-card" style="font-size: 1em;"></i></div>
+	         <div class="caja-title">Datos Personales
 				</div>
-				<div class="box-body">
+	      </div>
+	      <div class="caja-body">
 					<div class="form-horizontal">
-
+						<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
+					</div>
+					<div class="form-horizontal">
 						<div class="form-group">
-							<label for="nombre" class="col-sm-3 control-label">Nombres: </label>
+							<label for="nombre" class="col-sm-3 control-label">Nombres <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input type="text" class="form-control" name="nombre" required value="{{old('nombre')}}" placeholder="Nombres...">
+									 <input required type="text" class="form-control" name="nombre" required value="{{old('nombre')}}" placeholder="Nombres">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="apellidoPaterno" class="col-sm-3 control-label">Ape. Paterno: </label>
+							<label for="apellidoPaterno" class="col-sm-3 control-label">Ape. Paterno <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input type="text" class="form-control" name="apellidoPaterno" required value="{{old('apellidoPaterno')}}" placeholder="Apellido Paterno...">
+									 <input required type="text" class="form-control" name="apellidoPaterno" required value="{{old('apellidoPaterno')}}" placeholder="Apellido Paterno">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="apellidoMaterno" class="col-sm-3 control-label">Ape. Materno: </label>
+							<label for="apellidoMaterno" class="col-sm-3 control-label">Ape. Materno <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input type="text" class="form-control" name="apellidoMaterno" required value="{{old('apellidoMaterno')}}" placeholder="Apellido Materno...">
+									 <input required type="text" class="form-control" name="apellidoMaterno" required value="{{old('apellidoMaterno')}}" placeholder="Apellido Materno">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="direccion" class="col-sm-3 control-label">Direccion: </label>
+							<label for="direccion" class="col-sm-3 control-label">Direccion </label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-home"></i></span>
-									 <input type="text" class="form-control" name="direccion" required value="{{old('direccion')}}" placeholder="Direccion...">
+									 <input type="text" class="form-control" name="direccion" value="{{old('direccion')}}" placeholder="Direccion">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="telefono" class="col-sm-3 control-label">Teléfono: </label>
+							<label for="telefono" class="col-sm-3 control-label">Teléfono </label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-									 <input type="text" class="form-control" name="telefono" required value="{{old('telefono')}}" placeholder="Teléfono...">
+									 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{old('telefono')}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxx">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="celular" class="col-sm-3 control-label">Celular: </label>
+							<label for="celular" class="col-sm-3 control-label">Celular </label>
 							<div class="col-sm-8">
 								<div class="input-group">
-									 <span class="input-group-addon"><i class="fa fa-mobile-phone"></i></span>
-									 <input type="text" class="form-control" name="celular" required value="{{old('celular')}}" placeholder="Celular...">
+									 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+									 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="celular" value="{{old('celular')}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxxxxx">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="email" class="col-sm-3 control-label">Email: </label>
+							<label for="email" class="col-sm-3 control-label">Email </label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-									 <input type="email" class="form-control" name="email" required value="{{old('email')}}" placeholder="Correo electrónico...">
+									 <input minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{old('email')}}" placeholder="e.g. ejemplo@ejemplo.com">
 								</div>
 							</div>
 						</div>
@@ -102,47 +103,50 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="box box-success">
-				<div class="box-header with-border">
-					<i class="fa fa-graduation-cap"></i>
-					<h3 class="box-title">Datos del Egresado</h3>
-				</div>
-
-				<div class="box-body">
+			<div class="caja">
+		      <div class="caja-header">
+		         <div class="caja-icon"><i class="fa fa-graduation-cap" style="font-size: 1em;"></i></div>
+		         <div class="caja-title">Datos del Egresado
+					</div>
+		      </div>
+		      <div class="caja-body">
 					<div class="form-horizontal">
 
 						<div class="form-group">
-							<label for="codigo" class="col-sm-3 control-label">Código: </label>
+							<label for="codigo" class="col-sm-3 control-label">Código <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
-									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input type="text" class="form-control" name="codigo" required value="{{old('codigo')}}" placeholder="Nombre">
+									 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
+									 <input required pattern="[0-9]+" minlength="4" maxlength="15" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control" name="codigo"  value="{{old('codigo')}}" placeholder="xxxx">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="anioEgreso" class="col-sm-3 control-label">Año Egreso: </label>
+							<label for="anioEgreso" class="col-sm-3 control-label">Año Egreso <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
-									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input type="text" class="form-control" name="anioEgreso" required value="{{old('anioEgreso')}}" placeholder="Año Egreso...">
+									 <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+									 <input type="number" required min="1950" max="{{date("Y")}}" id="anioEgreso" name="anioEgreso" class="form-control" value ="{{old('anioEgreso')}}"  required placeholder="1950">
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="numeroSemestre" class="col-sm-3 control-label">Númetro de Semestre: </label>
+							<label for="numeroSemestre" class="col-sm-3 control-label">Ciclo <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
-									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input type="text" class="form-control" name="numeroSemestre" required value="{{old('numeroSemestre')}}" placeholder="Año Egreso...">
+									<span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+									<select name="numeroSemestre" class="form-control">
+										<option value="1">I</option>
+										<option value="2">II</option>
+					 				</select>
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label for="grado" class="col-sm-3 control-label">Condición: </label>
+							<label for="grado" class="col-sm-3 control-label">Grado <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
@@ -156,16 +160,22 @@
 							</div>
 						</div>
 					</div>
-					<div class="box-footer">
-						<div class="form-group">
-							<button class="btn btn-primary" type="submit"> Guardar</button>
-							<button class="btn btn-danger" type="reset"> Cancelar</button>
-						</div>
+			   </div>
+				<div class="caja-footer">
+					<div class="pull-right">
+						<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
+		      </div>
+		   </div>
+	  </div>
+</div>
 {!! Form::close() !!}
+
+<style type="text/css">
+	.ast{
+		color: red;
+		font-size: 20px;
+	}
+</style>
 @endsection
