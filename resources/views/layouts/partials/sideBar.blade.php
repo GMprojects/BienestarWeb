@@ -1,6 +1,8 @@
 <div class="navbar navbar-fixed-top toggled" id="sidebar-wrapper" role="navigation">
    <ul id="buttons-list" class="nav sidebar-nav">
-
+      <li>
+         <a class="ff-li-a" href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}"><i class="fa fa-puzzle-piece"></i>Mis Actividades</a>         
+      </li>
       <!-- PERMISOS DE ADMINISTRADOR/PROGRAMADOR -->
       @if( Auth::user()->funcion != 1)
          {{---<li>
@@ -95,7 +97,7 @@
          dataType: 'json',
          success:function(data) {
             if(data.tutorados > 0){
-               $('#buttons-list').append('<a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados',[]) }}"><i class="fa fa-plus"></i>Mis Tutorados</a>');
+               $('#buttons-list').append('<a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados',[]) }}"><i class="fa fa-users"></i>Mis Tutorados</a>');
             }
          },
          error:function() {

@@ -8,9 +8,10 @@
 	<div class="caja-body">
 		<div class="row">
 			@if ($actividad->fechaEjecutada == null)
+				<p style="color:red;"> <span class="ast">*</span> Requerido
 				<div class="col-md-4">
 					<div class="form-group">
-						<label for="fechaEjecutada">Fecha de Ejecutada:</label>
+						<label for="fechaEjecutada">Fecha de Ejecutada:</label><span class="ast">*</span>
 						<div class="input-group date">
 						  <div class="input-group-addon">
 							<i class="fa fa-calendar"></i>
@@ -22,7 +23,7 @@
 				<div class="col-md-4">
 					<div class="bootstrap-timepicker">
 						<div class="form-group">
-							<label for="horaEjecutada">Hora de Ejecutada:</label>
+							<label for="horaEjecutada">Hora de Ejecutada:</label><span class="ast">*</span>
 							<div class="input-group">
 								<div class="input-group-addon">
 								  <i class="fa fa-clock-o"></i>
@@ -34,7 +35,7 @@
 				</div>
 			@else
 				<div class="form-group">
-					<label><b>Plazo de la Convocatoria: </b> </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->actividadMovilidad['fechaInicioConvocatoria'])) }} &nbsp;-  &nbsp;{{ date("d/m/Y",strtotime($actividad->actividadMovilidad['fechaFinConvocatoria'])) }}<br>
+					<label><b>Plazo de la Convocatoria: </b> </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }} &nbsp;-  &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaFin)) }}<br>
 				</div>
 				<div class="form-group">
 					<label><b>Fecha de Ejecución: </b> </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaEjecutada)) }} &nbsp;- &nbsp;{{ date("h:i A",strtotime($actividad->horaEjecutada)) }}<br>
@@ -43,6 +44,7 @@
 		</div>
 	</div>
 	@if ($actividad->fechaEjecutada == null)
+		<p style="color:red;"> <span class="ast">*</span> Requerido
 		<div class="caja-footer">
 			<div class="pull-right">
 				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
@@ -71,14 +73,14 @@
                <th>Opciones</th>
                </thead>
                <tbody>
-						@if (count($actividad->actividadMovilidad->beneficiariosMovilidad) != 0)
-							@foreach ($actividad->actividadMovilidad->beneficiariosMovilidad as $beneficiario)
+						@if (count($actividad->beneficiariosMovilidad) != 0)
+							@foreach ($actividad->beneficiariosMovilidad as $beneficiario)
 								<tr>
 									<td>{{ $beneficiario->user->codigo }}</td>
 									<td>{{ $beneficiario->user->nombre.' '.$beneficiario->user->apellidoPaterno.' '.$beneficiario->user->apellidoMaterno }}</td>
 									<td>
-										<a href="{{ action('BeneficiarioController@editBeneficiario',[$actividad->idActividad,  $beneficiario->pivot->idBeneficiarioMovilidad ]) }}"><button class="btn btn-ff-blues">  <i class="fa fa-eye"></i> Ver Detalles </button></a>
-										<a href="" data-target = "#modal-deletebm-{{ $beneficiario->pivot->idBeneficiarioComedor }}" data-toggle = "modal"><button class="btn btn-ff-red"> <i class="fa fa-remove"></i> Eliminar</button></a>
+										<a href="{{ action('BeneficiarioController@editBeneficiario',[$actividad->idActividad,  $beneficiario->pivot->idBeneficiarioMovilidad ]) }}"><button class="btn btn-ff-blues">  <i class="fa fa-eye"></i></button></a>
+										<a href="" data-target = "#modal-deletebm-{{ $beneficiario->pivot->idBeneficiarioMovilidad }}" data-toggle = "modal"><button class="btn btn-ff-red"> <i class="fa fa-remove"></i></button></a>
 									</td>
 								</tr>
 								@include('programador.actividad.beneficiario.modal')

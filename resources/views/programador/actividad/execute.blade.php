@@ -163,6 +163,10 @@
 		padding: 0px 0px 0px 0.4px;
 		font-size: 15px;
 	}
+	.ast{
+		color: red;
+		font-size: 20px;
+	}
 </style>
 
 @endsection

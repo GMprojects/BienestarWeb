@@ -97,8 +97,8 @@
 						<div class="form-group">
 							<label for="observaciones">Observaciones</label>
 							<textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas observaciones que pueda dar sobre su trabajo"></textarea>
-			 				<p id="contadorRecomendaciones">0/500</p>
-						</div>						
+			 				<p id="contadorObservaciones">0/500</p>
+						</div>
 					</div>
 				</div>
 			</div>

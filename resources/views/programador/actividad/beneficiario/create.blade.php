@@ -35,11 +35,12 @@
 		<div class="caja-title">Detalles de Beneficiario</div>
 	</div>
 	<div class="caja-body">
+		<p style="color:red;"> <span class="ast">*</span> Requerido
 		<div class="row">
       	@if ($tipoActividad == '8') <!-- movilidada -->
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                <div class="form-group">
-                  <label for="fechaInicio">Fecha de Inicio *</label>
+                  <label for="fechaInicio">Fecha de Inicio </label><span class="ast">*</span>
                   <div class="input-group date">
                     <div class="input-group-addon">
                      <i class="fa fa-calendar"></i>
@@ -50,7 +51,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                <div class="form-group">
-                  <label for="fechaFin">Fecha de Fin *</label>
+                  <label for="fechaFin">Fecha de Fin </label><span class="ast">*</span>
 						<div class="input-group date">
                     <div class="input-group-addon">
                      <i class="fa fa-calendar"></i>
@@ -61,38 +62,39 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                <div class="form-group">
-                        <label for="duracionMeses">N° Meses *</label>
+                        <label for="duracionMeses">N° Meses </label><span class="ast">*</span>
                         <input type="number" id="duracionMeses"  min="0" name="duracionMeses" class="form-control" value ="{{old('duracionMeses')}}"required  placeholder="0">
                </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                <div class="form-group">
-                        <label for="duracionAnio">N° Años *</label>
+                        <label for="duracionAnio">N° Años </label><span class="ast">*</span>
                         <input type="number" id="duracionAnio" min="0" name="duracionAnio" class="form-control" value ="{{old('duracionAnio')}}" required placeholder="0">
                </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                <div class="form-group">
-                  <label for="institucion">Intitución *</label>
+                  <label for="institucion">Intitución </label><span class="ast">*</span>
                   <input type="text" name="institucion" class="form-control"  required value ="{{old('institucion')}}" placeholder="Institución">
                </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                <div class="form-group">
-                  <label for="pais">País *</label>
+                  <label for="pais">País </label><span class="ast">*</span>
                   <input type="text" name="pais" class="form-control"  required value ="{{old('pais')}}" placeholder="País">
                </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                <div class="form-group">
                   <label for="observaciones">Observaciones </label>
-                  <textarea name="observaciones"  class="form-control" value ="{{old('observaciones')}}"  rows="6" cols="30" placeholder="Describir observaciones... "></textarea>
+                  <textarea name="observaciones" id="observaciones" class="form-control" value ="{{old('observaciones')}}"  rows="6" cols="30" placeholder="Describir observaciones... "></textarea>
+						<p id="contadorObservaciones">0/500</p>
               </div>
            </div>
       	@else<!-- comedor -->
 	         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 	            <div class="form-group">
-	               <label for="fechaBeneficio">Fecha de Beneficio *</label>
+	               <label for="fechaBeneficio">Fecha de Beneficio </label><span class="ast">*</span>
 	               <div class="input-group date">
 	                 <div class="input-group-addon">
 	                  <i class="fa fa-calendar"></i>
@@ -103,7 +105,7 @@
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 	            <div class="form-group">
-	               <label for="tipoBeneficio">Tipo Beneficio *</label>
+	               <label for="tipoBeneficio">Tipo Beneficio </label><span class="ast">*</span>
 	               <select name="tipoBeneficio" id="tipoBeneficio"  required class="form-control">
 	                     <option value="">Seleccione Tipo de Actividad</option>
 	                     <option value="1">Beca</option>
@@ -188,7 +190,8 @@ $('#fechaInicio').datepicker({
    format: 'dd/mm/yyyy'
 });
 $(document).ready(function() {
-
+		 init_contador('#observaciones', '#contadorObservaciones');
+		 init_contador('#recomendaciones', '#contadorRecomendaciones');
 		 $('#tabAlumnos').DataTable({
 				"lengthMenu": [ 10, 25, 50, 75, 100 ],
 				"oLanguage" : {
@@ -219,6 +222,21 @@ $(document).ready(function() {
 		 });
  		//FalumnosLibres
 	});
+
+	function init_contador(idTextArea, idContador){
+		function update_Contador(idTextArea, idContador){
+			var contador = $(idContador);
+			var ta = $(idTextArea);
+			contador.html(ta.val().length+'/500');
+		}
+		$(idTextArea).keyup(function(){
+			update_Contador(idTextArea, idContador);
+		});
+		$(idTextArea).change(function(){
+			update_Contador(idTextArea, idContador);
+		});
+	}
+
 	function agregar(){
 	  $('input[type=radio]').each(function(){
           if (this.checked) {
@@ -279,6 +297,10 @@ $(document).ready(function() {
 <style type="text/css">
 	textarea{
 		resize: none;
+	}
+	.ast{
+		color: red;
+		font-size: 20px;
 	}
 </style>
 @endsection
