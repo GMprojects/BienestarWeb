@@ -17,6 +17,7 @@ class ActividadProgramadaNotif extends Notification
     private $mensaje;
     private $sexo;
     private $url;
+    private $nombres;
     private $soyResponsable;
     private $soyInscrito;
     /**
@@ -24,12 +25,13 @@ class ActividadProgramadaNotif extends Notification
      *
      * @return void
      */
-    public function __construct(Actividad $actividad,  $mensaje, $sexo, $url, $soyResponsable, $soyInscrito)
+    public function __construct(Actividad $actividad,  $mensaje, $sexo, $url, $nombres, $soyResponsable, $soyInscrito)
     {
           $this->actividad = $actividad;
           $this->mensaje = $mensaje;
           $this->sexo = $sexo;
           $this->url = $url;
+          $this->nombres = $nombres;
           $this->soyResponsable = $soyResponsable;
           $this->soyInscrito = $soyInscrito;
     }
@@ -62,6 +64,7 @@ class ActividadProgramadaNotif extends Notification
                                                                               'mensaje' => $this->mensaje,
                                                                               'sexo' => $this->sexo,
                                                                               'url' => $this->url,
+                                                                              'nombres' => $this->nombres,
                                                                               'soyResponsable' => $this->soyResponsable,
                                                                               'soyInscrito' => $this->soyInscrito  ])
                                 ->subject('Nueva Programada Actividad');

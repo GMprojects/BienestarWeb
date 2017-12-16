@@ -11,7 +11,7 @@ class Encuesta extends Model
   protected $fillable = ['titulo', 'destino', 'idTipoActividad'];
   public $timestamps = false;
 
-  public function preguntasEncuesta(){
+  public function preguntas(){
     return $this->hasMany('BienestarWeb\PreguntaEncuesta','idEncuesta');
   }
   public function tipoActividad(){

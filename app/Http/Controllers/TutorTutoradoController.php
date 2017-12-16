@@ -7,15 +7,21 @@ use BienestarWeb\HabitoEstudio;
 use BienestarWeb\Docente;
 use BienestarWeb\Alumno;
 use BienestarWeb\Persona;
-use Illuminate\Support\Facades\Auth;
+use BienestarWeb\User;
+
+use BienestarWeb\Actividad;
+use BienestarWeb\ActPedagogia;
+use BienestarWeb\InscripcionAlumno;
+
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redirect;
 
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 use BienestarWeb\Jobs\JobEmail;
-
+use BienestarWeb\Jobs\JobEmailHabitosEstudios;
 use DB;
 use Log;
 use Carbon\Carbon;
@@ -24,10 +30,7 @@ class TutorTutoradoController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *alumnos = Alumno::join('user','alumno.idUser', '=','user.id' )
-              *         ->whereNotIn('alumno.idAlumno', $idAlumnosTutorados)
-              *         ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-              *         ->get();
+     *
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -58,16 +61,18 @@ class TutorTutoradoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) // alumnos[] , tutor split[0]
+    public function store(Request $request)
     {
-        //dd($request);
-        $array = preg_split("/[.]/",$request->tutor);
+        $array = preg_split("/[_]/",$request->tutor);
         $idDocente = $array[0];
         $docente = Docente::findOrFail($idDocente);
         for ($i = 0; $i < count($request->alumnos); $i++) {
           $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
                                                                  'numeroSemestre' => $request->numeroSemestre]);
         }
+        $job = (new JobEmailHabitosEstudios($idDocente, $request->anioSemestre, $request->numeroSemestre))
+           ->delay(Carbon::now()->addSeconds(1));
+        dispatch($job);
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -101,18 +106,9 @@ class TutorTutoradoController extends Controller
                         ->where('idDocente', $idTutor)
                         ->select('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
                         ->first();
-        $idTutorados = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )//alumnosdeTutorado del docente $request->idDocente
-                                  ->where([['tutorTutorado.idDocente',  $idTutor],['tutorTutorado.numeroSemestre',  $request->numeroSemestre],['tutorTutorado.anioSemestre',   $request->anioSemestre]])
-                                  ->pluck('alumno.idAlumno');
 
        $idAlumnosTutorados = TutorTutorado::where([['numeroSemestre', $request->numeroSemestre],['anioSemestre',  $request->anioSemestre],['idDocente',  $tutor->idDocente]])
                                            ->pluck('idAlumno');
-
-       $alumnosTutorados = Alumno::join('user','alumno.idUser', '=','user.id' )//alumnos Tutorados
-                                  ->whereIn('alumno.idAlumno', $idAlumnosTutorados)
-                                  ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-                                  ->orderBy('user.nombre')
-                                  ->get();
 
        $alumnosLibres = Alumno::join('user','alumno.idUser', '=','user.id' )//alumnos Libres
                          ->whereNotIn('alumno.idAlumno', $idAlumnosTutorados)
@@ -120,16 +116,11 @@ class TutorTutoradoController extends Controller
                          ->orderBy('user.nombre')
                          ->get();
 
-       $tutorados = $alumnosTutorados->merge($alumnosLibres);
-
-       //dd($tutorados[202]->idAlumno);
-       //dd(in_array($tutorados[0]->idAlumno, $idTutorados->toArray()));
-
         return view('admin.tutorTutorado.edit',['tutor' => $tutor,
-                                               'idTutorados' => $idTutorados,
+                                               //'idTutorados' => $idTutorados,
                                                'anioSemestre' => $request->anioSemestre,
                                                'numeroSemestre' => $request->numeroSemestre,
-                                               'tutorados' => $tutorados]);
+                                               'alumnos' => $alumnosLibres]);
     }
 
     /**
@@ -139,31 +130,16 @@ class TutorTutoradoController extends Controller
      * @param  \BienestarWeb\TutorTutorado  $tutorTutorado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $idTutor){
+    public function update(Request $request, $idTutor)
+    {
         $docente = Docente::findOrFail($idTutor);
-        Log::info($docente);
-        $tutorTutorados = TutorTutorado::where([['idDocente',  $idTutor],['anioSemestre',  $request->anioSemestre],['numeroSemestre',  $request->numeroSemestre]])->get();
-        foreach ($tutorTutorados as $tutorTutorado) {
-           if ($tutorTutorado->habitoEstudioRespondido == 1) {
-              Log::info('Habito d e Estudio Respondido');
-              $habitoEstudio = HabitoEstudio::where('idTutorTutorado', $tutorTutorado->idTutorTutorado);
-              $preguntasHabito = PreguntaHabito::get();
-              foreach ($preguntasHabito as $preguntaHabito){
-                 $habitoEstudio->respuestasHabito()->detach($preguntaHabito);
-              }
-              $habitoEstudio->delete();
-           }else{
-             Log::info('Habito d e Estudio NO Respondido');
-          }
-          Log::info('BORRAR tutorTUTORADO');
-           $docente->tutorados()->detach($tutorTutorado->idAlumno);
-        }
-
-
         for ($i = 0; $i < count($request->alumnos); $i++) {
           $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
                                                                  'numeroSemestre' => $request->numeroSemestre]);
         }
+        $job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $request->numeroSemestre))
+           ->delay(Carbon::now()->addSeconds(1));
+        dispatch($job);
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -176,10 +152,119 @@ class TutorTutoradoController extends Controller
     public function destroy($idTutorTutorado)
     {
          $tutorTutorado = TutorTutorado::findOrFail($idTutorTutorado);
-         if($tutorTutorado->habitoEstudioRespondido == "1"){
-            HabitoEstudio::where('idTutorTutorado', $tutorTutorado->idTutorTutorado)->delete();
+         $idDocente = $tutorTutorado->idDocente;
+         $numeroSemestre = $tutorTutorado->numeroSemestre;
+         $anioSemestre = $tutorTutorado->anioSemestre;
+         $actividades = Actividad::where([
+                                       ['idUserResp', Docente::findOrFail($tutorTutorado->idDocente)->user->id],
+                                       ['numeroSemestre', $tutorTutorado->numeroSemestre],
+                                       ['anioSemestre', $tutorTutorado->anioSemestre]
+                                       ])->get();
+         if ($actividades!=null) {
+            foreach ($actividades as $actividad) {
+               if ( $actividad->estado != 2 ) {//sino esta ejecutada la actividad se eliman las inscripciones, de lo contrario quedan como registro.
+                  $i = 0;
+                  $noExiste = true;
+                  $inscritos = count($actividad->inscripcionesADA);
+                  $cuposTotales = $actividad->cuposTotales;
+                  while ($noExiste && $i<$inscritos) {
+                     $inscripcionADA = $actividad->inscripcionesADA[$i];
+                     if ($inscripcionADA->inscripcionAlumno->idAlumno == $tutorTutorado->idAlumno) {
+                        ActPedagogia::where([
+                                            ['idActividad', $actividad->idActividad],
+                                            ['idInscripcionAlumno', $inscripcionADA->inscripcionAlumno->idInscripcionAlumno]
+                                            ])->delete();
+                        $inscripcionADA->inscripcionAlumno->delete();
+                        $inscripcionADA->delete();
+                        $noExiste = false;
+                        $cuposTotales--;
+                     }
+                     $i++;
+                  }
+                  $actividad->cuposTotales = $cuposTotales;
+                  if ($inscritos==0) {
+                     $actividad->delete();
+                  }elseif ($inscritos==1) {
+                     $actividad->modalidad = 1;
+                  }
+                  $actividad->update();
+               }
+            }
+         }
+         if ($tutorTutorado->habitoEstudioRespondido == 1) {
+            Log::info('Habito d e Estudio Respondido');
+            $tutorTutorado->habitoEstudio->respuestasHabito()->detach();
+            $tutorTutorado->habitoEstudio->delete();
+         }else{
+           Log::info('Habito d e Estudio NO Respondido');
          }
          $tutorTutorado->delete();
+         $tutorTutorados = TutorTutorado::where([
+                                       ['idDocente', $idDocente],
+                                       ['numeroSemestre', $numeroSemestre],
+                                       ['anioSemestre', $anioSemestre]
+                                       ])->get();
+         if (count($tutorTutorados)==0) {
+            return Redirect::to('admin/tutorTutorado');
+         } else {
+            return redirect()->back();
+         }
+
+    }
+
+    public function destroyTutor(Request $request, $idTutor)
+    {
+         $actividades = Actividad::where([
+                                       ['idUserResp', Docente::findOrFail($idTutor)->user->id],
+                                       ['numeroSemestre', $request->numeroSemestre],
+                                       ['anioSemestre', $request->anioSemestre]
+                                       ])->get();
+         $tutorTutorados = TutorTutorado::where([
+                                                    ['numeroSemestre', $request->numeroSemestre],
+                                                    ['anioSemestre',  $request->anioSemestre],
+                                                    ['idDocente',  $idTutor]])
+                                            ->get();
+
+
+         foreach ($tutorTutorados as $tutorTutorado) {
+            if ($actividades != null) {
+               foreach ($actividades as $actividad) {
+                  if ( $actividad->estado != 2 ) {//sino esta ejecutada la actividad se eliman las inscripciones, de lo contrario quedan como registro.
+                     $i = 0;
+                     $noExiste = true;
+                     $inscritos = count($actividad->inscripcionesADA);
+                     while ($noExiste && $i<$inscritos) {
+                        $inscripcionADA = $actividad->inscripcionesADA[$i];
+                        if ($inscripcionADA->inscripcionAlumno->idAlumno == $tutorTutorado->idAlumno) {
+                           ActPedagogia::where([
+                                               ['idActividad', $actividad->idActividad],
+                                               ['idInscripcionAlumno', $inscripcionADA->inscripcionAlumno->idInscripcionAlumno]
+                                               ])->delete();
+                           $inscripcionADA->inscripcionAlumno->delete();
+                           $inscripcionADA->delete();
+                           $noExiste = false;
+                        }
+                        $i++;
+                     }
+                  }
+               }
+            }
+            if ($tutorTutorado->habitoEstudioRespondido == 1) {
+               Log::info('Habito d e Estudio Respondido');
+               $tutorTutorado->habitoEstudio->respuestasHabito()->detach();
+               $tutorTutorado->habitoEstudio->delete();
+            }else{
+              Log::info('Habito d e Estudio NO Respondido');
+            }
+            $tutorTutorado->delete();
+         }
+         if ($actividades != null) {
+            foreach ($actividades as $actividad) {
+               if ($actividad->estado != 2) {
+                  $actividad->delete();
+               }
+            }
+         }
          return redirect()->back();
     }
 

@@ -3,9 +3,9 @@
    <div class="act-mini">
       <div class="act-mini-header">
          @if( $actividad->rutaImagen == null )
-            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found"></a>
+            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found"></a>
          @else
-            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
+            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
          @endif
       </div>
       <div class="act-mini-body" >
@@ -15,12 +15,12 @@
          </div>
          <div class="act-mini-details">
             <div class="act-mini-1">
-               <span class="act-mini-title"><a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="{{ $actividad->titulo }}">{{ $actividad->titulo }}</a></span>
+               <span class="act-mini-title"><a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}" data-toggle="tooltip" data-placement="bottom" title="{{ $actividad->titulo }}">{{ $actividad->titulo }}</a></span>
             </div>
             <div class="act-mini-2">
                <span>{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }} - </span>
-               <span>{{ date('G:i', strtotime( $actividad->horaInicio )) }} - </span>
-               <span><a href="#">{{ $actividad->lugar }}</a></span>
+               <span>{{ date("g:i A",strtotime($actividad->horaInicio)) }} - </span>
+               <span>{{ $actividad->lugar }}</span>
             </div>
             <div class="act-mini-2">
                <h5 style="margin-top:0px;">
@@ -40,7 +40,7 @@
          <div class="act-mini-txt pull-left">Categoría: <span style="color: white;">{{ $actividad->tipoActividad->tipo }}</span> {{--<a href="#">{{ $actividad->tipoActividad->tipo }}</a>--}}</div>
 {{-- --}}
          @if( $actividad->idTipoActividad == 4 )
-            @if(Auth::user()!= null && in_array($actividad->idActividad, $list_insc))
+            @if(Auth::user() !=null && Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad)))
                <div class="act-mini-txt pull-right">DEBO ASISTIR</div>
             @else
                <div class="act-mini-txt pull-right">Exclusiva: Tutorados</div>
@@ -49,19 +49,19 @@
             <div class="act-mini-txt pull-right">Presentar documentos</div>
          @elseif(Auth::user()!=null)
             @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
-               @if(in_array($actividad->idActividad, $list_insc))
-                  <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
+               @if(Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad) ||
+                  Auth::user()->idTipoPersona == 2 && Auth::user()->docente->misInscripciones->contains('idActividad', $actividad->idActividad) ||
+                  Auth::user()->idTipoPersona == 3 && Auth::user()->administrativo->misInscripciones->contains('idActividad', $actividad->idActividad))
+                  <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
                      <i class="fa fa-check-circle"></i> Asistiré
                   </a>
                @else
                   @if( $actividad->estado == 1 )
                      @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
                         @if( $actividad->idUserResp != Auth::user()->id )
-                           <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
-                              onclick="event.preventDefault();
-                              document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-                              <i class="fa fa-circle-o"></i> Quiero Asistir
-                           </a>
+                           <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
+                             <i class="fa fa-circle-o"></i> Quiero Asistir
+                          </a>
                         @else
                            <div class="act-mini-txt pull-right">
                               <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">Soy Responsable</span>
@@ -102,17 +102,20 @@
             <h4 class="modal-title" id="lb-confMod-{{ $actividad->idActividad }}">Confirme su Inscripción</h4>
          </div>
          <div class="modal-body">
-            Quiero inscribirme en :(
+            <p>Actividad: {{ $actividad->titulo }}</p>
+            <p>Fecha: {{ $actividad->fechaInicio }}>{{ $actividad->horaInicio }} - {{ $actividad->fechaFin }}>{{ $actividad->horaFin }}</p>
+            <p>Lugar: {{ $actividad->lugar }}</p>
          </div>
          <div class="modal-footer">
-            <a class="btn btn-success" href="{{ route('inscripcion.store') }}"
-               onclick="event.preventDefault(); document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-               <i class="fa fa-check-o"></i> Confirmar
+            <a class="btn btn-ff-green" href="#"
+               onclick="event.preventDefault();
+               document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+               <i class="fa fa-check-circle"></i> Confirmar
             </a>
             <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
                {{ csrf_field() }}
             </form>
-            <button type="button" class="btn btn-primary">Cancelar</button>
+            <button type="button" class="btn btn-ff-red" data-dismiss="modal">Cancelar</button>
          </div>
       </div>
    </div>

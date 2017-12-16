@@ -107,6 +107,14 @@ class EgresadoController extends Controller
      */
     public function update(Request $request, $id)
     {
+         $request->validate([
+            'grado' => 'required',
+            'nombre' => 'required|max:45',
+            'apellidoPaterno' => 'required|max:20',
+            'apellidoMaterno' => 'required|max:20',
+            'anioEgreso' => 'required',
+            'numeroSemestre' => ['required', Rule::in('1','2')],
+        ]);
         $egresado = Egresado::findOrFail($id);
         $egresado->grado = $request->grado;
         $egresado->nombre = $request->nombre;

@@ -8,21 +8,21 @@
 	         <div class="caja-title">Detalles de la Actividad </div>
       	</div>
 			<div class="caja-body">
-				<h4><b>Título de Actividad: </b> <b>  &nbsp; &nbsp; {{$actividad->titulo}}</b>&nbsp; &nbsp;</h4>
+				<h4> <b>Título de Actividad:    &nbsp; &nbsp; {{$actividad->titulo}}&nbsp; &nbsp;</b> </h4>
 				<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-								<label><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $actividad->anioSemestre }}
+						<div class="col-md-12">
+								<label><i class="glyphicon glyphicon-calendar margin-r-5"></i>&nbsp; &nbsp;Semestre Académico:  </label> &nbsp; &nbsp;{{ $actividad->anioSemestre }}
 									@if ($actividad->numeroSemestre == '1')
 										- I
 								  @else
 										- II
 								  @endif <br>
-								<label><b>Fecha de Programación: </b> </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}<br>
-								<label><b>Duración de la Actividad: </b> </label> &nbsp; &nbsp;{{ date("h:i A",strtotime($actividad->horaInicio)) }} &nbsp;- &nbsp;{{ date("h:i A",strtotime($actividad->horaFin)) }}<br>
-								<label><b>Responsable: </b> </label> &nbsp; &nbsp;{{ $actividad->responsable->nombre.' '.$actividad->responsable->apellidoPaterno.' '.$actividad->responsable->apellidoMaterno }}<br>
-								<label>Categoría </label>&nbsp; &nbsp;&nbsp; &nbsp;
+								<label><i class="fa fa-calendar margin-r-5"></i>&nbsp; &nbsp;Fecha de Programación:  </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}<br>
+								<label><i class="fa fa-clock-o margin-r-5"></i>&nbsp; &nbsp;Duración de la Actividad:  </label> &nbsp; &nbsp;{{ date("h:i A",strtotime($actividad->horaInicio)) }} &nbsp;- &nbsp;{{ date("h:i A",strtotime($actividad->horaFin)) }}<br>
+								<label><i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;Responsable:  </label> &nbsp; &nbsp;{{ $actividad->responsable->nombre.' '.$actividad->responsable->apellidoPaterno.' '.$actividad->responsable->apellidoMaterno }}<br>
+								<label><i class="glyphicon glyphicon-wrench  margin-r-5"></i>&nbsp; &nbsp;Categoría </label>&nbsp; &nbsp;&nbsp; &nbsp;
 								<span style="color: #4B367C;"> <b>{{ $actividad->tipoActividad->tipo }}</b> &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</span>
-								<label >Modalidad </label>&nbsp; &nbsp;&nbsp; &nbsp;
+								<label>Modalidad </label>&nbsp; &nbsp;&nbsp; &nbsp;
 								@if ($actividad->idTipoActividad != 8 && $actividad->idTipoActividad  != 9)
 									@if ($actividad->modalidad == '1')
 											<td><small class="label bg-aqua">Individual</small></td>

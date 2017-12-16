@@ -19,21 +19,13 @@ class PreguntaEncuesta extends Model
     return $query->where('idEncuesta', '=', $texto)
                 ->orderBy('idPreguntaEncuesta', 'ASC');
   }
-  public function enuestasRespondidasResp(){
-      return $this->belongsToMany('BienestarWeb\EncuestaRespondidaResp','rptaEncuestaResp','idPreguntaEncuesta','idEncuestaRespondidaResp')
-                  ->withPivot('idRptaEncuestaResp','rpta');
+  public function enuestasRespondidaResp(){
+      return $this->belongsToMany('BienestarWeb\EncuestaRespondidaResp','rptaencuestainsc','idPreguntaEncuesta','idEncuestaRespondidaResp')
+                  ->withPivot('respuesta');
   }
-  public function enuestasRespondidasInsc(){
-      return $this->belongsToMany('BienestarWeb\EncuestaRespondidaInsc','rptaEncuestaInsc','idPreguntaEncuesta','idEncuestaRespondidaInsc')
-                  ->withPivot('idRptaEncuestaInsc','rpta');
+  public function enuestasRespondidaInsc(){
+      return $this->belongsToMany('BienestarWeb\EncuestaRespondidaInsc','rptaencuestaresp','idPreguntaEncuesta','idEncuestaRespondidaInsc')
+                  ->withPivot('respuesta');
   }
 
-
-  public function scopeFiltroEnunciado($query, $idEncuesta, $enunciado){
-      //dd($texto);
-      return $query
-          ->where('idEncuesta', '=', $idEncuesta)
-          ->where('enunciado','LIKE',"%$enunciado%")
-          ->orderBy('idPreguntaEncuesta', 'ASC');
-  }
 }

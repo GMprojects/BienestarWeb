@@ -2,20 +2,26 @@
 
 namespace BienestarWeb;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
 
-class EncuestaRespondidaResp extends Pivot
+class EncuestaRespondidaResp extends Model
 {
-    protected $table = 'EncuestaRespondidaResp';
-    protected $primaryKey = 'idEncuestaRespondidaResp';
-    protected $fillable = [
-      'idActividad',
-      'idEncuesta'];
+       protected $table = 'EncuestaRespondidaResp';
+       protected $primaryKey = 'idEncuestaRespondidaResp';
+       protected $fillable = [
+         'idActividad',
+         'idEncuesta',
+         'estado'];
+       public $timestamps = true;
 
-    public $timestamps = true;
-
-    public function preguntasEncuesta(){
-        return $this->belongsToMany('BienestarWeb\PreguntaEncuesta','rptaEncuestaResp','idEncuestaRespondidaResp','idPreguntaEncuesta')
-                    ->withPivot('idRptaEncuestaResp','rpta');
-    }
+       public function preguntas(){
+           return $this->belongsToMany('BienestarWeb\PreguntaEncuesta','rptaencuestaresp','idEncuestaRespondidaResp','idPreguntaEncuesta')
+                       ->withPivot('respuesta');
+       }
+       public function encuesta(){
+         return $this->belongsTo('BienestarWeb\Encuesta', 'idEncuesta');
+      }
+      public function actividad(){
+        return $this->belongsTo('BienestarWeb\Actividad', 'idActividad');
+     }
 }

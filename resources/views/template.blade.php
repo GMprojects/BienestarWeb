@@ -39,8 +39,11 @@
       <script src="{{ asset('plugins/iCheck/icheck.js') }}"></script>
 
       <script src="{{ asset('plugins/flot/jquery.flot.min.js') }}"></script>
-      <script src="{{ asset('plugins/flot/jquery.flot.time.js') }}"></script>
-      <script src="{{ asset('plugins/flot/jquery.flot.symbol.js') }}"></script>
+      <script src="{{ asset('plugins/flot/jquery.flot.time.min.js') }}"></script>
+      <script src="{{ asset('plugins/flot/jquery.flot.symbol.min.js') }}"></script>
+      <script src="{{ asset('plugins/flot/jquery.flot.pie.min.js') }}"></script>
+      <script src="{{ asset('plugins/flot/jquery.flot.categories.min.js') }}"></script>
+      <script src="{{ asset('plugins/flot/jquery.flot.resize.min.js') }}"></script>
    </head>
    <body>
       @if(Auth::user() == null)

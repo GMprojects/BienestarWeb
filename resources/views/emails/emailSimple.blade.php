@@ -1,7 +1,7 @@
 @component('mail::message')
   # {{$subject}}
   <br>
-  @if ($sexo = 'm')
+  @if ($sexo == 'm')
   Estimada
   @else
   Estimado
@@ -22,5 +22,5 @@
 
   Gracias,<br>
   {{ config('app.name') }}
-  [Pagina Web](www)
+  [Pagina Web]({{ config('app.url') }})
 @endcomponent

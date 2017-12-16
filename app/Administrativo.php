@@ -19,8 +19,12 @@ class Administrativo extends Model
     	return $this->belongsTo('BienestarWeb\User','idUser');
     }
 
-    public function inscripcionesAdministrativo(){
+    /*public function inscripcionesAdministrativo(){
       return $this->belongsToMany('BienestarWeb\InscripcionADA','inscripcionAdministrativo','idAdministrativo','idInscripcionADA')
             ->withPivot('idInscAdministrativo','asistencia','idActividad');
-    }
+    }*/
+
+    public function misInscripciones(){
+      return $this->hasMany('BienestarWeb\InscripcionAdministrativo', 'idAdministrativo');
+   }
 }

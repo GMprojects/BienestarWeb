@@ -26,58 +26,60 @@
 
    <body>
       <div class="container">
-	        <div class="login-container">
-             <div  class="header-login-box" >
-                   <span class="my-user"> <i class="fa fa-user"> </i></span>
+         <div class="row">
+            <!--<div class="col-sm-6 col-md-4 col-md-offset-4">}
+.col-	.col-sm-	.col-md-	.col-lg-	.col-xl-
+         -->
+            <div class="col-lg-6 col-lg-offset-3 col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
+               <div class="login-container">
+                  <div  class="header-login-box" >
+                     <span class="my-user"> <i class="fa fa-user"> </i></span>
+                  </div>
+                  <div class="form-box">
+                     <form class="form" method="POST" action="{{ route('login') }}">
+                        {{ csrf_field() }}
+                        {{--<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">--}}
+                        <div class="form-group">
+                           <div class="input-group input-group-lg">
+                              <span class="input-group-addon rounded-left"><i class="fa fa-envelope"></i></span>
+                              <input required minlength="6" maxlength="100" type="email" class="form-control input-addon-left" name="email"  value="{{old('email')}}" placeholder="e.g. mguevaral@unitru.edu.pe" autofocus>
+                           </div>
+                        </div>
 
+                        {{--<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">--}}
+                        <div class="form-group">
+                           <div class="input-group input-group-lg">
+                              <span class="input-group-addon rounded-left"><i class="fa fa-lock"></i></span>
+                              <input required minlength="4" maxlength="100" type="password" class="form-control input-addon-left" name="password"  value="{{old('password')}}" placeholder="***********">
+                           </div>
+                        </div>
+                        @if ($errors->has('email'))
+                           <span class="help-block">
+                           <strong style="color:red;">{{ $errors->first('email') }}</strong>
+                           </span>
+                        @endif
+                        @if ($errors->has('password'))
+                           <span class="help-block">
+                           <strong style="color:red;">{{ $errors->first('password') }}</strong>
+                           </span>
+                        @endif
+                        <div class="form-group pull-left">
+                           <label>
+                              <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} >
+                              Recuérdame
+                           </label>
+                        </div>
+                        <br />
+                        <div class="form-group" style="text-align:right;">
+                           <button type="submit" class="btn btn-lg btn-facfar">Conectar</button>
+                        </div>
+                        <div class="olvido" style="text-align:right;">
+                           <a href="{{ route('password.request') }}">¿Has olvidado tu contraseña?</a>
+                        </div>
+                     </form>
+                  </div>
+               </div>
             </div>
-            <div class="form-box">
-               <form class="form" method="POST" action="{{ route('login') }}">
-                  {{ csrf_field() }}
-                  <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                     <div class="input-group input-group-lg">
-                           <span class="input-group-addon rounded-left"><i class="fa fa-envelope"></i></span>
-                           <input required minlength="6" maxlength="100" type="email" class="form-control input-addon-left" name="email"  value="{{old('email')}}" placeholder="e.g. mguevaral@unitru.edu.pe" autofocus>
-                     </div>
-                     @if ($errors->has('email'))
-                        <span class="help-block">
-                           <strong>{{ $errors->first('email') }}</strong>
-                        </span>
-                     @endif
-                  </div>
-
-                  <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                     <div class="input-group input-group-lg">
-                        <span class="input-group-addon rounded-left"><i class="fa fa-key"></i></span>
-                        <input required minlength="4" maxlength="100" type="password" class="form-control input-addon-left" name="password"  value="{{old('password')}}" placeholder="***********">
-                     </div>
-                     @if ($errors->has('password'))
-                        <span class="help-block">
-                           <strong>{{ $errors->first('password') }}</strong>
-                        </span>
-                     @endif
-                  </div>
-
-                  <div class="form-group pull-left">
-                     <label>
-                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} >
-                        Recuérdame
-                     </label>
-                  </div>
-                  <br />
-                  <div class="form-group" style="text-align:right;">
-                     <button type="submit" class="btn btn-lg btn-facfar">
-                        Conectar
-                     </button>
-                  </div>
-                  <div class="olvido" style="text-align:right;">
-                     <a href="{{ route('password.request') }}">
-                        ¿Has olvidado tu contraseña?
-                     </a>
-                  </div>
-               </form>
-            </div>
-
          </div>
       </div>
 
@@ -110,13 +112,14 @@
 
       .login-container{
       position: relative;
-      width: 500px;
-
       margin: 80px auto;
       padding: 20px 40px 40px;
       text-align: center;
       background: #fff;
       border: 1px solid #ccc;
+      -webkit-box-shadow: 1px 2px 6px 0px rgba(171,171,171,1);
+      -moz-box-shadow: 1px 2px 6px 0px rgba(171,171,171,1);
+      box-shadow: 1px 2px 6px 0px rgba(171,171,171,1);
       }
 
       #output{
@@ -133,30 +136,6 @@
 
       #output.alert-danger{
       background: rgb(228, 105, 105);
-      }
-
-
-      .login-container::before,.login-container::after{
-      content: "";
-      position: absolute;
-      width: 100%;height: 100%;
-      top: 3.5px;left: 0;
-      background: #fff;
-      z-index: -1;
-      -webkit-transform: rotateZ(4deg);
-      -moz-transform: rotateZ(4deg);
-      -ms-transform: rotateZ(4deg);
-      border: 1px solid #ccc;
-
-      }
-
-      .login-container::after{
-      top: 5px;
-      z-index: -2;
-      -webkit-transform: rotateZ(-2deg);
-        -moz-transform: rotateZ(-2deg);
-         -ms-transform: rotateZ(-2deg);
-
       }
 
       .avatar{

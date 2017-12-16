@@ -22,7 +22,7 @@
 				<div class="row">
 	            <div class="col-md-6">
 	                <div class="form-group">
-	                    <label for="subject">Subject</label>
+	                    <label for="subject">Asunto</label>
 	                    <input id="subject" type="text" name="subject" class="form-control" value="Recordatorio: Llenar Habito Estudio">
 	                    <div class="help-block with-errors"></div>
 	                </div>

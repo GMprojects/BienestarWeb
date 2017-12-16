@@ -37,10 +37,11 @@
 			                    </button>
 			                  </a>
 									<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
-										<button class="btn btn-ff-yellow">
-											<i class="fa fa-edit"></i>
-										</button>
-									</a>
+					               <button class="btn btn-ff-green"><i class="fa fa-plus"></i></button>
+					            </a>
+									<a href="{{ action('TutorTutoradoController@destroyTutor',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
+					               <button class="btn btn-ff-red"><i class="fa fa-times"></i></button>
+					            </a>
                 		  </td>
 							</tr>
 							@endforeach
@@ -76,7 +77,8 @@
 				  "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
 				  "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 				}
-			}
+			},
+			"order": [['2','asc']]
 		})
 	});
 </script>

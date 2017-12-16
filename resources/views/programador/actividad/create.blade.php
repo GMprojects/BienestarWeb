@@ -41,7 +41,7 @@
 				<br>
             <div class="form-group">
                <label for="titulo">Título de la actividad </label><span class="ast">*</span>
-               <input type="text" name="titulo" class="form-control"  required value ="{{old('titulo')}}" placeholder="De preferencia un título corto y llamativo">
+               <input type="text"  minlength="5"  name="titulo" class="form-control"  required value ="{{old('titulo')}}" placeholder="De preferencia un título corto y llamativo">
             </div>
 				<div class="form-group">
 					<label for="idTipoActividad">Categoría </label><span class="ast">*</span>
@@ -55,7 +55,7 @@
 
 				<div class="form-group">
 				  <label for="titulo">Descripción </label><span class="ast">*</span>
-					<textarea style="resize: none;" name="descripcion"  class="form-control" required value ="{{old('descripcion')}}"  rows="6" cols="30" placeholder="Describir una breve reseña de Evento"></textarea>
+					<textarea style="resize: none;" minlength="10" name="descripcion"  class="form-control" required value ="{{old('descripcion')}}"  rows="6" cols="30" placeholder="Describir una breve reseña de Evento"></textarea>
 			  	</div>
 				<div class="form-group">
 					<label for="titulo">Información Adicional </label>

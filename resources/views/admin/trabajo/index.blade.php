@@ -17,6 +17,7 @@
 		</div>
 
 		<div class="box-body">
+			{{ $op }}
 			@if ($op == 1)
 				<h4><b>Lista de Trabajos del egresado: </b> <b style="color:#4B367C">  &nbsp; &nbsp; {{ $egresado->nombre.' '.$egresado->apellidoPaterno.' '.$egresado->apellidoMaterno }}</b>&nbsp; &nbsp;</h4>
 				<br>
@@ -63,7 +64,7 @@
 										{{--@if ($idEgresado == null)
 											<a href="{{URL::action('EgresadoController@show',$trabajo->idEgresado) }}"><button class="btn btn-info">Ver Egresado</button></a>
 										@else--}}
-										<a href="{{ action('TrabajoController@edit',$trabajo->idTrabajo) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
+										<a href="{{ action('TrabajoController@edit',['idTrabajo' => $trabajo->idTrabajo, 'op' => $op] ) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
 										<a href="" data-target = "#modal-delete-{{ $trabajo->idTrabajo }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
 										{{--@endif--}}
 									</td>

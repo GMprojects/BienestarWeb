@@ -66,8 +66,8 @@ class UserController extends Controller
            'nombre'=>'required|min:2|max:45',
            'apellidoPaterno' => 'required|min:2|max:20',
            'apellidoMaterno' => 'required|min:2|max:20',
-           'codigo' => 'required|min:4|max:20',
-           'email' => 'required|max:100',
+           'codigo' => 'required|min:4|max:20|unique:user',
+           'email' => 'required|max:100|unique:user',
            'direccion'=> 'max:100',
            'telefono' => 'max:15',
            'celular' => 'max:15',
@@ -169,6 +169,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+         $request->validate([
+             'nombre'=>'required|min:2|max:45',
+             'apellidoPaterno' => 'required|min:2|max:20',
+             'apellidoMaterno' => 'required|min:2|max:20',
+             'codigo' => 'required|min:4|max:20|unique:user',
+             'email' => 'required|max:100|unique:user',
+             'direccion'=> 'max:100',
+             'telefono' => 'max:15',
+             'celular' => 'max:15'
+         ]);
         $user = User::findOrFail($id);
         switch ($user->idTipoPersona)
         {

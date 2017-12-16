@@ -3,11 +3,22 @@
 namespace BienestarWeb\Http\Controllers;
 
 use BienestarWeb\Encuesta;
+use BienestarWeb\Alumno;
+use BienestarWeb\Docente;
+use BienestarWeb\Administrativo;
+use BienestarWeb\EncuestaRespondidaInsc;
+use BienestarWeb\EncuestaRespondidaResp;
+use BienestarWeb\RptaEncuestaInsc;
+use BienestarWeb\RptaEncuestaResp;
+use BienestarWeb\Actividad;
+use BienestarWeb\InscripcionAlumno;
+use BienestarWeb\InscripcionDocente;
+use BienestarWeb\InscripcionAdministrativo;
 use BienestarWeb\TipoActividad;
 use BienestarWeb\PreguntaEncuesta;
 use BienestarWeb\Alternativa;
 
-
+use Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -126,4 +137,75 @@ class EncuestaController extends Controller
         Encuesta::destroy($id);
         return Redirect::to('admin/encuesta');
     }
+
+    public function misEncuPendientes(Request $request){
+      /* Inscrito */
+
+      switch ($request->user()->idTipoPersona) {
+         case '1'://Alumno
+            $idAlumno = Alumno::where('idUser', $request->id)->value('idAlumno');
+            $insc_asis = InscripcionAlumno::where(['idAlumno' => $idAlumno, 'asistencia' => '1'])->pluck('idInscripcionADA');
+            $insc_noresp = EncuestaRespondidaInsc::whereIn('idInscripcionADA', $insc_asis)->where('estado', '0')->get();
+            break;
+         case '2'://Docente
+            $idDocente = Docente::where('idUser', $request->id)->value('idDocente');
+            $insc_asis = InscripcionDocente::where(['idDocente' => $idDocente, 'asistencia' => '1'])->pluck('idInscripcionADA');
+            $insc_noresp = EncuestaRespondidaInsc::whereIn('idInscripcionADA', $insc_asis)->where('estado', '0')->get();
+            break;
+         case '3'://Administrativo
+            $idAdministrativo = Administrativo::where('idUser', $request->id)->value('idAdministrativo');
+            $insc_asis = InscripcionAdministrativo::where(['idAdministrativo' => $idAdministrativo, 'asistencia' => '1'])->pluck('idInscripcionADA');
+            $insc_noresp = EncuestaRespondidaInsc::whereIn('idInscripcionADA', $insc_asis)->where('estado', '0')->get();
+            break;
+      }
+      /* Responsable */
+      $resp_act = Actividad::where(['idUserResp' => $request->id, 'estado' => '2'])->pluck('idActividad');
+      $resp_noresp = EncuestaRespondidaResp::whereIn('idActividad', $resp_act)->where('estado', '0')->get();
+      //Log::info('me llevaaa'.$resp_noresp);
+      if($request->ajax()){
+         //$enc_noresp = [ 'insc_noresp' => $insc_noresp, 'resp_noresp' => $resp_noresp ];
+         return response()->json(['insc_noresp' => $insc_noresp, 'resp_noresp' => $resp_noresp]);
+      }else{
+         return view('miembro.mis-encuestas.todas', ['insc_noresp'=>$insc_noresp, 'resp_noresp'=>$resp_noresp]);
+      }
+   }
+
+   public function encuestaInsc(Request $request, $id){
+      $encResp_insc = EncuestaRespondidaInsc::findOrFail($id);
+      return view('miembro.mis-encuestas.show')
+         ->with(['encResp' => $encResp_insc, 'opt'=>'1']);
+   }
+   public function encuestaResp(Request $request, $id){
+      $encResp_resp = EncuestaRespondidaResp::findOrFail($id);
+      return view('miembro.mis-encuestas.show')
+         ->with(['encResp' => $encResp_resp, 'opt'=>'2']);
+   }
+
+   public function registrar_respuestas(Request $request, $id, $opt){
+      switch($opt){
+         case '1': //encuesta de Inscrito
+            $encResp_insc = EncuestaRespondidaInsc::findOrFail($id);
+            if($encResp_insc->estado == '0'){
+               $preguntas = $encResp_insc->encuesta->preguntas;
+               for ($i=0; $i < count($preguntas) ; $i++) {
+                  $encResp_insc->preguntas()->attach($preguntas[$i], ['respuesta' => $request->input($preguntas[$i]->idPreguntaEncuesta)]);
+               }
+               $encResp_insc->estado = '1';
+               $encResp_insc->update();
+            }
+            break;
+         case '2': //encuesta de Responsable
+            $encResp_resp = EncuestaRespondidaResp::findOrFail($id);
+            if($encResp_resp->estado == '0'){
+               $preguntas = $encResp_resp->encuesta->preguntas;
+               for ($i=0; $i < count($preguntas) ; $i++) {
+                  $encResp_resp->preguntas()->attach($preguntas[$i], ['respuesta' => $request->input($preguntas[$i]->idPreguntaEncuesta)]);
+               }
+               $encResp_resp->estado = '1';
+               $encResp_resp->update();
+            }
+            break;
+      }
+      return redirect('/');
+   }
 }

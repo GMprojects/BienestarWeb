@@ -15,8 +15,14 @@ class CrearTablaEncuestaRespondidaInsc extends Migration
     {
         Schema::create('EncuestaRespondidaInsc', function(Blueprint $tabla)
         {
-            $tabla->increments('idEncuestaRespondidaInsc');            
-
+            $tabla->increments('idEncuestaRespondidaInsc');
+            $tabla->integer('estado')->default(0);
+            /*
+            estado:
+            0. No Respondida
+            1. Respondida
+            2. Eliminada
+            */
             //Clave foranea de la tabla InscripcionADA
             $tabla->integer('idInscripcionADA')->unsigned();
             $tabla->foreign('idInscripcionADA')->references('idInscripcionADA')->on('InscripcionADA');
@@ -41,7 +47,7 @@ class CrearTablaEncuestaRespondidaInsc extends Migration
             $tabla->integer('idEncuestaRespondidaInsc')->unsigned();
             $tabla->foreign('idEncuestaRespondidaInsc')->references('idEncuestaRespondidaInsc')->on('EncuestaRespondidaInsc');
         });
-        
+
     }
 
     /**

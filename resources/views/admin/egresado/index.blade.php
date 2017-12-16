@@ -41,10 +41,10 @@
 							<td>{{ $egresado->email }}</td>
 							<td>{{ $egresado->anioEgreso }} - {{ $egresado->numeroSemestre }}</td>
 							@switch($egresado->grado)
-								@case(1) <td><span class="badge bg-green">Bachiller</span></td> @break
-								@case(2) <td><span class="badge bg-yellow">Magister</span></td> @break
-								@case(3) <td><span class="badge bg-orange">Doctor</span></td> @break
-								@case(4) <td><span class="badge bg-red">PhD</span></td> @break
+								@case(1) <td><span class="label ff-bg-green rounded">Bachiller</span></td> @break
+								@case(2) <td><span class="label ff-bg-yellow rounded">Magister</span></td> @break
+								@case(3) <td><span class="label ff-bg-orange rounded">Doctor</span></td> @break
+								@case(4) <td><span class="label ff-bg-red rounded">PhD</span></td> @break
 							@endswitch
 							<td>
 								<a href="{{ action('TrabajoController@index',['idEgresado' => $egresado->idEgresado, 'op' => '1'  ]) }}">

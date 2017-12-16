@@ -23,9 +23,12 @@ class Docente extends Model
         return $this->belongsToMany('BienestarWeb\Alumno','tutorTutorado','idDocente','idAlumno')
               ->withPivot('idTutorTutorado','anioSemestre','numeroSemestre','habitoEstudioRespondido');
     }
-    public function inscripcionesDocente(){
+    /*public function inscripcionesDocente(){
       return $this->belongsToMany('BienestarWeb\InscripcionADA','inscripcionDocente','idDocente','idInscripcionADA')
             ->withPivot('idInscDocente','asistencia','idActividad');
+    }*/
+    public function misInscripciones(){
+     return $this->hasMany('BienestarWeb\InscripcionDocente', 'idDocente');
     }
     public function horariosDisponible(){
       return $this->hasMany('BienestarWeb\HorarioDisponible','idDocente');

@@ -11,8 +11,9 @@
 				</div>
 	      </div>
 	      <div class="caja-body">
+				{{ $op }}
 				<h4><b>Editar trabajo del egresado: </b> <b style="color:#4B367C">  &nbsp; &nbsp; {{ $trabajo->egresado->nombre.' '.$trabajo->egresado->apellidoPaterno.' '.$trabajo->egresado->apellidoMaterno }}</b>&nbsp; &nbsp;</h4>
-
+				{{ Form::hidden('invisible', $op) }}
 				<div  class="row">
 					<div class="col-lg-6 col-sm-6 col-xs-12">
 						@if (count($errors) >0)
@@ -34,11 +35,11 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="institucion">Institución </label><span class="ast">*</span>
-							<input type="text" name="institucion" required class="form-control" value ="{{ $trabajo->institucion }}" placeholder="Institución">
+							<input type="text" minlength="3" name="institucion" required class="form-control" value ="{{ $trabajo->institucion }}" placeholder="Institución">
 						</div>
 						<div class="form-group">
 							<label for="lugar">Lugar </label><span class="ast">*</span>
-							<input type="text" name="lugar" required class="form-control" value ="{{ $trabajo->institucion }}" placeholder="Lugar">
+							<input type="text" minlength="3" name="lugar" required class="form-control" value ="{{ $trabajo->institucion }}" placeholder="Lugar">
 						</div>
 						<div class="form-group">
 							<label for="fechaInicio" id="lblFechaInicio">Fecha de Inicio </label><span class="ast">*</span>

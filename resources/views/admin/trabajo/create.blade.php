@@ -53,11 +53,11 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="institucion">Institución </label><span class="ast">*</span>
-							<input type="text" name="institucion" required class="form-control" value ="{{old('institucion')}}" placeholder="Institución">
+							<input type="text"  minlength="3" name="institucion" required class="form-control" value ="{{old('institucion')}}" placeholder="Institución">
 						</div>
 						<div class="form-group">
 							<label for="lugar">Lugar </label><span class="ast">*</span>
-							<input type="text" name="lugar" required class="form-control" value ="{{old('lugar')}}" placeholder="Lugar">
+							<input type="text"  minlength="3" name="lugar" required class="form-control" value ="{{old('lugar')}}" placeholder="Lugar">
 						</div>
 						<div class="form-group">
 							<label for="fechaInicio" id="lblFechaInicio">Fecha de Inicio </label><span class="ast">*</span>
@@ -65,7 +65,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaInicio" required class="form-control" required  value="{{ date("d/m/Y") }}" id="fechaInicio">
+								<input type="text" name="fechaInicio" required class="form-control" required placeholder="{{ date("d/m/Y") }}" id="fechaInicio">
 							</div>
 						</div>
 						<div class="form-group">
@@ -74,7 +74,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaFin" class="form-control"  placeholder="{{ date("d/m/Y") }}" id="fechaFin">
+								<input type="text" name="fechaFin" class="form-control" placeholder="{{ date("d/m/Y") }}" id="fechaFin">
 							</div>
 						</div>
 						<div class="form-group">

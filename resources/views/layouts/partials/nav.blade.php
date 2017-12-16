@@ -51,7 +51,7 @@
             <ul class="nav navbar-nav pull-right">
                <li class="menu-usu">
                   <a href="{{ route('login') }}">
-                     <i style="font-size: 1.4em;" class="glyphicon glyphicon-user"></i>
+                     <i style="font-size: 1.4em;" class="fa fa-user"></i>
                      <span class="" style="font-size: 1.3em; padding-left:5px;">Iniciar Sesión</span>
                   </a>
                </li>

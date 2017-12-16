@@ -12,7 +12,7 @@
 	      </div>
 	      <div class="caja-body">
 					<div  class="row">
-						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
+						<div class="col-lg-12 col-sm-12 col-xs-12">
 							@if (count($errors) >0)
 							<div class="alert alert-danger">
 								<ul>
@@ -46,7 +46,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{ $user->nombre }}" placeholder="e.g. María Fernanda" autofocus>
+									 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{ $user->nombre }}" onkeypress="return soloLetras(event)"  placeholder="Nombres" autofocus>
 								</div>
 							</div>
 						</div>
@@ -56,7 +56,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $user->apellidoPaterno }}" placeholder="e.g. Guevara">
+									 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $user->apellidoPaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
 								</div>
 							</div>
 						</div>
@@ -66,7 +66,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required minlength="2" maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $user->apellidoMaterno }}" placeholder="e.g. Lizárraga">
+									 <input required minlength="2" maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $user->apellidoMaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Materno">
 								</div>
 							</div>
 						</div>
@@ -86,7 +86,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-									 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{ $user->email }}" placeholder="e.g. mguevaral@unitru.edu.pe">
+									 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{ $user->email }}"  onkeypress="return soloEmail(event)" placeholder="e.g. ejemplo@unitru.edu.pe">
 								</div>
 							</div>
 						</div>
@@ -96,7 +96,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-									 <input pattern="[0-9]+" maxlength="15" type="text" class="form-control" name="telefono"  value="{{ $user->telefono }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxx">
+									 <input pattern="[0-9]+" maxlength="15" type="text" class="form-control" name="telefono"  value="{{ $user->telefono }}" onkeypress="return soloNumeros(event)" placeholder="(xxx)xxxxxx">
 								</div>
 							</div>
 						</div>
@@ -106,7 +106,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-									 <input pattern="[0-9]+" maxlength="15" type="celular" class="form-control" name="celular" value="{{ $user->celular }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxxxxx">
+									 <input pattern="[0-9]+" maxlength="15" type="celular" class="form-control" name="celular" value="{{ $user->celular }}" onkeypress="return soloNumeros(event)" placeholder="(xxx)xxxxxxxxx">
 								</div>
 							</div>
 						</div>
@@ -123,33 +123,14 @@
 					</div>
 		      </div>
 				<!-- BODY de Datos Propios del TIPO_PERSONA -->
-				<div class="caja-body">{{--
-					<!-- Campo Tipo Radio (Tipo de Usuario) -->
-					<div class="row" name = "tipos de user">
-						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoAlumno" class="flaticon-answer" style="color:rgba(0,0,0,0.5);"></i></h3>
-							<input type="radio" id="radioAlumno" name="tipo" value="1" onchange="cambiarColorTipo(1)"/>
-							<h5>Alumno</h5>
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoDocente" class="flaticon-classroom" style="color:rgba(0,0,0,0.5);"></i></h3>
-							<input type="radio" id="radioDocente" name="tipo" value="2" onchange="cambiarColorTipo(2)"/>
-							<h5>Docente</h5>
-						</div>
-						<div class="col-md-4 colsm-4 col-xs-4" style="text-align: center;">
-							<h3><i id="icoAdministrativo" class="flaticon-teacher" style="color:rgba(0,0,0,0.5);"></i></h3>
-							<input type="radio" id="radioAdministrativo" name="tipo" value="3" onchange="cambiarColorTipo(3)" />
-							<h5>Administrativo</h5>
-						</div>
-					</div>
-					<br>--}}
+				<div class="caja-body">
 					<div class="form-horizontal">
 						<div class="form-group">
 							<label for="codigo" class="col-sm-3 control-label">Código </label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
-									 <input readonly pattern="[0-9]+" minlength="4" maxlength="15" type="text" class="form-control" name="codigo"  value="{{ $user->codigo }}" placeholder="xxxx">
+									 <input readonly pattern="[0-9]+" minlength="4" maxlength="15" type="text" class="form-control" name="codigo"  value="{{ $user->codigo }}" onkeypress="return soloNumeros(event)" placeholder="xxxx">
 								</div>
 							</div>
 						</div>
@@ -164,7 +145,7 @@
 								<div class="col-sm-8">
 									<div class="input-group">
 										 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-										 <input type="cargo" class="form-control" name="cargo" value="{{ $tipoPersona->cargo }}" placeholder="Cargo">
+										 <input type="cargo" class="form-control" name="cargo" value="{{ $tipoPersona->cargo }}"  onkeypress="return soloLetras(event)"  placeholder="Cargo">
 									</div>
 								</div>
 							</div>
@@ -237,7 +218,7 @@
 			<!-- CAJA de FUNCION de usuario -->
 			<div class="caja" name "nuevoUsuario">
 		      <div class="caja-header">
-		         <div class="caja-icon">	<i class="glyphicon glyphicon-lock"></i></div>
+		         <div class="caja-icon">	<i class="fa fa-lock"></i></div>
 		         <div class="caja-title">Privilegios
 					</div>
 		      </div>
@@ -335,6 +316,38 @@
 				case 3: iconoElegido = 'icoAdmin'; break;
 			}
 			document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
+		}
+		function soloNumeros(evento){
+			console.log(evento.charCode);
+			if ((evento.charCode >= 48 && evento.charCode <= 57)) {
+				return true;
+			}
+			return false;
+		}
+		function soloLetras(evento){
+			console.log(evento.charCode);
+			if ((evento.charCode >= 65 && evento.charCode <= 90) ||
+			    (event.charCode >= 97 && event.charCode <= 122) ||
+				 (event.charCode == 225) || (event.charCode == 193) || //á Á
+				 (event.charCode == 233) || (event.charCode == 201) || //é É
+				 (event.charCode == 237) || (event.charCode == 205) || //í Í
+				 (event.charCode == 243) || (event.charCode == 211) || //ó Ó
+				 (event.charCode == 250) || (event.charCode == 218) || //ú Ú
+				 (event.charCode == 32)) {
+				return true;
+			}
+			return false;
+		}
+		function soloEmail(evento){
+			console.log(evento.charCode);
+			if ((evento.charCode >= 48 && evento.charCode <= 57) ||
+				 (event.charCode >= 97 && event.charCode <= 122) ||
+				 (event.charCode == 46)||
+				 (event.charCode == 64)||
+				 (event.charCode == 95)){
+				return true;
+			}
+			return false;
 		}
 	</script>
 	<style type="text/css">

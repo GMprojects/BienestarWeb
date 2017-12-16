@@ -36,6 +36,122 @@ use Carbon\Carbon;
 
 class ActividadController extends Controller
 {
+
+   function getFecha($fechaIn){
+      $dia = substr( $fechaIn,0 ,2);
+      $mes =substr( $fechaIn,3 ,2);
+      $anio=substr( $fechaIn,-4 ,4);
+      return $anio."-".$mes."-".$dia;
+   }
+   function getRutaImagen($request){
+      if($request->file('rutaImagen')){
+         $file = $request->file('rutaImagen');
+         $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
+         $storage = Storage::disk('actividades')->put($name, \File::get($file));
+         if($storage){
+            return 'actividades/'.$name;
+         }else{
+            return NULL;
+         }
+      }
+
+   }
+   function getRutaImagenUpdate($request, $rutaImgAnterior){
+       //Eliminando Foto anterior
+       $path = $rutaImgAnterior;
+       File::delete(storage_path('app/public/'.$rutaImgAnterior));
+       Storage::delete($path);
+       //Guardar la nueva imagen
+         if($request->file('rutaImagen')){
+            $file = $request->file('rutaImagen');
+            $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
+            $storage = Storage::disk('actividades')->put($name, \File::get($file));
+            if($storage){
+               return 'actividades/'.$name;
+            }else{
+               return NULL;
+            }
+         }else {
+             $rutaImagen = $rutaImgAnterior;
+         }
+   }
+   function getInivitado($request){
+      if($request->nombreResponsable != NULL){
+         return $request->nombreResponsable.'-'.$request->apellidosResponsable.'-'.$request->emailResponsable;
+      }else{
+         return NULL;
+      }
+   }
+   function getModalidad($request){
+      switch($request->idTipoActividad) {
+         case '1': case '2': return 1;
+         case '4':
+            if(count($request->idAlumnoTutorado) > 1){
+               return '2';
+            }else{
+               return '1';
+            }
+         case '5': case '6': case '7': case '8': case '9': return 2;
+         case '3': case '10': return $request->modalidad;
+         default:
+            return 2;
+      }
+   }
+   function getModalidadUpdate($request, $actividad){
+      if($actividad->idTipoActividad == '4'){
+         if(count($request->idAlumnoTutorado) > 1){
+            return '2';
+         }else{
+            return '1';
+         }
+      }else{
+         return $actividad->modalidad;
+      }
+   }
+   function getCuposTotales($request){
+      switch($request->idTipoActividad) {
+         case '1':
+         case '2': return 1;
+         case '4': return count($request->idAlumnoTutorado);
+         case '5':
+         case '6':
+         case '7': return $request->cuposTotales;
+         case '3':
+         case '10':
+            if($request->modalidad == 1)
+               return 1;
+            else return $request->cuposTotales;
+         case '8':
+         case '9': return 1;
+         default: return  $request->cuposTotales;
+      }
+   }
+   function getCuposTotalesUpdate($request, $actividad){
+      switch($actividad->idTipoActividad) {
+         case '1':
+         case '2': return 1;
+         case '4': return count($request->idAlumnoTutorado);
+         case '5':
+         case '6':
+         case '7': return $request->cuposTotales;
+         case '8':
+         case '9': return 2;
+         case '3':
+         case '10':
+            if($actividad->modalidad == 1)
+               return 1;
+            else return $request->cuposTotales;
+         default:
+            return $request->cuposTotales;
+      }
+   }
+   function getResp($request){
+      if($request->idUserResp == null){
+         return $request->user()->id;
+      }else{
+         return $request->idUserResp;
+      }
+   }
     /**
      * Display a listing of the resource.
      *
@@ -43,7 +159,7 @@ class ActividadController extends Controller
      */
     public function index(Request $request){
     //    dd($request);
-      $actividades = Actividad::Search($request)->get();
+      $actividades = Actividad::get();
       //dd($actividades);
       return view('programador.actividad.index',[
          'actividades' => $actividades,
@@ -74,114 +190,6 @@ class ActividadController extends Controller
       * @param  \Illuminate\Http\Request  $request
       * @return \Illuminate\Http\Response
       */
-      function getFecha($fechaIn){
-         $dia = substr( $fechaIn,0 ,2);
-         $mes =substr( $fechaIn,3 ,2);
-         $anio=substr( $fechaIn,-4 ,4);
-         return $anio."-".$mes."-".$dia;
-      }
-      function getRutaImagen($request){
-         if($request->file('rutaImagen')){
-            $file = $request->file('rutaImagen');
-            $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
-            $storage = Storage::disk('actividades')->put($name, \File::get($file));
-            if($storage){
-               return 'actividades/'.$name;
-            }else{
-               return NULL;
-            }
-         }
-
-      }
-      function getRutaImagenUpdate($request, $rutaImgAnterior){
-   		 //Eliminando Foto anterior
-          $path = $rutaImgAnterior;
-   		 File::delete(storage_path('app/public/'.$rutaImgAnterior));
-   		 Storage::delete($path);
-   		 //Guardar la nueva imagen
-            if($request->file('rutaImagen')){
-               $file = $request->file('rutaImagen');
-               $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
-               $storage = Storage::disk('actividades')->put($name, \File::get($file));
-               if($storage){
-                  return 'actividades/'.$name;
-               }else{
-                  return NULL;
-               }
-            }else {
-                $rutaImagen = $rutaImgAnterior;
-            }
-      }
-      function getInivitado($request){
-         if($request->nombreResponsable != NULL){
-            return $request->nombreResponsable.'-'.$request->apellidosResponsable.'-'.$request->emailResponsable;
-         }else{
-            return NULL;
-         }
-      }
-      function getModalidad($request){
-         switch($request->idTipoActividad) {
-            case '1': case '2': return 1;
-            case '4':
-               if(count($request->idAlumnoTutorado) > 1){
-                  return '2';
-               }else{
-                  return '1';
-               }
-            case '5': case '6': case '7': case '8': case '9': return 2;
-            case '3': case '10': return $request->modalidad;
-            default:
-               return 2;
-         }
-      }
-      function getModalidadUpdate($request, $actividad){
-         if($actividad->idTipoActividad == '4'){
-            if(count($request->idAlumnoTutorado) > 1){
-               return '2';
-            }else{
-               return '1';
-            }
-         }else{
-            return $actividad->modalidad;
-         }
-      }
-      function getCuposTotales($request){
-         switch($request->idTipoActividad) {
-            case '1':
-            case '2': return 1;
-            case '4': return count($request->idAlumnoTutorado);
-            case '5':
-            case '6':
-            case '7': return $request->cuposTotales;
-            default:
-               if($request->modalidad == 1)
-                  return 1;
-               else return $request->cuposTotales;
-         }
-      }
-      function getCuposTotalesUpdate($request, $actividad){
-         switch($actividad->idTipoActividad) {
-            case '1':
-            case '2': return 1;
-            case '4': return count($request->idAlumnoTutorado);
-            case '5':
-            case '6':
-            case '7': return $request->cuposTotales;
-            case '8':
-            case '9': return 1;
-            default:
-               if($actividad->modalidad == 1)
-                  return 1;
-               else return $request->cuposTotales;
-         }
-      }
-      function getResp($request){
-         if($request->idUserResp == null){
-            return $request->user()->id;
-         }else{
-            return $request->idUserResp;
-         }
-      }
       public function store(Request $request){
          $mensajeA = 'Se le invita a participar de una actividad';
          $mensajeR = 'Ud. ha sido asignado como responsable de una actividad';
@@ -194,12 +202,19 @@ class ActividadController extends Controller
             'modalidad' => 'required',
             'rutaImagen' => 'image|mimes:jpeg,png,jpg'
          ]);
+         if ($request->idTipoActividad == 1 || $request->idTipoActividad == 2) {
+            $fechaFin = ActividadController::getFecha($request->fechaInicio);
+            $horaFin = (Carbon::parse($request->horaInicio))->toTimeString();
+         } else {
+            $fechaFin = ActividadController::getFecha($request->fechaFin);
+            $horaFin = (Carbon::parse($request->horaFin))->toTimeString();
+         }
          $actividad = Actividad::create([
             'titulo' => $request->titulo,
             'fechaInicio' => ActividadController::getFecha($request->fechaInicio),
             'horaInicio' => (Carbon::parse($request->horaInicio))->toTimeString(),
-            'fechaFin' =>  ActividadController::getFecha($request->fechaFin),
-            'horaFin' => (Carbon::parse($request->horaFin))->toTimeString(),
+            'fechaFin' => $fechaFin,
+            'horaFin' => $horaFin,
             'lugar' => $request->lugar,
             'referencia' => $request->referencia,
             'descripcion' => $request->descripcion,
@@ -258,7 +273,7 @@ class ActividadController extends Controller
                   $actPed->save();
                }
                $mensajeA = 'Se le ha programado una sesión de tutoría ';
-               $mensajeR = 'Se le ha programado una sesión de tutoría';
+               $mensajeR = 'Ud. ha sido asignado responsable de la siguiente sesión de tutoría';
                break;
             case '5':           case '6':           case '7':
                $actGrupal = new ActGrupal;
@@ -371,11 +386,18 @@ class ActividadController extends Controller
           $actividad = Actividad::findOrFail($id);
           Log::info($actividad);
 
+          if ($request->idTipoActividad == 1 || $request->idTipoActividad == 2) {
+             $fechaFin = $actividad->fechaFin;
+             $horaFin = $actividad->horaFin;
+          } else {
+             $fechaFin = ActividadController::getFecha($request->fechaFin);
+             $horaFin = (Carbon::parse($request->horaFin))->toTimeString();
+          }
            $actividad->titulo = $request->titulo;
            $actividad->fechaInicio = ActividadController::getFecha($request->fechaInicio);
            $actividad->horaInicio = (Carbon::parse($request->horaInicio))->toTimeString();
-           $actividad->fechaFin = ActividadController::getFecha($request->fechaFin);
-           $actividad->horaFin = (Carbon::parse($request->horaFin))->toTimeString();
+           $actividad->fechaFin = $fechaFin;
+           $actividad->horaFin = $horaFin;
            $actividad->lugar = $request->lugar;
            $actividad->referencia = $request->referencia;
            $actividad->descripcion = $request->descripcion;
@@ -709,9 +731,31 @@ class ActividadController extends Controller
       }
     }
 
-   public function member_show(Request $request){
+    public function member_show(Request $request){
       $actividad = Actividad::findOrFail($request->id);
-      return view('miembro.actividad')->with('actividad',$actividad)->with('list_insc', $request->list_insc);
+      $relacionadas = Actividad::where([['idTipoActividad', '=', $actividad->idTipoActividad], ['idActividad', '<>', $actividad->idActividad]])->get();
+      $inscripciones = $actividad->inscripcionesADA;
+      $insc_alum = [];
+      $insc_doce = [];
+      $insc_admi = [];
+      for ($i=0; $i < count($inscripciones); $i++) {
+         if($inscripciones[$i]->inscripcionAlumno != null){
+            array_push( $insc_alum, $inscripciones[$i]->inscripcionAlumno->alumno->user );
+         }
+         if($inscripciones[$i]->inscripcionDocente != null){
+            array_push( $insc_doce, $inscripciones[$i]->inscripcionDocente->docente->user );
+         }
+         if($inscripciones[$i]->inscripcionAdministrativo != null){
+            array_push( $insc_admi, $inscripciones[$i]->inscripcionAdministrativo->administrativo->user );
+         }
+      }
+      return view('miembro.actividad')->with([
+         'actividad' => $actividad,
+         'relacionadas' => $relacionadas,
+         'insc_alum' => $insc_alum,
+         'insc_doce' => $insc_doce,
+         'insc_admi' => $insc_admi
+      ]);
       //return view('miembro.actividad')->with('actividad',$actividad);
    }
 }

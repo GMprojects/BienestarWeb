@@ -29,6 +29,7 @@ class TrabajoController extends Controller
      */
     public function index(Request $request)
     {
+      dd($request->op);
          if ($request->op == 1) { //viene desde egresado
             $trabajos = Trabajo::where('idEgresado',$request->idEgresado)->get();
             $egresado = Egresado::findOrFail($request->idEgresado);
@@ -53,7 +54,7 @@ class TrabajoController extends Controller
     public function create(Request $request)
     {
          if ($request->op == 1) { //viene desde egresado
-         $egresado = Egresado::findOrFail($request->idEgresado);
+            $egresado = Egresado::findOrFail($request->idEgresado);
             return view('admin.trabajo.create')
                   ->with('op',$request->op)
                   ->with('idEgresado', $request->idEgresado)
@@ -77,8 +78,6 @@ class TrabajoController extends Controller
         $request->validate([
             'institucion' => 'required',
             'lugar' => 'required',
-            'fechaInicio' => 'required|date',
-            'fechaFin' => 'date|nullable',
             'nivelSatisfaccion' => 'required'
         ]);
         $trabajo = new Trabajo;
@@ -95,7 +94,7 @@ class TrabajoController extends Controller
       //return Redirect::to('admin/preguntaEncuesta');
         if ($request->op == 2) {
            return redirect()->action('TrabajoController@index', ['op' => $request->op]);
-       } else {
+       } else { //viene desde egresado
            return redirect()->action('TrabajoController@index', ['idEgresado' => $request->idEgresado, 'op' => $request->op]);
         }
 
@@ -118,10 +117,11 @@ class TrabajoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        return view('admin.trabajo.edit')
-        ->with('trabajo',Trabajo::findOrFail($id));
+         return view('admin.trabajo.edit')
+         ->with('trabajo',Trabajo::findOrFail($id))
+         ->with('op', $request->op);
     }
 
     /**
@@ -142,9 +142,12 @@ class TrabajoController extends Controller
         $trabajo->recomendaciones = $request->get('recomendaciones');
         $trabajo->observaciones = $request->get('observaciones');
         $trabajo->update();
-        //return Redirect::to('admin/preguntaEncuesta')->with('texto',$idEncuesta);
-        //return redirect()->back();
-        return redirect()->action('TrabajoController@index', ['idEgresado' => $trabajo->idEgresado]);
+
+        if ($request->op == 2) {
+           return redirect()->action('TrabajoController@index', ['op' => $request->op]);
+        } else { //viene desde egresado
+           return redirect()->action('TrabajoController@index', ['idEgresado' => $trabajo->idEgresado, 'op' => $request->op]);
+        }
     }
 
     /**

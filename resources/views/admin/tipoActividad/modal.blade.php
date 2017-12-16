@@ -10,15 +10,19 @@
 				<div class="modal-body">
 					@if (in_array($tipoActividad->idTipoActividad, $idTiposActividad))
 						@php($sePuedeEliminar = false)
-						<p>Categoría <b>{{ $tipoActividad->tipo }} </b></p>
-						<p>Existen Actividades que pertenecen a esta categoría.</p>
+						<h5><b> Categoría {{ $tipoActividad->tipo }} </b></h5>
+						@if ($tipoActividad->idTipoActividad < 11 )
+							<p style="color:red">Esta es una categoría por defecto, no puede ser eliminada.</p>
+						@else
+							<p style="color:red">Existen Actividades que pertenecen a esta categoría.</p>
+						@endif
 					@else
 						@php($sePuedeEliminar = true)
 						<p>Confirme si desea ELIMINAR la Categoría <b>{{ $tipoActividad->tipo }} .</b></p>
 					@endif
 				</div>
 				<div class="modal-footer">
-					@if ($sePuedeEliminar)
+					@if ($tipoActividad->idTipoActividad < 11 && $sePuedeEliminar)
 						<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>
 					@endif
 					<button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>

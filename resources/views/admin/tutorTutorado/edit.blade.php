@@ -37,17 +37,11 @@
 								 <th>Opciones</th>
 							 </thead>
 							 <tbody>
-								 @foreach ($tutorados as $tutorado)
+								 @foreach ($alumnos as $alumno)
 									 <tr>
-										 @if (in_array($tutorado->idAlumno, $idTutorados->toArray()))
-											 <td>{{ $tutorado->codigo }}</td>
-											 <td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
-											 <td><input type="checkbox" checked onchange="ocultarError(this)" style="" value={{ $tutorado->idAlumno }} name="alumnos[]"></td>
-										 @else
-											 <td>{{ $tutorado->codigo }}</td>
-											 <td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
-											 <td><input type="checkbox" onchange="ocultarError(this)" style="" value={{ $tutorado->idAlumno }} name="alumnos[]"></td>
-										 @endif
+											 <td>{{ $alumno->codigo }}</td>
+											 <td>{{ $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno }}</td>
+											 <td><input type="checkbox" onchange="ocultarError(this)" style="" value={{ $alumno->idAlumno }} name="alumnos[]"></td>									
 									 </tr>
 								 @endforeach
 							 </tobody>

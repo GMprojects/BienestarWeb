@@ -55,11 +55,12 @@ class MiPerfilController extends Controller
      $du['inscInscripcion'] = $inscInscripcion;
      $du['inscAsistencia'] = $inscAsistencia;
      //dd($du);
-    return view('miembro.perfil')->with('du', $du);
+    return view('miembro.perfil.perfil')->with('du', $du);
    }
    public function edit(Request $request, $id){
       if($id == $request->user()->id){ //FUNCION DE middleware QUE NO PUDE IMPLEMENTAR EN UNMIDDLEWARE :(
-         return ('aqui editare mi perfil');
+         $user = User::findOrFail($request->user()->id);
+         return view('miembro.perfil.edit')->with('user', $user);
       }else{
          return abort(401);
       }

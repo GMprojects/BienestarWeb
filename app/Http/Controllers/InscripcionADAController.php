@@ -13,6 +13,9 @@ use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
 use BienestarWeb\User;
 use BienestarWeb\Actividad;
+use BienestarWeb\Encuesta;
+use BienestarWeb\EncuestaRespondidaResp;
+use BienestarWeb\EncuestaRespondidaInsc;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -184,13 +187,28 @@ class InscripcionADAController extends Controller
 
     public function registrarAsistencias(Request $request, $id){
       //dd($id);
+      $idEnc_insc = Encuesta::where([
+         'idTipoActividad' => Actividad::findOrFail($id)->idTipoActividad,
+         'destino' => 'i'
+         ])->pluck('idEncuesta');
+      $idEnc_resp = Encuesta::where([
+         'idTipoActividad' => Actividad::findOrFail($id)->idTipoActividad,
+         'destino' => 'r'
+         ])->pluck('idEncuesta');
+      EncuestaRespondidaResp::create([
+         'idActividad' => $id,
+         'idEncuesta' => $idEnc_resp[0]
+      ]);
       for ($i = 0; $i < count($request->asistencia) ; $i++) {
          $array = preg_split("/[-]/",$request->asistencia[$i]);
-         if($array[1] == '1'){//alumno 1
+         if($array[1] == '1'){
+            //alumno 1
             $inscripcionAlumno = InscripcionAlumno::where('idInscripcionADA', $array[0])->get();
             $inscripcionAlumno[0]->asistencia = '1';
             $inscripcionAlumno[0]->update();
-         }elseif ($array[1] == '2') {//docente 2
+
+         }elseif ($array[1] == '2') {
+            //docente 2
             $inscripcionDocente = InscripcionDocente::where('idInscripcionADA', $array[0])->get();
             $inscripcionDocente[0]->asistencia = '1';
             $inscripcionDocente[0]->update();
@@ -199,6 +217,10 @@ class InscripcionADAController extends Controller
             $inscripcionAdministrativo[0]->asistencia = '1';
             $inscripcionAdministrativo[0]->update();
          }
+         $nuevaEncuesta = EncuestaRespondidaInsc::create([
+            'idInscripcionADA'=>$array[0],
+            'idEncuesta' => $idEnc_insc[0]
+         ]);
       }
       $actividad = Actividad::findOrFail($id);
       $actividad->estado = 2;

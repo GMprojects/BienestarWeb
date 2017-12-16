@@ -8,18 +8,8 @@
 	<div class="caja-body">
 		<div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-               <strong>
-                  &nbsp; &nbsp; <i class="fa fa-qrcode margin-r-5"></i>&nbsp; &nbsp;Código de Beneficiario:
-               </strong>
-               <p>
-                   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{{ $alumno->user->codigo }}
-               </p>
-               <strong>
-                  &nbsp; &nbsp; <i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;Beneficiario:
-               </strong>
-               <p>
-                   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{{ $alumno->user->nombre.' '.$alumno->user->apellidoPaterno.' '.$alumno->user->apellidoMaterno }}
-               </p>
+					<label><i class="fa fa-qrcode margin-r-5"></i>&nbsp; &nbsp;Código:  </label> &nbsp; &nbsp; {{ $alumno->user->codigo }} <br>
+					<label><i class="fa fa-calendar margin-r-5"></i>&nbsp; &nbsp;Beneficiario:  </label> &nbsp; &nbsp; {{ $alumno->user->nombre.' '.$alumno->user->apellidoPaterno.' '.$alumno->user->apellidoMaterno }}
             </div>
 	 	</div>
 	</div>

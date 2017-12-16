@@ -42,6 +42,7 @@ class CrearTablaBeneficiarioMovilidad extends Migration
         Schema::create('EvidenciaMovilidad', function(Blueprint $tabla)
         {
             $tabla->increments('idEvidenciaMovilidad');
+            $tabla->string('nombre', 100)->default('Evidencia');
             $tabla->mediumtext('ruta');
 
             //Clave foranea de la tabla Alumno

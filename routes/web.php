@@ -25,6 +25,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('preguntaEncuesta', 'PreguntaEncuestaController');
     Route::resource('user', 'UserController');
     Route::resource('tutorTutorado', 'TutorTutoradoController');
+    Route::get('tutorTutorado/{tutorTutorado}/destroy', 'TutorTutoradoController@destroyTutor');
+    Route::get('dashboard', 'DashboardController@index');
+    Route::get('dashboard/actividades', 'DashboardController@listarActividades');
    /* Route::get('tutorTutorado', 'TutorTutoradoController@index');
     Route::get('tutorTutorado/create', 'TutorTutoradoController@create');
     Route::get('tutorTutorado/{tutorTutorado}/edit', 'TutorTutoradoController@edit');
@@ -34,7 +37,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 //Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
 
-Route::get('perfilTipo', 'UserController@getUserTipo');
+//Route::get('perfilTipo', 'UserController@getUserTipo');
 
 Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
    Route::resource('actividad', 'ActividadController');
@@ -62,12 +65,21 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::post('actividad/registrarAsistencias/{idActividad}', ['uses' => 'InscripcionADAController@registrarAsistencias','as' => 'actividad.registrarAsistencias']);
     Route::post('actividad/nuevoMotivo/{idActividad}', ['uses' => 'DetallePedagogiaController@store',  'as' => 'detallePedagogia.store']);
     Route::post('actividad/actualizarActPedagogia/{idActividadPedagogia}', ['uses' => 'ActPedagogiaController@update', 'as' => 'actPedagogia.update']);
+
+    Route::get('actividad/{id}/beneficiario/{idBeneficiario}/evidencias', 'BeneficiarioController@indexEvidenciasBeneficiario');
+    Route::post('actividad/{id}/beneficiario/{idBeneficiario}/evidencias', ['uses' => 'BeneficiarioController@storeEvidenciaBeneficiario','as' => 'evidenciaBeneficiario.store']);
+    Route::delete('actividad/{id}/beneficiario/{idBeneficiario}/evidencias/{idEvidencia}','BeneficiarioController@destroyEvidenciaBeneficiario');
+
     Route::get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
     Route::resource('perfil', 'MiPerfilController');
     Route::get('mis-actividades/{id}', ['uses' => 'MiPerfilController@mis_actividades', 'as' => 'miembro.misActividades']);
 
 
-    Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
+     Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
+     Route::get('encuesta', 'EncuestaController@encuesta');
+     Route::get('encuestaInsc/{id}', ['uses' => 'EncuestaController@encuestaInsc']);
+     Route::get('encuestaResp/{id}', ['uses' => 'EncuestaController@encuestaResp']);
+     Route::post('encuesta/registrar_respuestas/{id}/{opt}', ['uses' => 'EncuestaController@registrar_respuestas']);
 });
 //Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
 
@@ -88,6 +100,7 @@ Route::get('listaAlumnos','UserController@getAlumnos');
 Route::get('listaResponsablesTutores','TutorTutoradoController@getTutores');
 Route::get('listaTutorados','TutorTutoradoController@getTutorados');
 Route::get('descargarEvidencia','EvidenciaActividadController@descargarEvidencia');
+Route::get('descargarEvidenciaBeneficiario','BeneficiarioController@descargarEvidenciaBeneficiario');
 Route::get('alumnosLibres', 'TutorTutoradoController@getAlumnosLibres');
 Route::get('alumnosLibresExDoc', 'TutorTutoradoController@getAlumnosLibresExDoc');
 Route::get('docentesNoTutores', 'TutorTutoradoController@getDocentesNoTutores');
@@ -104,6 +117,10 @@ Route::get('actividadesInscritas','ActividadController@verActividadesInsc');
 Route::get('actividadesAsistidas','ActividadController@verActividades');
 Route::get('actividadesNoAsistidas','ActividadController@verActividades');
 Route::get('verMisEstadisticas','ActividadController@verMisEstadisticas');
+Route::get('misEncuPendientes', 'EncuestaController@misEncuPendientes');
+
+
+Route::get('reIndexDashboard','DashboardController@reIndex');
 
 //temporal :p
 Route::get('encuesta', function () {

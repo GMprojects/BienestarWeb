@@ -19,11 +19,4 @@ class TipoActividad extends Model
       return $this->hasMany('BienestarWeb\Encuesta');
     }
 
-    public function scopeSearch($query, $tipo){
-        return $query
-        	->where('tipo','LIKE',"%$tipo%")
-            ->orwhere('rutaImagen','LIKE',"%$tipo%")
-            ->orderBy('idTipoActividad', 'desc');
-    }
-
 }

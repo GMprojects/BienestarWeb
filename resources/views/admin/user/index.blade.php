@@ -1,6 +1,5 @@
 @extends('template')
 @section('contenido')
-
 		<div class="box box-info">
 			<div class="box-header">
 				<div class="row">
@@ -84,7 +83,7 @@
 	              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 				  }
 	         },
-				"order":[[2,"asc"]]	
+				"order":[[2,"asc"]]
 	      })
 	   });
 	</script>

@@ -28,7 +28,7 @@ class CrearTablaEncuesta extends Migration
         {
             $tabla->increments('idAlternativa');
             $tabla->string('etiqueta', 20);
-
+            $tabla->integer('valor')->default(0);
             //Clave foranea de la tabla Encuesta
             $tabla->integer('idEncuesta')->unsigned();
             $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta');
@@ -41,7 +41,7 @@ class CrearTablaEncuesta extends Migration
             $tabla->integer('estado')->default('1');
             //0 desactivada
             //1 activada
-            
+
             //Clave foranea de la tabla Encuesta
             $tabla->integer('idEncuesta')->unsigned();
             $tabla->foreign('idEncuesta')->references('idEncuesta')->on('Encuesta');

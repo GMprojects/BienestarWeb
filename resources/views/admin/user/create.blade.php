@@ -13,7 +13,7 @@
 	      <div class="caja-body">
 				<!-- Imagen de usuario -->
 				<div  class="row">
-					<div class="col-lg-6 col-sm-6 col-xs-13">
+					<div class="col-lg-12 col-sm-12 col-xs-12">
 						@if (count($errors) >0)
 						<div class="alert alert-danger">
 							<ul>
@@ -44,7 +44,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{old('nombre')}}" placeholder="e.g. María Fernanda" autofocus>
+								 <input required minlength="2" maxlength="45" type="text" class="form-control" name="nombre" value="{{old('nombre')}}" onkeypress="return soloLetras(event)"  placeholder="Nombres" autofocus>
 							</div>
 						</div>
 					</div>
@@ -54,7 +54,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{old('apellidoPaterno')}}" placeholder="e.g. Guevara">
+								 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{old('apellidoPaterno')}}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
 							</div>
 						</div>
 					</div>
@@ -64,7 +64,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" placeholder="e.g. Lizárraga">
+								 <input required maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" onkeypress="return soloLetras(event)" placeholder="Apellido Materno">
 							</div>
 						</div>
 					</div>
@@ -84,7 +84,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{old('email')}}" placeholder="e.g. ejemplo@ejemplo.com">
+								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email" value="{{old('email')}}"  onkeypress="return soloEmail(event)" placeholder="e.g. ejemplo@unitru.edu.pe">
 							</div>
 						</div>
 					</div>
@@ -94,7 +94,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-								 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{old('telefono')}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxx">
+								 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{old('telefono')}}" onkeypress="return soloNumeros(event)" placeholder="(xxx)xxxxxx">
 							</div>
 						</div>
 					</div>
@@ -104,7 +104,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-								 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="celular" value="{{old('celular')}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxxxxx">
+								 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="celular" value="{{old('celular')}}" onkeypress="return soloNumeros(event)" placeholder="(xxx)xxxxxxxxx">
 							</div>
 						</div>
 					</div>
@@ -116,9 +116,8 @@
 	<div class="col-md-6">
 		<div class="caja" name "nuevoUsuario">
 	      <div class="caja-header">
-	         <div class="caja-icon">	<i class="glyphicon glyphicon-user"></i></div>
-	         <div class="caja-title" id="tituloCamposPropios">Datos de Alumno
-				</div>
+	         <div class="caja-icon">	<i class="fa fa-user"></i></div>
+	         <div class="caja-title" id="tituloCamposPropios">Datos de Alumno</div>
 	      </div>
 			<div class="caja-body">
 				<!-- Campo Tipo Radio (Tipo de Usuario) -->
@@ -146,7 +145,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
-								 <input required pattern="[0-9]+" minlength="4" maxlength="15" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control" name="codigo"  value="{{old('codigo')}}" placeholder="xxxx">
+								 <input required pattern="[0-9]+" minlength="4" maxlength="15" onkeypress="return soloNumeros(event)" type="text" class="form-control" name="codigo"  value="{{old('codigo')}}" placeholder="xxxx">
 							</div>
 						</div>
 					</div>
@@ -156,11 +155,11 @@
 					<!-- Campos para el tipo ADMINISTRATIVO -->
 					<div class="camposAdministrativo" id="formAdministrativo" style='display:none;'>
 						<div class="form-group">
-							<label for="cargo" class="col-sm-3 control-label">Cargo </label>
+							<label for="cargo" class="col-sm-3 control-label">Cargo <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-									 <input type="cargo" class="form-control" name="cargo" value="{{old('cargo')}}" placeholder="Cargo">
+									 <input type="cargo" id="cargo" class="form-control" name="cargo" value="{{old('cargo')}}" placeholder="Cargo">
 								</div>
 							</div>
 						</div>
@@ -231,7 +230,7 @@
 		<!-- CAJA de FUNCION de usuario -->
 		<div class="caja" name "nuevoUsuario">
 	      <div class="caja-header">
-	         <div class="caja-icon">	<i class="glyphicon glyphicon-lock"></i></div>
+	         <div class="caja-icon">	<i class="fa fa-lock"></i></div>
 	         <div class="caja-title">Privilegios
 				</div>
 	      </div>
@@ -279,6 +278,7 @@
 		document.getElementById('formAdministrativo').style.display = 'none';
 		document.getElementById('formAlumno').style.display = 'none';
 		document.getElementById('formDocente').style.display = 'none';
+		$('#cargo').removeAttr('required');
 		switch (icono) {
 			case 1: 	iconoElegido = 'icoAlumno';
 						document.getElementById('formAlumno').style.display = 'block';
@@ -289,6 +289,7 @@
 			case 3: 	iconoElegido = 'icoAdministrativo';
 						document.getElementById('formAdministrativo').style.display = 'block';
 						document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";break;
+						$('#cargo').attr('required', 'true');
 		}
 		document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 	}
@@ -304,6 +305,39 @@
 			case 3: iconoElegido = 'icoAdmin'; break;
 		}
 		document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
+	}
+
+	function soloNumeros(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 48 && evento.charCode <= 57)) {
+			return true;
+		}
+		return false;
+	}
+	function soloLetras(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 65 && evento.charCode <= 90) ||
+		    (event.charCode >= 97 && event.charCode <= 122) ||
+			 (event.charCode == 225) || (event.charCode == 193) || //á Á
+			 (event.charCode == 233) || (event.charCode == 201) || //é É
+			 (event.charCode == 237) || (event.charCode == 205) || //í Í
+			 (event.charCode == 243) || (event.charCode == 211) || //ó Ó
+			 (event.charCode == 250) || (event.charCode == 218) || //ú Ú
+			 (event.charCode == 32)) {
+			return true;
+		}
+		return false;
+	}
+	function soloEmail(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 48 && evento.charCode <= 57) ||
+			 (event.charCode >= 97 && event.charCode <= 122) ||
+			 (event.charCode == 46)||
+			 (event.charCode == 64)||
+			 (event.charCode == 95)){
+			return true;
+		}
+		return false;
 	}
 </script>
 <style type="text/css">

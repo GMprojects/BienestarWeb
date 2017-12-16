@@ -22,4 +22,7 @@ class InscripcionDocente extends Model
    public function docente(){
       return $this->belongsTo('BienestarWeb\Docente', 'idDocente');
    }
+   public function inscripcionADA(){
+     return $this->belongsTo('BienestarWeb\InscripcionADA','idInscripcionADA');
+   }
 }

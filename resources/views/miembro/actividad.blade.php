@@ -149,43 +149,23 @@
                               <span class="label label-success">{{ $actividad->actividadGrupal->cuposOcupados }} asistirán</span>
                               <span class="label label-danger">{{ $actividad->actividadGrupal->cuposDisponibles }} restantes</span>
                            @elseif( $actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
-                              <span class="label label-success">Libre</span>
+                              <span class="label ff-bg">Libre</span>
                            @elseif( $actividad->idTipoActividad == 4 )
-                              <span class="btn ff-bg-red">TUTORADOS</span>
+                              <span class="label ff-bg-blue">TUTORADOS</span>
                            @endif
                         </div>
-                        {{--
-                        @if(in_array($actividad->idActividad, $list_insc))
-                           <a class="btn btn-ff pull-right" href="{{ action('ActividadController@member_show', $actividad->idActividad) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
-                              <i class="fa fa-check-circle"></i> Asistiré
-                           </a>
-                        @else
-                           @if(Auth::user() == null || $actividad->idActividad != 4 || $actividad->actividadGrupal->cuposDisponibles > 0)
-                              <a class="btn btn-ff pull-right" href="{{ route('inscripcion.store') }}"
-                                 onclick="event.preventDefault();
-                                 document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-                                 <i class="fa fa-circle-o"></i> Deseo Asistir
-                              </a>
-                              <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
-                                 {{ csrf_field() }}
-                              </form>
-                           @else
-                              <a class="act-mini-txt pull-right" href="#" data-toggle="tooltip" data-placement="bottom" title="Click para contactar con el programador?">
-                                 <i class="fa fa-times-circle"></i> Inscripcion no disponible
-                              </a>
-                           @endif
-                        @endif
-                     --}}
                      @if( $actividad->idTipoActividad == 4 )
-                        @if(Auth::user()!= null && in_array($actividad->idActividad, $list_insc))
+                        @if(Auth::user()!= null && Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad))
                            <h5><span class="label ff-bg-red">DEBO ASISTIR</span></h5>
                         @endif
                      @elseif($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
                         <span class="pull-right label ff-bg-red rounded" style="font-size: 1.3em;">Presentar documentos</span>
                      @elseif(Auth::user()!=null)
                         @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
-                           @if(in_array($actividad->idActividad, $list_insc))
-                              <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad, 'list_insc'=>$list_insc]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
+                           @if(Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad) ||
+                              Auth::user()->idTipoPersona == 2 && Auth::user()->docente->misInscripciones->contains('idActividad', $actividad->idActividad) ||
+                              Auth::user()->idTipoPersona == 3 && Auth::user()->administrativo->misInscripciones->contains('idActividad', $actividad->idActividad))
+                              <a class="btn btn-ff pull-right" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
                                  <i class="fa fa-check-circle"></i> Asistiré
                               </a>
                            @else
@@ -236,77 +216,91 @@
                   </div>
                </section>
                <aside class="col-md-3 col-sm-3 hidden-xs hidden-sm">
-                  <div class="panel panel-default">
-                     <div class="panel-heading">
-                        <h3 class="panel-title">Actividades Relacionadas</h3>
-                     </div>
-                     <section class="actividades-relacionadas">
-
-                        <section class="activity-item">
-                           <a href="#" class="list-group-item act-rec">
-                              <img class="img-thumbnail pull-left" src="{{ asset('img/act1.jpg') }}" alt="No disponible">
-                              <h5 class="act-rec-title"><b>Una Actividad Reciente</b></h5>
-                              <p class="act-rec-descripcion text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                           </a>
-                        </section>
-
-                        <section class="activity-item">
-                           <a href="#" class="list-group-item act-rec">
-                              <span class="thumb"><img class="img-thumbnail pull-left" src="{{ asset('img/act2.jpg') }}" alt="No disponible"></span>
-                              <h5 class="act-rec-title"> <b>Una Actividad Reciente</b></h5>
-                              <p class="act-rec-descripcion text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                           </a>
-                        </section>
-
-                        <section class="activity-item">
-                           <a href="#" class="list-group-item act-rec">
-                              <span class="thumb"><img class="img-thumbnail pull-left" src="{{ asset('img/act3.jpg') }}" alt="No disponible"></span>
-                              <h5 class="act-rec-title"> <b>Una Actividad Reciente</b></h5>
-                              <p class="act-rec-descripcion text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                           </a>
-                        </section>
-                     </section>
-                  </div>
-
-                  <section class="inscritos">
+                  @if( count($relacionadas) > 0 )
                      <div class="panel panel-default">
                         <div class="panel-heading">
-                           <h3 class="panel-title">Asistirán</h3>
+                           <h3 class="panel-title">Actividades Relacionadas</h3>
                         </div>
-                        <div class="signed-up">
-                           <a href="#">
-                              <div class="signed-up-img pull-left">
-                                 <img src="{{ asset('img/avatar.png') }}" alt="Not found" class="img-circle">
-                              </div>
-                              <div class="signed-up-data">
-                                 <div class="member-name"></i>Jhordy Abanto Castillo</div>
-                              </div>
-                           </a>
-                        </div>
-
-                        <div class="signed-up">
-                           <a href="#">
-                              <div class="signed-up-img pull-left">
-                                 <img src="{{ asset('img/avatar4.png') }}" alt="Not found" class="img-circle">
-                              </div>
-                              <div class="signed-up-data">
-                                 <div class="member-name"></i> Abelardo Abad Giron</div>
-                              </div>
-                           </a>
-                        </div>
-
-                        <div class="signed-up">
-                           <a href="#">
-                              <div class="signed-up-img pull-left">
-                                 <img src="{{ asset('img/avatar5.png') }}" alt="Not found" class="img-circle">
-                              </div>
-                              <div class="signed-up-data">
-                                 <div class="member-name"></i> Jordy Abanto Reyes</div>
-                              </div>
-                           </a>
-                        </div>
+                        <section class="actividades-relacionadas">
+                           @foreach ($relacionadas as $key => $relacionada)
+                              <section class="activity-item">
+                                 <a href="{{ action('ActividadController@member_show', ['id'=>$relacionada->idActividad]) }}" class="list-group-item act-rec">
+                                    <img class="img-thumbnail pull-left" src="{{ asset('img/act1.jpg') }}" alt="No disponible">
+                                    <h5 class="act-rec-title"><b>{{ $relacionada->titulo }}</b></h5>
+                                    <p class="act-rec-descripcion text-justify"> {{ $relacionada->descripcion }} </p>
+                                 </a>
+                              </section>
+                           @endforeach
+                        </section>
                      </div>
-                  </section>
+                  @endif
+
+                  @if( count($insc_alum) > 0 )
+                     <section class="alumnos_inscritos">
+                        <div class="panel panel-default">
+                           <div class="panel-heading">
+                              <h3 class="panel-title">Estudiantes que asitirán</h3>
+                           </div>
+                           @foreach ($insc_alum as $alumno)
+                              <div class="signed-up">
+                                 <a href="{{ action('MiPerfilController@show', ['idPerfil' => $alumno->id ]) }}">
+                                    <div class="signed-up-img pull-left">
+                                       <img src="{{ asset('storage/'.$alumno->foto ) }}" alt="Not found" class="img-circle">
+                                    </div>
+                                    <div class="signed-up-data">
+                                       <div class="member-name"></i>{{ $alumno->nombre }} {{ $alumno->apellidoPaterno }}</div>
+                                    </div>
+                                 </a>
+                              </div>
+                           @endforeach
+                        </div>
+                     </section>
+                  @endif
+
+                  @if( count($insc_doce) > 0 )
+                     <section class="alumnos_inscritos">
+                        <div class="panel panel-default">
+                           <div class="panel-heading">
+                              <h3 class="panel-title">Docentes que asitirán</h3>
+                           </div>
+                           @foreach ($insc_doce as $docente)
+                              <div class="signed-up">
+                                 <a href="{{ action('MiPerfilController@show', ['idPerfil' => $docente->id ]) }}">
+                                    <div class="signed-up-img pull-left">
+                                       <img src="{{ asset('storage/'.$docente->foto ) }}" alt="Not found" class="img-circle">
+                                    </div>
+                                    <div class="signed-up-data">
+                                       <div class="member-name"></i>{{ $docente->nombre }} {{ $docente->apellidoPaterno }}</div>
+                                    </div>
+                                 </a>
+                              </div>
+                           @endforeach
+                        </div>
+                     </section>
+                  @endif
+
+                  @if( count($insc_admi) > 0 )
+                     <section class="alumnos_inscritos">
+                        <div class="panel panel-default">
+                           <div class="panel-heading">
+                              <h3 class="panel-title">Administrativos que asitirán</h3>
+                           </div>
+                           @foreach ($insc_admi as $administrativo)
+                              <div class="signed-up">
+                                 <a href="{{ action('MiPerfilController@show', ['idPerfil' => $administrativo->id ]) }}">
+                                    <div class="signed-up-img pull-left">
+                                       <img src="{{ asset('storage/'.$administrativo->foto ) }}" alt="Not found" class="img-circle">
+                                    </div>
+                                    <div class="signed-up-data">
+                                       <div class="member-name"></i>{{ $administrativo->nombre }} {{ $administrativo->apellidoPaterno }}</div>
+                                    </div>
+                                 </a>
+                              </div>
+                           @endforeach
+                        </div>
+                     </section>
+                  @endif
+
                </aside>
             </div>
             @include('layouts.partials.footer')

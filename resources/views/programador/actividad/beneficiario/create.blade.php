@@ -126,7 +126,6 @@
 	</div>
 </div>
 {!! Form::Close() !!}
-
 <!-- MODALES -->
 <!-- /.modal -->
 <div class="modal fade" id="modal-default">

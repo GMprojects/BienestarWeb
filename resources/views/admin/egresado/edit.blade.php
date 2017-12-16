@@ -1,5 +1,5 @@
 @extends('template')
-@section('contenido')}
+@section('contenido')
 {!! Form::model($egresado, ['method'=>'PATCH', 'route'=>['egresado.update', $egresado->idEgresado]]) !!}
 {{ Form::token() }}
 <div  class="row">
@@ -19,7 +19,7 @@
 	<div class="col-md-6">
 		<div class="caja">
 	      <div class="caja-header">
-	         <div class="caja-icon"><i class="fa fa-address-card" style="font-size: 1em;"></i></div>
+	         <div class="caja-icon"><i class="fa fa-address-card"></i></div>
 	         <div class="caja-title">Datos Personales
 				</div>
 	      </div>
@@ -33,7 +33,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required type="text" class="form-control" name="nombre" required value="{{ $egresado->nombre }}" placeholder="Nombres">
+									 <input required type="text" minlength="2" class="form-control" name="nombre" required value="{{ $egresado->nombre }}" onkeypress="return soloLetras(event)" placeholder="Nombres">
 								</div>
 							</div>
 						</div>
@@ -43,7 +43,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required type="text" class="form-control" name="apellidoPaterno" required value="{{ $egresado->apellidoPaterno }}" placeholder="Apellido Paterno">
+									 <input required type="text" minlength="2" class="form-control" name="apellidoPaterno" required value="{{ $egresado->apellidoPaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
 								</div>
 							</div>
 						</div>
@@ -53,7 +53,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required type="text" class="form-control" name="apellidoMaterno" required value="{{ $egresado->apellidoMaterno }}" placeholder="Apellido Materno">
+									 <input required type="text" minlength="2" class="form-control" name="apellidoMaterno" required value="{{ $egresado->apellidoMaterno }}"  onkeypress="return soloLetras(event)"  placeholder="Apellido Materno">
 								</div>
 							</div>
 						</div>
@@ -63,7 +63,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-home"></i></span>
-									 <input type="text" class="form-control" name="direccion" value="{{ $egresado->direccion }}" placeholder="Direccion">
+									 <input type="text" minlength="2" class="form-control" name="direccion" value="{{ $egresado->direccion }}" placeholder="Direccion">
 								</div>
 							</div>
 						</div>
@@ -73,7 +73,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-									 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{ $egresado->telefono }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxx">
+									 <input pattern="[0-9]+" minlength="6" maxlength="15" type="tel" class="form-control" name="telefono"  value="{{ $egresado->telefono }}" onkeypress="return soloNumeros(event)" placeholder="(xxx)xxxxxx">
 								</div>
 							</div>
 						</div>
@@ -83,7 +83,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-									 <input pattern="[0-9]+" maxlength="15" type="tel" class="form-control" name="celular" value="{{ $egresado->celular }}" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="(xxx)xxxxxxxxx">
+									 <input pattern="[0-9]+" minlength="9" maxlength="15" type="tel" class="form-control" name="celular" value="{{ $egresado->celular }}" onkeypress="return soloNumeros(event)" placeholder="(xxx)xxxxxxxxx">
 								</div>
 							</div>
 						</div>
@@ -93,7 +93,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-									 <input minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{ $egresado->email }}" placeholder="e.g. ejemplo@ejemplo.com">
+									 <input minlength="6" maxlength="100" type="email" class="form-control" name="email"  value="{{ $egresado->email }}" onkeypress="return soloEmail(event)" placeholder="e.g. ejemplo@ejemplo.com">
 								</div>
 							</div>
 						</div>
@@ -105,7 +105,7 @@
 		<div class="col-md-6">
 			<div class="caja">
 		      <div class="caja-header">
-		         <div class="caja-icon"><i class="fa fa-graduation-cap" style="font-size: 1em;"></i></div>
+		         <div class="caja-icon"><i class="fa fa-graduation-cap"></i></div>
 		         <div class="caja-title">Datos del Egresado
 					</div>
 		      </div>
@@ -113,11 +113,11 @@
 					<div class="form-horizontal">
 
 						<div class="form-group">
-							<label for="codigo" class="col-sm-3 control-label">Código <span class="ast">*</span></label>
+							<label for="codigo" class="col-sm-3 control-label">Código </label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
-									 <input required pattern="[0-9]+" minlength="4" maxlength="15" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" class="form-control" name="codigo"  value="{{ $egresado->codigo }}" placeholder="xxxx">
+									 <input required pattern="[0-9]+" minlength="4" maxlength="15" onkeypress="return soloNumeros(event)" type="text" class="form-control" name="codigo"  value="{{ $egresado->codigo }}" placeholder="xxxx" readonly>
 								</div>
 							</div>
 						</div>
@@ -201,4 +201,39 @@
 		font-size: 20px;
 	}
 </style>
+
+<script type="text/javascript">
+	function soloNumeros(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 48 && evento.charCode <= 57)) {
+			return true;
+		}
+		return false;
+	}
+	function soloLetras(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 65 && evento.charCode <= 90) ||
+		    (event.charCode >= 97 && event.charCode <= 122) ||
+			 (event.charCode == 225) || (event.charCode == 193) || //á Á
+			 (event.charCode == 233) || (event.charCode == 201) || //é É
+			 (event.charCode == 237) || (event.charCode == 205) || //í Í
+			 (event.charCode == 243) || (event.charCode == 211) || //ó Ó
+			 (event.charCode == 250) || (event.charCode == 218) || //ú Ú
+			 (event.charCode == 32)) {
+			return true;
+		}
+		return false;
+	}
+	function soloEmail(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 48 && evento.charCode <= 57) ||
+			 (event.charCode >= 97 && event.charCode <= 122) ||
+			 (event.charCode == 46)||
+			 (event.charCode == 64)||
+			 (event.charCode == 95)){
+			return true;
+		}
+		return false;
+	}
+</script>
 @endsection

@@ -28,6 +28,9 @@ body{
 .ff-bg-purple{
    background-color: #605CA8;
 }
+.ff-bg-orange{
+   background-color: #FF8D00;
+}
 a{
    color: #6441a4;
 }
@@ -151,7 +154,7 @@ a:hover{
    background-color: rgba(8, 8, 8, 0.15);
 }
 
-@media( max-width: 768px ){
+@media( max-width: 767px ){
    .header-princ{
       max-height: 100px;
    }
@@ -554,7 +557,8 @@ textarea:focus {
 .ff-card .body-card{
    width: 100%;
    color: #444;
-   margin-left: 20px;
+   padding-left: 15px;
+   padding-right: 15px;
    text-align: left;
 }
 .ff-card .body-card .fa{
@@ -761,7 +765,7 @@ textarea:focus {
    margin-bottom: 7px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
    .actividad .thumb{
       width: 45%;
    }
@@ -946,58 +950,52 @@ textarea:focus {
    border-radius: 25px;
 }
 /* componente encuesta */
-.encuesta{
-   display: flex;
-   background-color: white;
-   margin-bottom: 20px;
-   border-radius: 5px;
-   box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-}
-.encuesta .enc-title{
-   padding: 15px;
-   color: #4B367C;
-   border-top: 1px solid #ddd;
-   border-radius: 5px 5px 0 0;
-   background-color: #f5f5f5;
-   border-bottom: 1px solid #e2e3e4;
-   margin-bottom: 1px;
-   width: 100%;
-}
-.encuesta .enc-type{
+.enc-type{
    padding: 10px 15px 10px 15px;
    font-family: Helvetica, Arial, sans-serif;
    font-weight: bold;
-   line-height: 20px;
-   font-size: 25px;
+   line-height: 15px;
+   font-size: 20px;
    color: #6441A4;
-   border-top: 1px solid #ddd;
-   background-color: #f5f5f5;
-   border-bottom: 1px solid #e2e3e4;
-   margin-bottom: 1px;
+   background-color: #D3C7E8;
+   margin-bottom: 10px;
+   margin-top: 10px;
+   width: 100%;
+   display: inline-flex;
+}
+.item {
+   display: inline-flex;
    width: 100%;
 }
-.item{
-   margin: 15px;
-   display: flex;
+.item:nth-child(odd){
+   background-color: rgba(0, 0, 0, 0.06);
 }
 .question{
+   padding: 7px;
+   float: left;
    width: 60%;
-   margin-right: 10px;
+   border: 2px solid white;
 }
 .alternatives{
-   display: flex;
+   display: inline-flex;
    width: 40%;
    float: right;
-   border-left: 1px solid #e2e3e4;
 }
-.choice{
-   display: flex;
+.env-alternative{
+   border: 2px solid white;
+   padding: 7px;
+   float: right;
 }
-.choice label, .choice input{
-   margin-left: auto;
-   margin-right: auto;
+.alternative{
+   text-align: center;
+   width: 100%;
+   float: left;
+}
+.alternative label{
+   margin-left: 10px;
 }
 .enc-list {
+   padding: 0px;
    counter-reset: item;
    list-style: none;
 }
@@ -1013,37 +1011,41 @@ textarea:focus {
    text-align: center;
    display: inline-block;
 }
+
 @media (max-width: 991px) {
-   .choice label{
-      margin-left: 0px;
-   }
-   .choice input{
-      margin-right: 8px;
-      margin-left: 0px;
+   .item{
+      display: block;
+      border: none;
    }
    .question{
+      background-color: rgba(0, 0, 0, 0.06);
+      border: none;
+      margin-bottom: 5px;
       width: 100%;
    }
    .alternatives{
-      margin-top: 10px;
+      padding: 0px;
       border: none;
-      float: left;
       width: 100%;
+      margin-bottom: 10px;
    }
-   .item{
-      display: block;
+   .env-alternative{
+      border: none;
+   }
+   .alternative{
+      text-align: left;
+      margin: 0px;
    }
 }
 @media (max-width: 767px){
-   .encuesta{
+   .alternatives{
+      text-align: left;
       display: block;
    }
-   .choice{
+   .env-alternative{
+      padding: 0px;
       display: block;
       width: 100% !important;
-   }
-   .alternatives{
-      display: block;
    }
 }
 
@@ -1179,7 +1181,7 @@ textarea:focus {
       margin-bottom: 5px;
    }
 }
-@media(max-width: 768px){
+@media(max-width: 767px){
    .member-actions{
       margin-top: -20px;
    }
@@ -1503,8 +1505,22 @@ textarea:focus {
    font-size: 2em;
    border-radius: 0 0 0 5px;
 }
-.caja-icon>i{
-   font-size: 1.3em;
+.caja-icon .fa{
+   margin-right: 0px;
+   font-size: 0.9em;
+}
+.caja .large{
+   overflow: visible;
+   text-overflow: clip;
+   white-space: normal;
+}
+.caja .large .caja-title{
+   padding-top: 6px;
+   padding-bottom: 6px;
+   line-height: 1em;
+}.caja-icon .fa, .caja-icon .glyphicon{
+   margin-right: 0px;
+   font-size: 0.9em;
 }
 
 .caja-title{
@@ -1548,7 +1564,7 @@ textarea:focus {
   content: " ";
   display: table;
 }
-@media (max-width : 768px) {
+@media (max-width : 767px) {
    .caja-body, .caja-footer{
       padding-left: 0px;
       padding-right: 0px;

@@ -9,8 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Notifications\Notifiable;
 
-
-use BienestarWeb\Mail\ActividadActualizadaMail;
 use BienestarWeb\Notifications\ActividadActualizadaNotif;
 use BienestarWeb\Actividad;
 use BienestarWeb\User;
@@ -43,29 +41,6 @@ class JobEmailActualizarAct implements ShouldQueue
         $this->opcion = $opcion;
     }
 
-    function getListInsc($user){
-      $list_insc = array('hd');
-          switch ($user->idTipoPersona) {
-             case '1'://Alumno
-               $idAlumno = Alumno::where('idUser', $user->id)->value('idAlumno');
-               $inscripciones = InscripcionAlumno::where('idAlumno', $idAlumno)->get();
-               break;
-             case '2'://Docente
-                $idDocente = Docente::where('idUser', $user->id)->pluck('idDocente');
-                $inscripciones = InscripcionDocente::where('idDocente', $idDocente)->get();
-                break;
-             case '3'://Administrativo
-                $idAdministrativo = Administrativo::where('idUser', $user->id)->pluck('idAdministrativo');
-                $inscripciones = InscripcionAdministrativo::where('idAdministrativo', $idAdministrativo)->get();
-                break;
-          }
-
-          for ($i=0; $i < count($inscripciones) ; $i++) {
-             array_push ( $list_insc,  $inscripciones[$i]->idActividad );
-          }
-          return $list_insc;
-    }
-
     /**
      * Execute the job.
      *
@@ -81,7 +56,7 @@ class JobEmailActualizarAct implements ShouldQueue
          }
         Log::info("JobEmailActualizarAct ");
         Log::info("Inicio enviar Responsable");
-        $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad, 'list_insc'=>JobEmailActualizarAct::getListInsc($this->userResp)]);
+        $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
         $this->userResp->notify(new ActividadActualizadaNotif($this->actividad, $subject, $url));
         Log::info($this->userResp->email);
         Log::info("Fin enviar Responsable");
@@ -128,7 +103,7 @@ class JobEmailActualizarAct implements ShouldQueue
         Log::info("Enviar correo a los inscritos ");
         foreach ($users as $user) {
              Log::info($user->email);
-             $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad, 'list_insc'=>JobEmailActualizarAct::getListInsc($user)]);
+             $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
              $user->notify(new ActividadActualizadaNotif($this->actividad, $subject, $url));
         }
         Log::info("Fin Enviar Correos");

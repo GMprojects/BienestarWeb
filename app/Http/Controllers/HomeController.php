@@ -11,6 +11,9 @@ use BienestarWeb\InscripcionAlumno;
 use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
 
+use BienestarWeb\User;
+use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Mail;
 class HomeController extends Controller
 {
     /**
@@ -31,28 +34,13 @@ class HomeController extends Controller
    public function index(Request $request){
 
       $actividades = Actividad::where([['modalidad', '=', '2'],['estado', '<', '3']])->get();
-      $list_insc = array('hd');
-      if($request->user() != null){
-         switch ($request->user()->idTipoPersona) {
-            case '1'://Alumno
-              $idAlumno = Alumno::where('idUser', $request->user()->id)->value('idAlumno');
-              $inscripciones = InscripcionAlumno::where('idAlumno', $idAlumno)->get();
-              break;
-            case '2'://Docente
-               $idDocente = Docente::where('idUser', $request->user()->id)->pluck('idDocente');
-               $inscripciones = InscripcionDocente::where('idDocente', $idDocente)->get();
-               break;
-            case '3'://Administrativo
-               $idAdministrativo = Administrativo::where('idUser', $request->user()->id)->pluck('idAdministrativo');
-               $inscripciones = InscripcionAdministrativo::where('idAdministrativo', $idAdministrativo)->get();
-               break;
-         }
-
-         for ($i=0; $i < count($inscripciones) ; $i++) {
-            array_push ( $list_insc,  $inscripciones[$i]->idActividad );
-         }
-      }
-      return view('home')->with('actividades', $actividades)->with('list_insc', $list_insc);
+      return view('home')->with('actividades', $actividades);
+      /*$user = User::find(854)->toArray();
+        Mail::send('emails.mailEvent', $user, function($message) use ($user) {
+            $message->to($user['email']);
+            $message->subject('Mailgun Testing');
+        });
+        dd('Mail Send Successfully');*/
    }
 
 }

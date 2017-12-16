@@ -337,7 +337,7 @@
 				success:function(data) {
 							for (var i = 0; i < data.length; i++) {
 								if({{ count($actividad->inscripcionesADA) }} !=0 ){
-									//console.log(data[i].idAlumno);console.log({{ $idAlumnos["0"]}});
+									{{--console.log(data[i].idAlumno);console.log({{ $idAlumnos["0"]}});--}}
 										if(in_array(data[i].idAlumno, {{ $idAlumnos }})){
 											op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" title="'+data[i].codigo+'" value="'+data[i].idAlumno+'" selected>'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
 										}else{

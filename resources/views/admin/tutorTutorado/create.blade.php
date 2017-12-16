@@ -34,7 +34,7 @@
 				</div>
 				<div class="row">
 					<br>
-					<label for="tabDocentes" style="color: #4B367C;">Seleccione al docente que será tutor</label>
+					<label for="tabDocentes" style="color: #4B367C;">Seleccione al docente que será tutor.</label>
 					<div class="table">
 							<div class="table-responsive">
 								<br>
@@ -67,7 +67,7 @@
 						<p>Debe al menos elegir un alumno</p>
 				</div>
 				<div class="row">
-					 <label for="tabModAlumnos" style="color: #4B367C;">Seleccione a los alumnos que serán tutorados</label>
+					 <label for="tabModAlumnos" style="color: #4B367C;">Seleccione a los alumnos que serán tutorados.</label>
 					 <br>
 					 <div class="table">
 							 <div class="table-responsive">
@@ -236,22 +236,24 @@ $(document).ready(function() {
 	function validar(){
 		var existeUnSeleccionado = false;
 		console.log('On Validate');
-		chk=document.getElementsByName('alumnos[]');
-		if ($('#codigo').val() == '') {
-			document.getElementById('divNoHayTutor').style.display = 'block';
-			return false;
-		}
+		chk1=document.getElementsByName('tutor');
+		chk2=document.getElementsByName('alumnos[]');
 		var i = 0;
-		while (i<chk.length && !existeUnSeleccionado) {
-			if(chk[i].checked){
+		while (i<chk2.length && !existeUnSeleccionado) {
+			if(chk2[i].checked){
 				existeUnSeleccionado = true;
 			}
 			i++;
 		}
-		if(existeUnSeleccionado){
-			return true;
-		}else{
+		if(!existeUnSeleccionado && !chk1[0].checked){
+			document.getElementById('divNoHayTutor').style.display = 'block';
 			document.getElementById('divNoHayAlumnos').style.display = 'block';
+			return false;
+		}else if(!existeUnSeleccionado){
+			document.getElementById('divNoHayAlumnos').style.display = 'block';
+			return false;
+		}else {
+			document.getElementById('divNoHayTutor').style.display = 'block';
 			return false;
 		}
 

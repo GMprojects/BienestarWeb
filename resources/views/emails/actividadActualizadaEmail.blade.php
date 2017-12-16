@@ -23,7 +23,6 @@
    </dt>
    @else
       <dt> {{ $actividad->descripcion }} </dt>
-
       @if($actividad->informacionAdicional != null)
       <dt> Información Adicional: </dt>
       <dd> {{ $actividad->informacionAdicional }} </dd>
@@ -31,8 +30,10 @@
 
       <dt> Fecha y Hora Inicio:</dt>
       <dd> {{ date("d",strtotime($actividad->fechaInicio))." de ".date("F",strtotime($actividad->fechaInicio))." del ".date("Y",strtotime($actividad->fechaInicio))." a las ".date('g:i A',strtotime($actividad->horaInicio)) }} </dd>
+      @if ($actividad->idTipoActividad != 1 || $actividad->idTipoActividad != 2)
       <dt> Fecha y Hora Fin:</dt>
       <dd> {{ date("d",strtotime($actividad->fechaFin))." de ".date("F",strtotime($actividad->fechaFin))." del ".date("Y",strtotime($actividad->fechaFin))." a las ".date('g:i A',strtotime($actividad->horaFin)) }} </dd>
+      @endif
 
       @if($actividad->cuposTotales > 1)
          <dt> Cupos Totales:</dt>
@@ -43,10 +44,9 @@
       <dd> {{ $actividad->lugar }} </dd>
 
       @if ($actividad->referencia != null)
-        <dt> Referencia: </dt>
-        <dd> {{ $actividad->referencia }} </dd>
+      <dt> Referencia: </dt>
+      <dd> {{ $actividad->referencia }} </dd>
       @endif
-
    @endif
  </dl>
 

@@ -33,11 +33,7 @@
                {{-- @include('layouts.partials.act-mini-demo') --}}
 
                @foreach ($actividades as $actividad)
-                  @if(Auth::user() != null)
-                     @include('layouts.partials.act-mini', [$actividad, $list_insc])
-                  @else
-                     @include('layouts.partials.act-mini', [$actividad])
-                  @endif
+                  @include('layouts.partials.act-mini', [$actividad])
                @endforeach
 
             </div>

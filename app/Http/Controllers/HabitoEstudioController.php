@@ -23,19 +23,7 @@ class HabitoEstudioController extends Controller
      */
    public function index(Request $request)
     {
-        //$cadena=url()->current();
-        //$r=strpos($cadena,'usuario');
-        //if($r !== FALSE){
-        //FALTA EL FILTRO POr SER TUTORTUTORADO
-        //Search($request->idTutorTutorado)->
 
-        $habitosEstudio = HabitoEstudio::get();
-
-        $tutorTutorados = TutorTutorado::get();
-        //dd($tutorTutorados);
-        return view('usuario.habitoEstudio.index')
-                ->with('habitosEstudio',$habitosEstudio)
-                ->with('tutorTutorados',$tutorTutorados);
     }
 
     /**
@@ -45,9 +33,20 @@ class HabitoEstudioController extends Controller
      */
     public function create()
     {
-        //$preguntasHabito = PreguntaHabito::orderBy('idTipoHabito')->get();
-        $preguntasHabito = PreguntaHabito::get();
-        return view('miembro.tutorado.habitoEstudio.create')->with('preguntasHabito',$preguntasHabito);
+         $preguntasHabito = PreguntaHabito::all();
+         $preguntas = [];
+         $j = 0; $k = 0; $i = $preguntasHabito[0]->idTipoHabito;
+         foreach ($preguntasHabito as $pregunta) {
+            if($i == $pregunta->idTipoHabito){
+              $preguntas[$j][$k++] = $pregunta;
+            }else{
+              $k = 0;
+              $preguntas[++$j][$k++] = $pregunta;
+              $i = $pregunta->idTipoHabito;
+            }
+
+         }
+         return view('miembro.tutorado.habitoEstudio.mis-habitos')->with('preguntas',$preguntas);
     }
 
     /**
@@ -58,27 +57,15 @@ class HabitoEstudioController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->input('respuestasHabito'));
-
-        $idTutorTutorado='7';
-
-        $tutorTutorado = TutorTutorado::findOrFail($idTutorTutorado);
-        //$user->roles()->updateExistingPivot($roleId, $attributes);
-        //$tutorTutorado->habitoEstudioRespondido = '1';
-        //$tutorTutorado->update();
-        $habitoEstudio = new HabitoEstudio;
-        $tutorTutorado->habitosEstudio()->save($habitoEstudio);
-        $preguntasHabito = PreguntaHabito::orderBy('idTipoHabito')->get();
-        $i=0;
-        foreach ($preguntasHabito as $pH) {
-            $i=$i+1;
-            $id =$pH->idPreguntaHabito;
-            $rpta = $request->input('respuestasHabito.'.$i);
-            //sdd($request->input('respuestasHabito.'.$i));
-            $habitoEstudio->respuestasHabito()->attach($id,['rpta'=>$rpta]);
-        }
-        //dd($habitoEstudio);
-        return Redirect::to('usuario/habitoEstudio');
+         $tutorTutorado = TutorTutorado::where(['idAlumno' => $request->user()->alumno->idAlumno, 'habitoEstudioRespondido' => '0'])->get()[0];
+         $habitoEstudio = HabitoEstudio::create(['idTutorTutorado' => $tutorTutorado->idTutorTutorado]);
+         $preguntasHabito = PreguntaHabito::all();
+         foreach ($preguntasHabito as $pregunta) {
+              $habitoEstudio->respuestasHabito()->attach($pregunta,['rpta'=> $request->input($pregunta->idPreguntaHabito)]);
+         }
+         $request->user()->alumno->tutores()->updateExistingPivot($tutorTutorado->idDocente, ['habitoEstudioRespondido' => '1'] );
+         //dd($habitoEstudio);
+         return redirect('/');
     }
 
     /**
