@@ -1,6 +1,8 @@
 @component('mail::message')
   @if($actividad->estado == '3')
   # Actividad Cancelada
+  @elseif($actividad->estado == '5')
+  # Actividad Eliminada
   @else
   # Actividad Actualizada
   @endif
@@ -19,6 +21,11 @@
    @if($actividad->estado == '3')
    <dt>
    Esta actividad ha sido cancelada, de ser habilitada le estaremos notificando.
+   Puede ponerse en contacto con el programador de la actividad. {{ $actividad->programador['nombre'].' '. $actividad->programador['apellidoPaterno'].' '.$actividad->programador['apellidoMaterno'] }}
+   </dt>
+   @elseif($actividad->estado == '5')
+   <dt>
+   Esta actividad ha sido eliminada.
    Puede ponerse en contacto con el programador de la actividad. {{ $actividad->programador['nombre'].' '. $actividad->programador['apellidoPaterno'].' '.$actividad->programador['apellidoMaterno'] }}
    </dt>
    @else

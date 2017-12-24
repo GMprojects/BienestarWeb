@@ -40,7 +40,7 @@
 					               <button class="btn btn-ff-green"><i class="fa fa-plus"></i></button>
 					            </a>
 									<a href="{{ action('TutorTutoradoController@destroyTutor',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
-					               <button class="btn btn-ff-red"><i class="fa fa-times"></i></button>
+					               <button class="btn btn-ff-red"><i class="fa fa-trash"></i></button>
 					            </a>
                 		  </td>
 							</tr>

@@ -21,6 +21,7 @@
       <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/flaticon/flaticon.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/square/green.css') }}"/>
+      <link rel="stylesheet" href="{{ asset('plugins/datetimepicker-4.17.47/build/css/bootstrap-datetimepicker.min.css') }}"/>
       <!-- Scripts GENERALES -->
       <script src="{{ asset('plugins/jQuery-3.2.1/jquery-3.2.1.min.js') }}"></script>
       <script src="{{ asset('plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
@@ -37,6 +38,7 @@
       <script src="{{ asset('plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
       <script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
       <script src="{{ asset('plugins/iCheck/icheck.js') }}"></script>
+      <script src="{{ asset('plugins/datetimepicker-4.17.47/build/js/bootstrap-datetimepicker.min.js') }}"></script>
 
       <script src="{{ asset('plugins/flot/jquery.flot.min.js') }}"></script>
       <script src="{{ asset('plugins/flot/jquery.flot.time.min.js') }}"></script>
@@ -83,14 +85,14 @@
         }
       });
 
-   	$(document).ready(function(){
+   	/*$(document).ready(function(){
          $('input').iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
             increaseArea: '20%' // optional
          });
          $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-   	});
+   	});*/
    </script>
 
 </html>

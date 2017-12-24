@@ -5,10 +5,10 @@
 		<div class="box-header">
 			<div class="row">
 				<div class="col-xs-6">
-					<h3 class="box-title">Todos los Usuarios</h3>
+					<h3 class="box-title">Alumnos</h3>
 				</div>
 				<div class="col-xs-6" style="text-align:right;">
-					<a href="user/create"><button class="btn btn-success">Nuevo Usuario</button></a>
+					<a href="user/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Usuario</button></a>
 				</div>
 			</div>
 
@@ -19,27 +19,27 @@
 				<table id="tabAlumnos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
 					<thead>
 						<th>Código</th>
-						<th>Nombre</th>
+						<th>Nombres</th>
+						<th>Apellidos</th>
 						<th>Email</th>
 						<th>Funcion</th>
-						<th>Tipo</th>
 						<th>Opciones</th>
 					</thead>
 					<tbody>
-						@foreach ($alumnos as $alumno)
+						@foreach ($alumnos as $user)
 						<tr>
-							<td>{{ $alumno->codigo }}</td>
-							<td >{{$alumno->apellidoPaterno}} {{$alumno->apellidoMaterno}} {{$alumno->nombre}}</td>
-							<td>{{$alumno->email}}</td>
-							@switch( $alumno->funcion)
+							<td>{{ $user->codigo }}</td>
+							<td>{{$user->nombre}}</td>
+							<td >{{$user->apellidoPaterno}} {{$user->apellidoMaterno}}</td>
+							<td>{{$user->email}}</td>
+							@switch( $user->funcion)
 								@case(3) <td><span class="label label-danger rounded">Administrador</span></td> @break
 								@case(2) <td><span class="label label-warning rounded">Programador</span></td> @break
 								@case(1) <td><span class="label label-success rounded">Miembro</span></td> @break
 							@endswitch
-							@endswitch
 							<td>
-								<a href="{{URL::action('UserController@edit',$alumno->id)}}"><button class="btn btn-warning">Editar</button></a>
-								<a href="" data-target="#modal-delete-{{$alumno->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>
+								<a href="{{URL::action('UserController@edit',$user->id)}}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
+								<a href="" data-target="#modal-delete-{{$user->id}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 							</td>
 						</tr>
 						@include('admin.user.modal')
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 	</div>
-      
+
 	<script>
 	   $(document).ready(function() {
 	      $('#tabAlumnos').DataTable({
@@ -76,10 +76,12 @@
 	            "oAria": {
 	              "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
 	              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-	            }
-	         }
+				  }
+	         },
+				"order":[[2,"asc"]]
 	      })
 	   });
 	</script>
+
 
 @endsection

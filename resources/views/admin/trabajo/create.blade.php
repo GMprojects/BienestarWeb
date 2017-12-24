@@ -6,13 +6,14 @@
 	<div class="col-md-12">
 		<div class="caja">
 	      <div class="caja-header">
-	         <div class="caja-icon">	<i class="fa fa-address-card" style="font-size: 1em;"></i></div>
+	         <div class="caja-icon">	<i class="fa fa-briefcase"></i></div>
 	         <div class="caja-title">Datos Específicos del Trabajo
 				</div>
 	      </div>
 	      <div class="caja-body">
 				@if ($op == 1)
-					<h4><b>Añadir un trabajo al egresado: </b> <b style="color:#4B367C">  &nbsp; &nbsp; {{ $egresado->nombre.' '.$egresado->apellidoPaterno.' '.$egresado->apellidoMaterno }}</b>&nbsp; &nbsp;</h4>
+					<label><i class="fa fa-graduation-cap"></i><b>Egresado: </b></label> <b style="color:#4B367C">  &nbsp; &nbsp; {{ $egresado->nombre.' '.$egresado->apellidoPaterno.' '.$egresado->apellidoMaterno }}</b>&nbsp; &nbsp;
+					<br><br>
 				@endif
 				<div  class="row">
 					<div class="col-lg-6 col-sm-6 col-xs-13">
@@ -27,30 +28,31 @@
 						@endif
 					</div>
 				</div>
-				<div class="form-horizontal">
-					<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
-				</div>
 
 				<div class="row">
-					@if ($op == 2)<!-- no viene desde egresado -->
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label for="idEgresado">Egresado </label><span class="ast">*</span>
-								<select required name="idEgresado" id="idEgresado" class="selectpicker form-control" data-size="15" data-live-search="true" data-show-subtext="true">
-							      <option value="" selected> Seleccione un egresado</option>
-									@if ( $egresados != null)
-										@foreach ($egresados as $e)
-											<option data-subtext="{{ $e->codigo }}" value="{{ $e->idEgresado }}">{{ $e->nombre }} {{ $e->apellidoPaterno }} {{ $e->apellidoMaterno }}</option>
-										@endforeach
-									@endif
-								</select>
-							</div>
+					<div class="col-sm-6">
+						<div class="form-horizontal">
+							<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
 						</div>
-					@else
-						<input type="hidden" name="idEgresado"  value ="{{$idEgresado}}" >
-					@endif
-					<input type="hidden" name="op"  value ="{{$op}}" >
-					<div class="col-md-6">
+						<div id="error" class="alert alert-danger" style='display:none;'>
+							<p>No existen Egresados registrados</p>
+						</div>
+						@if ($op == 2)<!-- no viene desde egresado -->
+								<div class="form-group">
+									<label for="idEgresado">Egresado </label><span class="ast">*</span>
+									<select required name="idEgresado" id="idEgresado" class="selectpicker form-control" data-size="15" data-live-search="true" data-show-subtext="true">
+								      <option value="" selected> Seleccione un egresado</option>
+										@if ( $egresados != null)
+											@foreach ($egresados as $e)
+												<option data-subtext="{{ $e->codigo }}" value="{{ $e->idEgresado }}">{{ $e->nombre }} {{ $e->apellidoPaterno }} {{ $e->apellidoMaterno }}</option>
+											@endforeach
+										@endif
+									</select>
+								</div>
+						@else
+							<input type="hidden" name="idEgresado"  value ="{{$idEgresado}}" >
+						@endif
+						<input type="hidden" name="op"  value ="{{$op}}" >
 						<div class="form-group">
 							<label for="institucion">Institución </label><span class="ast">*</span>
 							<input type="text"  minlength="3" name="institucion" required class="form-control" value ="{{old('institucion')}}" placeholder="Institución">
@@ -65,7 +67,11 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaInicio" required class="form-control" required placeholder="{{ date("d/m/Y") }}" id="fechaInicio">
+								@if (old('fechaInicio') == null)
+									<input type="text" name="fechaInicio" required placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaInicio" >
+								@else
+									<input type="text" name="fechaInicio" required value="{{old('fechaInicio')}}" class="form-control"  id="fechaInicio" >
+								@endif
 							</div>
 						</div>
 						<div class="form-group">
@@ -74,17 +80,21 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaFin" class="form-control" placeholder="{{ date("d/m/Y") }}" id="fechaFin">
+								@if (old('fechaFin') == null)
+									<input type="text" name="fechaFin" required placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaFin" >
+								@else
+									<input type="text" name="fechaFin" required value="{{old('fechaFin')}}" class="form-control"  id="fechaFin" >
+								@endif
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="nivelSatisfaccion">Nivel de Satisfacción  </label><span class="ast">*</span>
 							<select required name="nivelSatisfaccion" class="form-control" >
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
+								<option value="1">Muy Satisfactorio</option>
+								<option value="2">Satisfactorio</option>
+								<option value="3">Poco Satisfactorio</option>
+								<option value="4">Mejorable</option>
+								<option value="5">Insatisfactorio</option>
 							</select>
 						</div>
 					</div>
@@ -104,8 +114,9 @@
 			</div>
 			<div class="caja-footer">
 				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+					<button class="btn btn-ff" type="submit" onclick="validar()"><i class="fa fa-save"></i> Guardar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 				</div>
 	      </div>
 	   </div>
@@ -127,7 +138,6 @@
 			 init_contador('#observaciones', '#contadorObservaciones');
 			 init_contador('#recomendaciones', '#contadorRecomendaciones');
 	});
-
 	function init_contador(idTextArea, idContador){
 		function update_Contador(idTextArea, idContador){
 			var contador = $(idContador);
@@ -140,6 +150,11 @@
 		$(idTextArea).change(function(){
 			update_Contador(idTextArea, idContador);
 		});
+	}
+	function validar(){
+		if (({{$egresados}}).length == 0) {
+			document.getElementById('error').style.display = 'block';
+		}
 	}
 
 </script>

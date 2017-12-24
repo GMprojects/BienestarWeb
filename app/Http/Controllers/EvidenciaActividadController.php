@@ -18,7 +18,7 @@ class EvidenciaActividadController extends Controller
      */
     public function index(Request $request)
     {
-        $evidenciasActividad = EvidenciaActividad::Search($request)->get();
+        $evidenciasActividad = EvidenciaActividad::get();
         //dd($actividades);
         $evidenciasActividad->each(function($evidenciasActividad){
             $evidenciasActividad->actividad;

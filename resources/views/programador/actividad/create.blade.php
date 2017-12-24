@@ -21,8 +21,7 @@
 		<div class="caja">
 	      <div class="caja-header">
 	         <div class="caja-icon">1</div>
-	         <div class="caja-title">Datos Generales
-				</div>
+	         <div class="caja-title">Datos Generales</div>
 	      </div>
 	      <div class="caja-body">
 				<div>
@@ -65,7 +64,8 @@
 	      <div class="caja-footer">
 				<div class="pull-right">
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Publicar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 				</div>
 	      </div>
 	   </div>
@@ -78,6 +78,9 @@
 			</div>
 			<div class="caja-body">
 				<div class="row">
+					<div id="horasError" class="alert alert-danger" style='display:none;'>
+							<p>La <b>Hora de Fin</b> debe ser mayor a la <b>Hora de Inicio</b>.</p>
+					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="fechaInicio" id="lblFechaInicio">Fecha de Inicio </label><span class="ast">*</span>
@@ -85,7 +88,11 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaInicio" class="form-control" required  value="{{ date("d/m/Y") }}" id="fechaInicio">
+								@if (old('fechaInicio') == null)
+									<input type="text" required name="fechaInicio"  placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaInicio" >
+								@else
+									<input type="text" required name="fechaInicio"  value="{{old('fechaInicio')}}" class="form-control"  id="fechaInicio" >
+								@endif
 							</div>
 						</div>
 					</div>
@@ -97,7 +104,11 @@
 									<div class="input-group-addon">
 									  <i class="fa fa-clock-o"></i>
 									</div>
-									<input type="text" name="horaInicio" id="horaInicio"  placeholder="{{ date("h:i A") }}"  required  class="form-control timepicker">
+									@if (old('horaInicio') == null)
+										<input type="text" required name="horaInicio" id="horaInicio" placeholder="{{ date("h:i A") }}" class="form-control timepicker">
+									@else
+										<input type="text" required name="horaInicio" id="horaInicio" value="{{old('horaInicio')}}" class="form-control timepicker">
+									@endif
 								</div>
 							</div>
 						</div>
@@ -111,7 +122,11 @@
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
 								</div>
-								<input type="text" name="fechaFin" class="form-control" required  value="{{ date("d/m/Y") }}" id="fechaFin">
+								@if (old('fechaFin') == null)
+									<input type="text" required name="fechaFin"  placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaFin" >
+								@else
+									<input type="text" required name="fechaFin"  value="{{old('fechaFin')}}" class="form-control"  id="fechaFin" >
+								@endif
 							</div>
 						</div>
 					</div>
@@ -123,7 +138,11 @@
 									<div class="input-group-addon">
 									  <i class="fa fa-clock-o"></i>
 									</div>
-									<input type="text" name="horaFin" id="horaFin" placeholder="{{ date("h:i A") }}" required class="form-control timepicker">
+									@if (old('horaFin') == null)
+										<input type="text" required name="horaFin" id="horaFin" placeholder="{{ date("h:i A") }}" class="form-control timepicker">
+									@else
+										<input type="text" required name="horaFin" id="horaFin" value="{{old('horaFin')}}" class="form-control timepicker">
+									@endif
 								</div>
 							</div>
 						</div>
@@ -170,9 +189,11 @@
 			</div>
 			<div class="caja-body">
 				<div id="divError" class="alert alert-danger" style='display:none;'>
-						<h4><b>Error</b></h4>
 						<p id="pError">Debe elegir a un docente para que sea tutor</p>
 				</div>
+				<div id="divNoHayTutor" class="alert alert-danger" style='display:none;'>
+		         <p id="mensajeTutor">No existen tutores registrados en el ciclo académico.</p>
+         	</div>
 				<div id="selectResponsables" style='display:none;'>
 					<div class="form-group">
 						<label for="idUserResp" id="etiquetaResponsable">Responsable </label><span class="ast">*</span>
@@ -205,10 +226,6 @@
 						<select name="idAlumnoTutorado[]" onchange="ocultar()" id="selectIdAlumnoTutorado"  class="selectpicker form-control" multiple title="Selecciona Tutorado.."data-size="15" data-live-search="true" data-show-subtext="true"> </select>
 					</div>
 				</div>
-				<div id="divNoHayTutor" class="callout callout-danger" style='display:none;'>
-		         <h4>Tutores</h4>
-		         <p id="mensajeTutor">No hay tutor dentro del bla bla.</p>
-         	</div>
 				<div id="divCuposTotales" style='display:none;'>
 					<div class="form-group">
 						<label for="cuposTotales">N° Cupos </label><span class="ast">*</span>
@@ -230,17 +247,20 @@
 				</div>
 			</div>
 			<div class="caja-body">
+				<div id="respError" class="alert alert-danger" style='display:none;'>
+						<p>Debe registrar todos los datos del responsable invitado, sino exite un invitdo cerrar la caja <b>Responsable Invitado</b>.</p>
+				</div>
 				<div class="form-group">
 					<label for="nombreResponsable">Nombres </label><span class="ast">*</span>
-					<input type="text"  name="nombreResponsable" class="form-control" value ="{{old('nombreResponsable')}}" placeholder="Nombres">
+					<input type="text" id="nombreResponsable" name="nombreResponsable" class="form-control" value ="{{old('nombreResponsable')}}" placeholder="Nombres">
 				</div>
 				<div class="form-group">
 					<label for="apellidosResponsable">Apellidos </label><span class="ast">*</span>
-					<input type="text" name="apellidosResponsable" class="form-control" value ="{{old('apellidosResponsable')}}" placeholder="Apellidos">
+					<input type="text" id="apellidosResponsable" name="apellidosResponsable" class="form-control" value ="{{old('apellidosResponsable')}}" placeholder="Apellidos">
 				</div>
 				<div class="form-group">
 					<label for="emailResponsable">Correo </label><span class="ast">*</span>
-					<input type="email" name="emailResponsable" class="form-control" value ="{{old('emailResponsable')}}" placeholder="xxx@xxx.xx">
+					<input type="email" id="emailResponsable" name="emailResponsable" class="form-control" value ="{{old('emailResponsable')}}" placeholder="xxx@xxx.xx">
 				</div>
 			</div>
 		</div>
@@ -251,25 +271,41 @@
 
 <script type="text/javascript">
 	$.ajaxSetup({
-	   headers: {
-	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
+	});
+	var llenarInvitado = false;
+	$(document).ready(function(){
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+			increaseArea: '20%' // optional
+		});
+		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
 	});
 	$('.timepicker').timepicker({
 		showInputs: false
 	})
-	$('#fechaInicio').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		startDate :  '-1d',
-		format: 'dd/mm/yyyy'
-	})
-	$('#fechaFin').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		startDate :  '-1d',
-		format: 'dd/mm/yyyy'
-	})
+	$('#fechaInicio').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+	$('#fechaFin').datetimepicker({
+		format: 'DD/MM/YYYY',
+		useCurrent: false // Important! See issue #1075
+	});
+	$('#fechaInicio').on("dp.change", function(e){
+		$('#fechaFin').data("DateTimePicker").minDate(e.date);
+	});
+	$('#fechaFin').on("dp.change", function(e){
+		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
+	});
+	$('#horaInicio').click(function(){
+			document.getElementById('horasError').style.display = 'none';
+	});
+	$('#horaFin').click(function(){
+			document.getElementById('horasError').style.display = 'none';
+	});
 	$("#selectIdTipoActividad").change(function(){
 		document.getElementById('boxDatosEspecificos').style.display = 'block';
       var tamSelectIdResponsable=document.getElementById("selectIdResponsable").length;
@@ -313,6 +349,10 @@
 
 				document.getElementById('selectAlumnos').style.display = 'block';
 				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumnos');
+
+				$('#fechaFin').removeAttr('required');
+				$('#horaFin').removeAttr('required');
+
 				break;
 			case '3'://SERVICIO SOCIAL
 				document.getElementById('selectResponsables').style.display = 'block';
@@ -321,14 +361,20 @@
 				document.getElementById('rIndividual').checked = true;
 				dListaResponsables('{{ action('UserController@getUsersAdm') }}', 'Responsable');
 				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
+
+				$('#fechaFin').attr('required', 'true');
+				$('#horaFin').attr('required', 'true');
+
 				break;
 			case '4'://TUTORÍA
 				document.getElementById('selectResponsables').style.display = 'block';
 				document.getElementById('selectAlumnosTutorados').style.display = 'block';
 				document.getElementById('etiquetaResponsable').innerHTML = 'Tutor';
-				var numeroSemestre = $('#numeroSemestre').val();
-				var anioSemestre = $('#anioSemestre').val();
-				dListaTutores('{{ action('TutorTutoradoController@getTutores') }}','Tutor',anioSemestre,numeroSemestre);
+				dListaTutores('{{ action('TutorTutoradoController@getTutores') }}','Tutor');
+
+				$('#fechaFin').attr('required', 'true');
+				$('#horaFin').attr('required', 'true');
+
 				break;
 			case '5'://DEPORTES
 			case '6'://CULTURALES
@@ -336,8 +382,12 @@
 				document.getElementById('selectResponsables').style.display = 'block';
 				document.getElementById('divCuposTotales').style.display = 'block';
 				document.getElementById('enlaceRespInvitado').style.display = 'block';
-				$('#cuposTotales').attr('required', 'true');
 				dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
+
+				$('#cuposTotales').attr('required', 'true');
+				$('#fechaFin').attr('required', 'true');
+				$('#horaFin').attr('required', 'true');
+
 				break;
 			case '8'://MOVILIDAD
 			case '9'://COMEDOR
@@ -345,6 +395,10 @@
 				document.getElementById('lblFechaInicio').innerHTML = 'Inicio de la Convocatoria';
 				document.getElementById('lblFechaFin').innerHTML = 'Fin de la Convocatoria';
 				dListaResponsables('{{ action('UserController@getUsersAdm') }}','Responsable');
+
+				$('#fechaFin').removeAttr('required');
+				$('#horaFin').removeAttr('required');
+
 				break;
 			case '10'://REFORZAMIENTO
 				document.getElementById('selectResponsables').style.display = 'block';
@@ -353,13 +407,21 @@
 				document.getElementById('selectAlumnos').style.display = 'block';
 				dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
 				dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
+
+				$('#fechaFin').attr('required', 'true');
+				$('#horaFin').attr('required', 'true');
+
 				break;
 			default:
 				document.getElementById('divCuposTotales').style.display = 'block';
 				document.getElementById('selectResponsables').style.display = 'block';
 				document.getElementById('enlaceRespInvitado').style.display = 'block';
-				$('#cuposTotales').attr('required', 'true');
 				dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
+
+				$('#cuposTotales').attr('required', 'true');
+				$('#fechaFin').attr('required', 'true');
+				$('#horaFin').attr('required', 'true');
+
 			break;
       }
 	});
@@ -379,7 +441,7 @@
 	      success:function(data) {
 	          op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
 	          $("#selectIdResponsable").append(op);
-	          console.log('Cantidad de responsables'+data.length);
+	          console.log('Cantidad de - responsables'+data.length);
 	          for (var i = 0; i < data.length; i++) {
 					 op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
 	            //op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
@@ -423,31 +485,37 @@
 	    //Fin del AJAX
 	};
 
-	var dListaTutores = function(url, placeholder,anioSemestre, numeroSemestre) {
+	var dListaTutores = function(url, placeholder) {
 	    var op ="";
 	    //Preparando el AJAX
 		 $.ajax({
 	      type:'GET',
 	      url: url,
-	      data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
 	      dataType: 'json',
 	      success:function(data) {
-	        if(data.length == 0){
-					document.getElementById('divNoHayTutor').style.display = 'block';
-					document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+anioSemestre+'-'+numeroSemestre+'.';
-	        }else {
-	              op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
-	              $("#selectIdResponsable").append(op);
-								console.log('Cantidad de Tutores'+data.length);
-	              for (var i = 0; i < data.length; i++) {
-	                op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
-	                $("#selectIdResponsable").append(op);
-	              }
-	              $("#selectIdResponsable").selectpicker("refresh");
-	        }
+	        if (data == 'error') {
+				  document.getElementById('divNoHayTutor').style.display = 'block';
+ 				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+	        }else{
+				  if(data.length == 0){
+					   document.getElementById('divNoHayTutor').style.display = 'block';
+					   document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+				  }else {
+						  op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
+						  $("#selectIdResponsable").append(op);
+									console.log('Cantidad de Tutores'+data.length);
+						  for (var i = 0; i < data.length; i++) {
+							 op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
+							 $("#selectIdResponsable").append(op);
+						  }
+						  $("#selectIdResponsable").selectpicker("refresh");
+				  }
+			  }
 	      },
 	      error:function() {
-	          console.log("Error dListaTutores");
+					document.getElementById('divNoHayTutor').style.display = 'block';
+					document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+	          	console.log("Error dListaTutores");
 	      }
 	    });
 	    //Fin del AJAX
@@ -464,22 +532,25 @@
 			if(tamSelectIdAlumno>0){
 			$("#selectIdAlumnoTutorado").children('option').remove();
 			}
-			var numeroSemestre = $('#numeroSemestre').val();
-			var anioSemestre = $('#anioSemestre').val();
 			//Preparando el AJAX
 			console.log("TutorTutoradoooo");
 			$.ajax({
 				type:'GET',
 				url: '{{ action('TutorTutoradoController@getTutorados') }}',
-				data: {id:$(this).val(), anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
+				data: {id:$(this).val()},
 				dataType: 'json',
 				success:function(data) {
-					console.log('Cantidad de Tutorados'+data.length);
-					for (var i = 0; i < data.length; i++) {
-						op ='<option data-subtext="'+data[i].codigo+'" title="'+data[i].codigo+'" value="'+data[i].idAlumno+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
-						$("#selectIdAlumnoTutorado").append(op);
-					}
-					$("#selectIdAlumnoTutorado").selectpicker("refresh");
+					if (data == 'error') {
+	 				  document.getElementById('divNoHayTutor').style.display = 'block';
+	  				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+	 	        }else{
+						console.log('Cantidad de Tutorados'+data.length);
+						for (var i = 0; i < data.length; i++) {
+							op ='<option data-subtext="'+data[i].codigo+'" title="'+data[i].codigo+'" value="'+data[i].idAlumno+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
+							$("#selectIdAlumnoTutorado").append(op);
+						}
+						$("#selectIdAlumnoTutorado").selectpicker("refresh");
+	 			  }
 				},
 				error:function() {
 					console.log("Error selectResponsable");
@@ -489,44 +560,17 @@
 	   }
 	});
 
-	$("#anioSemestre").click(function(){
-	      document.getElementById('divNoHayTutor').style.display = 'none';
-	      if($('#selectIdTipoActividad').val() == 4){
-	        var op ="";
-	        //Preparando el AJAX
-	        $.ajax({
-	          type:'GET',
-	          url: '{{ action('TutorTutoradoController@getTutores') }}',
-	          data: {anioSemestre:anioSemestre, numeroSemestre:numeroSemestre},
-	          dataType: 'json',
-	          success:function(data) {
-	            if(data.length == 0){
-	                  document.getElementById('divNoHayTutor').style.display = 'block';
-	                  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+anioSemestre+'-'+numeroSemestre+'.';
-	            }else {
-	                  op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
-	                  $("#selectIdResponsable").append(op);
-	                  for (var i = 0; i < data.length; i++) {
-	                    op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].idPersona+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
-	                    $("#selectIdResponsable").append(op);
-	                  }
-	                  $("#selectIdResponsable").selectpicker("refresh");
-	            }
-	          },
-	          error:function() {
-	              console.log("Error listaResponsablesTutores");
-	          }
-	        });
-	        //Fin del AJAX
-	      }
-	});
-
 	function mostrarNuevoResponsable(){
+		llenarInvitado = true;
 		document.getElementById('boxResponsableInvitado').style.display = 'block';
 	}
 
 	function ocultarNuevoResponsable(){
+		llenarInvitado = false;
 		document.getElementById('boxResponsableInvitado').style.display = 'none';
+		$('#nombreResponsable').val('');
+		$('#apellidosResponsable').val('');
+		$('#emailResponsable').val('');
 	}
 
 	function mostrarSegunModalidad(modalidad){
@@ -563,11 +607,10 @@
 				var selectIdAlumno = document.getElementById('selectIdAlumno');
 				var pro = selectIdAlumno.options[selectIdAlumno.selectedIndex].value;
 				if ( pro == '') {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno para quien será la actividad que esta programando';
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno para quien será la actividad que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}
-				//document.getElementById('selectIdAlumno').style.display = 'block';
 				break;
 			case '3'://SERVICIO SOCIAL
 			case '10'://REFORZAMIENTO
@@ -577,36 +620,49 @@
 					var selectIdAlumno = document.getElementById('selectIdAlumno');
 					var pro2 = selectIdAlumno.options[selectIdAlumno.selectedIndex].value;
 					if ( pro1 == '' || pro2 == '') {
-						document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno y un responsable para quien será la actividad que esta programando';
+						document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno y un responsable para quien será la actividad que esta programando.';
 						document.getElementById('divError').style.display = 'block';
 						todoBien = false;
 					}
 				} else if ( $('input:radio[name=modalidad]:checked').val() == 2 ) {//GRUPAL
 					if ( pro1 == '' ) {
-						document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+						document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando.';
 						document.getElementById('divError').style.display = 'block';
 						todoBien = false;
 					}
 				}
-				//document.getElementById('selectIdAlumno').style.display = 'block';
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 			case '4'://TUTORÍA
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
 				if ( pro1 == '' ) {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un tutor para quien será la actividad que esta programando';
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un tutor, quien estará a cargo de sesión de tutoría que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}else {
 					var selectIdAlumnoTutorado = document.getElementById('selectIdAlumnoTutorado');
 					if ( selectIdAlumnoTutorado.selectedIndex == -1) {
-						document.getElementById('pError').innerHTML = 'Debe seleccionar al menos un tutorado';
+						document.getElementById('pError').innerHTML = 'Debe seleccionar al menos un tutorado.';
 						document.getElementById('divError').style.display = 'block';
 						todoBien = false;
 					}
 				}
-				//document.getElementById('selectResponsables').style.display = 'block';
-				//document.getElementById('selectAlumnosTutorados').style.display = 'block';
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 			case '5'://DEPORTES
 			case '6'://CULTURALES
@@ -616,21 +672,45 @@
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
 				if ( pro1 == '' ) {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable, quien estará a cargo de la actividad que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}
-				//document.getElementById('selectResponsables').style.display = 'block';
+				var nombreResponsable = $('#nombreResponsable').val();
+				var apellidosResponsable = $('#apellidosResponsable').val();
+				var emailResponsable = $('#emailResponsable').val();
+				if(llenarInvitado){
+					if(nombreResponsable == '' || apellidosResponsable == '' || emailResponsable == ''){
+							document.getElementById('respError').style.display = 'block';
+							console.log(nombreResponsable);
+							todoBien = false
+					}
+				}
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 			default:
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
 				if ( pro1 == '' ) {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable, quien estará a cargo de la actividad que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}
-				//document.getElementById('selectResponsables').style.display = 'block';
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 		}
 		return todoBien;

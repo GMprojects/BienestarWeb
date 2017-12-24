@@ -17,10 +17,9 @@
 		</div>
 
 		<div class="box-body">
-			{{ $op }}
 			@if ($op == 1)
-				<h4><b>Lista de Trabajos del egresado: </b> <b style="color:#4B367C">  &nbsp; &nbsp; {{ $egresado->nombre.' '.$egresado->apellidoPaterno.' '.$egresado->apellidoMaterno }}</b>&nbsp; &nbsp;</h4>
-				<br>
+				<label><i class="fa fa-graduation-cap"></i><b>Egresado: </b></label> <b style="color:#4B367C">  &nbsp; &nbsp; {{ $egresado->nombre.' '.$egresado->apellidoPaterno.' '.$egresado->apellidoMaterno }}</b>&nbsp; &nbsp;
+				<br><br>
 			@endif
 			<div class="table">
 				<div class="table-responsive">
@@ -57,7 +56,23 @@
 											Hasta la actualidad
 										@endif
 									</td>
-									<td>{{ $trabajo->nivelSatisfaccion }}</td>
+									<td>
+										@switch($trabajo->nivelSatisfaccion)
+											@case(1)
+											Muy Satisfactorio
+											@break
+											@case(2)
+											Satisfactorio
+											@break
+											@case(3)Poco Satisfactorio
+											@break
+											@case(4)Mejorable
+											@break
+											@case(5)
+											Insatisfactorio
+											@break
+										@endswitch
+									</td>
 									<td>{{ $trabajo->recomendaciones }}</td>
 									<td>{{ $trabajo->observaciones }}</td>
 									<td>
@@ -65,7 +80,7 @@
 											<a href="{{URL::action('EgresadoController@show',$trabajo->idEgresado) }}"><button class="btn btn-info">Ver Egresado</button></a>
 										@else--}}
 										<a href="{{ action('TrabajoController@edit',['idTrabajo' => $trabajo->idTrabajo, 'op' => $op] ) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
-										<a href="" data-target = "#modal-delete-{{ $trabajo->idTrabajo }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
+										<a href="" data-target = "#modal-delete-{{ $trabajo->idTrabajo }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 										{{--@endif--}}
 									</td>
 								</tr>

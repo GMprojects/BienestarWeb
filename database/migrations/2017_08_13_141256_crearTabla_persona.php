@@ -34,7 +34,7 @@ class CrearTablaPersona extends Migration
                 2. Programador
                 3. Administrador
             */
-            $tabla->enum('estado', [0,1]);
+            $tabla->enum('estado', [0,1])->default(1);
             /* estado
               0. Inactivo
               1. Activo

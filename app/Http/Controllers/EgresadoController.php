@@ -48,6 +48,7 @@ class EgresadoController extends Controller
             'nombre' => 'required|max:45',
             'apellidoPaterno' => 'required|max:20',
             'apellidoMaterno' => 'required|max:20',
+            'email' => 'max:100|unique:egresado',
             'codigo' => 'required|max:20|unique:egresado',
             'anioEgreso' => 'required',
             'numeroSemestre' => ['required', Rule::in('1','2')],
@@ -107,15 +108,29 @@ class EgresadoController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $request->validate([
-            'grado' => 'required',
-            'nombre' => 'required|max:45',
-            'apellidoPaterno' => 'required|max:20',
-            'apellidoMaterno' => 'required|max:20',
-            'anioEgreso' => 'required',
-            'numeroSemestre' => ['required', Rule::in('1','2')],
-        ]);
-        $egresado = Egresado::findOrFail($id);
+         $egresado = Egresado::findOrFail($id);
+         if ($egresado->email == $request->email) {
+            //dd('igual');
+               $request->validate([
+                  'grado' => 'required',
+                  'nombre' => 'required|max:45',
+                  'apellidoPaterno' => 'required|max:20',
+                  'apellidoMaterno' => 'required|max:20',
+                  'anioEgreso' => 'required',
+                  'numeroSemestre' => ['required', Rule::in('1','2')],
+              ]);
+         } else {
+            //dd('duff');
+               $request->validate([
+                  'grado' => 'required',
+                  'nombre' => 'required|max:45',
+                  'apellidoPaterno' => 'required|max:20',
+                  'apellidoMaterno' => 'required|max:20',
+                  'email' => 'max:100|unique:egresado',
+                  'anioEgreso' => 'required',
+                  'numeroSemestre' => ['required', Rule::in('1','2')],
+              ]);
+         }
         $egresado->grado = $request->grado;
         $egresado->nombre = $request->nombre;
         $egresado->apellidoPaterno = $request->apellidoPaterno;

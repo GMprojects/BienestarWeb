@@ -9,6 +9,7 @@ use BienestarWeb\Alumno;
 use BienestarWeb\Persona;
 use BienestarWeb\User;
 
+use BienestarWeb\Semestre;
 use BienestarWeb\Actividad;
 use BienestarWeb\ActPedagogia;
 use BienestarWeb\InscripcionAlumno;
@@ -52,7 +53,27 @@ class TutorTutoradoController extends Controller
      */
     public function create()
     {
-        return view('admin.tutorTutorado.create');
+
+         $array = explode("-",TutorTutoradoController::getSemestre());
+         $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ;
+         $tutorTutorados = TutorTutorado::where('numeroSemestre',$numeroSemestre)
+                                             ->where('anioSemestre', $array[0])
+                                             ->select('idDocente','idAlumno')->get();
+
+         $idDocentesTutorados = $tutorTutorados->pluck('idDocente');
+         $idAlumnosTutorados = $tutorTutorados->pluck('idAlumno');
+         //dd($idDocentesTutorados);
+         $docentes = Docente::join('user','docente.idUser', '=','user.id' )
+                           ->whereNotIn('docente.idDocente', $idDocentesTutorados)
+                           ->select('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+                           ->get();
+
+         $alumnos = Alumno::join('user','alumno.idUser', '=','user.id' )
+                          ->whereNotIn('alumno.idAlumno', $idAlumnosTutorados)
+                          ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+                          ->get();
+
+        return view('admin.tutorTutorado.create')->with('alumnos', $alumnos)->with('docentes', $docentes);
     }
 
     /**
@@ -63,14 +84,18 @@ class TutorTutoradoController extends Controller
      */
     public function store(Request $request)
     {
+
+        $arraySemestre = explode("-",TutorTutoradoController::getSemestre());
+        $numeroSemestre  = ($arraySemestre[1] == 'I') ? 1 : 2 ;
+
         $array = preg_split("/[_]/",$request->tutor);
         $idDocente = $array[0];
         $docente = Docente::findOrFail($idDocente);
         for ($i = 0; $i < count($request->alumnos); $i++) {
-          $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
-                                                                 'numeroSemestre' => $request->numeroSemestre]);
+          $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $arraySemestre[0],
+                                                                 'numeroSemestre' => $numeroSemestre]);
         }
-        $job = (new JobEmailHabitosEstudios($idDocente, $request->anioSemestre, $request->numeroSemestre))
+        $job = (new JobEmailHabitosEstudios($idDocente, $arraySemestre[0], $numeroSemestre))
            ->delay(Carbon::now()->addSeconds(1));
         dispatch($job);
         return Redirect::to('admin/tutorTutorado');
@@ -91,7 +116,7 @@ class TutorTutoradoController extends Controller
                                   ->select('tutorTutorado.idTutorTutorado', 'alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo','tutorTutorado.anioSemestre','tutorTutorado.numeroSemestre','tutorTutorado.habitoEstudioRespondido')
                                   ->orderBy('user.nombre', 'asc')
                                   ->get();
-        return view('admin.tutorTutorado.show',['tutor' => $tutor->user,'idTutor' => $tutor->idDocente, 'tutorados' => $tutorados ]);
+        return view('admin.tutorTutorado.show',['tutor' => $tutor->user,'idTutor' => $tutor->idDocente, 'tutorados' => $tutorados, 'anioSemestre' => $request->anioSemestre, 'numeroSemestre' => ($request->numeroSemestre == 1) ? 'I' : 'II'  ]);
     }
 
     /**
@@ -270,7 +295,8 @@ class TutorTutoradoController extends Controller
 
    public function enviarEmail(Request $request)
     {
-        if($request->ajax()){
+         //dd($request);
+        //if($request->ajax()){
            $idAlPer = Alumno::where('idAlumno', $request->idAlumno)->value('idUser');
            $idDocPer = Docente::where('idDocente', $request->idTutor)->value('idUser');
            Log::info($idAlPer);
@@ -278,63 +304,74 @@ class TutorTutoradoController extends Controller
            $job = (new JobEmail($idAlPer, $request->mensaje, $request->subject, $idDocPer, '1'))
                   ->delay(Carbon::now()->addSeconds(5));
            dispatch($job);
-        }
+          return redirect()->back();
+        //}
     }
+
+    public function getSemestre(){
+      $fechaActual = (Carbon::now())->format('Y-m-d');
+      $semestres = Semestre::get();
+      $i = 0; $existe = false; $nroSem = count($semestres);
+      while ($i < $nroSem && !$existe) {
+        $fechaInicio = $semestres[$i]['fechaInicio'];
+        $fechaFin = $semestres[$i]['fechaFin'];
+
+         if (($fechaActual >= $fechaInicio) && ($fechaActual <= $fechaFin)) {
+            $existe = true;
+         } else {
+            $existe = false;
+         }
+         $i++;
+      }
+
+      if ($existe) {//True
+         return $semestres[$i-1]['semestre'];
+      } else {
+         return 'error';
+      }
+
+   }
 
     public function getTutores(Request $request){
     //    dd($request);
-      if($request->ajax()){
 
-          $users = Docente::join('tutorTutorado','docente.idDocente', '=','tutorTutorado.idDocente' )
-              ->join('user','docente.idUser', '=','user.id' )
-              ->select('user.id','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-              ->distinct()
-              ->get();
-         return response()->json($users);
+      if($request->ajax()){
+          $array = explode("-",TutorTutoradoController::getSemestre());
+          Log::info($array);
+          if ($array[0] != 'error') {
+               $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ;
+               $users = Docente::join('tutorTutorado','docente.idDocente', '=','tutorTutorado.idDocente' )
+                   ->join('user','docente.idUser', '=','user.id' )
+                   ->select('user.id','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+                   ->where([['anioSemestre', $array[0]], ['numeroSemestre', $numeroSemestre]])
+                   ->distinct()
+                   ->get();
+              return response()->json($users);
+          }else{
+             return response()->json('error');
+          }
       }
     }
 
     public function getTutorados(Request $request){
-    //    dd($request);
-    Log::info($request);
       if($request->ajax()){
-          $idDocente = Docente::where('idUser',   $request->id )->value('idDocente');
-          $tutorados = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
-              ->join('user','alumno.idUser', '=','user.id' )
-              ->where([['tutorTutorado.idDocente',  $idDocente]])
-              ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-              ->get();
-          return response()->json($tutorados);
+          $array = explode("-",TutorTutoradoController::getSemestre());
+          Log::info($array);
+          if ($array[0] != 'error') {
+                $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ;
+                $idDocente = Docente::where('idUser',   $request->id )->value('idDocente');
+                $tutorados = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
+                    ->join('user','alumno.idUser', '=','user.id' )
+                    ->where([['tutorTutorado.idDocente',  $idDocente], ['anioSemestre', $array[0]], ['numeroSemestre', $numeroSemestre]])
+                    ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+                    ->get();
+                return response()->json($tutorados);
+         }else{
+            return response()->json('error');
+         }
       }
     }
 
-    public function getAlumnosLibres(Request $request){
-    //    dd($request);whereNotIn
-      if($request->ajax()){
-          $idAlumnosTutorados = TutorTutorado::where([['numeroSemestre',$request->numeroSemestre],
-                                                     ['anioSemestre',   $request->anioSemestre]])
-                                             ->pluck('idAlumno');
-          $alumnos = Alumno::join('user','alumno.idUser', '=','user.id' )
-                            ->whereNotIn('alumno.idAlumno', $idAlumnosTutorados)
-                            ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-                            ->get();
-          return response()->json($alumnos);
-      }
-    }
-
-    public function getDocentesNoTutores(Request $request){
-    //    dd($request);whereNotIn
-      if($request->ajax()){
-          $idAlumnosTutorados = TutorTutorado::where('numeroSemestre',$request->numeroSemestre)
-                                             ->where('anioSemestre',   $request->anioSemestre)
-                                             ->pluck('idDocente');
-          $docentes = Docente::join('user','docente.idUser', '=','user.id' )
-                            ->whereNotIn('docente.idDocente', $idAlumnosTutorados)
-                            ->select('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-                            ->get();
-          return response()->json($docentes);
-      }
-    }
 
     public function getAlumnosLibresExDoc(Request $request){//alumos libres + //alumnosdeTutorado del docente $request->idDocente
     //    dd($request);whereNotIn

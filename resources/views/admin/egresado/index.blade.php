@@ -55,7 +55,7 @@
 									</button>
 								</a>
 								<a href="{{ action('EgresadoController@edit',$egresado->idEgresado) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
-								<a href="" data-target = "#modal-delete-{{ $egresado->idEgresado }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
+								<a href="" data-target = "#modal-delete-{{ $egresado->idEgresado }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 							</td>
 						</tr>
 						@include('admin.egresado.modal')

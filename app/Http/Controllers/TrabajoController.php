@@ -29,7 +29,7 @@ class TrabajoController extends Controller
      */
     public function index(Request $request)
     {
-      dd($request->op);
+      //dd($request->op);
          if ($request->op == 1) { //viene desde egresado
             $trabajos = Trabajo::where('idEgresado',$request->idEgresado)->get();
             $egresado = Egresado::findOrFail($request->idEgresado);
@@ -38,12 +38,12 @@ class TrabajoController extends Controller
                 ->with('trabajos',$trabajos)
                 ->with('egresado', $egresado);
          } else {
+             $op = 2;
              $trabajos = Trabajo::get();
              return view('admin.trabajo.index')
-                ->with('op',$request->op)
+                ->with('op',$op)
                 ->with('trabajos',$trabajos);
          }
-
     }
 
     /**
@@ -60,9 +60,10 @@ class TrabajoController extends Controller
                   ->with('idEgresado', $request->idEgresado)
                   ->with('egresado', $egresado);
          } else {
+            $op = 2;
             $egresados = Egresado::get();
             return view('admin.trabajo.create')
-                  ->with('op',$request->op)
+                  ->with('op',$op)
                   ->with('egresados',$egresados);
          }
     }
@@ -119,9 +120,14 @@ class TrabajoController extends Controller
      */
     public function edit(Request $request, $id)
     {
-         return view('admin.trabajo.edit')
-         ->with('trabajo',Trabajo::findOrFail($id))
-         ->with('op', $request->op);
+         if ($request->op == null) {
+            abort(404);
+         } else {
+            return view('admin.trabajo.edit')
+            ->with('trabajo',Trabajo::findOrFail($id))
+            ->with('op', $request->op);
+         }
+
     }
 
     /**
@@ -133,6 +139,7 @@ class TrabajoController extends Controller
      */
     public function update(Request $request, $id)
     {
+      //dd($request);
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->institucion = $request->get('institucion');
         $trabajo->lugar = $request->get('lugar');

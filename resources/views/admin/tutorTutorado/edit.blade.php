@@ -8,58 +8,66 @@
 
 <div class="caja">
 	<div class="caja-header">
-      <div class="caja-icon"><i style="font-size: 1em;" class="fa fa-users"></i></div>
+      <div class="caja-icon"><i class="fa fa-users"></i></div>
       <div class="caja-title">Tutorados</div>
    </div>
 
 	<div class="caja-body">
 	   <div class="row">
-			<h4>
-				<b>Docente: </b> <b>  &nbsp; &nbsp; {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</b>&nbsp; &nbsp;
-			   <div class="pull-right"><label><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $anioSemestre.'-'.$numeroSemestre }}</div>
-			</h4>
+			<div class="col-md-6">
+				<label><i class="fa fa-user margin-r-5"></i><b>Tutor: </b></label> <b>  &nbsp; &nbsp; {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</b>&nbsp; &nbsp;
 
-	      <br> <br>
+			</div>
+			<div class="col-md-3"></div>
+			<div class="col-md-3 text-right">
+				<label><i class="glyphicon glyphicon-calendar margin-r-5"></i><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $anioSemestre.'-'.$numeroSemestre }}
+			</div>
+	   </div>
+      <br>
+		<div class="row">
 			<div id="divNoHayAlumnos" class="alert alert-danger" style='display:none;'>
 					<a href="" class="close" data-dismiss="alert" aria-label="close">X</a>
 					<h4>Error</h4>
 					<p>Debe al menos elegir un alumno</p>
 			</div>
-	   </div>
+		</div>
 		<div class="row">
-	       <label for="tabModAlumnos" style="color: #4B367C;">Seleccione a los alumnos que serán tutorados</label>
-			 <div class="table">
-					 <div class="table-responsive">
-						 <table id="tabModAlumnos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
-							 <thead>
-								 <th>Código</th>
-								 <th>Alumno</th>
-								 <th>Opciones</th>
-							 </thead>
-							 <tbody>
-								 @foreach ($alumnos as $alumno)
-									 <tr>
-											 <td>{{ $alumno->codigo }}</td>
-											 <td>{{ $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno }}</td>
-											 <td><input type="checkbox" onchange="ocultarError(this)" style="" value={{ $alumno->idAlumno }} name="alumnos[]"></td>									
-									 </tr>
-								 @endforeach
-							 </tobody>
-						 </table>
-					</div>
-	 		</div>
+	       <div class="col-md-12">
+				 <label for="tabModAlumnos" style="color: #4B367C;">Seleccione a los alumnos que serán tutorados</label>
+   			 <div class="table">
+   					 <div class="table-responsive">
+   						 <table id="tabModAlumnos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+   							 <thead>
+   								 <th>Código</th>
+   								 <th>Alumno</th>
+   								 <th>Opciones</th>
+   							 </thead>
+   							 <tbody>
+   								 @foreach ($alumnos as $alumno)
+   								 <tr>
+   									 <td>{{ $alumno->codigo }}</td>
+   									 <td>{{ $alumno->apellidoPaterno.' '.$alumno->apellidoMaterno.' '.$alumno->nombre }}</td>
+   									 <td><input type="checkbox" class="icheckbox_square-green" id="check" onchange="ocultarError(this)" style="" value={{ $alumno->idAlumno }} name="alumnos[]"></td>
+   								 </tr>
+   								 @endforeach
+   							 </tobody>
+   						 </table>
+   					</div>
+   	 		</div>
+	       </div>
 	   </div>
 	</div>
    <div class="caja-footer">
 		<div class="pull-right">
-			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Asignar </button>
-			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+			<button class="btn btn-ff" type="submit"><i class="fa fa-link"></i> Vincular </button>
+			<button class="btn btn-ff-red" type="button" id="limpiarBtn"><i class="fa fa-eraser"></i> Limpiar</button>
+			<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 		</div>
    </div>
 </div>
 {!! Form::close() !!}
 <script type="text/javascript">
-$(document).ready(function() {
+	$(document).ready(function() {
 		 $('#tabModAlumnos').DataTable({
 				"lengthMenu": [ 10, 25, 50, 75, 100 ],
 				"oLanguage" : {
@@ -86,28 +94,21 @@ $(document).ready(function() {
 						 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 					 }
 				},
-				"order": [[ 2,'asc' ]]
+				"order": [[ 1,'asc' ]]
 		 });
 		// ajaxAlumnosLibres();
  		//FalumnosLibres
 	});
 
-	function agregar(){
-		document.getElementById('divNoHayAlumnos').style.display = 'none';
-	  $('input[type=radio]').each(function(){
-          if (this.checked) {
-            var str = this.value;
-            var res = str.split("_");
-						$('#idTutor').val(res[0]);
-						$('#codigo').val(res[1]);
-						$('#nombreApellidos').val(res[2]);
-          }
-	   });
-	}
 
 	function ocultarError(){
 		document.getElementById('divNoHayAlumnos').style.display = 'none';
 	}
+
+	$('#limpiarBtn').click(function(){
+		console.log('limpiar Button');
+		$('input:checkbox').prop('checked',false);
+	});
 
 	function validar(){
 		var existeUnSeleccionado = false;

@@ -23,10 +23,10 @@
                   <ul class="ff-list-act">
                      @foreach ($mis_resp as $actividad)
                         <div class="row">
-                           <div class="col-md-10">
+                           <div class="col-md-9">
                               @include('layouts.partials.list-act', $actividad)
                            </div>
-                           <div class="col-md-2 pull-right">
+                           <div class="col-md-3 pull-right">
                              <div class="mis-act-op" valign="middle">
                                 @if ( Auth::user()->id == $actividad->idUserResp)
                                     <a href="{{ action('ActividadController@execute',$actividad->idActividad) }}" class="btn btn-ff-greenOs" data-toggle="tooltip" data-placement="bottom" title="Ejecutar Actividad">
@@ -45,21 +45,48 @@
                   <ul class="ff-list-act">
                      @foreach ($mis_prog as $actividad)
                         <div class="row">
-                           <div class="col-md-10">
+                           <div class="col-md-9">
                               @include('layouts.partials.list-act', $actividad)
                            </div>
-                           <div class="col-md-2 pull-right">
+                           <div class="col-md-3 pull-right">
                              <div class="mis-act-op" valign="middle">
-                               @if ($actividad->estado != 2)
-                                  <a href="{{ action('ActividadController@edit',$actividad->idActividad) }}" class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar Actividad"><i class="fa fa-edit"></i></a>
-                               @endif
-                               @if ($actividad->estado != 3 && $actividad->estado != 2)
-                                  <a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"> <button  class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-remove" ></i></button> </a>
-                               @endif
+                                @switch($actividad->estado)
+                                   @case('1')
+                                      <a href="{{ action('ActividadController@execute',$actividad->idActividad) }}">
+                                         <button class="btn btn-ff-greenOs" data-toggle="tooltip" data-placement="bottom" title="Ejecutar Actividad">
+                                            <span>
+                                              <i class="fa fa-child"><i class="fa fa-cogs"></i></i>
+                                            </span>
+                                         </button>
+                                      </a>
+                                      <a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"  data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"></i></button></a>
+                                      <a href="" data-target = "#modal-cancel-{{ $actividad->idActividad }}" data-toggle = "modal"> <button  class="btn btn-ff-dark-red" data-toggle="tooltip" data-placement="bottom" title="Cancelar Actividad"><i class="fa fa-ban" ></i></button></a>
+                                      <a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-trash"></i></button></a>
+                                   @break
+                                   @case('2')
+                                      <a href="{{ action('ActividadController@execute',$actividad->idActividad) }}">
+                                         <button class="btn btn-ff-greenOs" data-toggle="tooltip" data-placement="bottom" title="Ejecutar Actividad">
+                                            <span>
+                                              <i class="fa fa-child"><i class="fa fa-cogs"></i></i>
+                                            </span>
+                                         </button>
+                                      </a>
+                                   @break
+                                   @case('3')
+                                      <a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"  data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"></i></button></a>
+                                      <a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-trash"></i></button></a>
+                                   @break
+                                   @case('4')
+                                      <a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"  data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"></i></button></a>
+                                      <a href="" data-target = "#modal-cancel-{{ $actividad->idActividad }}" data-toggle = "modal"> <button  class="btn btn-ff-dark-red" data-toggle="tooltip" data-placement="bottom" title="Cancelar Actividad"><i class="fa fa-ban" ></i></button></a>
+                                      <a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-trash"></i></button></a>
+                                   @break
+                                @endswitch
                             </div>
                            </div>
                         </div>
                         @include('programador.actividad.modal')
+                        @include('programador.actividad.modalCancel')
                      @endforeach
                      </table>
                   </ul>

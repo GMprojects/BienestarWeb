@@ -6,52 +6,56 @@
 		<div class="caja-title">Ejecución de la Actividad</div>
 	</div>
 	<div class="caja-body">
-		<div class="row">
-			@if ($actividad->fechaEjecutada == null)
-				<p style="color:red;"> <span class="ast">*</span> Requerido
-				<div class="col-md-4">
-					<div class="form-group">
-						<label for="fechaEjecutada">Fecha de Ejecutada:</label><span class="ast">*</span>
-						<div class="input-group date">
-						  <div class="input-group-addon">
-							<i class="fa fa-calendar"></i>
-						  </div>
-						  <input type="text" name="fechaEjecutada" class="form-control pull-right" required  value="{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}" id="datepicker1">
-					  </div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="bootstrap-timepicker">
-						<div class="form-group">
-							<label for="horaEjecutada">Hora de Ejecutada:</label><span class="ast">*</span>
-							<div class="input-group">
-								<div class="input-group-addon">
-								  <i class="fa fa-clock-o"></i>
-								</div>
-									<input type="text" name="horaEjecutada"  class="form-control timepicker" value="{{ date("h:i A",strtotime($actividad->horaEjecutada)) }}" required>
-							</div>
-						</div>
-					</div>
-				</div>
-			@else
-				<div class="form-group">
-					<label><b>Fecha de Convocatoria: </b> </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}<br>
-				</div>
-				<div class="form-group">
-					<label><b>Fecha de Ejecución: </b> </label> &nbsp; &nbsp;{{ date("d/m/Y",strtotime($actividad->fechaEjecutada)) }} &nbsp;- &nbsp;{{ date("h:i A",strtotime($actividad->horaEjecutada)) }}<br>
-				</div>
-			@endif
-		</div>
-	</div>
-	@if ($actividad->fechaEjecutada == null)
 		<p style="color:red;"> <span class="ast">*</span> Requerido
-		<div class="caja-footer">
-			<div class="pull-right">
-				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+		<div class="row">
+			<div class="col-md-4">
+			   <div class="form-group">
+				   <label for="fechaEjecutada">Fecha de Ejecutada <span class="ast">*</span></label>
+				   <div class="input-group date">
+					  <div class="input-group-addon">
+					   <i class="fa fa-calendar"></i>
+					  </div>
+					  @if ($actividad->fechaEjecutada == null)
+						  @if (old('fechaEjecutada') == null)
+							  <input type="text" required name="fechaEjecutada"  placeholder="{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}" class="form-control pull-right"  id="fechaEjecutada" >
+						  @else
+							  <input type="text" required name="fechaEjecutada"  value="{{old('fechaEjecutada')}}" class="form-control pull-right"  id="fechaEjecutada" >
+						  @endif
+					  @else
+						  <input type="text" required name="fechaEjecutada"  value="{{ date("d/m/Y",strtotime($actividad->fechaEjecutada)) }}" class="form-control pull-right"  id="fechaEjecutada" >
+					  @endif
+				  </div>
+			   </div>
+			</div>
+			<div class="col-md-4">
+			   <div class="bootstrap-timepicker">
+				   <div class="form-group">
+					   <label for="horaEjecutada">Hora de Ejecutada <span class="ast">*</span></label>
+					   <div class="input-group">
+						   <div class="input-group-addon">
+							  <i class="fa fa-clock-o"></i>
+						   </div>
+							  @if ($actividad->horaEjecutada == null)
+								  @if (old('horaEjecutada') == null)
+									  <input type="text" required name="horaEjecutada"  value="{{ date('g:i A',strtotime($actividad->horaInicio)) }}" class="form-control timepicker">
+								  @else
+									  <input type="text" required name="horaEjecutada"  value="{{old('horaEjecutada')}}" class="form-control timepicker">
+								  @endif
+							  @else
+								  <input type="text" required name="horaEjecutada"  value="{{ date("g:i A",strtotime($actividad->horaEjecutada)) }}" class="form-control timepicker">
+							  @endif
+					   </div>
+				   </div>
+			   </div>
 			</div>
 		</div>
-	@endif
+	</div>
+	<div class="caja-footer">
+		<div class="pull-right">
+			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+		</div>
+	</div>
 	{!!Form::close()!!}
 </div>
 
@@ -79,8 +83,8 @@
 									<td>{{ $beneficiario->user->codigo }}</td>
 									<td>{{ $beneficiario->user->nombre.' '.$beneficiario->user->apellidoPaterno.' '.$beneficiario->user->apellidoMaterno }}</td>
 									<td>
-										<a href="{{ action('BeneficiarioController@editBeneficiario',[$actividad->idActividad,  $beneficiario->pivot->idBeneficiarioComedor ]) }}"><button class="btn btn-ff-blues"><i class="fa fa-eye"></i> </button></a>
-										<a href="" data-target = "#modal-deletebc-{{ $beneficiario->pivot->idBeneficiarioComedor }}" data-toggle = "modal"><button class="btn btn-ff-red"> <i class="fa fa-remove"></i> </button></a>
+										<a href="{{ action('BeneficiarioController@editBeneficiario',[$actividad->idActividad,  $beneficiario->pivot->idBeneficiarioComedor ]) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i> </button></a>
+										<a href="" data-target = "#modal-deletebc-{{ $beneficiario->pivot->idBeneficiarioComedor }}" data-toggle = "modal"><button class="btn btn-ff-red"> <i class="fa fa-trash"></i> </button></a>
 									</td>
 								</tr>
 								@include('programador.actividad.beneficiario.modal')

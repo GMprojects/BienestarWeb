@@ -14,11 +14,13 @@
          Llenar Hábito Estudio
       @endcomponent
      @break
+     @case(2){{-- Comunicarse con el programador y responsable --}}
+     @break
   @endswitch()
 
   <br><br><br>
 
-  Atentamente, {{ $remitente }}
+  Atentamente, {{  ucwords(strtolower($remitente))  }}
 
   Gracias,<br>
   {{ config('app.name') }}

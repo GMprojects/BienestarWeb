@@ -44,11 +44,10 @@ class EncuestaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $tiposActividad=TipoActividad::get();
-        return view('admin.encuesta.create')->with('tiposActividad',$tiposActividad);
-    }
+     public function create(){
+        $tiposActividad=TipoActividad::all();
+         return view('admin.encuesta.create')->with('tipos',$tiposActividad);
+     }
 
     /**
      * Store a newly created resource in storage.
@@ -74,14 +73,10 @@ class EncuestaController extends Controller
      */
     public function show($id)
     {
-        $encuesta = Encuesta::findOrFail($id);
-        $encuesta->each(function($encuesta){
-            $encuesta->preguntasEncuesta;
-            $encuesta->alternativas;
-            $encuesta->tipoActividad;
-        });
-        //dd($habitoEstudio->preguntasHabito);
-        return view('admin.encuesta.show')->with('encuesta',$encuesta);
+      $encuesta = Encuesta::findOrFail($id);
+      //$encResp_insc = EncuestaRespondidaInsc::findOrFail($id);
+
+      return view('admin.encuesta.show')->with('encuesta', $encuesta);
     }
 
     /**

@@ -51,8 +51,10 @@ class JobEmailActualizarAct implements ShouldQueue
          Log::info("---------------------------------------------------------------------------------- ");
          if ($this->opcion == '1') {
               $subject = 'Actividad Actualizada';
-         } else {
+         } elseif($this->opcion == '2') {
               $subject = 'Actividad Cancelada';
+         } else {
+              $subject = 'Actividad Eliminada';
          }
         Log::info("JobEmailActualizarAct ");
         Log::info("Inicio enviar Responsable");

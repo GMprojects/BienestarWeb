@@ -9,7 +9,7 @@
           </h3>
   			</div>
          <div class="col-xs-6" style="text-align:right;">
-				<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $idTutor, 'anioSemestre' => $tutorados[0]->anioSemestre, 'numeroSemestre' => $tutorados[0]->numeroSemestre ]) }}">
+				<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $idTutor, 'anioSemestre' => $anioSemestre, 'numeroSemestre' => $numeroSemestre ]) }}">
                <button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Tutorado</button>
             </a>
 			</div>
@@ -18,35 +18,45 @@
   	</div>
 
   	<div class="box-body">
-        <label><b>Tutor: </b> </label> <b>  &nbsp; &nbsp; {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</b>&nbsp; &nbsp;
-        <div class="pull-right"><label><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $tutorados[0]->anioSemestre.'-'.$tutorados[0]->numeroSemestre }}</div>
-        <br> <br>
-  			<div class="table">
-  					<div class="table-responsive">
-  						<table id="tabTutores" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
-  							<thead>
-  								<th>Id</th>
-                        <th>Código</th>
-								<th>Nombres y Apellidos</th>
-  								<th>Opciones</th>
-  							</thead>
-                     @php($i = 1)
-                     @if (count($tutorados)>0)
-                        @foreach($tutorados as $tutorado)
-     							<tr>
-                           <td>{{ $i }}</td>
-                           <td>{{ $tutorado->codigo }}</td>
-     								<td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
-     								<td><a href="" data-target = "#modal-delete-{{ $tutorado->idTutorTutorado }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa  fa-remove" aria-hidden="true"></i> Desvincular</button></a></td>
-                        @php($i++)
-     							</tr>
-                        @include('admin.tutorTutorado.modalEmail')
-                        @include('admin.tutorTutorado.modal')
-     							@endforeach
-                     @endif
-  						</table>
-  					</div>
-  		   </div>
+      <div class="row">
+			<div class="col-md-6">
+				<label><i class="fa fa-user margin-r-5"></i><b>Tutor: </b></label> <b>  &nbsp; &nbsp; {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</b>&nbsp; &nbsp;
+
+			</div>
+			<div class="col-md-3"></div>
+			<div class="col-md-3 text-right">
+				<label><i class="glyphicon glyphicon-calendar margin-r-5"></i><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $anioSemestre.'-'.$numeroSemestre }}
+			</div>
+	   </div>
+     <br>
+     <div class="row">
+        <div class="col-md-12">
+           <div class="table">
+   					<div class="table-responsive">
+   						<table id="tabTutores" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+   							<thead>
+   								<th>Id</th>
+                           <th>Código</th>
+    								<th>Nombres y Apellidos</th>
+   								<th>Opciones</th>
+   							</thead>
+                      @php($i = 1)
+                      @if (count($tutorados)>0)
+                         @foreach($tutorados as $tutorado)
+      							<tr>
+                            <td>{{ $i }}</td>
+                            <td>{{ $tutorado->codigo }}</td>
+      								<td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
+      								<td><a href="" data-target = "#modal-delete-{{ $tutorado->idTutorTutorado }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa  fa-unlink" aria-hidden="true"></i> Desvincular</button></a></td>
+                         @php($i++)
+      							</tr>
+                         @include('admin.tutorTutorado.modal')
+      							@endforeach
+                      @endif
+   						</table>
+   					</div>
+   		   </div>
+        </div>
   	 </div>
   </div>
 

@@ -27,9 +27,6 @@
 <div class="box box-info">
 	<div class="box-header">
 		<h3 class="box-title">Análisis del Hábito de Estudio  </h3>
-		<div class="box-tools pull-right">
-			<button type="button" class="btn btn-box-tool" data-toggle="collapse" data-target="#box"> <i class="fa fa-minus" aria-controls="box" aria-expanded="false"></i> </button>
-		</div>
 	</div>
 
 	<div class="box-body"  id="box" class="collapse">
@@ -157,9 +154,6 @@
 	}
 </style>
 <script type="text/javascript">
-	function mostrarGrafico(){
-		document.getElementById('chart').style.display = 'block';
-	}
 	var data = [
 		[0, {{ ($respuesta_cantidad[0]['cantidad'])*1.85 }}],
 		[1, {{ ($respuesta_cantidad[1]['cantidad'])*1.85 }}],

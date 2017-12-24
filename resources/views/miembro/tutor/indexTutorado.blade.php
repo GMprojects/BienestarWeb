@@ -49,7 +49,7 @@
                             </td>
                            @endif
      							</tr>
-                        @include('admin.tutorTutorado.modalEmail')
+                        @include('miembro.tutor.modalEmail')
   							@endforeach
   						</table>
   					</div>

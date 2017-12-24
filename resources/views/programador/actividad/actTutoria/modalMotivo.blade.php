@@ -10,7 +10,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                      <span aria-hidden="true"><i class="fa fa-remove"></i></span>
              </button>
-             <h4 class="modal-title"><b> <i class="fa fa-comment-o"></i>Nuevo Motivo</b></h4>
+             <h4 class="modal-title"><b>Nuevo Motivo</b></h4>
          </div>
 			<div class="modal-body">
             <div class="row">

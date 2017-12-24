@@ -7,7 +7,7 @@
 				<h3 class="box-title">Preguntas de Encuesta de Hábitos de Estudio</h3>
 			</div>
 			<div class="col-xs-6" style="text-align:right;">
-				<a href="preguntaHabito/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nueva Pregunta</button></a>
+				{{--<a href="preguntaHabito/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nueva Pregunta</button></a>--}}
 			</div>
 		</div>
 	</div>
@@ -30,7 +30,7 @@
 										<td>{{$preguntaHabito->tipoHabito['tipo']}}</td>
 										<td>
 											<a href="{{URL::action('PreguntaHabitoController@edit',$preguntaHabito->idPreguntaHabito)}}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
-											<a href="" data-target="#modal-delete-{{$preguntaHabito->idPreguntaHabito}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
+											<a href="" data-target="#modal-delete-{{$preguntaHabito->idPreguntaHabito}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 										</td>
 									</tr>
 									@include('admin.preguntaHabito.modal')

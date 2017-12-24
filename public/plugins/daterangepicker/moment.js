@@ -792,7 +792,7 @@
 
     // FORMATTING
 
-    addFormatToken('M', ['MM', 2], 'Mo', function () {
+    addFormatToken('M', ['MM', 2], 'Lu', function () {
         return this.month() + 1;
     });
 

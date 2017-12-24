@@ -68,6 +68,33 @@
 							</div>
 						</div>
 					</div>
+					<!-- CAmpo Sexo -->
+					<div class="form-group">
+						<label for="sexo" class="col-sm-3 control-label">Sexo<span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-venus-mars"></i></span>
+								 <select name="sexo"  required class="form-control">
+										<option value="h">Hombre</option>
+										<option value="m">Mujer</option>
+								 </select>
+							</div>
+						</div>
+					</div>
+					<!-- Campo Fecha Nacimiento -->
+					<div class="form-group">
+						<label for="fechaNacimiento" class="col-sm-3 control-label">Nacimiento </label>
+						<div class="col-sm-8">
+							<div class="input-group date">
+								<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+								@if (old('fechaNacimiento') == null)
+									<input type="text" name="fechaNacimiento"  placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaNacimiento" >
+								@else
+									<input type="text" name="fechaNacimiento"  value="{{old('fechaNacimiento')}}" class="form-control"  id="fechaNacimiento" >
+								@endif
+							</div>
+						</div>
+					</div>
 					<!-- Campo Direccion -->
 					<div class="form-group">
 						<label for="direccion" class="col-sm-3 control-label">Direccion </label>
@@ -138,7 +165,7 @@
 						<h5>Administrativo</h5>
 					</div>
 				</div>
-				<br>
+				<br><br>
 				<div class="form-horizontal">
 					<div class="form-group">
 						<label for="codigo" class="col-sm-3 control-label">Código <span class="ast">*</span></label>
@@ -224,9 +251,11 @@
 							</div>
 						</div>
 					</div>
+					<br>
 				</div>
 			</div>
 		</div>
+		<br>
 		<!-- CAJA de FUNCION de usuario -->
 		<div class="caja" name "nuevoUsuario">
 	      <div class="caja-header">
@@ -254,14 +283,16 @@
 					</div>
 				</div>
 			</div>
-			<br><br>
+			<br><br><br>
 			<!-- FOOTER de CAJA de FUNCION de usuario -->
 	      <div class="caja-footer">
 				<div class="pull-right">
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 				</div>
 	      </div>
+			<br><br>
 		</div>
 	</div>
 
@@ -270,6 +301,17 @@
 {!! Form::close() !!}
 
 <script type="text/javascript">
+	$('#fechaNacimiento').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+	$(document).ready(function(){
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+			increaseArea: '20%' // optional
+		});
+		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+	});
 	function cambiarColorTipo(icono){
 		document.getElementById('icoAlumno').style.color = 'rgba(0,0,0, 0.5)';
 		document.getElementById('icoDocente').style.color = 'rgba(0,0,0, 0.5)';
@@ -288,8 +330,8 @@
 						document.getElementById('tituloCamposPropios').innerHTML = "Datos de Docente";break;
 			case 3: 	iconoElegido = 'icoAdministrativo';
 						document.getElementById('formAdministrativo').style.display = 'block';
-						document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";break;
-						$('#cargo').attr('required', 'true');
+						document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";
+						$('#cargo').attr('required', 'true');break;
 		}
 		document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 	}

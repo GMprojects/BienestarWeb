@@ -15,6 +15,7 @@ use BienestarWeb\InscripcionAlumno;
 use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
 use BienestarWeb\InscripcionADA;
+use BienestarWeb\Semestre;
 
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Storage;
 
 use BienestarWeb\Jobs\JobEmailNuevaAct;
 use BienestarWeb\Jobs\JobEmailActualizarAct;
+use BienestarWeb\Jobs\JobEmail;
 
 use File;
 use Log;
@@ -152,6 +154,27 @@ class ActividadController extends Controller
          return $request->idUserResp;
       }
    }
+   public function getSemestre(){
+      $fechaActual = (Carbon::now())->format('Y-m-d');
+      $semestres = Semestre::get();
+      $i = 0; $existe = false; $nroSem = count($semestres);
+      while ($i < $nroSem && !$existe) {
+         $fechaInicio = $semestres[$i]['fechaInicio'];
+         $fechaFin = $semestres[$i]['fechaFin'];
+         if (($fechaActual >= $fechaInicio) && ($fechaActual <= $fechaFin)) {
+           $existe = true;
+         } else {
+           $existe = false;
+         }
+         $i++;
+      }
+      if ($existe) {//True
+         return $semestres[$i-1]['semestre'];
+      } else {
+         return $semestres[$nroSem-1]['semestre'];
+      }
+   }
+
     /**
      * Display a listing of the resource.
      *
@@ -159,7 +182,7 @@ class ActividadController extends Controller
      */
     public function index(Request $request){
     //    dd($request);
-      $actividades = Actividad::get();
+      $actividades = Actividad::where('estado', '<', '5')->get();
       //dd($actividades);
       return view('programador.actividad.index',[
          'actividades' => $actividades,
@@ -178,10 +201,11 @@ class ActividadController extends Controller
     public function create()
     {
       $tiposActividad=TipoActividad::get();
+//dd(ActividadController::getSemestre());
     //  $users=User::get();
       return view('programador.actividad.create')
-              ->with('tiposActividad', $tiposActividad);
-            //  ->with('users', $users);
+              ->with('tiposActividad', $tiposActividad)
+              ->with('semestre', ActividadController::getSemestre());
     }
 
       /**
@@ -375,6 +399,7 @@ class ActividadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
+      dd($request);
           $request->validate([
               'titulo' => 'required|max:100',
               'fechaInicio' => 'required|date_format:d/m/Y',
@@ -452,7 +477,12 @@ class ActividadController extends Controller
                break;
              case '4':
                  //eliminar inscripciones anteriores
-                 $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->delete();
+                 ActPedagogia::where('idActividad', $actividad->idActividad)->delete();
+                 $inscripcionAlumnos = InscripcionAlumno::where('idActividad', $actividad->idActividad)->delete();
+                 /*foreach ($inscripcionesAlumnos as $inscripcionAlumno) {
+                    ActPedagogia::where('idActividad', $actividad->idActividad)->delete();
+                    $inscripcionAlumno->delete();
+                 }*/
                  $inscripcionADA = InscripcionADA::where('idActividad', $actividad->idActividad)->delete();
                  //realizar inscripciones
                  for ($i = 0; $i < $actividad->cuposTotales; $i++) {
@@ -505,6 +535,19 @@ class ActividadController extends Controller
      */
     public function destroy($id)  {
         $actividad = Actividad::findOrFail($id);
+        $actividad->estado ='5';
+        $actividad->update();
+        //---------------Notificacion o E-Mail-------------------//
+        Log::info('envio de notificaciones');
+        $userResp = User::findOrFail($actividad->idUserResp);
+        $job = (new JobEmailActualizarAct($actividad, $userResp, '3'))
+               ->delay(Carbon::now()->addSeconds(1));
+        dispatch($job);
+        return redirect()->back();
+    }
+
+    public function cancel($id)  {
+        $actividad = Actividad::findOrFail($id);
         $actividad->estado ='3';
         $actividad->update();
         //---------------Notificacion o E-Mail-------------------//
@@ -543,6 +586,7 @@ class ActividadController extends Controller
     }
 
     public function updateExecute(Request $request, $id){ //ejecutar una actividad
+      //dd($request);
          $actividad = Actividad::findOrFail($id);
          if ($request->horaEjecutada != null) {
             $actividad->horaEjecutada = (Carbon::parse($request->horaEjecutada))->toTimeString();
@@ -636,14 +680,14 @@ class ActividadController extends Controller
    public function verActividadesResp(Request $request){
       Log::info('si llegooooo ');
       if($request->ajax()){
-         $actividades = Actividad::where('idUserResp', $request->id)->get();
+         $actividades = Actividad::where([['idUserResp', $request->id], ['estado', '<', '5']])->get();
          return response()->json($actividades);
       }
    }
 
    public function verActividadesProg(Request $request){
       if($request->ajax()){
-         $actividades = Actividad::where('idUserProg', $request->id)->get();
+         $actividades = Actividad::where([['idUserProg', $request->id], ['estado', '<', '5']])->get();
          return response()->json($actividades);
       }
    }
@@ -673,10 +717,10 @@ class ActividadController extends Controller
                    //$user = User::findOrFail('22'); // OR AUTH ....
          switch ($request->tarea) {
            case '1'://ACTIVIDADES PROGRAMADAS
-                 $actividades = Actividad::where('idUserProg', $request->id)->get();
+                 $actividades = Actividad::where([['idUserProg', $request->id], ['estado', '<', '5']])->get();
              break;
            case '2'://ACTIVIDADES RESPONSABLE
-                 $actividades = Actividad::where('idUserResp', $request->id)->get();
+                 $actividades = Actividad::where([['idUserResp', $request->id], ['estado', '<', '5']])->get();
              break;
            case '3': //ACTIVIDADES INSCRITAS
                  switch ($request->idTipoPersona) {
@@ -733,7 +777,7 @@ class ActividadController extends Controller
 
     public function member_show(Request $request){
       $actividad = Actividad::findOrFail($request->id);
-      $relacionadas = Actividad::where([['idTipoActividad', '=', $actividad->idTipoActividad], ['idActividad', '<>', $actividad->idActividad]])->get();
+      $relacionadas = Actividad::where([['idTipoActividad', '=', $actividad->idTipoActividad], ['idActividad', '<>', $actividad->idActividad], ['estado', '<', '5']])->get();
       $inscripciones = $actividad->inscripcionesADA;
       $insc_alum = [];
       $insc_doce = [];
@@ -757,5 +801,17 @@ class ActividadController extends Controller
          'insc_admi' => $insc_admi
       ]);
       //return view('miembro.actividad')->with('actividad',$actividad);
+   }
+
+   public function enviarMensaje(Request $request){
+      //dd($request);
+      $idEmisor = User::where('id', $request->idEmisor)->value('id');
+      $idReceptor = USer::where('id', $request->idReceptor)->value('id');
+      Log::info($idEmisor);
+      Log::info($idReceptor);
+      $job = (new JobEmail($idEmisor, $request->mensaje, $request->subject, $idReceptor, '2'))//Comunicarse con el programador y responsable
+             ->delay(Carbon::now()->addSeconds(5));
+      dispatch($job);
+     return redirect()->back();
    }
 }

@@ -62,7 +62,7 @@ class BeneficiarioController extends Controller{
 
     public function editBeneficiario($idActividad, $idBeneficiario)  {
        //dd($idTipoActividad.'     '.$idBeneficiario);
-       $id_idTipoActividad = Actividad::where('idActividad', $idActividad)->select('idActividad','idTipoActividad')->first();
+       $id_idTipoActividad = Actividad::where([['idActividad', $idActividad], ['estado', '<', '5']])->select('idActividad','idTipoActividad')->first();
        //dd($id_idTipoActividad->idActividad);
        if ($id_idTipoActividad->idTipoActividad == '8') {//movilidad
          $beneficiario = BeneficiarioMovilidad::findOrFail($idBeneficiario);

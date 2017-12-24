@@ -70,6 +70,36 @@
 								</div>
 							</div>
 						</div>
+						<!-- CAmpo Sexo -->
+						<div class="form-group">
+							<label for="sexo" class="col-sm-3 control-label">Sexo<span class="ast">*</span></label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									 <span class="input-group-addon"><i class="fa fa-venus-mars"></i></span>
+									 <select name="sexo"  required class="form-control">
+										 @if ( $user->sexo == 'h' )
+   											<option value="h">Hombre</option>
+										 @else
+												<option value="m">Mujer</option>
+										 @endif
+									 </select>
+								</div>
+							</div>
+						</div>
+						<!-- Campo Fecha Nacimiento -->
+						<div class="form-group">
+							<label for="fechaNacimiento" class="col-sm-3 control-label">Nacimiento </label>
+							<div class="col-sm-8">
+								<div class="input-group date">
+									<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+									@if (old('fechaNacimiento') == null)
+										<input type="text" name="fechaNacimiento"  placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaNacimiento" >
+									@else
+										<input type="text" name="fechaNacimiento"  value="{{ date("d/m/Y",strtotime($semestre->fechaNacimiento )) }}" class="form-control"  id="fechaNacimiento" >
+									@endif
+								</div>
+							</div>
+						</div>
 						<!-- Campo Direccion -->
 						<div class="form-group">
 							<label for="direccion" class="col-sm-3 control-label">Direccion </label>
@@ -247,7 +277,8 @@
 		      <div class="caja-footer">
 					<div class="pull-right">
 						<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+						<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 					</div>
 		      </div>
 			</div>
@@ -260,20 +291,6 @@
 
 		function iniciar(){
 			var tipo = '', funcion = '';
-	{{--		switch({{ $user->idTipoPersona }}){
-				case 1: 	tipo = 'radioAlumno';
-							document.getElementById('condicion').selectedIndex = {{ $tipoPersona->condicion }} - 1;
-							break;
-				case 2: 	tipo = 'radioDocente';
-							document.getElementById('categoria').selectedIndex = {{ $tipoPersona->categoria }} - 1;
-							document.getElementById('dedicacion').selectedIndex = {{ $tipoPersona->dedicacion }} - 1;
-							document.getElementById('modalidad').selectedIndex = {{ $tipoPersona->modalidad }} - 1;
-							break;
-				case 3: 	tipo = 'radioAdministrativo'; break;
-			}
-			document.getElementById(tipo).checked = true;
-			cambiarColorTipo({{ $user->idTipoPersona }});--}}
-
 			switch({{ $user->funcion }}){
 				case 1: funcion = 'radioMiembro'; break;
 				case 2: funcion = 'radioProgramador'; break;
@@ -281,28 +298,6 @@
 			}
 			document.getElementById(funcion).checked = true;
 			cambiarColorFuncion({{ $user->idTipoPersona }});
-		}
-
-		function cambiarColorTipo(icono){
-			/*document.getElementById('icoAlumno').style.color = 'rgba(0,0,0, 0.5)';
-			document.getElementById('icoDocente').style.color = 'rgba(0,0,0, 0.5)';
-			document.getElementById('icoAdministrativo').style.color = 'rgba(0,0,0, 0.5)';*/
-			var iconoElegido = "";
-			document.getElementById('formAdministrativo').style.display = 'none';
-			document.getElementById('formAlumno').style.display = 'none';
-			document.getElementById('formDocente').style.display = 'none';
-			switch ({{ $user->idTipoPersona }}) {
-				case 1: 	iconoElegido = 'icoAlumno';
-							document.getElementById('formAlumno').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Alumno";break;
-				case 2: 	iconoElegido = 'icoDocente';
-							document.getElementById('formDocente').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Docente";break;
-				case 3: 	iconoElegido = 'icoAdministrativo';
-							document.getElementById('formAdministrativo').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";break;
-			}
-			document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 		}
 
 		function cambiarColorFuncion(icono){
@@ -349,6 +344,14 @@
 			}
 			return false;
 		}
+		$(document).ready(function(){
+         $('input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+            increaseArea: '20%' // optional
+         });
+         $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+   	});
 	</script>
 	<style type="text/css">
 		.ast{

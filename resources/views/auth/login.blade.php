@@ -27,9 +27,6 @@
    <body>
       <div class="container">
          <div class="row">
-            <!--<div class="col-sm-6 col-md-4 col-md-offset-4">}
-.col-	.col-sm-	.col-md-	.col-lg-	.col-xl-
-         -->
             <div class="col-lg-6 col-lg-offset-3 col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
                <div class="login-container">
                   <div  class="header-login-box" >

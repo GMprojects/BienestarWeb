@@ -18,8 +18,8 @@ class CrearTablaBeneficiarioMovilidad extends Migration
             $tabla->increments('idBeneficiarioMovilidad');
             $tabla->date('fechaInicio');
             $tabla->date('fechaFin');
-            $tabla->tinyInteger('duracionMeses');
-            $tabla->tinyInteger('duracionAnio');
+            $tabla->integer('duracionMeses');
+            $tabla->integer('duracionAnio');
             $tabla->string('institucion', 100);
             $tabla->string('pais', 45);
             $tabla->mediumtext('observaciones')->nullable();

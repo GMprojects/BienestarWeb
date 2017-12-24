@@ -52,16 +52,21 @@
                @if(Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad) ||
                   Auth::user()->idTipoPersona == 2 && Auth::user()->docente->misInscripciones->contains('idActividad', $actividad->idActividad) ||
                   Auth::user()->idTipoPersona == 3 && Auth::user()->administrativo->misInscripciones->contains('idActividad', $actividad->idActividad))
-                  <a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
+                  <div class="act-mini-txt pull-right">
+                     <i style="color:white;" class="fa fa-check-circle"></i> <span style="color:white;">Asistiré</span>
+                  </div>
+                  {{--<a class="btn-footer pull-right" href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
                      <i class="fa fa-check-circle"></i> Asistiré
-                  </a>
+                  </a>--}}
                @else
                   @if( $actividad->estado == 1 )
                      @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
                         @if( $actividad->idUserResp != Auth::user()->id )
-                           <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
-                             <i class="fa fa-circle-o"></i> Quiero Asistir
-                          </a>
+                           @if (Auth::user()!=null)
+                              <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
+                                <i class="fa fa-circle-o"></i> Quiero Asistir
+                             </a>
+                           @endif
                         @else
                            <div class="act-mini-txt pull-right">
                               <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">Soy Responsable</span>
@@ -85,11 +90,13 @@
                </div>
             @endif
          @else
-            <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
-               onclick="event.preventDefault();
-               document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-               <i class="fa fa-circle-o"></i> Quiero Asistir
-            </a>
+            @if (Auth::user()!=null)
+               <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
+                  onclick="event.preventDefault();
+                  document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                  <i class="fa fa-circle-o"></i> Quiero Asistir
+               </a>
+            @endif
          @endif
       </div>
    </div>
@@ -98,24 +105,28 @@
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="lb-confMod-{{ $actividad->idActividad }}">Confirme su Inscripción</h4>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
+               <h4 class="modal-title" id="lb-confMod-{{ $actividad->idActividad }}"><b>Confirme su Inscripción</b></h4>
          </div>
          <div class="modal-body">
-            <p>Actividad: {{ $actividad->titulo }}</p>
-            <p>Fecha: {{ $actividad->fechaInicio }}>{{ $actividad->horaInicio }} - {{ $actividad->fechaFin }}>{{ $actividad->horaFin }}</p>
-            <p>Lugar: {{ $actividad->lugar }}</p>
+            <p> <b style="color: #4B367C">Actividad: "{{ $actividad->titulo }}" </b> </p>
+            <p> <b>Fecha:</b>
+               @if (date("d/m/Y",strtotime($actividad->fechaInicio)) == date("d/m/Y",strtotime($actividad->fechaFin)))
+                     {{ date("d/m/Y",strtotime($actividad->fechaInicio)).'  desde las '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta las '.date("g:i A",strtotime($actividad->horaFin)) }}
+               @else
+                     {{ date("d/m/Y",strtotime($actividad->fechaInicio)).' '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta '.date("d/m/Y",strtotime($actividad->fechaFin)).' '.date("g:i A",strtotime($actividad->horaFin)) }}
+               @endif
+            </p>
+            <p> <b>Lugar:</b>  {{ $actividad->lugar }}</p>
          </div>
          <div class="modal-footer">
-            <a class="btn btn-ff-green" href="#"
-               onclick="event.preventDefault();
-               document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-               <i class="fa fa-check-circle"></i> Confirmar
-            </a>
+            <button type="submit" class="btn btn-ff" onclick="event.preventDefault();
+            document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+            <i class="fa fa-check-circle"></i> Confirmar</button>
             <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
                {{ csrf_field() }}
             </form>
-            <button type="button" class="btn btn-ff-red" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
          </div>
       </div>
    </div>

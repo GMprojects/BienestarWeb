@@ -194,11 +194,14 @@ class InscripcionADAController extends Controller
       $idEnc_resp = Encuesta::where([
          'idTipoActividad' => Actividad::findOrFail($id)->idTipoActividad,
          'destino' => 'r'
-         ])->pluck('idEncuesta');
-      EncuestaRespondidaResp::create([
-         'idActividad' => $id,
-         'idEncuesta' => $idEnc_resp[0]
-      ]);
+         ])->pluck('idEncuesta');         
+      if(count($idEnc_resp) > 0 && count(EncuestaRespondidaResp::where('idActividad', $id)->get()) == 0){
+         EncuestaRespondidaResp::create([
+            'idActividad' => $id,
+            'idEncuesta' => $idEnc_resp[0]
+         ]);
+      }
+
       for ($i = 0; $i < count($request->asistencia) ; $i++) {
          $array = preg_split("/[-]/",$request->asistencia[$i]);
          if($array[1] == '1'){
@@ -217,10 +220,13 @@ class InscripcionADAController extends Controller
             $inscripcionAdministrativo[0]->asistencia = '1';
             $inscripcionAdministrativo[0]->update();
          }
-         $nuevaEncuesta = EncuestaRespondidaInsc::create([
-            'idInscripcionADA'=>$array[0],
-            'idEncuesta' => $idEnc_insc[0]
-         ]);
+         if(count($idEnc_insc) > 0 && count(EncuestaRespondidaInsc::where('idInscripcionADA', $array[0])->get()) == 0){
+            $nuevaEncuesta = EncuestaRespondidaInsc::create([
+               'idInscripcionADA'=>$array[0],
+               'idEncuesta' => $idEnc_insc[0]
+            ]);
+         }
+
       }
       $actividad = Actividad::findOrFail($id);
       $actividad->estado = 2;

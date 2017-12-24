@@ -72,7 +72,12 @@
                      @if(Auth::user()->foto != null)
                         <img src="{{ asset('storage/'.Auth::user()->foto ) }}" class="img-usu" alt="not found">
                      @else
-                        <img src="{{ asset('img/user.png') }}" class="img-usu" alt="not found">
+                           @if (Auth::user()->sexo == 'h'){{-- Hombre --}}
+                              <img src="{{ asset('img/avatar5.png') }}" class="img-usu" alt="Not found">
+                           @else{{-- Mujer --}}
+                              <img src="{{ asset('img/avatar2.png') }}" class="img-usu" alt="Not found">
+                           @endif
+                        {{--<img src="{{ asset('img/user.png') }}" class="img-usu" alt="not found">--}}
                      @endif
                      <span class="hidden-xs hidden-sm" style="padding-left:5px;">{{ Auth::user()->nombre }}</span>
                   </a>
@@ -81,7 +86,12 @@
                         @if(Auth::user()->foto != null)
                            <img src="{{ asset('storage/'.Auth::user()->foto ) }}" class="img-circle" alt="not found">
                         @else
-                           <img src="{{ asset('img/user.png') }}" class="img-circle" alt="not found">
+                              @if (Auth::user()->sexo == 'h'){{-- Hombre --}}
+                                 <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="Not found">
+                              @else{{-- Mujer --}}
+                                 <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="Not found">
+                              @endif
+                           {{--<img src="{{ asset('img/user.png') }}" class="img-circle" alt="not found">--}}
                         @endif<p>{{ Auth::user()->nombre }} -
                            @switch ( Auth::user()->idTipoPersona )
                               @case(1) Estudiante @break

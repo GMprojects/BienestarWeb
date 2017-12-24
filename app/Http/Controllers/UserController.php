@@ -15,26 +15,38 @@ use File;
 
 class UserController extends Controller
 {
-
-   function getRutaImagenUpdate($request, $rutaImgAnterior){
-       //Eliminando Foto anterior
-       $path = $rutaImgAnterior;
-       File::delete(storage_path('app/public/'.$rutaImgAnterior));
-       Storage::delete($path);
-       //Guardar la nueva imagen
-         if($request->file('foto')){
-            $file = $request->file('foto');
-            $name = 'imgAct_'.time().'.'.$file->getClientOriginalExtension();
-            $storage = Storage::disk('actividades')->put($name, \File::get($file));
-            if($storage){
-               return 'actividades/'.$name;
-            }else{
-               return NULL;
-            }
-         }else {
-             $foto = $rutaImgAnterior;
+   function getFecha($fechaIn){
+         if ($fechaIn != null) {
+            $dia = substr( $fechaIn,0 ,2);
+            $mes =substr( $fechaIn,3 ,2);
+            $anio=substr( $fechaIn,-4 ,4);
+            return $anio."-".$mes."-".$dia;
+         } else {
+            return null;
          }
+
    }
+
+   function getRutaImagenUpdate($request, $rutaImgAnterior, $tipo){
+
+          if($request->file('foto')){
+             //Eliminando Foto anterior
+             $path = $rutaImgAnterior;
+             File::delete(storage_path('app/public/'.$path));
+             Storage::delete($path);
+             //Guardar la nueva imagen
+             $file = $request->file('foto');
+             $name = 'usr_'. $tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
+             $storage = Storage::disk('users')->put($name, \File::get($file));
+             if($storage){
+                return 'users/'.$name;
+             }else{
+                return NULL;
+             }
+          }else {
+              $foto = $rutaImgAnterior;
+          }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -42,7 +54,7 @@ class UserController extends Controller
      */
    public function index(Request $request)
    {
-      $users = User::all();
+      $users = User::where('estado','1')->get();
       return view('admin.user.index')->with('users', $users);
    }
 
@@ -62,6 +74,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+      dd($request);
        $request->validate([
            'nombre'=>'required|min:2|max:45',
            'apellidoPaterno' => 'required|min:2|max:20',
@@ -72,6 +85,7 @@ class UserController extends Controller
            'telefono' => 'max:15',
            'celular' => 'max:15',
            'foto' => 'file',
+           'sexo' => 'required',
            'funcion' => 'required|numeric|min:1|max:3',
            'tipo' => 'required|numeric|min:1|max:3',
            //validacion si tipo = 1 (ALUMNO)
@@ -90,13 +104,15 @@ class UserController extends Controller
         $nuevoUser->nombre = $request->nombre;
         $nuevoUser->apellidoPaterno = $request->apellidoPaterno;
         $nuevoUser->apellidoMaterno = $request->apellidoMaterno;
+        $nuevoUser->fechaNacimiento = UserController::getFecha($request->fechaNacimiento);
+        $nuevoUser->sexo = $request->sexo;
         $nuevoUser->codigo = $request->codigo;
         $nuevoUser->email = $request->email;
         $nuevoUser->direccion = $request->direccion;
         $nuevoUser->telefono = $request->telefono;
         $nuevoUser->celular = $request->celular;
         $nuevoUser->funcion = $request->funcion;
-        $nuevoUser->estado = 1;
+        $nuevoUser->estado = '1';
         $nuevoUser->idTipoPersona = $request->tipo;
         $nuevoUser->password = bcrypt($request->codigo);
         $file = $request->file('foto');
@@ -169,26 +185,43 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $request->validate([
-             'nombre'=>'required|min:2|max:45',
-             'apellidoPaterno' => 'required|min:2|max:20',
-             'apellidoMaterno' => 'required|min:2|max:20',
-             'codigo' => 'required|min:4|max:20|unique:user',
-             'email' => 'required|max:100|unique:user',
-             'direccion'=> 'max:100',
-             'telefono' => 'max:15',
-             'celular' => 'max:15'
-         ]);
+         $user = User::findOrFail($id);
+         if ($user->email == $request->email) {
+             //dd('igual');
+             $request->validate([
+                 'nombre'=>'required|min:2|max:45',
+                 'apellidoPaterno' => 'required|min:2|max:20',
+                 'apellidoMaterno' => 'required|min:2|max:20',
+                 'sexo' => 'required',
+                 'direccion'=> 'max:100',
+                 'telefono' => 'max:15',
+                 'celular' => 'max:15'
+             ]);
+         } else {
+             //dd('duff');
+             $request->validate([
+                 'nombre'=>'required|min:2|max:45',
+                 'apellidoPaterno' => 'required|min:2|max:20',
+                 'apellidoMaterno' => 'required|min:2|max:20',
+                 'sexo' => 'required',
+                 'email' => 'required|max:100|unique:user',
+                 'direccion'=> 'max:100',
+                 'telefono' => 'max:15',
+                 'celular' => 'max:15'
+             ]);
+         }
         $user = User::findOrFail($id);
         switch ($user->idTipoPersona)
         {
            case '1': $alumno = Alumno::findOrFail($user->idTipoPersona); break;
            case '2': $docente = Docente::findOrFail($user->idTipoPersona); break;
-           case '3': $administrativo = administrativo::findOrFail($user->idTipoPersona); break;
+           case '3': $administrativo = Administrativo::findOrFail($user->idTipoPersona); break;
         }
         $user->nombre = $request->nombre;
         $user->apellidoPaterno = $request->apellidoPaterno;
         $user->apellidoMaterno = $request->apellidoMaterno;
+        $user->fechaNacimiento = UserController::getFecha($request->fechaNacimiento);
+        $user->sexo = $request->sexo;
         $user->codigo = $request->codigo;
         $user->email = $request->email;
         $user->direccion = $request->direccion;
@@ -196,7 +229,7 @@ class UserController extends Controller
         $user->celular = $request->celular;
 
         $tipoUser = TipoPersona::find($request->tipo);
-        $user->foto = UserController::getRutaImagenUpdate($request, $user->foto);
+        $user->foto = UserController::getRutaImagenUpdate($request, $user->foto, $tipoUser);
         $user->funcion = $request->funcion;
         $user->update();
 
@@ -229,7 +262,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->estado = '0';
+        $user->update();
+
+        return Redirect::to('admin/user');
     }
 
     public function asignarResponsable(Request $request)
@@ -269,5 +306,20 @@ class UserController extends Controller
                     ->get();
         return response()->json($users);
       }
+    }
+    public function indexAlumnos(){
+        $alumnos = User::where([['idTipoPersona','1'], ['estado','1']])
+                 ->get();
+        return view('admin.user.alumnos')->with('alumnos', $alumnos);
+    }
+    public function indexDocentes(){
+        $docentes = User::where([['idTipoPersona','2'], ['estado','1']])
+                 ->get();
+        return view('admin.user.docentes')->with('docentes', $docentes);
+    }
+    public function indexAdministrativos(){
+        $administrativos = User::where([['idTipoPersona','3'],'estado','1'])
+                 ->get();
+        return view('admin.user.administrativos')->with('administrativos', $administrativos);
     }
 }

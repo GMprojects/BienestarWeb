@@ -89,7 +89,7 @@
 					  <div class="input-group-addon">
 						<i class="fa fa-calendar"></i>
 					  </div>
-					  <input type="text" name="fechaBeneficio" class="form-control pull-right" required value="{{ date("d/m/Y",strtotime($beneficiario->fechaBeneficio)) }}" id="datepicker3">
+					  <input type="text" name="fechaBeneficio" class="form-control pull-right" required value="{{ date("d/m/Y",strtotime($beneficiario->fechaBeneficio)) }}" id="fechaBeneficio">
 				  </div>
 				</div>
 			</div>
@@ -132,30 +132,28 @@
 	<div class="caja-footer">
 		<div class="pull-right">
 			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 		</div>
 	</div>
 </div>
 {!! Form::Close() !!}
 
 <script type="text/javascript">
-$('#datepicker3').datepicker({
-   autoclose: true,
-   todayHighlight: true,
-   startDate :  '-3d',
-   format: 'dd/mm/yyyy'
+$('#fechaBeneficio').datetimepicker({
+	format: 'DD/MM/YYYY',
 });
-$('#fechaFin').datepicker({
-   autoclose: true,
-   todayHighlight: true,
-   startDate :  '-3d',
-   format: 'dd/mm/yyyy'
+$('#fechaInicio').datetimepicker({
+	format: 'DD/MM/YYYY'
 });
-$('#fechaInicio').datepicker({
-   autoclose: true,
-   todayHighlight: true,
-   startDate :  '-3d',
-   format: 'dd/mm/yyyy'
+$('#fechaFin').datetimepicker({
+	format: 'DD/MM/YYYY',
+	useCurrent: false // Important! See issue #1075
+});
+$('#fechaInicio').on("dp.change", function(e){
+	$('#fechaFin').data("DateTimePicker").minDate(e.date);
+});
+$('#fechaFin').on("dp.change", function(e){
+	$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
 });
 function validar(){
 	var existeUnSeleccionado = false;

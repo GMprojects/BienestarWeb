@@ -16,10 +16,10 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
    </head>
    <body>
-      @if($du['user'] != null)
-         @include('layouts.partials.member-nav')
-      @else
+      @if(Auth::user() == null)
          @include('layouts.partials.nav')
+      @else
+         @include('layouts.partials.member-nav')
       @endif
 
       <div id="wrapper">
@@ -37,16 +37,29 @@
                         @if ( $du['user']->foto != null )
                            <img src="{{ asset('storage/'.$du['user']->foto) }}" class="img-circle img-profile-img">
                         @else
-                           <img src="{{ asset('img/user.png') }}" class="img-circle img-profile-img">
+                           @if ($du['user']->sexo == 'h'){{-- Hombre --}}
+                              <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="Not found">
+                           @else{{-- Mujer --}}
+                              <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="Not found">
+                           @endif
+                           {{--<img src="{{ asset('img/user.png') }}" class="img-circle img-profile-img">--}}
                         @endif
                      </div>
                      <hr class="act-hr"/>
                      <div class="body-card">
                         <p><i class="fa fa-user"></i>{{ $du['user']->nombre }}</p>
                         <p><i class="fa fa-user"></i>{{ $du['user']->apellidoPaterno }} {{ $du['user']->apellidoMaterno }}</p>
-                        <p><i class="fa fa-map-marker"></i>{{ $du['user']->direccion }}</p>
-                        <p><i class="fa fa-phone"></i>{{ $du['user']->telefono }}</p>
-                        <p><i class="fa fa-mobile-phone"></i>{{ $du['user']->celular }}</p>
+                        @if (Auth::user()->id == $du['user']->id)
+                           @if ($du['user']->direccion != null)
+                              <p><i class="fa fa-map-marker"></i>{{ $du['user']->direccion }}</p>
+                           @endif
+                           @if ($du['user']->telefono != null)
+                              <p><i class="fa fa-phone"></i>{{ $du['user']->telefono }}</p>
+                           @endif
+                           @if ($du['user']->celular != null)
+                              <p><i class="fa fa-mobile-phone"></i>{{ $du['user']->celular }}</p>
+                           @endif
+                        @endif
                         <p><i class="fa fa-birthday-cake"></i>{{ date("d F",strtotime($du['user']->fechaNacimiento)) }}</p>
                         @switch ( $du['user']->idTipoPersona )
                            @case(1) <p><i class="fa fa-graduation-cap"></i><span class="label label-success">Alumno</span></p> @break
@@ -101,9 +114,13 @@
                                    <p>Inscripciones</p>
                                  </div>
                                  <div class="icon">
-                                    <i class="fa fa-calendar-plus-o"></i>
+                                    <i class="fa fa-square-o"></i>
                                  </div>
-                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @if(Auth::user()->id == $du['user']->id)
+                                    <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @else
+
+                                 @endif
                               </div>
                            </div>
 
@@ -114,9 +131,13 @@
                                    <p>Asistencias</p>
                                  </div>
                                  <div class="icon">
-                                    <i class="fa fa-thumbs-o-up"></i>
+                                    <i class="fa fa-check-square-o"></i>
                                  </div>
-                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @if(Auth::user()->id == $du['user']->id)
+                                    <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @else
+
+                                 @endif
                               </div>
                            </div>
 
@@ -140,9 +161,13 @@
                                    <p>Ejecutadas</p>
                                  </div>
                                  <div class="icon">
-                                    <i class="fa fa-calendar-plus-o"></i>
+                                    <i class="fa fa-calendar-check-o"></i>
                                  </div>
-                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'2']) }}"  class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @if(Auth::user()->id == $du['user']->id)
+                                    <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'2']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @else
+
+                                 @endif
                               </div>
                            </div>
 
@@ -153,9 +178,13 @@
                                    <p>Pendientes</p>
                                  </div>
                                  <div class="icon">
-                                    <i class="fa fa-thumbs-o-up"></i>
+                                    <i class="fa fa-calendar-minus-o"></i>
                                  </div>
-                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'2']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @if(Auth::user()->id == $du['user']->id)
+                                    <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'2']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @else
+
+                                 @endif
                               </div>
                            </div>
 
@@ -184,9 +213,13 @@
                                    <p>Expiradas</p>
                                  </div>
                                  <div class="icon">
-                                    <i class="fa fa-calendar-plus-o"></i>
+                                    <i class="fa fa-calendar-times-o"></i>
                                  </div>
-                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'3']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @if(Auth::user()->id == $du['user']->id)
+                                    <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'3']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @else
+
+                                 @endif
                               </div>
                            </div>
 
@@ -197,9 +230,12 @@
                                    <p>Ejecutadas</p>
                                  </div>
                                  <div class="icon">
-                                    <i class="fa fa-thumbs-o-up"></i>
+                                    <i class="fa fa-calendar-check-o"></i>
                                  </div>
-                                 <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'3']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @if(Auth::user()->id == $du['user']->id)
+                                    <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'3']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
+                                 @else
+                                 @endif
                               </div>
                            </div>
 
@@ -223,7 +259,7 @@
                                    <p>Canceladas</p>
                                  </div>
                                  <div class="icon">
-                                    <i class="fa fa-thumbs-o-down"></i>
+                                    <i class="fa fa-times-circle"></i>
                                  </div>
                                  <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'3']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
                               </div>

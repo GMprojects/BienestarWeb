@@ -16,6 +16,9 @@ body{
 .ff-bg-red{
    background-color: #C3301F;
 }
+.ff-bg-dark-red{
+   background-color: #8B0505;
+}
 .ff-bg-green2{
    background-color: #006400;
 }
@@ -441,6 +444,16 @@ a:hover{
 .btn-ff-red:focus, .btn-ff-red:hover{
    color: white;
    background-color: #FE523E;
+}
+
+.btn-ff-dark-red{
+   border-radius: 0px;
+   background: #8B0505;
+   color: white;
+}
+.btn-ff-dark-red:focus, .btn-ff-dark-red:hover{
+   color: white;
+   background-color: #923838;
 }
 
 .btn-ff-yellow{

@@ -2,19 +2,7 @@
 @section('contenido')
 {!! Form::open(['url'=>'admin/egresado', 'method'=>'POST', 'autocomplete'=>'off']) !!}
 {{ Form::token() }}
-<div  class="row">
-	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-13">
-		@if (count($errors) >0)
-		<div class="alert alert-danger">
-			<ul>
-			@foreach($errors->all() as $error)
-				<li> {{ $error }} </li>
-			@endforeach
-			</ul>
-		</div>
-		@endif
-	</div>
-</div>
+
 <div class="row">
 	<div class="col-md-6">
 		<div class="caja">
@@ -24,6 +12,19 @@
 				</div>
 	      </div>
 	      <div class="caja-body">
+					<div  class="row">
+						<div class="col-lg-12 col-sm-12 col-xs-12">
+							@if (count($errors) >0)
+							<div class="alert alert-danger">
+								<ul>
+								@foreach($errors->all() as $error)
+									<li>{{$error}}</li>
+								@endforeach
+								</ul>
+							</div>
+							@endif
+						</div>
+					</div>
 					<div class="form-horizontal">
 						<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
 					</div>
@@ -164,7 +165,8 @@
 				<div class="caja-footer">
 					<div class="pull-right">
 						<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+						<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 					</div>
 		      </div>
 		   </div>

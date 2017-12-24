@@ -18,9 +18,10 @@
 				<label for="tipo"> Tipo de Hábito	</label>
 				<input type="text" name="tipo" class="form-control" placeholder="Tipo de Hábito">
 			</div>
-			<div class="form-group">
-				<button class="btn btn-primary" type="submit">Guardar</button>
-				<button class="btn btn-danger" type="reset">Cancelar</button>
+			<div class="pull-right">
+				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 			</div>
 			{!!Form::close()!!}
 		</div>

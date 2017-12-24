@@ -81,10 +81,11 @@
 					</span>
 				</div>
 			</div>
-	      <div class="caja-footer">
+			<div class="caja-footer">
 				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Modificar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Publicar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
 				</div>
 	      </div>
 	   </div>
@@ -97,6 +98,9 @@
 			</div>
 			<div class="caja-body">
 				<div class="row">
+					<div id="horasError" class="alert alert-danger" style='display:none;'>
+							<p>La <b>Hora de Fin</b> debe ser mayor a la <b>Hora de Inicio</b>.</p>
+					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="fechaInicio" id="lblFechaInicio">Fecha de Inicio </label><span class="ast">*</span>
@@ -189,7 +193,6 @@
 			</div>
 			<div class="caja-body">
 				<div id="divError" class="alert alert-danger" style='display:none;'>
-						<h4><b>Error</b></h4>
 						<p id="pError">Debe elegir a un docente para que sea tutor</p>
 				</div>
 				<div id="selectResponsables" style='display:none;'>
@@ -232,24 +235,40 @@
 				<div class="caja-icon">5</div>
 				<div class="caja-title"> Responsable Invitado </div>
 				<div class="caja-tools">
-					<button type="button" class="btn btn-caja" onclick="ocultarNuevoResponsable()">
-						<i class="fa fa-times"></i>
-					</button>
+					<button type="button" class="btn btn-caja" onclick="ocultarNuevoResponsable()"><i class="fa fa-times"></i></button>
 				</div>
 			</div>
 			<div class="caja-body">
-				<div class="form-group">
-				  <label for="nombreResponsable">Nombres </label><span class="ast">*</span>
-				  <input type="text" id="nombreResponsable" name="nombreResponsable" class="form-control" placeholder="Nombres">
-			  </div>
-			  <div class="form-group">
-				  <label for="apellidosResponsable">Apellidos </label><span class="ast">*</span>
-				  <input type="text" id="apellidosResponsable" name="apellidosResponsable" class="form-control" placeholder="Apellidos">
-			  </div>
-			  <div class="form-group">
-				  <label for="emailResponsable">Correo </label><span class="ast">*</span>
-				  <input type="email" id="emailResponsable" name="emailResponsable" class="form-control" placeholder="xxx@xxx.xx">
-			  </div>
+				<div id="respError" class="alert alert-danger" style='display:none;'>
+						<p>Debe registrar todos los datos del responsable invitado, sino exite un invitdo cerrar la caja <b>Responsable Invitado</b>.</p>
+				</div>
+				@if ($actividad->invitado != null)
+					<div class="form-group">
+					  <label for="nombreResponsable">Nombres </label><span class="ast">*</span>
+					  <input type="text" id="nombreResponsable" name="nombreResponsable" value="{{ preg_split("/[-]/",$actividad->invitado)[0] }}" class="form-control" placeholder="Nombres">
+				  </div>
+				  <div class="form-group">
+					  <label for="apellidosResponsable">Apellidos </label><span class="ast">*</span>
+					  <input type="text" id="apellidosResponsable" name="apellidosResponsable" value="{{ preg_split("/[-]/",$actividad->invitado)[1] }}" class="form-control" placeholder="Apellidos">
+				  </div>
+				  <div class="form-group">
+					  <label for="emailResponsable">Correo </label><span class="ast">*</span>
+					  <input type="email" id="emailResponsable" name="emailResponsable" value="{{ preg_split("/[-]/",$actividad->invitado)[2] }}" class="form-control" placeholder="xxx@xxx.xx">
+				  </div>
+				@else
+					<div class="form-group">
+					  <label for="nombreResponsable">Nombres </label><span class="ast">*</span>
+					  <input type="text" id="nombreResponsable" name="nombreResponsable" class="form-control" placeholder="Nombres">
+				  </div>
+				  <div class="form-group">
+					  <label for="apellidosResponsable">Apellidos </label><span class="ast">*</span>
+					  <input type="text" id="apellidosResponsable" name="apellidosResponsable" class="form-control" placeholder="Apellidos">
+				  </div>
+				  <div class="form-group">
+					  <label for="emailResponsable">Correo </label><span class="ast">*</span>
+					  <input type="email" id="emailResponsable" name="emailResponsable" class="form-control" placeholder="xxx@xxx.xx">
+				  </div>
+				@endif
 			</div>
 		</div>
 	</div>
@@ -284,21 +303,32 @@
 	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+	var llenarInvitado = false;
+
+	console.log(llenarInvitado);
+
 	$('.timepicker').timepicker({
 		showInputs: false
 	})
-	$('#fechaInicio').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		startDate :  '-1d',
-		format: 'dd/mm/yyyy'
-	})
-	$('#fechaFin').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		startDate :  '-1d',
-		format: 'dd/mm/yyyy'
-	})
+	$('#fechaInicio').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+	$('#fechaFin').datetimepicker({
+		format: 'DD/MM/YYYY',
+		useCurrent: false // Important! See issue #1075
+	});
+	$('#fechaInicio').on("dp.change", function(e){
+		$('#fechaFin').data("DateTimePicker").minDate(e.date);
+	});
+	$('#fechaFin').on("dp.change", function(e){
+		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
+	});
+	$('#horaInicio').click(function(){
+			document.getElementById('horasError').style.display = 'none';
+	});
+	$('#horaFin').click(function(){
+			document.getElementById('horasError').style.display = 'none';
+	});
 	$(document).ready(function(){
 		document.getElementById('boxDatosEspecificos').style.display = 'block';
       console.log("elegir actividad");
@@ -310,6 +340,9 @@
 
 			document.getElementById('selectAlumnos').style.display = 'block';
 			dListaAlumnos('{{ action('UserController@getAlumnos') }}','Alumno');
+
+			$('#fechaFin').removeAttr('required');
+			$('#horaFin').removeAttr('required');
 			//SERVICIO SOCIAL
 		}else if ({{ $actividad->idTipoActividad }} == '3') {
 			document.getElementById('selectResponsables').style.display = 'block';
@@ -320,6 +353,9 @@
 			} else {//GRUPAL
 				document.getElementById('divCuposTotales').style.display = 'block';
 			}
+
+			$('#fechaFin').removeAttr('required');
+			$('#horaFin').removeAttr('required');
 			//TUTORIA
 		}else if ({{ $actividad->idTipoActividad }} == '4') {
 			document.getElementById('selectResponsables').style.display = 'block';
@@ -352,13 +388,15 @@
 						console.log("Error ");
 				}
 			});
+
+			$('#fechaFin').removeAttr('required');
+			$('#horaFin').removeAttr('required');
 			//DEPORTES CULTURALES ESPARCIMIENTO
 		}else if ({{ $actividad->idTipoActividad }} == '5' || {{ $actividad->idTipoActividad }} == '6' || {{ $actividad->idTipoActividad }} == '7') {
 			console.log("5 - 6- 7");
 			document.getElementById('selectResponsables').style.display = 'block';
 			document.getElementById('divCuposTotales').style.display = 'block';
 			document.getElementById('enlaceRespInvitado').style.display = 'block';
-			$('#cuposTotales').attr('required', 'true');
 			if ( ('{{ $actividad->invitado }}') != '' ) {
 				 console.log("tamaño de "+('{{ $actividad->invitado }}').length);
 	          document.getElementById('boxResponsableInvitado').style.display = 'block';
@@ -366,8 +404,14 @@
 				 $('#nombreResponsable').attr('value', invitado[0]);
 	          $('#apellidosResponsable').attr('value', invitado[1]);
 	          $('#emailResponsable').attr('value', invitado[2]);
+				 llenarInvitado = true;
 			}
 			dListaResponsables('{{ action('UserController@getUsers') }}','Responsable');
+
+			$('#cuposTotales').attr('required', 'true');
+			$('#fechaFin').attr('required', 'true');
+			$('#horaFin').attr('required', 'true');
+
 			//MOVILIDAD
 		}else if ({{ $actividad->idTipoActividad }} == '8' || {{ $actividad->idTipoActividad }} == '9') {
 			document.getElementById('selectResponsables').style.display = 'block';
@@ -375,6 +419,10 @@
 			document.getElementById('lblFechaFin').innerHTML = 'Fin de la Convocatoria';
 
 			dListaResponsables('{{ action('UserController@getUsersAdm') }}','Responsable');
+
+			$('#fechaFin').attr('required', 'true');
+			$('#horaFin').attr('required', 'true');
+
 			//REFORZAMIENTO
 		}else if ({{ $actividad->idTipoActividad }} == '10'){
 			document.getElementById('selectResponsables').style.display = 'block';
@@ -393,7 +441,12 @@
 				 $('#nombreResponsable').attr('value', invitado[0]);
 	          $('#apellidosResponsable').attr('value', invitado[1]);
 	          $('#emailResponsable').attr('value', invitado[2]);
+				 llenarInvitado = true;
 			}
+
+			$('#fechaFin').attr('required', 'true');
+			$('#horaFin').attr('required', 'true');
+
 		}else{
 			document.getElementById('divCuposTotales').style.display = 'block';
 			document.getElementById('selectResponsables').style.display = 'block';
@@ -407,6 +460,11 @@
 	          $('#apellidosResponsable').attr('value', invitado[1]);
 	          $('#emailResponsable').attr('value', invitado[2]);
 			}
+
+			$('#cuposTotales').attr('required', 'true');
+			$('#fechaFin').attr('required', 'true');
+			$('#horaFin').attr('required', 'true');
+
 		}
 	});
 
@@ -603,10 +661,14 @@
 	});
 
 	function mostrarNuevoResponsable(){
+		llenarInvitado = true;
+		console.log(llenarInvitado);
 		document.getElementById('boxResponsableInvitado').style.display = 'block';
 	}
 
 	function ocultarNuevoResponsable(){
+		llenarInvitado = false;
+		console.log(llenarInvitado);
 		document.getElementById('boxResponsableInvitado').style.display = 'none';
 		$('#nombreResponsable').val('');
 		$('#apellidosResponsable').val('');
@@ -644,7 +706,7 @@
 				var selectIdAlumno = document.getElementById('selectIdAlumno');
 				var pro = selectIdAlumno.options[selectIdAlumno.selectedIndex].value;
 				if ( pro == '') {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno para quien será la actividad que esta programando';
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno para quien será la actividad que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}
@@ -654,40 +716,53 @@
 			case '10'://REFORZAMIENTO
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
-				if ( '{{  $actividad->modalidad }}' == '1' ) {//INDIVIDUAL
+				if ( $('input:radio[name=modalidad]:checked').val() == 1 ) {//INDIVIDUAL
 					var selectIdAlumno = document.getElementById('selectIdAlumno');
 					var pro2 = selectIdAlumno.options[selectIdAlumno.selectedIndex].value;
 					if ( pro1 == '' || pro2 == '') {
-						document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno y un responsable para quien será la actividad que esta programando';
+						document.getElementById('pError').innerHTML = 'Debe seleccionar un alumno y un responsable para quien será la actividad que esta programando.';
 						document.getElementById('divError').style.display = 'block';
 						todoBien = false;
 					}
-				} else if ( '{{  $actividad->modalidad }}' == '2' ) {//GRUPAL
+				} else if ( $('input:radio[name=modalidad]:checked').val() == 2 ) {//GRUPAL
 					if ( pro1 == '' ) {
-						document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+						document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando.';
 						document.getElementById('divError').style.display = 'block';
 						todoBien = false;
 					}
 				}
-				//document.getElementById('selectIdAlumno').style.display = 'block';
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 			case '4'://TUTORÍA
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
 				if ( pro1 == '' ) {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un tutor para quien será la actividad que esta programando';
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un tutor, quien estará a cargo de sesión de tutoría que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}else {
 					var selectIdAlumnoTutorado = document.getElementById('selectIdAlumnoTutorado');
 					if ( selectIdAlumnoTutorado.selectedIndex == -1) {
-						document.getElementById('pError').innerHTML = 'Debe seleccionar al menos un tutorado';
+						document.getElementById('pError').innerHTML = 'Debe seleccionar al menos un tutorado.';
 						document.getElementById('divError').style.display = 'block';
 						todoBien = false;
 					}
 				}
-				//document.getElementById('selectResponsables').style.display = 'block';
-				//document.getElementById('selectAlumnosTutorados').style.display = 'block';
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 			case '5'://DEPORTES
 			case '6'://CULTURALES
@@ -697,20 +772,47 @@
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
 				if ( pro1 == '' ) {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable, quien estará a cargo de la actividad que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}
-				//document.getElementById('selectResponsables').style.display = 'block';
+				var nombreResponsable = $('#nombreResponsable').val();
+				var apellidosResponsable = $('#apellidosResponsable').val();
+				var emailResponsable = $('#emailResponsable').val();
+				console.log(llenarInvitado);
+				if(llenarInvitado){
+					console.log(nombreResponsable);
+					if(nombreResponsable == '' || apellidosResponsable == '' || emailResponsable == ''){
+							document.getElementById('respError').style.display = 'block';
+							console.log(nombreResponsable);
+							todoBien = false
+					}
+				}
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 			default:
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
-				if ( selectIdResponsable.selectedIndex == -1) {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable para quien será la actividad que esta programando';
+				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
+				if ( pro1 == '' ) {
+					document.getElementById('pError').innerHTML = 'Debe seleccionar un responsable, quien estará a cargo de la actividad que esta programando.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}
-				//document.getElementById('selectResponsables').style.display = 'block';
+				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+					var i = moment($('#horaInicio').val(),'HH:mm A');
+					var f = moment($('#horaFin').val(),'HH:mm A');
+					if( f.diff(i) < 0){
+						document.getElementById('horasError').style.display = 'block';
+						todoBien = false;
+					}
+				}
 				break;
 		}
 		return todoBien;

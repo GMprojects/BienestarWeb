@@ -7,7 +7,7 @@
 						<h4 class="modal-title"><b>Eliminar Actividad</b></h4>
 				</div>
 				<div class="modal-body">
-					<p>Confirme si desea ELIMINAR la ACTIVIDAD con el ID: {{ $actividad->idActividad }}</p>
+					<p>Confirme si desea ELIMINAR la ACTIVIDAD: <b>{{ $actividad->titulo }}</b> </p>
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>

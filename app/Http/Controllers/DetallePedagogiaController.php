@@ -76,9 +76,14 @@ class DetallePedagogiaController extends Controller
     * @param  \BienestarWeb\DetallePedagogia  $detallePedagogia
     * @return \Illuminate\Http\Response
     */
-   public function update(Request $request, DetallePedagogia $detallePedagogia)
+   public function update(Request $request, $id)
    {
-      //
+      $detalle = DetallePedagogia::findOrFail($id);
+      $detalle->motivo = $request->motivo;
+      $detalle->situacionEspecifica = $request->situacionEspecifica;
+      $detalle->recomendacion = $request->recomendacion;
+      $detalle->update();
+      return redirect()->back();
    }
 
    /**
@@ -87,8 +92,10 @@ class DetallePedagogiaController extends Controller
     * @param  \BienestarWeb\DetallePedagogia  $detallePedagogia
     * @return \Illuminate\Http\Response
     */
-   public function destroy(DetallePedagogia $detallePedagogia)
+   public function destroy($id)
    {
-      //
+      $detalle = DetallePedagogia::findOrFail($id);
+      $detalle->delete();
+      return redirect()->back();
    }
 }

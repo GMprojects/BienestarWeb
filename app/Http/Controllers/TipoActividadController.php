@@ -37,7 +37,7 @@ class TipoActividadController extends Controller
      */
     public function index(Request $request)
     {
-        $tiposActividad = TipoActividad::Search($request->texto)->get();
+        $tiposActividad = TipoActividad::get();
         $idTiposActividad = Actividad::select('idTipoActividad')->distinct()->pluck('idTipoActividad');
         return view('admin.tipoActividad.index',['tiposActividad' => $tiposActividad, 'idTiposActividad' => Collection::unwrap($idTiposActividad)]);
     }

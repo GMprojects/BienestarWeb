@@ -55,7 +55,7 @@
                           </div>
                           <div class="env-alternative"  style="width:25%; background-color: #D3C7E8; padding: 0px; border-radius: 7px 7px 0px 0px;">
                              <div class="alternative" style="text-align:left;">
-                                <label>S'i</label>
+                                <label>Sí</label>
                              </div>
                           </div>
                        </div>
@@ -92,7 +92,7 @@
                                    </div>
                                    <div class="env-alternative"  style="width:25%;">
                                       <div class="alternative">
-                                        <input required type="radio" name="{{ $preguntas[$i][$j]->idPreguntaHabito}}" value="4"><label class="hidden-lg hidden-md">S'i</label>
+                                        <input required type="radio" name="{{ $preguntas[$i][$j]->idPreguntaHabito}}" value="4"><label class="hidden-lg hidden-md">Sí</label>
                                       </div>
                                    </div>
                                 </div>
@@ -110,4 +110,14 @@
      </div>
  </div>
  {!!Form::close()!!}
+ <script type="text/javascript">
+	 $(document).ready(function(){
+		 $('input').iCheck({
+			 checkboxClass: 'icheckbox_square-green',
+			 radioClass: 'iradio_square-green',
+			 increaseArea: '20%' // optional
+		 });
+		 $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+	 });
+ </script>
 @endsection

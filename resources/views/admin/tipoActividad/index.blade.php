@@ -65,7 +65,7 @@
 													<td><img src="{{ asset('storage/'.$tipoActividad->rutaImagen) }}" width="100px" alt="Not found"></td>
 													<td>
 														<a href="{{ action('TipoActividadController@edit',$tipoActividad->idTipoActividad) }}" class="btn btn-ff-yellow"><i class="fa fa-edit"></i></a>
-														<a href="" data-target = "#modal-delete-{{ $tipoActividad->idTipoActividad }}" data-toggle = "modal" class="btn btn-ff-red"><i class="fa fa-remove"></i></a>
+														<a href="" data-target = "#modal-delete-{{ $tipoActividad->idTipoActividad }}" data-toggle = "modal" class="btn btn-ff-red"><i class="fa fa-trash"></i></a>
 													</td>
 												</tr>
 												@include('admin.tipoActividad.modal')

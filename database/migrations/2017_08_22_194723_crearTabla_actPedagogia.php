@@ -23,7 +23,7 @@ class CrearTablaActPedagogia extends Migration
                 2. Telefono
                 3. Correo
             */
-            $tabla->enum('canalizacion', ['1', '2'])->nullable();
+            $tabla->enum('canalizacion', ['1', '2', '3'])->nullable();
             /*
                 Canalizacion:
                 1. Medico

@@ -7,14 +7,12 @@
 				<h3 class="box-title">Encuestas</h3>
 			</div>
 			<div class="col-xs-6" style="text-align:right;">
-				<button type="button" name="button" data-target="#modal-newEncuesta" data-toggle="modal" class="btn btn-ff-green pull-right" style="margin-top:4px;">
+				<a type="button" href="{{ action('EncuestaController@create') }}" class="btn btn-ff-green pull-right" style="margin-top:4px;">
 					<i class="fa fa-plus "></i>Nueva Encuesta
-				 </button>
+				</a>
 			</div>
 		</div>
 	</div>
-
-	@include('admin.encuesta.modalNuevaEncuesta')
 	<div class="box-body">
 			<div class="table">
 					<div class="table-responsive">
@@ -37,9 +35,11 @@
 											<td>Inscrito</td>
 										@endif
 										<td>
+											{{--
 											<a href="{{URL::action('EncuestaController@edit',$encuesta->idEncuesta)}}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
 											<a href="" data-target="#modal-delete-{{$encuesta->idEncuesta}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
-											{{--<a href="{{URL::action('EncuestaController@show',$encuesta->idEncuesta)}}"><button class="btn btn-warning">Vista Preliminar</button></a>--}}
+											--}}
+											<a href="{{URL::action('EncuestaController@show',$encuesta->idEncuesta)}}"><button class="btn btn-ff-blues"><i class="fa fa-eye"></i></button></a>
 										</td>
 									</tr>
 									@include('admin.encuesta.modal')

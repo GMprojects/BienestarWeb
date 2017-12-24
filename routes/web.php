@@ -28,6 +28,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('tutorTutorado/{tutorTutorado}/destroy', 'TutorTutoradoController@destroyTutor');
     Route::get('dashboard', 'DashboardController@index');
     Route::get('dashboard/actividades', 'DashboardController@listarActividades');
+    Route::get('alumnos', 'UserController@indexAlumnos');
+    Route::get('docentes', 'UserController@indexDocentes');
+    Route::get('administrativos', 'UserController@indexAdministrativos');
+
+    Route::resource('semestre', 'SemestreController');
    /* Route::get('tutorTutorado', 'TutorTutoradoController@index');
     Route::get('tutorTutorado/create', 'TutorTutoradoController@create');
     Route::get('tutorTutorado/{tutorTutorado}/edit', 'TutorTutoradoController@edit');
@@ -47,11 +52,14 @@ Route::middleware(['programador', 'auth'])->prefix('programador')->group(functio
 //PERMISOS DE MIEMBRO
 Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
-    Route::resource('perfil','MiPerfilController');
+
+    Route::get('perfil','MiPerfilController@index');
+    Route::get('perfil/{idPerfil}/edit', 'MiPerfilController@edit');
+    Route::post('perfil/{idPerfil}',  ['uses' => 'MiPerfilController@update','as' => 'perfil.update']);
     Route::resource('inscripcion', 'InscripcionADAController');
 
     Route::resource('evidenciaActividad', 'EvidenciaActividadController');
-
+    Route::get('actividad/{idActividad}/cancel', 'ActividadController@cancel');
     Route::get('actividad/{idActividad}/execute', 'ActividadController@execute');
     Route::get('actividad/{idActividad}/execute/{idInsAlumno}/tutoria', 'ActPedagogiaController@create');
     Route::get('actividad/{id}/beneficiario/create', 'BeneficiarioController@createBeneficiario');
@@ -64,6 +72,8 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::post('actividad/execute/{idActividad}', ['uses' => 'ActividadController@updateExecute','as' => 'actividad.updateExecute']);
     Route::post('actividad/registrarAsistencias/{idActividad}', ['uses' => 'InscripcionADAController@registrarAsistencias','as' => 'actividad.registrarAsistencias']);
     Route::post('actividad/nuevoMotivo/{idActividad}', ['uses' => 'DetallePedagogiaController@store',  'as' => 'detallePedagogia.store']);
+    Route::post('actividad/deleteMotivo/{idActividad}', ['uses' => 'DetallePedagogiaController@update',  'as' => 'detallePedagogia.update']);
+    Route::delete('actividad/nuevoMotivo/{idMotivo}', 'DetallePedagogiaController@destroy');
     Route::post('actividad/actualizarActPedagogia/{idActividadPedagogia}', ['uses' => 'ActPedagogiaController@update', 'as' => 'actPedagogia.update']);
 
     Route::get('actividad/{id}/beneficiario/{idBeneficiario}/evidencias', 'BeneficiarioController@indexEvidenciasBeneficiario');
@@ -74,12 +84,14 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('perfil', 'MiPerfilController');
     Route::get('mis-actividades/{id}', ['uses' => 'MiPerfilController@mis_actividades', 'as' => 'miembro.misActividades']);
 
+    Route::post('enviarMailHabito', ['uses' => 'TutorTutoradoController@enviarEmail', 'as' => 'tutorTutorado.enviarMailHabito']);
+    Route::post('enviarMensaje', ['uses' => 'ActividadController@enviarMensaje', 'as' => 'tutorTutorado.enviarMensaje']);
 
-     Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
-     Route::get('encuesta', 'EncuestaController@encuesta');
-     Route::get('encuestaInsc/{id}', ['uses' => 'EncuestaController@encuestaInsc']);
-     Route::get('encuestaResp/{id}', ['uses' => 'EncuestaController@encuestaResp']);
-     Route::post('encuesta/registrar_respuestas/{id}/{opt}', ['uses' => 'EncuestaController@registrar_respuestas']);
+    Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
+    Route::get('encuesta', 'EncuestaController@encuesta');
+    Route::get('encuestaInsc/{id}', ['uses' => 'EncuestaController@encuestaInsc']);
+    Route::get('encuestaResp/{id}', ['uses' => 'EncuestaController@encuestaResp']);
+    Route::post('encuesta/registrar_respuestas/{id}/{opt}', ['uses' => 'EncuestaController@registrar_respuestas']);
 });
 //Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
 
@@ -101,11 +113,10 @@ Route::get('listaResponsablesTutores','TutorTutoradoController@getTutores');
 Route::get('listaTutorados','TutorTutoradoController@getTutorados');
 Route::get('descargarEvidencia','EvidenciaActividadController@descargarEvidencia');
 Route::get('descargarEvidenciaBeneficiario','BeneficiarioController@descargarEvidenciaBeneficiario');
-Route::get('alumnosLibres', 'TutorTutoradoController@getAlumnosLibres');
 Route::get('alumnosLibresExDoc', 'TutorTutoradoController@getAlumnosLibresExDoc');
-Route::get('docentesNoTutores', 'TutorTutoradoController@getDocentesNoTutores');
 Route::get('soyTutor', 'TutorTutoradoController@soyTutor');
-Route::post('enviarMail','TutorTutoradoController@enviarEmail');
+//Route::post('enviarMail','TutorTutoradoController@enviarEmail');
+//Route::post('enviarMailUser','TutorTutoradoController@enviarEmail');
 
 Route::get('buscarInscripciones', 'InscripcionADAController@buscarInscripciones');
 

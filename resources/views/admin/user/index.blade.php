@@ -44,7 +44,7 @@
 								@endswitch
 								<td>
 									<a href="{{URL::action('UserController@edit',$user->id)}}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
-									<a href="" data-target="#modal-delete-{{$user->id}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
+									<a href="" data-target="#modal-delete-{{$user->id}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 								</td>
 							</tr>
 							@include('admin.user.modal')

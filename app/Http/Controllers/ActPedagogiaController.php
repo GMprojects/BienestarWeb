@@ -7,7 +7,9 @@ use BienestarWeb\Http\Controllers\Controller;
 
 use BienestarWeb\ActPedagogia;
 use BienestarWeb\Actividad;
+use BienestarWeb\Docente;
 use BienestarWeb\InscripcionAlumno;
+use BienestarWeb\TutorTutorado;
 
 class ActPedagogiaController extends Controller
 {
@@ -28,11 +30,13 @@ class ActPedagogiaController extends Controller
      */
     public function create(Request $request, $idActividad, $idTutoradoADA)
     {
-         $inscAlumno = InscripcionAlumno::where('idActividad',$idActividad)->where('idInscripcionADA', $idTutoradoADA)->first();
+         $inscAlumno = InscripcionAlumno::where([['idActividad',$idActividad], ['idInscripcionADA', $idTutoradoADA]])->first();
          $alumno = $inscAlumno->alumno;
          $actividad = Actividad::findOrFail($idActividad);
-         $actPedagogia = ActPedagogia::where('idActividad',$idActividad)->where('idInscripcionAlumno', $inscAlumno->idInscripcionAlumno)->first();
-         return view('programador.actividad.actTutoria.create',['tutorado' => $alumno->user, 'actPedagogia' => $actPedagogia, 'idTutor' => $actividad->responsable->docente->idDocente,'anioSemestre' => $actividad->anioSemestre, 'numeroSemestre' => $actividad->numeroSemestre]);
+         $actPedagogia = ActPedagogia::where([['idActividad',$idActividad], ['idInscripcionAlumno', $inscAlumno->idInscripcionAlumno]])->first();
+         $tutorTutorado = TutorTutorado::where([['idAlumno', $alumno->idAlumno], ['idDocente', Docente::where('idUser', $actividad->idUserResp)->value('idDocente')], ['anioSemestre', $actividad->anioSemestre], ['numeroSemestre', $actividad->numeroSemestre]])->first();
+         
+         return view('programador.actividad.actTutoria.create',['tutorado' => $alumno->user, 'actPedagogia' => $actPedagogia, 'idTutor' => $actividad->responsable->docente->idDocente, 'anioSemestre' => $actividad->anioSemestre, 'numeroSemestre' => $actividad->numeroSemestre, 'tutorTutorado' => $tutorTutorado]);
     }
 
     /**

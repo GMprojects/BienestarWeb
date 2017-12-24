@@ -4,10 +4,10 @@
 		<div class=modal-content>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
-				<h4 class="modal-title"><b>Eliminar ></b></h4>
+				<h4 class="modal-title"><b>Eliminar Usuario</b></h4>
 			</div>
 			<div class="modal-body">
-				<p> Confirme si desea Eliminar el USUARIO  con el ID: {{ $user->codigo }} </p>
+				<p> Confirme si desea Eliminar el USUARIO  con el código: {{ $user->codigo }} </p>
 			</div>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>

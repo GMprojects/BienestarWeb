@@ -54,7 +54,7 @@
                          @break
                    @endswitch
                    <p><strong>Elija una de las siguientes opciones:</strong></p>
-                   
+
                 </div>
                 <div class="items">
                    <div class="item hidden-xs hidden-sm">

@@ -28,7 +28,7 @@
          </li>
          <li class="dropdown ">
             <a href="#" class="ff-li-a dropdown-toggle" data-toggle="dropdown">
-               <i class="fa fa-graduation-cap"></i> Tutoría <span class="caret"></span>
+               <i class="fa fa-book"></i> Tutoría <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
                <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('admin/tutorTutorado/create') }}"><i class="fa fa-circle-o"></i> Asignar Tutores</a></li>
@@ -43,14 +43,13 @@
             </a>
             <ul class="dropdown-menu" role="menu">
                <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('admin/user') }}"><i class="fa fa-circle-o"></i> Todos</a></li>
-               {{--  <li class="ff-li-nav"><a class="ff-li-b" href="#"><i class="fa fa-circle-o"></i> Estudiantes</a></li>
-               <li class="ff-li-nav"><a class="ff-li-b" href="#"><i class="fa fa-circle-o"></i> Docentes</a></li>
-               <li class="ff-li-nav"><a class="ff-li-b" href="#"><i class="fa fa-circle-o"></i> Administrativos</a></li>
-               --}}
+               <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/alumnos') }}"><i class="fa fa-circle-o"></i> Alumnos</a></li>
+               <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/docentes') }}"><i class="fa fa-circle-o"></i> Docentes</a></li>
+               <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/administrativos') }}"><i class="fa fa-circle-o"></i> Administrativos</a></li>
             </ul>
          </li>
          <li class="dropdown ">
-            <a href="{{ url('actividades-demo') }}" class="ff-li-a dropdown-toggle" data-toggle="dropdown">
+            <a href="" class="ff-li-a dropdown-toggle" data-toggle="dropdown">
                <i class="fa fa-file-text-o"></i> Encuestas<span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
@@ -59,17 +58,22 @@
             </ul>
          </li>
          <li class="dropdown ">
-            <a href="{{ url('actividades-demo') }}" class="ff-li-a dropdown-toggle" data-toggle="dropdown">
-               <i class="fa fa-file-text-o"></i> Egresados<span class="caret"></span>
+            <a href="" class="ff-li-a dropdown-toggle" data-toggle="dropdown">
+               <i class="fa fa-graduation-cap"></i> Egresados<span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
                <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('admin/egresado') }}"><i class="fa fa-circle-o"></i> Todos</a></li>
                <li class="ff-li-nav"><a class="ff-li-b" href="{{ action('TrabajoController@index',[ 'op' => '2'  ]) }}"><i class="fa fa-circle-o"></i> Trabajos</a></li>
             </ul>
          </li>
-         <li class="dropdown ">
+         {{--<li class="dropdown ">
             <a class="ff-li-a" href="{{ action('DashboardController@index')}}">
                <i class="fa fa-dashboard"></i> Dashboard
+            </a>
+         </li>--}}
+         <li class="dropdown ">
+            <a class="ff-li-a" href="{{ action('SemestreController@index')}}">
+               <i class="fa fa-gear"></i> Configuración
             </a>
          </li>
       @endif
@@ -113,13 +117,14 @@
                var dirInsc, dirResp;
                dirInsc = '{{ url('/miembro/encuestaInsc') }}';
                dirResp = '{{ url('/miembro/encuestaResp') }}';
+               var total_encu = data.insc_noresp.length + data.resp_noresp.length;
                for (var i = 0; i < data.insc_noresp.length; i++) {
                   encu = encu + '<li class="ff-li-nav"><a class="ff-li-b" href="'+dirInsc+'/'+data.insc_noresp[i].idEncuestaRespondidaInsc+'"><i class="fa fa-circle-o"></i> '+data.insc_noresp[i].idEncuesta+'</a></li>';
                }
                for (var i = 0; i < data.resp_noresp.length; i++) {
                   encu = encu + '<li class="ff-li-nav"><a class="ff-li-b" href="'+dirResp+'/'+data.resp_noresp[i].idEncuestaRespondidaResp+'"><i class="fa fa-circle-o"></i> '+data.resp_noresp[i].idEncuesta+'</a></li>';
                }
-               $('#buttons-list').append('<li class="dropdown "><a href="#" class="ff-li-a dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list-ul"></i>Mis Encuestas</a><ul class="dropdown-menu" role="menu">'+encu+'</ul></li>');
+               $('#buttons-list').append('<li class="dropdown "><a href="#" class="ff-li-a dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list-ul"></i>Mis Encuestas <span class="badge">' + total_encu + '</span></a><ul class="dropdown-menu" role="menu">'+encu+'</ul></li>');
             }
          },
          error:function() {

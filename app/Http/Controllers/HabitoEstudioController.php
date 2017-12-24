@@ -5,6 +5,7 @@ namespace BienestarWeb\Http\Controllers;
 use BienestarWeb\PreguntaHabito;
 use BienestarWeb\TipoHabito;
 use BienestarWeb\HabitoEstudio;
+use BienestarWeb\Semestre;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 use BienestarWeb\TutorTutorado;
 use BienestarWeb\Alumno;
 use BienestarWeb\Http\Controllers\Controller;
-
+use Carbon\Carbon;
 use DB;
 class HabitoEstudioController extends Controller
 {
@@ -31,23 +32,25 @@ class HabitoEstudioController extends Controller
      *
      * @return \Illuminate\Http\ResponsetutorTutorados
      */
-    public function create()
-    {
-         $preguntasHabito = PreguntaHabito::all();
-         $preguntas = [];
-         $j = 0; $k = 0; $i = $preguntasHabito[0]->idTipoHabito;
-         foreach ($preguntasHabito as $pregunta) {
-            if($i == $pregunta->idTipoHabito){
+     public function create()
+     {    /*
+         $preguntasHabito = PreguntaHabito::orderBy('idTipoHabito')->get();
+         return view('miembro.habitoEstudio.create')->with('preguntasHabito',$preguntasHabito);*/
+        $preguntasHabito = PreguntaHabito::all();
+        $preguntas = [];
+        $j = 0; $k = 0; $i = $preguntasHabito[0]->idTipoHabito;
+        foreach ($preguntasHabito as $pregunta) {
+           if($i == $pregunta->idTipoHabito){
               $preguntas[$j][$k++] = $pregunta;
-            }else{
+           }else{
               $k = 0;
               $preguntas[++$j][$k++] = $pregunta;
               $i = $pregunta->idTipoHabito;
-            }
+           }
 
-         }
-         return view('miembro.tutorado.habitoEstudio.mis-habitos')->with('preguntas',$preguntas);
-    }
+        }
+        return view('miembro.tutorado.habitoEstudio.mis-habitos')->with('preguntas',$preguntas);
+     }
 
     /**
      * Store a newly created resource in storage.
@@ -55,18 +58,53 @@ class HabitoEstudioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-         $tutorTutorado = TutorTutorado::where(['idAlumno' => $request->user()->alumno->idAlumno, 'habitoEstudioRespondido' => '0'])->get()[0];
-         $habitoEstudio = HabitoEstudio::create(['idTutorTutorado' => $tutorTutorado->idTutorTutorado]);
+     public function getSemestre(){
+         $fechaActual = (Carbon::now())->format('Y-m-d');
+         $semestres = Semestre::get();
+         $i = 0; $existe = false; $nroSem = count($semestres);
+         while ($i < $nroSem && !$existe) {
+          $fechaInicio = $semestres[$i]['fechaInicio'];
+          $fechaFin = $semestres[$i]['fechaFin'];
+
+            if (($fechaActual >= $fechaInicio) && ($fechaActual <= $fechaFin)) {
+               $existe = true;
+            } else {
+               $existe = false;
+            }
+            $i++;
+         }
+
+         if ($existe) {//True
+            return $semestres[$i-1]['semestre'];
+         } else {
+            return $semestres[$nroSem-1]['semestre'];
+         }
+
+    }
+     public function store(Request $request)
+     {   //dd($request);
+         /* $array = explode("-",HabitoEstudioController::getSemestre());
+         $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ; */
+
+         $tutorTutorado = TutorTutorado::where([
+            'idAlumno' => $request->user()->alumno->idAlumno,
+            'habitoEstudioRespondido' => '0',
+            /*'anioSemestre' => $array[0],
+            'numeroSemestre' => $numeroSemestre*/
+            ])->get()[0];
+
+         $habitoEstudio = HabitoEstudio::create([
+            'idTutorTutorado' => $tutorTutorado->idTutorTutorado
+         ]);
          $preguntasHabito = PreguntaHabito::all();
          foreach ($preguntasHabito as $pregunta) {
-              $habitoEstudio->respuestasHabito()->attach($pregunta,['rpta'=> $request->input($pregunta->idPreguntaHabito)]);
+             $habitoEstudio->respuestasHabito()->attach($pregunta,['rpta'=> $request->input($pregunta->idPreguntaHabito)]);
          }
          $request->user()->alumno->tutores()->updateExistingPivot($tutorTutorado->idDocente, ['habitoEstudioRespondido' => '1'] );
          //dd($habitoEstudio);
          return redirect('/');
-    }
+
+     }
 
     /**
      * Display the specified resource.
