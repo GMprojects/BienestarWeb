@@ -11,9 +11,9 @@
          <span class="act-mini-title"><a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}" data-toggle="tooltip" data-placement="bottom" title="{{ $actividad->titulo }}">{{ $actividad->titulo }}</a></span>
       </div>
       <div class="act-mini-2">
-         <span>{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }} - </span>
+         <span>{{ Date::make($actividad->fechaInicio)->format('l\, d \d\e F') }} - </span>
          <span>{{ date('G:i', strtotime( $actividad->horaInicio )) }} - </span>
-         <span><a href="#">{{ $actividad->lugar }}</a></span>
+         <span>{{ $actividad->lugar }}</span>
       </div>
       <div class="act-mini-2">
          <h5 style="margin-top:0px; margin-bottom:7px;">

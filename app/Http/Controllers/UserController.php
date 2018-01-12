@@ -11,6 +11,8 @@ use BienestarWeb\Administrativo;
 use BienestarWeb\TutorTutorado;
 use BienestarWeb\Actividad;
 
+use Illuminate\Validation\Rule;
+
 use Illuminate\Support\Facades\Storage;
 use File;
 
@@ -28,24 +30,25 @@ class UserController extends Controller
 
    }
 
-   function getRutaImagenUpdate($request, $rutaImgAnterior, $tipo){
-
+   function getRutaImagenUpdate($request, $user){
           if($request->file('foto')){
+             //dd("Hy foto nueva");
              //Eliminando Foto anterior
-             $path = $rutaImgAnterior;
+             $path = $user->foto;
              File::delete(storage_path('app/public/'.$path));
              Storage::delete($path);
              //Guardar la nueva imagen
              $file = $request->file('foto');
-             $name = 'usr_'. $tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
+             $name = 'usr_'. $user->idTipoPersona .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
              $storage = Storage::disk('users')->put($name, \File::get($file));
              if($storage){
                 return 'users/'.$name;
              }else{
-                return NULL;
+                return $path;
              }
           }else {
-              $foto = $rutaImgAnterior;
+              //dd("<NO></NO>Hy foto nueva");
+              return $path;
           }
     }
     /**
@@ -185,6 +188,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+      //dd($request);
          $user = User::findOrFail($id);
          if ($user->email == $request->email) {
              //dd('igual');
@@ -210,7 +214,6 @@ class UserController extends Controller
                  'celular' => 'max:15'
              ]);
          }
-        $user = User::findOrFail($id);
         switch ($user->idTipoPersona)
         {
            case '1': $alumno = Alumno::findOrFail($user->idTipoPersona); break;
@@ -229,11 +232,13 @@ class UserController extends Controller
         $user->celular = $request->celular;
 
         $tipoUser = TipoPersona::find($request->tipo);
-        $user->foto = UserController::getRutaImagenUpdate($request, $user->foto, $tipoUser);
+        $user->foto = UserController::getRutaImagenUpdate($request, $user);
+        //dd($user->foto);
         $user->funcion = $request->funcion;
+      //dd($user);
         $user->update();
 
-        switch ($request->tipo) {
+        /*switch ($request->tipo) {
            case '1': $alumno = $user->alumno()->get();
                      $alumno[0]->condicion = $request->condicion;
                      $alumno[0]->update();
@@ -250,8 +255,9 @@ class UserController extends Controller
                      $administrativo[0]->cargo = $request->cargo;
                      $administrativo[0]->update();
                      break;
-        }
-        return Redirect::to('admin/user');
+        }*/
+        //return Redirect::to('admin/user');
+        return  redirect()->back();
     }
 
     /**

@@ -279,6 +279,7 @@
 	});
 	var llenarInvitado = false;
 	$(document).ready(function(){
+		$('#modal-ayuda').modal('show');
 		$('input').iCheck({
 			checkboxClass: 'icheckbox_square-green',
 			radioClass: 'iradio_square-green',
@@ -498,10 +499,12 @@
 	        if (data == 'error') {
 				  document.getElementById('divNoHayTutor').style.display = 'block';
  				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+				  $('#modal-errorTut').modal('show');
 	        }else{
 				  if(data.length == 0){
 					   document.getElementById('divNoHayTutor').style.display = 'block';
 					   document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+						$('#modal-errorTut').modal('show');
 				  }else {
 						  op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
 						  $("#selectIdResponsable").append(op);
@@ -514,9 +517,10 @@
 				  }
 			  }
 	      },
-	      error:function() {
+	      error:function() {$('#modal-errorTut').modal('show');
 					document.getElementById('divNoHayTutor').style.display = 'block';
 					document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+					//$('#modal-errorTut').modal('show');
 	          	console.log("Error dListaTutores");
 	      }
 	    });
@@ -647,7 +651,7 @@
 				console.log(selectIdResponsable.options.length);
 				if(selectIdResponsable.options.length == 0){
 					//<MODAL><DE>ERROR</DE></MODAL>
-					document.getElementById('pError').innerHTML = 'Antes de publicar se deben registrar tutores en el semestre académico.';
+					document.getElementById('pError').innerHTML = 'Antes de publicar se deben registrar tutores en el semestre académico.'+"{{(String)$semestre}}"+'.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}else {
@@ -724,6 +728,9 @@
 				break;
 		}
 		return todoBien;
+	}
+	function seleccionarCero(){
+		$("#selectIdTipoActividad option:first").attr('selected', 'selected');
 	}
 </script>
 

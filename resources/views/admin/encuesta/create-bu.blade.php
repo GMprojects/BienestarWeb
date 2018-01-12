@@ -1,4 +1,4 @@
-@extends('template')
+extends('template')
 @section ('contenido')
 {!!Form::open(['url'=>'admin/encuesta','method'=>'POST','autocomplete'=>'off'])!!}
 {{Form::token()}}

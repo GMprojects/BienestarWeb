@@ -56,7 +56,7 @@
                         </div>
                      </div>
                   </div>
-                  @include('miembro.modalEmail')
+                  {{--@include('miembro.modalEmail')--}}
                   <div class="panel panel-default">
                      <div class="panel-heading">
                         <h3 class="panel-title">Responsable</h3>
@@ -111,7 +111,7 @@
                            </div>
                            <div class="dt-txt">
                               <span class="text-muted">Cuándo?</span>
-                              <div class="dt-txt-big">{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }}</div>
+                              <div class="dt-txt-big">{{ Date::make($actividad->fechaInicio)->format('l\, d \d\e F') }}</div>
                            </div>
                         </div>
                         <div class="act-view-dt">
@@ -246,10 +246,11 @@
                               <div class="signed-up">
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $alumno->id ]) }}">
                                     <div class="signed-up-img pull-left">
-                                       @if(Auth::user()->foto != null)
-                                          <img src="{{ asset('storage/'.$alumno->foto ) }}" class="img-circle" alt="found">
+                                       @if($alumno->foto != null)
+                                          <img src="{{ asset('storage/'.$alumno->foto ) }}" class="img-circle" alt="No Encontrada">
                                        @else
-                                          @if ($alumno->sexo == 'h'){{-- Hombre --}}
+                                          @if ($alumno->sexo == 'h')
+                                             {{-- Hombre --}}
                                              <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
                                           @else{{-- Mujer --}}
                                              <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
@@ -277,7 +278,7 @@
                               <div class="signed-up">
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $docente->id ]) }}">
                                     <div class="signed-up-img pull-left">
-                                       @if(Auth::user()->foto != null)
+                                       @if($docente->foto != null)
                                           <img src="{{ asset('storage/'.$docente->foto ) }}" class="img-circle" alt="No Encontrada">
                                        @else
                                           @if ($docente->sexo == 'h'){{-- Hombre --}}
@@ -308,7 +309,7 @@
                               <div class="signed-up">
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $administrativo->id ]) }}">
                                     <div class="signed-up-img pull-left">
-                                       @if(Auth::user()->foto != null)
+                                       @if($administrativo->foto != null)
                                           <img src="{{ asset('storage/'.$administrativo->foto ) }}" class="img-circle" alt="No Encontrada">
                                        @else
                                           @if ($administrativo->sexo == 'h'){{-- Hombre --}}

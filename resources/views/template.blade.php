@@ -78,7 +78,7 @@
       	  'default': 'Click o arrastrar y soltar',
       	  'replace': 'Click o arrastrar y soltar',
       	  'remove':  'Quitar',
-      	  'error':   'Ops! Ha ocurrido un error'
+      	  'error':   'Ops! el archivo es demasiado grande'
        },
        error: {
            'imageFormat': 'Formato de Imagen no permitido (solo .png .jpg y .jpge).'

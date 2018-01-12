@@ -373,6 +373,11 @@
 				data: {id:{{ $actividad->idUserResp }}, anioSemestre:{{ $actividad->anioSemestre }}, numeroSemestre:{{ $actividad->numeroSemestre }}},
 				dataType: 'json',
 				success:function(data) {
+					if(data.length == 0){
+ 					   document.getElementById('divNoHayTutor').style.display = 'block';
+ 					   document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+ 						$('#modal-errorTut').modal('show');
+ 				  }else {
 							for (var i = 0; i < data.length; i++) {
 								if({{ count($actividad->inscripcionesADA) }} !=0 ){
 									{{--console.log(data[i].idAlumno);console.log({{ $idAlumnos["0"]}});--}}
@@ -385,6 +390,7 @@
 								$("#selectIdAlumnoTutorado").append(op);
 							}
 							$("#selectIdAlumnoTutorado").selectpicker("refresh");
+					}
 				},
 				error:function() {
 						console.log("Error ");
@@ -746,7 +752,7 @@
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
 				if(selectIdResponsable.options.length == 0){
-					document.getElementById('pError').innerHTML = 'Al no existir Responsables a cargo de la actividad no puede registrar la actividad.';
+					document.getElementById('pError').innerHTML = 'Antes de publicar se deben registrar tutores en el semestre académico.'+"{{(String)$semestre}}"+'.'
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
 				}else{

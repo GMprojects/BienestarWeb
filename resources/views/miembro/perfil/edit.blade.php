@@ -1,13 +1,13 @@
 @extends('template')
 @section('contenido')
 
-{{--{!! Form::model($user, ['method'=>'PATCH', 'route'=>['perfil.update', $egresado->idEgresado]]) !!}--}}
-{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off']) !!}
-{{Form::token()}}
 <div class="row">
-	{!!Form::hidden('op',1)!!}
-	<div class="col-md-6">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
 		<div class="caja">
+			{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
+			{{Form::token()}}
+			{!!Form::hidden('op',1)!!}
 	      <div class="caja-header">
 	         <div class="caja-icon">	<i class="fa fa-address-card"></i></div>
 	         <div class="caja-title">Datos Personales
@@ -28,25 +28,61 @@
 						@endif
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-sm-3"></div>
+					<div class="col-sm-6">
+						@if($user->foto != null)
+							<input type="file" name="foto" class="form-control dropify" data-height="200" data-max-file-size="4M" data-default-file="{{ asset('storage/'.$user->foto ) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+						@else
+							<input type="file" name="foto" class="form-control dropify" data-height="200" data-max-file-size="4M" data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+						@endif
+						<div class="form-horizontal"><p style="color:blue; text-align:center;"> Tamaño Max: 4MB	</p></div>
+					</div>
+					<div class="col-sm-3"></div>
+				</div>
 				<br>
-				<div class="form-horizontal">
-					<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
+				<div class="row">
+					<div class="col-sm-2"></div>
+					<div class="form-horizontal">
+						<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
+					</div>
+					<div class="col-sm-2"></div>
 				</div>
 				<!-- Campos Tipo Texto -->
 				<div class="form-horizontal">
 					<!-- Campo nombre -->
 					<div class="form-group">
-						<label for="nombre" class="col-sm-3 control-label">Nombre </label>
+						<label for="nombre" class="col-sm-3 control-label">Nombre <span class="ast">*</span></label>
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input maxlength="100" type="nombre" class="form-control" name="nombre" value="{{ $user->nombre }} {{ $user->apellidoPaterno }} {{ $user->apellidoMaterno }}">
+								 <input maxlength="100" required type="nombre" class="form-control" name="nombre" value="{{ $user->nombre }}">
+							</div>
+						</div>
+					</div>
+					<!-- Campo apellidoPaterno -->
+					<div class="form-group">
+						<label for="apellidoPaterno" class="col-sm-3 control-label">Apellido Paterno <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
+								 <input maxlength="100" required type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $user->apellidoPaterno }}">
+							</div>
+						</div>
+					</div>
+					<!-- Campo apellidoMaterno -->
+					<div class="form-group">
+						<label for="apellidoMaterno" class="col-sm-3 control-label">Apellido Materno <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
+								 <input maxlength="100" required type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $user->apellidoMaterno }}">
 							</div>
 						</div>
 					</div>
 					<!-- Campo codigo -->
 					<div class="form-group">
-						<label for="coigo" class="col-sm-3 control-label">Código </label>
+						<label for="coigo" class="col-sm-3 control-label">Código <span class="ast">*</span></label>
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-qrcode"></i></span>
@@ -99,173 +135,172 @@
 			<br><br>
 			<div class="caja-footer">
 				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
 					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 				</div>
 	      </div>
+		{!! Form::close() !!}
 	   </div>
-{!! Form::close() !!}
 
-{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off']) !!}
-{{Form::token()}}
-		{!!Form::hidden('op',2)!!}
-			<div class="caja">
-		      <div class="caja-header">
-		         <div class="caja-icon">	<i class="fa fa-user"></i></div>
-		         <div class="caja-title">Datos Específicos</div>
-		      </div>
-				<div class="caja-body">
-					<div  class="row">
-						<div class="col-lg-12 col-sm-12 col-xs-12">
-							@if (count($errors) >0)
-							<div class="alert alert-danger">
-								<ul>
-								@foreach($errors->all() as $error)
-									<li>{{$error}}</li>
-								@endforeach
-								</ul>
-							</div>
-							@endif
+	{{--	<div class="caja">
+			{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off']) !!}
+			{{Form::token()}}
+			{!!Form::hidden('op',2)!!}
+			<div class="caja-header">
+				<div class="caja-icon">	<i class="fa fa-user"></i></div>
+				<div class="caja-title">Datos Específicos</div>
+			</div>
+			<div class="caja-body">
+				<div  class="row">
+					<div class="col-lg-12 col-sm-12 col-xs-12">
+						@if (count($errors) >0)
+						<div class="alert alert-danger">
+							<ul>
+							@foreach($errors->all() as $error)
+								<li>{{$error}}</li>
+							@endforeach
+							</ul>
 						</div>
-					</div>
-					<div class="row">
-						<div class="form-horizontal">
-							@if ($user->idTipoPersona == 1)
-								<div class="form-group">
-									<label for="condicion" class="col-sm-3 control-label">Condición <span class="ast">*</span></label>
-									<div class="col-sm-8">
-										<div class="input-group">
-											<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
-											<select name="condicion" class="form-control" required>
-												@switch ($user->alumno->condicion)
-													@case(1)
-													<option value="1" selected>Matriculado</option>
-													<option value="2">No Matriculado</option>
-													@break
-													@case(2)
-													<option value="1">Matriculado</option>
-													<option value="2" selected>No Matriculado</option>
-													@break
-												@endswitch
-											</select>
-										</div>
-									</div>
-								</div>
-							@elseif ($user->idTipoPersona == 2)
-										<div class="form-group">
-											<label for="categoria" class="col-sm-3 control-label">Categoría </label>
-											<div class="col-sm-8">
-												<div class="input-group">
-													<span class="input-group-addon"><i class="fa fa-star fa-rotate-90"></i><i class="fa fa-suitcase"></i></span>
-													<select name="categoria" class="form-control">
-														@switch ($user->docente->categoria)
-															@case(1)
-															<option value="1" selected>Principal</option>
-															<option value="2">Asociado</option>
-															<option value="3">Auxiliar</option>
-															<option value="4">Contratado</option>
-															@break
-															@case(2)
-															<option value="1">Principal</option>
-															<option value="2" selected>Asociado</option>
-															<option value="3">Auxiliar</option>
-															<option value="4">Contratado</option>
-															@break
-															@case(3)
-															<option value="1">Principal</option>
-															<option value="2">Asociado</option>
-															<option value="3" selected>Auxiliar</option>
-															<option value="4">Contratado</option>
-															@break
-															@case(4)
-															<option value="1">Principal</option>
-															<option value="2">Asociado</option>
-															<option value="3">Auxiliar</option>
-															<option value="4" selected>Contratado</option>
-															@break
-														@endswitch
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="dedicacion" class="col-sm-3 control-label">Dedicación </label>
-											<div class="col-sm-8">
-												<div class="input-group">
-													<span class="input-group-addon"><i class="fa fa-clock-o"> <i class="fa fa-briefcase"></i></i></span>
-													<select name="dedicacion" class="form-control">
-														@switch ($user->docente->dedicacion)
-															@case(1)
-															<option value="1" selected>Exclusiva</option>
-															<option value="2">Tiempo Completo</option>
-															<option value="3">Tiempo Parcial</option>
-															@break
-															@case(2)
-															<option value="1">Exclusiva</option>
-															<option value="2" selected>Tiempo Completo</option>
-															<option value="3">Tiempo Parcial</option>
-															@break
-															@case(3)
-															<option value="1">Exclusiva</option>
-															<option value="2">Tiempo Completo</option>
-															<option value="3" selected>Tiempo Parcial</option>
-															@break
-														@endswitch
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="modalidad" class="col-sm-3 control-label">Modalidad </label>
-											<div class="col-sm-8">
-												<div class="input-group">
-													<span class="input-group-addon"><i class="fa fa-tag fa-rotate-90"></i> <i class="fa fa-briefcase"></i></span>
-													<select name="modalidad" class="form-control">
-														@switch ($user->docente->dedicacion)
-															@case(1)
-															<option value="1" selected>Ordinario</option>
-															<option value="2">Contratado</option>
-															@break
-															@case(2)
-															<option value="1">Ordinario</option>
-															<option value="2" selected>Contratado</option>
-															@break
-														@endswitch
-													</select>
-												</div>
-											</div>
-										</div>
-							@else
-								<div class="form-group">
-									<label for="cargo" class="col-sm-3 control-label">Cargo <span class="ast">*</span></label>
-									<div class="col-sm-8">
-										<div class="input-group">
-											 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-											 <input type="cargo" id="cargo" class="form-control" name="cargo" value="{{ $user->administrativo->cargo}}" placeholder="Cargo">
-										</div>
-									</div>
-								</div>
-							@endif
-						</div>
+						@endif
 					</div>
 				</div>
-				<br><br>
-				<div class="caja-footer">
-					<div class="pull-right">
-						<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+				<div class="row">
+					<div class="form-horizontal">
+						@if ($user->idTipoPersona == 1)
+							<div class="form-group">
+								<label for="condicion" class="col-sm-3 control-label">Condición <span class="ast">*</span></label>
+								<div class="col-sm-8">
+									<div class="input-group">
+										<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
+										<select name="condicion" class="form-control" required>
+											@switch ($user->alumno->condicion)
+												@case(1)
+												<option value="1" selected>Matriculado</option>
+												<option value="2">No Matriculado</option>
+												@break
+												@case(2)
+												<option value="1">Matriculado</option>
+												<option value="2" selected>No Matriculado</option>
+												@break
+											@endswitch
+										</select>
+									</div>
+								</div>
+							</div>
+						@elseif ($user->idTipoPersona == 2)
+									<div class="form-group">
+										<label for="categoria" class="col-sm-3 control-label">Categoría </label>
+										<div class="col-sm-8">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-star fa-rotate-90"></i><i class="fa fa-suitcase"></i></span>
+												<select name="categoria" class="form-control">
+													@switch ($user->docente->categoria)
+														@case(1)
+														<option value="1" selected>Principal</option>
+														<option value="2">Asociado</option>
+														<option value="3">Auxiliar</option>
+														<option value="4">Contratado</option>
+														@break
+														@case(2)
+														<option value="1">Principal</option>
+														<option value="2" selected>Asociado</option>
+														<option value="3">Auxiliar</option>
+														<option value="4">Contratado</option>
+														@break
+														@case(3)
+														<option value="1">Principal</option>
+														<option value="2">Asociado</option>
+														<option value="3" selected>Auxiliar</option>
+														<option value="4">Contratado</option>
+														@break
+														@case(4)
+														<option value="1">Principal</option>
+														<option value="2">Asociado</option>
+														<option value="3">Auxiliar</option>
+														<option value="4" selected>Contratado</option>
+														@break
+													@endswitch
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="dedicacion" class="col-sm-3 control-label">Dedicación </label>
+										<div class="col-sm-8">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-clock-o"> <i class="fa fa-briefcase"></i></i></span>
+												<select name="dedicacion" class="form-control">
+													@switch ($user->docente->dedicacion)
+														@case(1)
+														<option value="1" selected>Exclusiva</option>
+														<option value="2">Tiempo Completo</option>
+														<option value="3">Tiempo Parcial</option>
+														@break
+														@case(2)
+														<option value="1">Exclusiva</option>
+														<option value="2" selected>Tiempo Completo</option>
+														<option value="3">Tiempo Parcial</option>
+														@break
+														@case(3)
+														<option value="1">Exclusiva</option>
+														<option value="2">Tiempo Completo</option>
+														<option value="3" selected>Tiempo Parcial</option>
+														@break
+													@endswitch
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="modalidad" class="col-sm-3 control-label">Modalidad </label>
+										<div class="col-sm-8">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-tag fa-rotate-90"></i> <i class="fa fa-briefcase"></i></span>
+												<select name="modalidad" class="form-control">
+													@switch ($user->docente->dedicacion)
+														@case(1)
+														<option value="1" selected>Ordinario</option>
+														<option value="2">Contratado</option>
+														@break
+														@case(2)
+														<option value="1">Ordinario</option>
+														<option value="2" selected>Contratado</option>
+														@break
+													@endswitch
+												</select>
+											</div>
+										</div>
+									</div>
+						@else
+							<div class="form-group">
+								<label for="cargo" class="col-sm-3 control-label">Cargo <span class="ast">*</span></label>
+								<div class="col-sm-8">
+									<div class="input-group">
+										 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+										 <input type="cargo" id="cargo" class="form-control" name="cargo" value="{{ $user->administrativo->cargo}}" placeholder="Cargo">
+									</div>
+								</div>
+							</div>
+						@endif
 					</div>
-		      </div>
-
+				</div>
 			</div>
+			<br><br>
+			<div class="caja-footer">
+				<div class="pull-right">
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
+				</div>
+			</div>
+			{!! Form::close() !!}
+		</div>--}}
 	</div>
-{!! Form::close() !!}
-{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
-{{Form::token()}}
-	{!!Form::hidden('op',3)!!}
-	<div class="col-md-6">
-		<div class="caja">
-
+	<div class="col-md-2"></div>
+</div>
+		{{--<div class="caja">
+			{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
+			{{Form::token()}}
+			{!!Form::hidden('op',3)!!}
 	      <div class="caja-header">
 	         <div class="caja-icon">	<i class="fa fa-user-circle"></i></div>
 	         <div class="caja-title">Foto de Perfil</div>
@@ -284,28 +319,18 @@
 						@endif
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-3"></div>
-					<div class="col-sm-6">
-						@if($user->foto != null)
-							<input type="file" name="foto" class="form-control dropify" data-height="200"  data-default-file="{{ asset('storage/'.$user->foto ) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="false">
-						@else
-							<input type="file" name="foto" class="form-control dropify" data-height="200"  data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="false">
-						@endif
-					</div>
-					<div class="col-sm-3"></div>
-				</div>
+
 			</div>
 			<br><br>
 			<div class="caja-footer">
 				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 				</div>
 	      </div>
+			{!! Form::close() !!}
+		</div>--}}
 
-		</div>
-{!! Form::close() !!}
 {{--{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off']) !!}
 {{Form::token()}}
 	{!!Form::hidden('op',4)!!}
@@ -365,7 +390,7 @@
 			<br><br>
 			<div class="caja-footer">
 				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 				</div>
 	      </div>
@@ -373,8 +398,6 @@
 		</div>
 
 {!! Form::close() !!}--}}
-	</div>
-</div>
 
 <style type="text/css">
 	.ast{

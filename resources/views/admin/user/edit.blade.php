@@ -25,18 +25,24 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-4"></div>
-						<div class="col-sm-4">
-							@if ($user->foto != null)
-								<input type="file" name="foto" class="form-control dropify"data-default-file="{{ asset('storage/'.$user->foto) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+						<div class="col-sm-3"></div>
+						<div class="col-sm-6">
+							@if($user->foto != null)
+								<input type="file" name="foto" class="form-control dropify" data-height="200" data-max-file-size="4M" data-default-file="{{ asset('storage/'.$user->foto ) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
 							@else
-								<input type="file" name="foto" class="form-control dropify"data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+								<input type="file" name="foto" class="form-control dropify" data-height="200" data-max-file-size="4M" data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
 							@endif
+							<div class="form-horizontal"><p style="color:blue; text-align:center;"> Tamaño Max: 4MB	</p></div>
 						</div>
-						<div class="col-sm-4"></div>
+						<div class="col-sm-3"></div>
 					</div><br/>
-					<div class="form-horizontal">
-						<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
+
+					<div class="row">
+						<div class="col-sm-2"></div>
+						<div class="form-horizontal">
+							<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
+						</div>
+						<div class="col-sm-2"></div>
 					</div>
 					<!-- Campos Tipo Texto -->
 					<div class="form-horizontal">

@@ -99,7 +99,11 @@
                               @case(3) Administrativo @break
                            @endswitch
                               <br />
-                           <small><i class="fa fa-birthday-cake"></i> {{ date("d F",strtotime(Auth::user()->fechaNacimiento)) }}</small>
+                           @if(Auth::user()->fechaNacimiento != null)
+                              <small><i class="fa fa-birthday-cake"></i> {{ Date::make(Auth::user()->fechaNacimiento)->format('d \d\e F') }}</small>
+                           @else
+                              <small><i class="fa fa-birthday-cake"></i> - </small>
+                           @endif
                         </p>
                      </li>
                      <li class="footer-usu">

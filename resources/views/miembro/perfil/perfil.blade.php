@@ -60,7 +60,12 @@
                               <p><i class="fa fa-mobile-phone"></i>{{ $du['user']->celular }}</p>
                            @endif
                         @endif
-                        <p><i class="fa fa-birthday-cake"></i>{{ date("d F",strtotime($du['user']->fechaNacimiento)) }}</p>
+                        @if( $du['user']->fechaNacimiento != null )
+                           <p><i class="fa fa-birthday-cake"></i>{{ Date::make($du['user']->fechaNacimiento)->format('d \d\e F') }}</p>
+                        @else
+                           <p><i class="fa fa-birthday-cake"></i>-</p>
+                        @endif
+
                         @switch ( $du['user']->idTipoPersona )
                            @case(1) <p><i class="fa fa-graduation-cap"></i><span class="label label-success">Alumno</span></p> @break
                            @case(2) <p><i class="fa fa-briefcase"></i><span class="label label-warning">Docente</span></p>

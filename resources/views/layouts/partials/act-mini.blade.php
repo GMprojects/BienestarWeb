@@ -10,15 +10,15 @@
       </div>
       <div class="act-mini-body" >
          <div class="ff-calendar">
-            <span class="ff-month">{{ date('M', strtotime( $actividad->fechaInicio )) }}</span>
-            <span class="ff-day">{{ date('d', strtotime( $actividad->fechaInicio )) }}</span>
+            <span class="ff-month">{{ Date::make($actividad->fechaInicio)->format('M') }}</span>
+            <span class="ff-day">{{ Date::make($actividad->fechaInicio)->format('d') }}</span>
          </div>
          <div class="act-mini-details">
             <div class="act-mini-1">
                <span class="act-mini-title"><a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}" data-toggle="tooltip" data-placement="bottom" title="{{ $actividad->titulo }}">{{ $actividad->titulo }}</a></span>
             </div>
             <div class="act-mini-2">
-               <span>{{ date('l, d', strtotime( $actividad->fechaInicio )) }} de {{ date('F', strtotime( $actividad->fechaInicio )) }} - </span>
+               <span>{{ Date::make($actividad->fechaInicio)->format('l\, d \d\e F') }} - </span>
                <span>{{ date("g:i A",strtotime($actividad->horaInicio)) }} - </span>
                <span>{{ $actividad->lugar }}</span>
             </div>

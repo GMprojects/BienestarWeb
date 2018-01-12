@@ -43,3 +43,26 @@
 	 </div>
     <!-- /.modal-dialog -->
 </div>
+<div class="modal fade" id="modal-errorTut">
+	 <!-- /.modal-dialog -->
+	 <div class="modal-dialog">
+		   <!-- /.modal-content -->
+		   <div class="modal-content">
+		        <div class="modal-header" style="background-color:red; color:white; border-radius:6px 6px 0px 0px;">
+			          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			            <span aria-hidden="true"  class="fa fa-remove"></span></button>
+			          <h4 class="modal-title"  style="color:white;"><i class="fa fa-warning"></i>&nbsp; &nbsp;<b>Error</b></h4>
+		        </div>
+		        <div class="modal-body">
+		          	<p> Antes de publicar una actividad de tutoría se deben registrar tutores en el semestre académico.</p>
+		        </div>
+		        <div class="modal-footer">
+						  <div class="pull-right">
+							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+						  </div>
+		        </div>
+		   </div>
+	      <!-- /.modal-content -->
+	 </div>
+    <!-- /.modal-dialog -->
+</div>

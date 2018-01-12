@@ -20,28 +20,30 @@ use File;
 class MiPerfilController extends Controller
 {
 
-   function getRutaImagenUpdate($request, $user, $tipo){
+   function getRutaImagenUpdate($request, $user){
       $path = $user->foto;
       if($request->file('foto')){
+         //dd("Hy foto nueva");
          //Eliminando Foto anterior
          File::delete(storage_path('app/public/'.$path));
          Storage::delete($path);
          //Guardar la nueva imagen
          $file = $request->file('foto');
-         $name = 'usr_'.$tipo.'_'. $user->apellidoPaterno.'_'. $user->apellidoMaterno.'_' . $user->codigo.'.'.$file->getClientOriginalExtension();
+         $name = 'usr_'.$user->idTipoPersona.'_'. $user->apellidoPaterno.'_'. $user->apellidoMaterno.'_' . $user->codigo.'.'.$file->getClientOriginalExtension();
          $storage = Storage::disk('users')->put($name, \File::get($file));
          if($storage){
            return 'users/'.$name;
          }else{
-           return NULL;
+           return $user->foto;
          }
       }else {
-          $foto = $path;
+          //dd("<NO></NO>Hy foto nueva");
+          return $path;
       }
    }
 
    public function show($id){
-      $user = User::findOrFail($id);
+     $user = User::findOrFail($id);
      $du['user'] = $user;
          //SI SOY PROGRAMADOR(organizador) o ADMINISTRADOR
      if($user->funcion != 1){
@@ -92,6 +94,7 @@ class MiPerfilController extends Controller
    }
 
    public function update(Request $request, $id){
+      //dd($request);
       $user = User::findOrFail($id);
       switch ($request->op) {
          case '1': //Datos Personales
@@ -103,7 +106,10 @@ class MiPerfilController extends Controller
             "telefono" => null
             "celular" => null*/
             $user->nombre = $request->nombre;
+            $user->apellidoPaterno = $request->apellidoPaterno;
+            $user->apellidoMaterno = $request->apellidoMaterno;
             $user->email = $request->email;
+            $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user);
             $user->direccion = $request->direccion;
             $user->telefono = $request->telefono;
             $user->celular = $request->celular;
@@ -127,9 +133,9 @@ class MiPerfilController extends Controller
             }
             break;
          case '3': //Foto
-            $tipo = TipoPersona::where('idTipoPersona', $user->idTipoPersona)->value('tipo');
+            /*$tipo = TipoPersona::where('idTipoPersona', $user->idTipoPersona)->value('tipo');
             $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user, $tipo);
-            $user->update();
+            $user->update();*/
             break;
          case '4': //Contraseña
             $var = bcrypt('123456');

@@ -42,7 +42,7 @@
 				<div class="caja-footer">
 					<a href="http://aplicaciones.unitru.edu.pe/index.php"><button type="button" class="btn btn-ff-blues" name="button">Historial Académico</button></a>
 					{{--<a href="#"><button type="button" class="btn btn-ff-blues" name="button">Información General</button></a>--}}
-					@if ($tutorTutorado->habitoEstudioRespondido == '1')
+					@if ($tutorado->habitoEstudioRespondido == '1')
 						<a href="{{ action('HabitoEstudioController@show',['$idTutorTutorado' => $tutorTutorado->idTutorTutorado ])}}"><button type="button" class="btn btn-ff-blues" name="button">&nbsp; Hábito de Estudio</button></a>
 					@endif
 				</div>
@@ -110,7 +110,7 @@
 				<div class="caja-footer">
 					<div class="pull-right">
 						 <button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-	 					 <button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
+	 					 <button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 					 </div>
 				</div>
 				{!! Form::Close() !!}
