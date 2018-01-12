@@ -10,8 +10,12 @@
 					<p>Confirme si desea ELIMINAR EVIDENCIA del BENEFICIARIO {{ $alumno->user->nombre.' '.$alumno->user->apellidoPaterno.' '.$alumno->user->apellidoMaterno }} </p>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>
-					<button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+					<div class="pull-left">
+	               <button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+	      		</div>
+	      		<div class="pull-right">
+						<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>
+	      		</div>
 				</div>
 			</div>
 		</div>

@@ -19,7 +19,7 @@
    					 <label for="nombreApellidos">Apellidos y Nombres</label>
    					 <input type="text" id="nombreApellidos"name="nombreApellidos" required class="form-control" disabled>
    				</div>
-   				 	 <button type="button" class="btn btn-ff-blues" style="margin-top: 24px;"data-toggle="modal" data-target="#modal-default"> <i class="fa fa-search"></i> Buscar</button>
+   				 	 <button type="button" class="btn btn-ff-blues" style="margin-top: 24px;"data-toggle="modal" data-target="#modal-alumnos"> <i class="fa fa-search"></i> Buscar</button>
    			</div>
    	</div><br>
   </div>
@@ -131,18 +131,21 @@
 	         </div>
       	@endif
 	 	</div>
-	</div>
+	</div><br><br><br>
 	<div class="caja-footer">
+		<div class="pull-left">
+			<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
+		</div>
 		<div class="pull-right">
-			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
 			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 		</div>
 	</div>
 </div>
 {!! Form::Close() !!}
 <!-- MODALES -->
 <!-- /.modal -->
-<div class="modal fade" id="modal-default">
+<div class="modal fade" id="modal-alumnos">
 	 <!-- /.modal-dialog -->
 	<div class="modal-dialog">
 		 <!-- /.modal-content -->
@@ -174,8 +177,12 @@
 					 </div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-ff" onclick="agregar()" data-dismiss="modal"> <i class="fa fa-save"></i> Grabar</button>
-               <button type="button" class="btn btn-ff-default pull-right"  data-dismiss="modal"> <i class="fa fa-remove"></i>Cerrar</button>
+	            <div class="pull-left">
+						<button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+					</div>
+					<div class="pull-right">
+						<button class="btn btn-ff" type="button" onclick="agregar()" data-dismiss="modal"><i class="fa fa-arrow-right"></i> Continuar</button>
+					</div>
 				</div>
 		</div>
 		<!-- /.modal-content -->

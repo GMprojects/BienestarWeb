@@ -24,9 +24,13 @@
             </div>
 			</div>
 			<div class="modal-footer">
-            <button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-            <button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+            <div class="pull-left">
+               <button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+      		</div>
+      		<div class="pull-right">
+      			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+      			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
+      		</div>
 			</div>
 		</div>
 		<!-- /.modal-content -->

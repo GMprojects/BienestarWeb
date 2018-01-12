@@ -128,76 +128,79 @@
 				</div>
 			</div>
 		@endif
-	</div>
+	</div><br><br><br>
 	<div class="caja-footer">
+		<div class="pull-left">
+			<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
+		</div>
 		<div class="pull-right">
-			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
 			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 		</div>
 	</div>
 </div>
 {!! Form::Close() !!}
 
 <script type="text/javascript">
-$('#fechaBeneficio').datetimepicker({
-	format: 'DD/MM/YYYY',
-});
-$('#fechaInicio').datetimepicker({
-	format: 'DD/MM/YYYY'
-});
-$('#fechaFin').datetimepicker({
-	format: 'DD/MM/YYYY',
-	useCurrent: false // Important! See issue #1075
-});
-$('#fechaInicio').on("dp.change", function(e){
-	$('#fechaFin').data("DateTimePicker").minDate(e.date);
-});
-$('#fechaFin').on("dp.change", function(e){
-	$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
-});
-function validar(){
-	var existeUnSeleccionado = false;
-	console.log('On Validate');
-	if ($('#codigo').val() == '') {
-		document.getElementById('divNoHayAlumno').style.display = 'block';
-		return false;
+	$('#fechaBeneficio').datetimepicker({
+		format: 'DD/MM/YYYY',
+	});
+	$('#fechaInicio').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+	$('#fechaFin').datetimepicker({
+		format: 'DD/MM/YYYY',
+		useCurrent: false // Important! See issue #1075
+	});
+	$('#fechaInicio').on("dp.change", function(e){
+		$('#fechaFin').data("DateTimePicker").minDate(e.date);
+	});
+	$('#fechaFin').on("dp.change", function(e){
+		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
+	});
+	function validar(){
+		var existeUnSeleccionado = false;
+		console.log('On Validate');
+		if ($('#codigo').val() == '') {
+			document.getElementById('divNoHayAlumno').style.display = 'block';
+			return false;
+		}
 	}
-}
 
-$("#duracionMeses").focus(function(){
-	var fInicio = $('#fechaInicio').val();
-	var fFin = $('#fechaFin').val();
+	$("#duracionMeses").focus(function(){
+		var fInicio = $('#fechaInicio').val();
+		var fFin = $('#fechaFin').val();
 
-	spliFI = fInicio.split("/");
-	spliFF = fFin.split("/");
+		spliFI = fInicio.split("/");
+		spliFF = fFin.split("/");
 
-	var dFI = moment(spliFI[2]+'-'+spliFI[1]+'-'+spliFI[0]);
-	var dFF = moment(spliFF[2]+'-'+spliFF[1]+'-'+spliFF[0]);
+		var dFI = moment(spliFI[2]+'-'+spliFI[1]+'-'+spliFI[0]);
+		var dFF = moment(spliFF[2]+'-'+spliFF[1]+'-'+spliFF[0]);
 
-	$('#duracionMeses').val(dFF.diff(dFI,'months'));
-	$('#duracionAnio').val(dFF.diff(dFI,'years'));
-});
-$("#duracionAnio").focus(function(){
-	var fInicio = $('#fechaInicio').val();
-	var fFin = $('#fechaFin').val();
+		$('#duracionMeses').val(dFF.diff(dFI,'months'));
+		$('#duracionAnio').val(dFF.diff(dFI,'years'));
+	});
+	$("#duracionAnio").focus(function(){
+		var fInicio = $('#fechaInicio').val();
+		var fFin = $('#fechaFin').val();
 
-	spliFI = fInicio.split("/");
-	spliFF = fFin.split("/");
+		spliFI = fInicio.split("/");
+		spliFF = fFin.split("/");
 
-	var dFI = moment(spliFI[2]+'-'+spliFI[1]+'-'+spliFI[0]);
-	var dFF = moment(spliFF[2]+'-'+spliFF[1]+'-'+spliFF[0]);
+		var dFI = moment(spliFI[2]+'-'+spliFI[1]+'-'+spliFI[0]);
+		var dFF = moment(spliFF[2]+'-'+spliFF[1]+'-'+spliFF[0]);
 
-	$('#duracionMeses').val(dFF.diff(dFI,'months'));
-	$('#duracionAnio').val(dFF.diff(dFI,'years'));
-});
-function restarFechas(componente){
-  var valor = componente.value;
-  console.log(valor);
-  if(valor.length > 2){
-    console.log(valor);
-    document.getElementById('ejecutar').click();
-  }
-}
+		$('#duracionMeses').val(dFF.diff(dFI,'months'));
+		$('#duracionAnio').val(dFF.diff(dFI,'years'));
+	});
+	function restarFechas(componente){
+	  var valor = componente.value;
+	  console.log(valor);
+	  if(valor.length > 2){
+	    console.log(valor);
+	    document.getElementById('ejecutar').click();
+	  }
+	}
 </script>
 
 <style type="text/css">

@@ -10,8 +10,12 @@
 					<p>Confirme si desea ELIMINAR EVIDENCIA de la ACTIVIDAD {{ $actividad->titulo }}</p>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>
-					<button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+	            <div class="pull-left">
+						<button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+					</div>
+					<div class="pull-right">
+						<button class="btn btn-ff" type="submit"><i class="fa fa-check"></i> Confirmar</button>
+					</div>
 				</div>
 			</div>
 		</div>

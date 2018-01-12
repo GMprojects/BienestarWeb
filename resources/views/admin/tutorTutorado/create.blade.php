@@ -41,8 +41,7 @@
 								</div>
 						 </div>
 					</div>
-				</div>
-				<br>
+				</div><br>
 		   </div>
 		</div>
 	</div>
@@ -87,10 +86,12 @@
 			   </div>
 		  	</div>
 			<div class="caja-footer">
-				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-link"></i> Vincular </button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+				<div class="pull-left">
 					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
+				</div>
+				<div class="pull-right">
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Vincular</button>
 				</div>
 			</div>
 		</div>
