@@ -40,7 +40,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input maxlength="100" type="nombre" class="form-control" name="nombre"  readonly value="{{ $user->nombre }} {{ $user->apellidoPaterno }} {{ $user->apellidoMaterno }}">
+								 <input maxlength="100" type="nombre" class="form-control" name="nombre" value="{{ $user->nombre }} {{ $user->apellidoPaterno }} {{ $user->apellidoMaterno }}">
 							</div>
 						</div>
 					</div>
@@ -100,7 +100,7 @@
 			<div class="caja-footer">
 				<div class="pull-right">
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 				</div>
 	      </div>
 	   </div>
@@ -137,7 +137,7 @@
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
 											<select name="condicion" class="form-control" required>
-												@switch ($user->docente->categoria)
+												@switch ($user->alumno->condicion)
 													@case(1)
 													<option value="1" selected>Matriculado</option>
 													<option value="2">No Matriculado</option>
@@ -253,7 +253,7 @@
 				<div class="caja-footer">
 					<div class="pull-right">
 						<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 					</div>
 		      </div>
 
@@ -300,7 +300,7 @@
 			<div class="caja-footer">
 				<div class="pull-right">
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 				</div>
 	      </div>
 
@@ -366,7 +366,7 @@
 			<div class="caja-footer">
 				<div class="pull-right">
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Cancelar</button>
+					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 				</div>
 	      </div>
 

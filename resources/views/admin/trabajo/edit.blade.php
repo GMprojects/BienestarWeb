@@ -132,15 +132,18 @@
 </div>
 {!! Form::close() !!}
 <script type="text/javascript">
-	$('#fechaInicio').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		format: 'dd/mm/yyyy'
+	$('#fechaInicio').datetimepicker({
+		format: 'DD/MM/YYYY'
 	});
-	$('#fechaFin').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		format: 'dd/mm/yyyy'
+	$('#fechaFin').datetimepicker({
+		format: 'DD/MM/YYYY',
+		useCurrent: false // Important! See issue #1075
+	});
+	$('#fechaInicio').on("dp.change", function(e){
+		$('#fechaFin').data("DateTimePicker").minDate(e.date);
+	});
+	$('#fechaFin').on("dp.change", function(e){
+		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
 	});
 	$(document).ready(function() {
 			 init_contador('#observaciones', '#contadorObservaciones');

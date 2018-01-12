@@ -23,7 +23,7 @@
 			</div>
 			<div class="form-group">
 				<label for="tipo">Nombre Categoría</label>
-				<input type="text" required name="tipo" class="form-control" placeholder="Nombre">
+				<input type="text" required name="tipo" class="form-control" onkeypress="return soloLetras(event)" placeholder="Nombre">
 			</div>
 			<div class="form-group">
 				<label for="tipo">Dirigido a</label>
@@ -48,6 +48,30 @@
 	{!! Form::close() !!}
 
 <script type="text/javascript">
+
+	$(document).ready(function(){
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+			increaseArea: '20%' // optional
+		});
+		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+	});
+
+	function soloLetras(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 65 && evento.charCode <= 90) ||
+			 (event.charCode >= 97 && event.charCode <= 122) ||
+			 (event.charCode == 225) || (event.charCode == 193) || //á Á
+			 (event.charCode == 233) || (event.charCode == 201) || //é É
+			 (event.charCode == 237) || (event.charCode == 205) || //í Í
+			 (event.charCode == 243) || (event.charCode == 211) || //ó Ó
+			 (event.charCode == 250) || (event.charCode == 218) || //ú Ú
+			 (event.charCode == 32)) {
+			return true;
+		}
+		return false;
+	}
 
 	function ocultar(){
 		document.getElementById('divError').style.display = 'none';

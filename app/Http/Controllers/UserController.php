@@ -9,6 +9,7 @@ use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
 use BienestarWeb\Administrativo;
 use BienestarWeb\TutorTutorado;
+use BienestarWeb\Actividad;
 
 use Illuminate\Support\Facades\Storage;
 use File;
@@ -74,7 +75,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-      dd($request);
+      //Ydd($request);
        $request->validate([
            'nombre'=>'required|min:2|max:45',
            'apellidoPaterno' => 'required|min:2|max:20',
@@ -101,9 +102,9 @@ class UserController extends Controller
         $tipoUser = TipoPersona::find($request->tipo);
 
         $nuevoUser = new User();
-        $nuevoUser->nombre = $request->nombre;
-        $nuevoUser->apellidoPaterno = $request->apellidoPaterno;
-        $nuevoUser->apellidoMaterno = $request->apellidoMaterno;
+        $nuevoUser->nombre = strtoupper($request->nombre);
+        $nuevoUser->apellidoPaterno = strtoupper($request->apellidoPaterno);
+        $nuevoUser->apellidoMaterno = strtoupper($request->apellidoMaterno);
         $nuevoUser->fechaNacimiento = UserController::getFecha($request->fechaNacimiento);
         $nuevoUser->sexo = $request->sexo;
         $nuevoUser->codigo = $request->codigo;
@@ -112,7 +113,6 @@ class UserController extends Controller
         $nuevoUser->telefono = $request->telefono;
         $nuevoUser->celular = $request->celular;
         $nuevoUser->funcion = $request->funcion;
-        $nuevoUser->estado = '1';
         $nuevoUser->idTipoPersona = $request->tipo;
         $nuevoUser->password = bcrypt($request->codigo);
         $file = $request->file('foto');
@@ -217,9 +217,9 @@ class UserController extends Controller
            case '2': $docente = Docente::findOrFail($user->idTipoPersona); break;
            case '3': $administrativo = Administrativo::findOrFail($user->idTipoPersona); break;
         }
-        $user->nombre = $request->nombre;
-        $user->apellidoPaterno = $request->apellidoPaterno;
-        $user->apellidoMaterno = $request->apellidoMaterno;
+        $user->nombre = strtoupper($request->nombre);
+        $user->apellidoPaterno = strtoupper($request->apellidoPaterno);
+        $user->apellidoMaterno = strtoupper($request->apellidoMaterno);
         $user->fechaNacimiento = UserController::getFecha($request->fechaNacimiento);
         $user->sexo = $request->sexo;
         $user->codigo = $request->codigo;
@@ -262,11 +262,43 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        /*$user = User::findOrFail($id);
         $user->estado = '0';
-        $user->update();
+        $user->update();*/
+        $user = User::findOrFail($id);
+        $tieneRelaciones = true;
+        if (count($user->docente) == 0) {
+           $tieneRelaciones = false;
+        }
+        if (count($user->alumno) == 0) {
+           $tieneRelaciones = false;
+        }
+        if (count($user->administrativo) == 0) {
+           $tieneRelaciones = false;
+        }
+        if (count($user->actividadesProgramador) == 0) {
+           $tieneRelaciones = false;
+        }
+        if (count($user->actividadesResponsable) == 0) {
+           $tieneRelaciones = false;
+        }
 
-        return Redirect::to('admin/user');
+        if ($tieneRelaciones) {
+           $user->estado = '0';
+           $user->update();
+        } else {
+           $user->delete();
+        }
+
+
+        /*echo 'docente   '.count($user->docente);
+        echo 'alumno   '.count($user->alumno);
+        echo 'administrativo   '.count($user->administrativo);
+
+        echo 'actividadesProgramador   '.count($user->actividadesProgramador);
+        echo 'actividadesResponsable   '.count($user->actividadesResponsable);*/
+dd('e');
+        //return Redirect::to('admin/user');
     }
 
     public function asignarResponsable(Request $request)
@@ -318,7 +350,7 @@ class UserController extends Controller
         return view('admin.user.docentes')->with('docentes', $docentes);
     }
     public function indexAdministrativos(){
-        $administrativos = User::where([['idTipoPersona','3'],'estado','1'])
+        $administrativos = User::where([['idTipoPersona','3'],['estado','1']])
                  ->get();
         return view('admin.user.administrativos')->with('administrativos', $administrativos);
     }

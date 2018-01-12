@@ -62,7 +62,7 @@
 															@endif
 														</ul>
 													</td>
-													<td><img src="{{ asset('storage/'.$tipoActividad->rutaImagen) }}" width="100px" alt="Not found"></td>
+													<td><img src="{{ asset('storage/'.$tipoActividad->rutaImagen) }}" width="100px" alt="No encontrada"></td>
 													<td>
 														<a href="{{ action('TipoActividadController@edit',$tipoActividad->idTipoActividad) }}" class="btn btn-ff-yellow"><i class="fa fa-edit"></i></a>
 														<a href="" data-target = "#modal-delete-{{ $tipoActividad->idTipoActividad }}" data-toggle = "modal" class="btn btn-ff-red"><i class="fa fa-trash"></i></a>
@@ -81,7 +81,8 @@
 	<script>
 		$(document).ready(function() {
 			$('#tabTipoActividad').DataTable({
-				"lengthMenu": [ 10, 25, 50, 75, 100 ],
+				//[10, 25, 50, -1], [10, 25, 50, "Todo"]
+				"lengthMenu": [ [10, 15, 25, -1], [10, 25, 50, "Todo"]  ],
 				"oLanguage" : {
 					"sProcessing":     "Procesando...",
 					"sLengthMenu":     "Mostrar _MENU_ registros",

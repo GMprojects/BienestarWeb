@@ -743,24 +743,30 @@
 			case '4'://TUTORÍA
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
 				var pro1 = selectIdResponsable.options[selectIdResponsable.selectedIndex].value;
-				if ( pro1 == '' ) {
-					document.getElementById('pError').innerHTML = 'Debe seleccionar un tutor, quien estará a cargo de sesión de tutoría que esta programando.';
+				if(selectIdResponsable.options.length == 0){
+					document.getElementById('pError').innerHTML = 'Al no existir Responsables a cargo de la actividad no puede registrar la actividad.';
 					document.getElementById('divError').style.display = 'block';
 					todoBien = false;
-				}else {
-					var selectIdAlumnoTutorado = document.getElementById('selectIdAlumnoTutorado');
-					if ( selectIdAlumnoTutorado.selectedIndex == -1) {
-						document.getElementById('pError').innerHTML = 'Debe seleccionar al menos un tutorado.';
+				}else{
+					if ( pro1 == '' ) {
+						document.getElementById('pError').innerHTML = 'Debe seleccionar un tutor, quien estará a cargo de sesión de tutoría que esta programando.';
 						document.getElementById('divError').style.display = 'block';
 						todoBien = false;
+					}else {
+						var selectIdAlumnoTutorado = document.getElementById('selectIdAlumnoTutorado');
+						if ( selectIdAlumnoTutorado.selectedIndex == -1) {
+							document.getElementById('pError').innerHTML = 'Debe seleccionar al menos un tutorado.';
+							document.getElementById('divError').style.display = 'block';
+							todoBien = false;
+						}
 					}
-				}
-				if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
-					var i = moment($('#horaInicio').val(),'HH:mm A');
-					var f = moment($('#horaFin').val(),'HH:mm A');
-					if( f.diff(i) < 0){
-						document.getElementById('horasError').style.display = 'block';
-						todoBien = false;
+					if ($('#fechaInicio').val() === $('#fechaFin').val() ) {
+						var i = moment($('#horaInicio').val(),'HH:mm A');
+						var f = moment($('#horaFin').val(),'HH:mm A');
+						if( f.diff(i) < 0){
+							document.getElementById('horasError').style.display = 'block';
+							todoBien = false;
+						}
 					}
 				}
 				break;

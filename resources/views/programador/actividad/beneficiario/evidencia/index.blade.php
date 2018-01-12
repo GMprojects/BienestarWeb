@@ -53,7 +53,7 @@
                         </div>
                      @elseif ($array[$count-1] == 'docx'|| $array[$count-1] == 'doc')
                         <div class="panel-body" width="90px" >
-                           <img src="{{asset('images/Iconos/word.png')}}" alt=""  height="80px" width="50px" class="img-responsive">
+                           <img src="{{asset('images/Iconos/word.png')}}" alt="{{ $array[$count-1] }}"  height="80px" width="50px" class="img-responsive">
                         </div>
                         <div class="panel-footer">
                            {{ $evidenciaMovilidad->nombre }}
@@ -64,7 +64,7 @@
                         </div>
                      @elseif ($array[$count-1] == 'pdf')
                         <div class="panel-body">
-                           <img src="{{asset('images/Iconos/pdf.png')}}" alt=""  height="80px" width="50px" class="img-responsive">
+                           <img src="{{asset('images/Iconos/pdf.png')}}" alt="{{ $array[$count-1] }}"  height="80px" width="50px" class="img-responsive">
                         </div>
                         <div class="panel-footer">
                            {{ $evidenciaMovilidad->nombre }}
@@ -76,7 +76,7 @@
                         </div>
                      @elseif ($array[$count-1] == 'xlsx' || $array[$count-1] == 'xls' || $array[$count-1] == 'xlsm')
                         <div class="panel-body">
-                           <img src="{{asset('images/Iconos/excel.png')}}" alt=""  height="80px" width="50px" class="img-responsive">
+                           <img src="{{asset('images/Iconos/excel.png')}}" alt="{{ $array[$count-1] }}"  height="80px" width="50px" class="img-responsive">
                         </div>
                         <div class="panel-footer">
                            {{ $evidenciaMovilidad->nombre }}
@@ -87,7 +87,7 @@
                         </div>
                      @elseif ($array[$count-1] == 'pptx' || $array[$count-1] == 'ppt' || $array[$count-1] == 'pptm')
                         <div class="panel-body">
-                           <img src="{{asset('images/Iconos/ppt.png')}}" alt=""  height="80px" width="50px" class="img-responsive">
+                           <img src="{{asset('images/Iconos/ppt.png')}}" alt="{{ $array[$count-1] }}"  height="80px" width="50px" class="img-responsive">
                         </div>
                         <div class="panel-footer">
                            {{ $evidenciaMovilidad->nombre }}
@@ -98,7 +98,7 @@
                         </div>
                      @else
                         <div class="panel-body">
-                           <img src="{{asset('images/Iconos/otro.png')}}" alt=""  height="80px" width="50px" alt="Otro Archivo" class="img-responsive">
+                           <img src="{{asset('images/Iconos/otro.png')}}" alt="{{ $array[$count-1] }}"  height="80px" width="50px" alt="Otro Archivo" class="img-responsive">
                         </div>
                         <div class="panel-footer">
                            {{ $evidenciaMovilidad->nombre }}

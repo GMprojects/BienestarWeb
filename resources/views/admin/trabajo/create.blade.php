@@ -124,16 +124,20 @@
 </div>
 {!! Form::close() !!}
 <script type="text/javascript">
-	$('#fechaInicio').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		format: 'dd/mm/yyyy'
+	$('#fechaInicio').datetimepicker({
+		format: 'DD/MM/YYYY'
 	});
-	$('#fechaFin').datepicker({
-		autoclose: true,
-		todayHighlight: true,
-		format: 'dd/mm/yyyy'
+	$('#fechaFin').datetimepicker({
+		format: 'DD/MM/YYYY',
+		useCurrent: false // Important! See issue #1075
 	});
+	$('#fechaInicio').on("dp.change", function(e){
+		$('#fechaFin').data("DateTimePicker").minDate(e.date);
+	});
+	$('#fechaFin').on("dp.change", function(e){
+		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
+	});
+
 	$(document).ready(function() {
 			 init_contador('#observaciones', '#contadorObservaciones');
 			 init_contador('#recomendaciones', '#contadorRecomendaciones');
@@ -151,11 +155,11 @@
 			update_Contador(idTextArea, idContador);
 		});
 	}
-	function validar(){
-		if (({{$egresados}}).length == 0) {
+	/*function validar(){
+		if (({/{$egresados}}).length == 0) {
 			document.getElementById('error').style.display = 'block';
 		}
-	}
+	}****/
 
 </script>
 <style type="text/css">

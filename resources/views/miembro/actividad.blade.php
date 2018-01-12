@@ -45,9 +45,9 @@
                      <div class="member">
                         <div class="member-img pull-left">
                            @if($actividad->programador->foto == null)
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Encontrada" class="img-circle"></a>
                            @else
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('storage/'.$actividad->programador->foto) }}" alt="Not found" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('storage/'.$actividad->programador->foto) }}" alt="No Encontrada" class="img-circle"></a>
                            @endif
                         </div>
                         <div class="member-data">
@@ -64,9 +64,9 @@
                      <div class="member">
                         <div class="member-img pull-left">
                            @if($actividad->responsable->foto == null)
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Encontrada" class="img-circle"></a>
                            @else
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('storage/'.$actividad->responsable->foto) }}" alt="Not found" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('storage/'.$actividad->responsable->foto) }}" alt="No Encontrada" class="img-circle"></a>
                            @endif
                         </div>
                         <div class="member-data">
@@ -83,7 +83,7 @@
                         </div>
                         <div class="member">
                            <div class="member-img pull-left">
-                              <a><img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle"></a>
+                              <a><img src="{{ asset('img/avatar3.png') }}" alt="No Encontrada" class="img-circle"></a>
                            </div>
                            <div class="member-data">
                               <div class="member-name">{{ preg_split("/[-]/",$actividad->invitado)[0] }} {{ preg_split("/[-]/",$actividad->invitado)[1] }}</div>
@@ -98,9 +98,9 @@
                   <div class="act-view">
                      <div class="act-view-img">
                         @if($actividad->rutaImagen == null)
-                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found">
+                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="No Encontrada">
                         @else
-                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found">
+                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No Encontrada">
                         @endif
                      </div>
                      <div class="act-view-title">{{ $actividad->titulo }}</div>
@@ -250,12 +250,12 @@
                                           <img src="{{ asset('storage/'.$alumno->foto ) }}" class="img-circle" alt="found">
                                        @else
                                           @if ($alumno->sexo == 'h'){{-- Hombre --}}
-                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="Not found">
+                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
                                           @else{{-- Mujer --}}
-                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="Not found">
+                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
                                           @endif
                                        @endif
-                                       {{--<img src="{{ asset('storage/'.$alumno->foto ) }}" alt="Not found" class="img-circle">--}}
+                                       {{--<img src="{{ asset('storage/'.$alumno->foto ) }}" alt="No Encontrada" class="img-circle">--}}
                                     </div>
                                     <div class="signed-up-data">
                                        <div class="member-name"></i>{{ $alumno->nombre }} {{ $alumno->apellidoPaterno }}</div>
@@ -278,15 +278,15 @@
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $docente->id ]) }}">
                                     <div class="signed-up-img pull-left">
                                        @if(Auth::user()->foto != null)
-                                          <img src="{{ asset('storage/'.$docente->foto ) }}" class="img-circle" alt="Not found">
+                                          <img src="{{ asset('storage/'.$docente->foto ) }}" class="img-circle" alt="No Encontrada">
                                        @else
                                           @if ($docente->sexo == 'h'){{-- Hombre --}}
-                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="Not found">
+                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
                                           @else{{-- Mujer --}}
-                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="Not found">
+                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
                                           @endif
                                        @endif
-                                       {{--<img src="{{ asset('storage/'.$docente->foto ) }}" alt="Not found" class="img-circle">--}}
+                                       {{--<img src="{{ asset('storage/'.$docente->foto ) }}" alt="No Encontrada" class="img-circle">--}}
                                     </div>
                                     <div class="signed-up-data">
                                        <div class="member-name"></i>{{ $docente->nombre }} {{ $docente->apellidoPaterno }}</div>
@@ -309,15 +309,15 @@
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $administrativo->id ]) }}">
                                     <div class="signed-up-img pull-left">
                                        @if(Auth::user()->foto != null)
-                                          <img src="{{ asset('storage/'.$administrativo->foto ) }}" class="img-circle" alt="Not found">
+                                          <img src="{{ asset('storage/'.$administrativo->foto ) }}" class="img-circle" alt="No Encontrada">
                                        @else
                                           @if ($administrativo->sexo == 'h'){{-- Hombre --}}
-                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="Not found">
+                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
                                           @else{{-- Mujer --}}
-                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="Not found">
+                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
                                           @endif
                                        @endif
-                                       {{--<img src="{{ asset('storage/'.$administrativo->foto ) }}" alt="Not found" class="img-circle">--}}
+                                       {{--<img src="{{ asset('storage/'.$administrativo->foto ) }}" alt="No Encontrada" class="img-circle">--}}
                                     </div>
                                     <div class="signed-up-data">
                                        <div class="member-name"></i>{{ $administrativo->nombre }} {{ $administrativo->apellidoPaterno }}</div>

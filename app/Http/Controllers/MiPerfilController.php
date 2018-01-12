@@ -102,6 +102,7 @@ class MiPerfilController extends Controller
             "email" => "admin@facfar.com"
             "telefono" => null
             "celular" => null*/
+            $user->nombre = $request->nombre;
             $user->email = $request->email;
             $user->direccion = $request->direccion;
             $user->telefono = $request->telefono;

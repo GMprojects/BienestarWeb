@@ -21,17 +21,13 @@
 									<th>Id</th>
 									<th>Enunciado</th>
 									<th>Tipo de Hábito</th>
-									<th>Opciones</th>
+
 								</thead>
 								@foreach($preguntasHabito as $preguntaHabito)
 									<tr>
 										<td>{{$preguntaHabito->idPreguntaHabito}}</td>
 										<td>{{$preguntaHabito->enunciado}}</td>
 										<td>{{$preguntaHabito->tipoHabito['tipo']}}</td>
-										<td>
-											<a href="{{URL::action('PreguntaHabitoController@edit',$preguntaHabito->idPreguntaHabito)}}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
-											<a href="" data-target="#modal-delete-{{$preguntaHabito->idPreguntaHabito}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
-										</td>
 									</tr>
 									@include('admin.preguntaHabito.modal')
 								@endforeach

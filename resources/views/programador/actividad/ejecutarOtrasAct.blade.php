@@ -106,7 +106,7 @@
 							<div class="panel panel-default">
 								@if($array[$count-1] == 'jpg'|| $array[$count-1] == 'png' || $array[$count-1] == 'jpeg')
 									<div class="panel-body">
-										<img src="{{ asset('storage/'.$evidenciaActividad->ruta) }}" alt="{{ $evidenciaActividad->ruta }}"  height="80px"  class="img-responsive">
+										<img src="{{ asset('storage/'.$evidenciaActividad->ruta) }}" alt="No Encontrada"  height="80px"  class="img-responsive">
 									</div>
 									<div class="panel-footer">
 										{{ $evidenciaActividad->nombre }}
@@ -117,7 +117,7 @@
 									</div>
 								@elseif ($array[$count-1] == 'docx'|| $array[$count-1] == 'doc')
 									<div class="panel-body" width="90px" >
-										<img src="{{asset('img/iconos/word.png')}}" alt=""  height="80px" width="120px" class="img-responsive">
+										<img src="{{asset('img/iconos/word.png')}}" alt="WORD"  height="80px" width="120px" class="img-responsive">
 									</div>
 									<div class="panel-footer">
 										{{ $evidenciaActividad->nombre }}
@@ -128,7 +128,7 @@
 									</div>
 								@elseif ($array[$count-1] == 'pdf')
 									<div class="panel-body" style="margin:0 auto;">
-										<img src="{{asset('img/iconos/pdf.png')}}" alt=""  height="100px" width="120px" class="img-responsive">
+										<img src="{{asset('img/iconos/pdf.png')}}" alt="PDF"  height="100px" width="120px" class="img-responsive">
 									</div>
 									<div class="panel-footer">
 										{{ $evidenciaActividad->nombre }}
@@ -140,7 +140,7 @@
 									</div>
 								@elseif ($array[$count-1] == 'xlsx' || $array[$count-1] == 'xls' || $array[$count-1] == 'xlsm')
 									<div class="panel-body">
-										<img src="{{asset('img/iconos/excel.png')}}" alt=""  height="80px" width="120px" class="img-responsive">
+										<img src="{{asset('img/iconos/excel.png')}}" alt="EXCEL"  height="80px" width="120px" class="img-responsive">
 									</div>
 									<div class="panel-footer">
 										{{ $evidenciaActividad->nombre }}
@@ -162,7 +162,7 @@
 									</div>
 								@else
 									<div class="panel-body">
-										<img src="{{asset('img/iconos/otro.png')}}" alt=""  height="80px" width="120px" alt="Otro Archivo" class="img-responsive">
+										<img src="{{asset('img/iconos/otro.png')}}" alt="{{ $array[$count-1] }}"  height="80px" width="120px" alt="Otro Archivo" class="img-responsive">
 									</div>
 									<div class="panel-footer">
 										{{ $evidenciaActividad->nombre }}

@@ -55,14 +55,44 @@ class EncuestaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    /*public function store(Request $request)
     {
         $request->validate([
             'titulo' => 'required'
             ]);
         $encuesta = new Encuesta($request->all());
         $encuesta->save();
+
         return Redirect::to('admin/encuesta');
+    }*/
+    public function store(Request $request){
+      $encuesta = Encuesta::create([
+         'titulo' => $request->titulo,
+         'destino' => $request->destino,
+         'idTipoActividad' => $request->idTipoActividad
+      ]);
+      
+      $verificado = 0;
+      $i = 0;
+      while ((count($request->all())- 8) != $verificado) {
+         if($request->input('e'.$i) != null){
+            Alternativa::create([
+               'etiqueta' => $request->input('e'.$i),
+               'valor' => $request->input('v'.$i),
+               'idEncuesta' => $encuesta->idEncuesta
+            ]);
+            $verificado = $verificado + 2;
+         }
+         if($request->input('p'.$i) != null){
+            PreguntaEncuesta::create([
+               'enunciado' => $request->input('p'.$i),
+               'idEncuesta' => $encuesta->idEncuesta
+            ]);
+            $verificado++;
+         }
+         $i++;
+      }
+      return Redirect::to('admin/encuesta');
     }
 
     /**
