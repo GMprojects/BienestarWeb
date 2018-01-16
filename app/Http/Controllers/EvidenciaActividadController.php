@@ -9,21 +9,17 @@ use BienestarWeb\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Storage;
 use File;
-class EvidenciaActividadController extends Controller
-{
+class EvidenciaActividadController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $evidenciasActividad = EvidenciaActividad::get();
-        //dd($actividades);
         $evidenciasActividad->each(function($evidenciasActividad){
             $evidenciasActividad->actividad;
         });
-      //  dd($evidenciasActividad);
         return view('programador.evidenciaActividad.index')
                 ->with('evidenciasActividad', $evidenciasActividad)
                 ->with('idActividad',$request->idActividad);
@@ -34,8 +30,7 @@ class EvidenciaActividadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request){
         return view('programador.evidenciaActividad.create')
               ->with('idActividad',$request->idActividad);
     }
@@ -46,9 +41,7 @@ class EvidenciaActividadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //dd($request);
+    public function store(Request $request){
         $request->validate([
             'ruta' => 'file',
             'nombre' => 'required|max:45'
@@ -79,8 +72,7 @@ class EvidenciaActividadController extends Controller
      * @param  \BienestarWeb\EvidenciaActividad  $evidenciaActividad
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -90,8 +82,7 @@ class EvidenciaActividadController extends Controller
      * @param  \BienestarWeb\EvidenciaActividad  $evidenciaActividad
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         //
     }
 
@@ -102,8 +93,7 @@ class EvidenciaActividadController extends Controller
      * @param  \BienestarWeb\EvidenciaActividad  $evidenciaActividad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         //
     }
 
@@ -113,8 +103,7 @@ class EvidenciaActividadController extends Controller
      * @param  \BienestarWeb\EvidenciaActividad  $evidenciaActividad
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $evidenciaActividad = EvidenciaActividad::findOrFail($id);
         $path = $evidenciaActividad->ruta;
       //  unlink($path);
@@ -125,10 +114,7 @@ class EvidenciaActividadController extends Controller
     }
 
     public function descargarEvidencia(Request $request){
-        //if($request->ajax()){
-            $evidencia = EvidenciaActividad::findOrFail($request->idEvidencia);
-            return response()->download(storage_path('app/public/'.$evidencia->ruta));
-        //}
-
+        $evidencia = EvidenciaActividad::findOrFail($request->idEvidencia);
+        return response()->download(storage_path('app/public/'.$evidencia->ruta));
     }
 }

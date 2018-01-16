@@ -9,17 +9,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use BienestarWeb\Http\Controllers\Controller;
 
-class TrabajoController extends Controller
-{
+class TrabajoController extends Controller{
+   
       function getFecha($fechaIn){
          if( $fechaIn == null ){
             return null;
          }else{
-         $dia = substr( $fechaIn,0 ,2);
-         $mes =substr( $fechaIn,3 ,2);
-         $anio=substr( $fechaIn,-4 ,4);
-         return $anio."-".$mes."-".$dia;
-
+            $dia = substr( $fechaIn,0 ,2);
+            $mes =substr( $fechaIn,3 ,2);
+            $anio=substr( $fechaIn,-4 ,4);
+            return $anio."-".$mes."-".$dia;
          }
       }
     /**
@@ -27,9 +26,7 @@ class TrabajoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-      //dd($request->op);
+    public function index(Request $request) {
          if ($request->op == 1) { //viene desde egresado
             $trabajos = Trabajo::where('idEgresado',$request->idEgresado)->get();
             $egresado = Egresado::findOrFail($request->idEgresado);
@@ -51,8 +48,7 @@ class TrabajoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request){
          if ($request->op == 1) { //viene desde egresado
             $egresado = Egresado::findOrFail($request->idEgresado);
             return view('admin.trabajo.create')
@@ -74,8 +70,7 @@ class TrabajoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'institucion' => 'required',
             'lugar' => 'required',
@@ -107,8 +102,7 @@ class TrabajoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
 
     }
 
@@ -118,8 +112,7 @@ class TrabajoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
-    {
+    public function edit(Request $request, $id){
          if ($request->op == null) {
             abort(404);
          } else {
@@ -137,9 +130,7 @@ class TrabajoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-      //dd($request);
+    public function update(Request $request, $id){
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->institucion = $request->get('institucion');
         $trabajo->lugar = $request->get('lugar');
@@ -163,8 +154,7 @@ class TrabajoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->delete();
         return redirect()->back();

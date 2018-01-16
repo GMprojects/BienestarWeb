@@ -6,15 +6,13 @@ use Illuminate\Http\Request;
 use BienestarWeb\ActPedagogia;
 use BienestarWeb\DetallePedagogia;
 
-class DetallePedagogiaController extends Controller
-{
+class DetallePedagogiaController extends Controller{
    /**
     * Display a listing of the resource.
     *
     * @return \Illuminate\Http\Response
     */
-   public function index()
-   {
+   public function index(){
       //
    }
 
@@ -23,8 +21,7 @@ class DetallePedagogiaController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-   public function create(Request $request, $idActPedagogia, $idTutorado)
-   {
+   public function create(Request $request, $idActPedagogia, $idTutorado){
         $alumno = Alumno::findOrFail($idTutorado);
         $actPedagogia = ActPedagogia::findOrFail($idActPedagogia);
         return view('programador.actividad.actTutoria.create',['tutorado' => $alumno->user, 'actPedagogia' => $actPedagogia]);
@@ -36,8 +33,7 @@ class DetallePedagogiaController extends Controller
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-   public function store(Request $request, $idActPedagogia)
-   {
+   public function store(Request $request, $idActPedagogia){
         $actPedagogia = ActPedagogia::findOrFail($idActPedagogia);
         $detalle = new DetallePedagogia;
         $detalle->motivo = $request->motivo;
@@ -53,8 +49,7 @@ class DetallePedagogiaController extends Controller
     * @param  \BienestarWeb\DetallePedagogia  $detallePedagogia
     * @return \Illuminate\Http\Response
     */
-   public function show(DetallePedagogia $detallePedagogia)
-   {
+   public function show(DetallePedagogia $detallePedagogia){
       //
    }
 
@@ -64,8 +59,7 @@ class DetallePedagogiaController extends Controller
     * @param  \BienestarWeb\DetallePedagogia  $detallePedagogia
     * @return \Illuminate\Http\Response
     */
-   public function edit(DetallePedagogia $detallePedagogia)
-   {
+   public function edit(DetallePedagogia $detallePedagogia){
       //
    }
 
@@ -76,8 +70,7 @@ class DetallePedagogiaController extends Controller
     * @param  \BienestarWeb\DetallePedagogia  $detallePedagogia
     * @return \Illuminate\Http\Response
     */
-   public function update(Request $request, $id)
-   {
+   public function update(Request $request, $id){
       $detalle = DetallePedagogia::findOrFail($id);
       $detalle->motivo = $request->motivo;
       $detalle->situacionEspecifica = $request->situacionEspecifica;
@@ -92,8 +85,7 @@ class DetallePedagogiaController extends Controller
     * @param  \BienestarWeb\DetallePedagogia  $detallePedagogia
     * @return \Illuminate\Http\Response
     */
-   public function destroy($id)
-   {
+   public function destroy($id){
       $detalle = DetallePedagogia::findOrFail($id);
       $detalle->delete();
       return redirect()->back();

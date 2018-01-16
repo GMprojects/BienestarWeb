@@ -46,7 +46,7 @@ class HabitoEstudioNotif extends Notification
      */
     public function toMail($notifiable)
     {
-      Log::info('HabitoEstudioNotification');
+      //Log::info('HabitoEstudioNotification');
       return (new MailMessage)->markdown('emails.habitoEstudioEmail',['user' => $this->user,
                                                                        'url' => $this->url ])
                               ->subject('Registrar Hábito de Estudio');

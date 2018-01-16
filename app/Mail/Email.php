@@ -40,10 +40,10 @@ class Email extends Mailable
      */
     public function build()
     {
-        Log::info("Email");
-        Log::info("Remitente");
-        Log::info($this->remitente);
-        Log::info("Email Remitente    ".$this->remitente->email);
+        //Log::info("Email");
+        //Log::info("Remitente");
+        //Log::info($this->remitente);
+        //Log::info("Email Remitente    ".$this->remitente->email);
         $nombreRemitente = $this->remitente->nombre.' '.$this->remitente->apellidoPaterno.' '.$this->remitente->apellidoMaterno;
 
         return $this->from($this->remitente->email)

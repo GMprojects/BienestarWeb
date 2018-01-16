@@ -120,7 +120,7 @@
                            </div>
                            <div class="dt-txt">
                               <span class="text-muted">A qué hora?</span>
-                              <div class="dt-txt-big">{{ date('G:i', strtotime( $actividad->horaInicio )) }}</div>
+                              <div class="dt-txt-big">{{ date("g:i A",strtotime($actividad->horaInicio)) }}</div>
                            </div>
                         </div>
                         <div class="act-view-dt">

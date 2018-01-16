@@ -23,7 +23,7 @@ class BeneficiarioController extends Controller{
          return $anio."-".$mes."-".$dia;
     }
 
-    public function createBeneficiario(Request $request, $idActividad)  {
+    public function createBeneficiario(Request $request, $idActividad){
         $actividad = Actividad::findOrFail($idActividad);
         if ($actividad->idTipoActividad == '8') {//movilidad
              $idAlumnos = BeneficiarioMovilidad::where('idActividad', $actividad['idActividad'])->pluck('idAlumno');
@@ -38,7 +38,6 @@ class BeneficiarioController extends Controller{
     }
 
     public function storeBeneficiario(Request $request, $idActividad)  {
-        //dd($request->all());
         $actividad = Actividad::findOrFail($idActividad);
         if ($actividad->idTipoActividad == '8') {//movilidad
             $actividad->beneficiariosMovilidad()->attach($request->idAlumno,['fechaInicio' => BeneficiarioController::getFecha($request->fechaInicio),
@@ -49,21 +48,17 @@ class BeneficiarioController extends Controller{
                                                                                'pais' => $request->pais,
                                                                                'observaciones' => $request->observaciones]);
             //$idBeneficiario = BeneficiarioMovilidad::where([['idActividad', $actividad->idActividad],['idAlumno', $request->idAlumno]])->pluck('idBeneficiarioMovilidad')[0];
-            //dd();
         } else {// comedor
             $actividad->beneficiariosComedor()->attach($request->idAlumno,['fechaBeneficio' => BeneficiarioController::getFecha($request->fechaBeneficio),
                                                                             'tipoBeneficio' => $request->tipoBeneficio]);
             //$idBeneficiario = BeneficiarioComedor::where([['idActividad', $actividad->idActividad],['idAlumno', $request->idAlumno]])->pluck('idBeneficiarioComedor')[0];
-            //dd($actComedor);
         }
         //return redirect()->action('BeneficiarioController@editBeneficiario',[$actividad->idActividad,  $idBeneficiario ]);
         return redirect()->action('ActividadController@execute',['idActividad' => $idActividad]);
     }
 
     public function editBeneficiario($idActividad, $idBeneficiario)  {
-       //dd($idTipoActividad.'     '.$idBeneficiario);
        $id_idTipoActividad = Actividad::where([['idActividad', $idActividad], ['estado', '<', '5']])->select('idActividad','idTipoActividad')->first();
-       //dd($id_idTipoActividad->idActividad);
        if ($id_idTipoActividad->idTipoActividad == '8') {//movilidad
          $beneficiario = BeneficiarioMovilidad::findOrFail($idBeneficiario);
          $alumno = Alumno::findOrFail($beneficiario->idAlumno);
@@ -75,8 +70,6 @@ class BeneficiarioController extends Controller{
     }
 
     public function updateBeneficiario(Request $request, $idActividad, $idBeneficiario)  {
-         //dd('idAct'.$idActividad.' - '.'idBenef'.$idBeneficiario);
-        //dd($request->all());
         $actividad = Actividad::findOrFail($idActividad);
         if ($actividad->idTipoActividad == '8') {//movilidad
             $dia =substr( $request->fechaFin,0 ,2); $mes =substr( $request->fechaFin,3 ,2); $anio=substr( $request->fechaFin,-4 ,4);
@@ -85,12 +78,10 @@ class BeneficiarioController extends Controller{
             $beneficiario = BeneficiarioMovilidad::findOrFail($idBeneficiario);
             $actividad->beneficiariosMovilidad()->updateExistingPivot($beneficiario->idAlumno,['fechaInicio' => BeneficiarioController::getFecha($request->fechaInicio),
                                                                                                                'observaciones' => $request->observaciones]);
-            //dd($actMovilidad);
         } else {// comedor
             $beneficiario = BeneficiarioComedor::findOrFail($idBeneficiario);
             $actividad->beneficiariosComedor()->updateExistingPivot($beneficiario->idAlumno,['fechaBeneficio' => BeneficiarioController::getFecha($request->fechaBeneficio),
                                                                                                                   'tipoBeneficio' => $request->tipoBeneficio]);
-            //dd($actComedor);
         }
         return redirect()->action('ActividadController@execute',['idActividad' => $idActividad]);
     }
@@ -107,21 +98,16 @@ class BeneficiarioController extends Controller{
             $evidenciaMovilidad->delete();
          }
          $actividad->beneficiariosMovilidad()->detach($beneficiario->idAlumno);
-         //dd($actMovilidad);
        } else {// comedor
          $beneficiario = BeneficiarioComedor::findOrFail($idBeneficiario);
          $actividad->beneficiariosComedor()->detach($beneficiario->idAlumno);
-         //dd($actComedor);
        }
        return redirect()->action('ActividadController@execute',['idActividad' => $idActividad]);
     }
 
    public function indexEvidenciasBeneficiario($idActividad, $idBeneficiario){
       $beneficiarioMovilidad = BeneficiarioMovilidad::findOrFail($idBeneficiario);
-      //dd($beneficiario->evidenciasMovilidad);
-      //dd($idAlumnoBeneficiario);
       $alumno = Alumno::findOrFail($beneficiarioMovilidad->idAlumno);
-      //dd($alumno->actividadesMovilidad[0]->pivot->fechaInicio);
       return view('programador.actividad.beneficiario.evidencia.index',['beneficiarioMovilidad' => $beneficiarioMovilidad, 'alumno' => $alumno, 'actividadMovilidad' => $alumno->actividadesMovilidad[0]]);
    }
 
@@ -162,10 +148,8 @@ class BeneficiarioController extends Controller{
    }
 
    public function descargarEvidenciaBeneficiario(Request $request){
-      //if($request->ajax()){
           $evidenciaMovilidad = EvidenciaMovilidad::findOrFail($request->idEvidenciaMovilidad);
           return response()->download(storage_path('app/public/'.$evidenciaMovilidad->ruta));
-      //}
    }
 
 }

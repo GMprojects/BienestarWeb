@@ -32,15 +32,15 @@
 								<td>{{ $tutor->nroTutorados }}
 								<td>
 			                  <a href="{{ action('TutorTutoradoController@show',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ])}}">
-			                    <button type="button" class="btn btn-ff-blues" data-toggle="modal" data-target="#modal-default">
+			                    <button class="btn btn-ff-blues" type="button" data-toggle="tooltip" data-target="#modal-default" data-toggle="tooltip" data-placement="bottom" title="Ver lista de tutorados">
 			                    		<i class="fa fa-eye"></i>
 			                    </button>
 			                  </a>
 									<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
-					               <button class="btn btn-ff-green"><i class="fa fa-plus"></i></button>
+					               <button class="btn btn-ff-green"  type="button" data-toggle="tooltip" data-placement="bottom" title="Añadir un tutorado"><i class="fa fa-plus"></i></button>
 					            </a>
 									<a href="{{ action('TutorTutoradoController@destroyTutor',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
-					               <button class="btn btn-ff-red"><i class="fa fa-trash"></i></button>
+					               <button class="btn btn-ff-red" type="button"  data-toggle="tooltip" data-placement="bottom" title="Eliminar a tutor y sus tutorados"><i class="fa fa-trash"></i></button>
 					            </a>
                 		  </td>
 							</tr>

@@ -9,15 +9,13 @@ use Illuminate\Validation\Rule;
 use BienestarWeb\Egresado;
 use BienestarWeb\Trabajo;
 
-class EgresadoController extends Controller
-{
+class EgresadoController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $egresados = Egresado::Search($request->texto)->get();
         $egresados->each(function($egresados){
             $egresados->trabajos;
@@ -30,8 +28,7 @@ class EgresadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         return view('admin.egresado.create');
     }
 
@@ -41,8 +38,7 @@ class EgresadoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'grado' => 'required',
             'nombre' => 'required|max:45',
@@ -67,7 +63,6 @@ class EgresadoController extends Controller
         $egresado->anioEgreso = $request->anioEgreso;
         $egresado->numeroSemestre = $request->numeroSemestre;
 
-        //dd($egresado);
         $egresado->save();
         return Redirect::to('admin/egresado');
     }
@@ -78,8 +73,7 @@ class EgresadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         $egresado = Egresado::findOrFail($id);
         //$egresado->each(function($egresado){
           //  $egresado->trabajos;
@@ -93,8 +87,7 @@ class EgresadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $egresado = Egresado::findOrFail($id);
         return view('admin.egresado.edit', ['egresado'=>$egresado]);
     }
@@ -106,11 +99,9 @@ class EgresadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
          $egresado = Egresado::findOrFail($id);
          if ($egresado->email == $request->email) {
-            //dd('igual');
                $request->validate([
                   'grado' => 'required',
                   'nombre' => 'required|max:45',
@@ -120,7 +111,6 @@ class EgresadoController extends Controller
                   'numeroSemestre' => ['required', Rule::in('1','2')],
               ]);
          } else {
-            //dd('duff');
                $request->validate([
                   'grado' => 'required',
                   'nombre' => 'required|max:45',
@@ -153,8 +143,7 @@ class EgresadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $egresado = Egresado::findOrFail($id);
         if(count($egresado->trabajos)>0){
             Trabajo::where('idEgresado',$id)->delete();

@@ -8,15 +8,13 @@ use BienestarWeb\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
-class TipoHabitoController extends Controller
-{
+class TipoHabitoController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $tiposHabito = TipoHabito::get();
         return view('admin.tipoHabito.index')->with('tiposHabito',$tiposHabito);
     }
@@ -26,8 +24,7 @@ class TipoHabitoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         return view('admin.tipoHabito.create');
     }
 
@@ -37,8 +34,7 @@ class TipoHabitoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'tipo' => 'required'
             ]);
@@ -53,8 +49,8 @@ class TipoHabitoController extends Controller
      * @param  \BienestarWeb\TipoHabito  $tipoHabito
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
+      //
     }
 
     /**
@@ -63,8 +59,7 @@ class TipoHabitoController extends Controller
      * @param  \BienestarWeb\TipoHabito  $tipoHabito
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         return view('admin.tipoHabito.edit')->with('tipoHabito',TipoHabito::findOrFail($id));
     }
 
@@ -75,8 +70,7 @@ class TipoHabitoController extends Controller
      * @param  \BienestarWeb\TipoHabito  $tipoHabito
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $request->validate([
             'tipo' => 'required'
             ]);
@@ -95,8 +89,7 @@ class TipoHabitoController extends Controller
      * @param  \BienestarWeb\TipoHabito  $tipoHabito
      * @return \Illuminate\Http\Response
      */
-     public function destroy($id)
-     {
+     public function destroy($id){
          $tipoHabito = TipoHabito::findOrFail($id);
          $tipoHabito->estado ='0';
          $tipoHabito->update();

@@ -19,16 +19,13 @@ use BienestarWeb\EncuestaRespondidaInsc;
 
 use Illuminate\Support\Facades\Auth;
 
-class InscripcionADAController extends Controller
-{
+class InscripcionADAController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-      //dd($request);
+    public function index(Request $request){
       switch ($request->opcionBuscar) {
         case '1':
           $inscripcionesAlumnos = InscripcionADA::SearchAlumno($request);
@@ -51,10 +48,8 @@ class InscripcionADAController extends Controller
           $inscripcionesAdministrativos = InscripcionADA::SearchAdministrativo($request);
           break;
       }
-        //dd($inscripciones);
         $numAsistentes = 0;    $numAusentes = 0;
         //numero Inscritos
-        //dd($inscripcionesAlumnos);
         $numInscritos = count($inscripcionesAlumnos)+count($inscripcionesDocentes)+count($inscripcionesAdministrativos);
         //numero asistentes        //numero de ausentes
         if($inscripcionesAlumnos != null){
@@ -91,8 +86,7 @@ class InscripcionADAController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         //
     }
 
@@ -133,10 +127,6 @@ class InscripcionADAController extends Controller
                ]);
                break;
          }
-         /*if($actividad->actividadGrupal != null){
-            $actividad->actividadGrupal->cuposDisponibles = $actividad->actividadGrupal->cuposDisponibles -1;
-            $actividad->actividadGrupal->cuposOcupados = $actividad->actividadGrupal->cuposOcupados +1;
-         }*/
          return redirect()->back();
       }
 
@@ -146,8 +136,7 @@ class InscripcionADAController extends Controller
      * @param  \BienestarWeb\InscripcionADA  $inscripcionADA
      * @return \Illuminate\Http\Response
      */
-    public function show(InscripcionADA $inscripcionADA)
-    {
+    public function show(InscripcionADA $inscripcionADA){
         //
     }
 
@@ -157,8 +146,7 @@ class InscripcionADAController extends Controller
      * @param  \BienestarWeb\InscripcionADA  $inscripcionADA
      * @return \Illuminate\Http\Response
      */
-    public function edit(InscripcionADA $inscripcionADA)
-    {
+    public function edit(InscripcionADA $inscripcionADA){
         //
     }
 
@@ -169,8 +157,7 @@ class InscripcionADAController extends Controller
      * @param  \BienestarWeb\InscripcionADA  $inscripcionADA
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InscripcionADA $inscripcionADA)
-    {
+    public function update(Request $request, InscripcionADA $inscripcionADA){
         //
     }
 
@@ -180,13 +167,11 @@ class InscripcionADAController extends Controller
      * @param  \BienestarWeb\InscripcionADA  $inscripcionADA
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InscripcionADA $inscripcionADA)
-    {
+    public function destroy(InscripcionADA $inscripcionADA){
         //
     }
 
     public function registrarAsistencias(Request $request, $id){
-      //dd($id);
       $idEnc_insc = Encuesta::where([
          'idTipoActividad' => Actividad::findOrFail($id)->idTipoActividad,
          'destino' => 'i'
@@ -194,7 +179,7 @@ class InscripcionADAController extends Controller
       $idEnc_resp = Encuesta::where([
          'idTipoActividad' => Actividad::findOrFail($id)->idTipoActividad,
          'destino' => 'r'
-         ])->pluck('idEncuesta');         
+         ])->pluck('idEncuesta');
       if(count($idEnc_resp) > 0 && count(EncuestaRespondidaResp::where('idActividad', $id)->get()) == 0){
          EncuestaRespondidaResp::create([
             'idActividad' => $id,

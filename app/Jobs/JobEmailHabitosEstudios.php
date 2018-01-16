@@ -47,14 +47,14 @@ class JobEmailHabitosEstudios implements ShouldQueue
                         ->where([['tutorTutorado.idDocente', $this->idDocente],['tutorTutorado.anioSemestre', $this->anioSemestre],['tutorTutorado.numeroSemestre', $this->numeroSemestre],['tutorTutorado.habitoEstudioRespondido', '0']])
                         ->get();
          //-----------enviar los emails-------------------------------------------------------------------------
-         Log::info("---------------------------------------------------------------------------------- ");
-         Log::info("Enviar correo a los inscritos ");
+         //Log::info("---------------------------------------------------------------------------------- ");
+         //Log::info("Enviar correo a los inscritos ");
          foreach ($users as $user) {
-              Log::info($user->email);
+              //Log::info($user->email);
               $url = url(route('habitoEstudio.create'));
               $user->notify(new HabitoEstudioNotif($user, $url));
          }
-         Log::info("Fin Enviar Correos");
+         //Log::info("Fin Enviar Correos");
 
     }
 }

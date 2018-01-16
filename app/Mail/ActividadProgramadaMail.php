@@ -33,7 +33,7 @@ class ActividadProgramadaMail extends Mailable
      */
     public function build()
     {
-        Log::info('ActividadProgramadaMail');
+        //Log::info('ActividadProgramadaMail');
         return $this->markdown('emails.actividadProgramadaEmail',['actividad' => $this->actividad, 'mensaje' => $this->mensaje])
                     ->subject('Nueva Actividad Programada ');
     }

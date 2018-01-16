@@ -9,13 +9,12 @@ use Illuminate\Support\Facades\Input;
 use BienestarWeb\TipoActividad;
 use BienestarWeb\Actividad;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Collection;
 use File;
 use Log;
-use Illuminate\Support\Collection;
 
 
-class TipoActividadController extends Controller
-{
+class TipoActividadController extends Controller{
 
     function getDirigidoA(Request $request){
          $dirigidoA = "";
@@ -35,8 +34,7 @@ class TipoActividadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $tiposActividad = TipoActividad::get();
         $idTiposActividad = Actividad::select('idTipoActividad')->distinct()->pluck('idTipoActividad');
         return view('admin.tipoActividad.index',['tiposActividad' => $tiposActividad, 'idTiposActividad' => Collection::unwrap($idTiposActividad)]);
@@ -47,8 +45,7 @@ class TipoActividadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         return view("admin.tipoActividad.create");
     }
 
@@ -88,8 +85,7 @@ class TipoActividadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         return view('admin.tipoActividad.show', ['tipoActividad'=>TipoActividad::findOrFail($id)]);
     }
 
@@ -99,8 +95,7 @@ class TipoActividadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $tipoActividad = TipoActividad::findOrFail($id);
         return view('admin.tipoActividad.edit', ['tipoActividad'=>$tipoActividad]);
     }
@@ -112,8 +107,7 @@ class TipoActividadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $tipoActividad = TipoActividad::findOrFail($id);
         if($request->file('rutaImagen')){
                 //Eliminando Foto anterior
@@ -146,12 +140,10 @@ class TipoActividadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $tipoActividad = TipoActividad::findOrFail($id);
         $tipoActividad->delete();
 
         return Redirect::to('admin/tipoActividad');
-
     }
 }

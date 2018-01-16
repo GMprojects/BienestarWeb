@@ -45,6 +45,7 @@ a:hover{
 }
 .input-group-addon .fa{
    margin-right: 0px;
+   border-radius: 6px 0 0 6px !important;
 }
 .header-princ{
    max-height: 55px;
@@ -380,13 +381,13 @@ a:hover{
 /* Botón FACFAR */
 .btn-facfar{
    background: #4B367C;
-   border-radius: 25px;
+   border-radius: 0px;
    color: white;
 }
 .btn-facfar-flat{
    border: 2px solid #4B367C;
    background: white;;
-   border-radius: 25px;
+   border-radius: 0px;
    color: #4B367C;
 }
 .btn-facfar-flat:focus, .btn-facfar-flat:hover{
@@ -498,7 +499,7 @@ a:hover{
    border-radius: 0 25px 25px 0 !important;
 }
 .rounded-left{
-   border-radius: 25px 0 0 25px !important;
+   border-radius: 6px 0 0 6px !important;
    color: white;
    background-color: #4B367C;
    border: none;
@@ -529,7 +530,8 @@ textarea:focus {
 }*/
 
 .input-addon-left{
-   border-radius: 0 25px 25px 0 !important;
+   /*border-radius: 0 25px 25px 0 !important;*/
+   border-radius: 0 6px 6px 0 !important;
 }
 .input-addon-right{
    border-radius: 25px 0 0 25px !important;

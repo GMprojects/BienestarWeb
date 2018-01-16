@@ -104,29 +104,33 @@
 <div class="modal fade" id="confirmModal-{{ $actividad->idActividad }}" tabindex="-1" role="dialog" aria-labelledby="lb-confMod-{{ $actividad->idActividad }}">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
-         <div class="modal-header">
+         <div class="modal-header" style="background-color:#337AB7; color:white; border-radius:6px 6px 0px 0px;">
                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
                <h4 class="modal-title" id="lb-confMod-{{ $actividad->idActividad }}"><b>Confirme su Inscripción</b></h4>
          </div>
          <div class="modal-body">
-            <p> <b style="color: #4B367C">Actividad: "{{ $actividad->titulo }}" </b> </p>
+            <p> <b>Actividad:</b>  <b style="color: #4B367C">"{{ $actividad->titulo }}" </b> </p>
             <p> <b>Fecha:</b>
                @if (date("d/m/Y",strtotime($actividad->fechaInicio)) == date("d/m/Y",strtotime($actividad->fechaFin)))
-                     {{ date("d/m/Y",strtotime($actividad->fechaInicio)).'  desde las '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta las '.date("g:i A",strtotime($actividad->horaFin)) }}
+                     {{ Date::make($actividad->fechaInicio)->format('l\, d \d\e F') .'  desde las '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta las '.date("g:i A",strtotime($actividad->horaFin)) }}
                @else
-                     {{ date("d/m/Y",strtotime($actividad->fechaInicio)).' '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta '.date("d/m/Y",strtotime($actividad->fechaFin)).' '.date("g:i A",strtotime($actividad->horaFin)) }}
+                     {{ Date::make($actividad->fechaInicio)->format('l\, d \d\e F').' '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta '.Date::make($actividad->fechaFin)->format('l\, d \d\e F').' '.date("g:i A",strtotime($actividad->horaFin)) }}
                @endif
             </p>
             <p> <b>Lugar:</b>  {{ $actividad->lugar }}</p>
          </div>
          <div class="modal-footer">
-            <button type="submit" class="btn btn-ff" onclick="event.preventDefault();
-            document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-            <i class="fa fa-check-circle"></i> Confirmar</button>
-            <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
-               {{ csrf_field() }}
-            </form>
-            <button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+            <div class="pull-left">
+               <button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+            </div>
+            <div class="pull-right">
+               <button type="submit" class="btn btn-ff" onclick="event.preventDefault();
+               document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+               <i class="fa fa-check-circle"></i> Confirmar</button>
+               <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
+                  {{ csrf_field() }}
+               </form>
+            </div>
          </div>
       </div>
    </div>

@@ -6,15 +6,13 @@ use BienestarWeb\RecomendacionTutor;
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
 
-class RecomendacionTutorController extends Controller
-{
+class RecomendacionTutorController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         //
     }
 
@@ -23,8 +21,7 @@ class RecomendacionTutorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         //
     }
 
@@ -34,8 +31,7 @@ class RecomendacionTutorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
     }
 
@@ -45,8 +41,7 @@ class RecomendacionTutorController extends Controller
      * @param  \BienestarWeb\RecomendacionTutor  $recomendacionTutor
      * @return \Illuminate\Http\Response
      */
-    public function show(RecomendacionTutor $recomendacionTutor)
-    {
+    public function show(RecomendacionTutor $recomendacionTutor){
         //
     }
 
@@ -56,8 +51,7 @@ class RecomendacionTutorController extends Controller
      * @param  \BienestarWeb\RecomendacionTutor  $recomendacionTutor
      * @return \Illuminate\Http\Response
      */
-    public function edit(RecomendacionTutor $recomendacionTutor)
-    {
+    public function edit(RecomendacionTutor $recomendacionTutor){
         //
     }
 
@@ -68,8 +62,7 @@ class RecomendacionTutorController extends Controller
      * @param  \BienestarWeb\RecomendacionTutor  $recomendacionTutor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RecomendacionTutor $recomendacionTutor)
-    {
+    public function update(Request $request, RecomendacionTutor $recomendacionTutor){
         //
     }
 
@@ -79,8 +72,7 @@ class RecomendacionTutorController extends Controller
      * @param  \BienestarWeb\RecomendacionTutor  $recomendacionTutor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RecomendacionTutor $recomendacionTutor)
-    {
+    public function destroy(RecomendacionTutor $recomendacionTutor){
         //
     }
 }

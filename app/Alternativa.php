@@ -16,7 +16,6 @@ class Alternativa extends Model
   }
 
   public function scopeSearch($query, $texto){
-    //dd($texto);
     return $query
         ->where('idEncuesta', '=', $texto)
         ->orderBy('idAlternativa', 'ASC');

@@ -9,15 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use BienestarWeb\Http\Controllers\Controller;
 
-class PreguntaEncuestaController extends Controller
-{
+class PreguntaEncuestaController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         if($request->enunciado != null){
           $preguntasEncuesta = PreguntaEncuesta::FiltroEnunciado($request->idEncuesta,$request->enunciado)->get();
         }else {
@@ -36,8 +34,7 @@ class PreguntaEncuestaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request){
         return view('admin.preguntaEncuesta.create')
               ->with('idEncuesta',$request->idEncuesta);
     }
@@ -48,9 +45,7 @@ class PreguntaEncuestaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //dd($request);
+    public function store(Request $request){
         $request->validate([
             'enunciado' => 'required|unique:preguntaEncuesta'
         ]);
@@ -68,8 +63,7 @@ class PreguntaEncuestaController extends Controller
      * @param  \BienestarWeb\PreguntaEncuesta  $preguntaEncuesta
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -79,8 +73,7 @@ class PreguntaEncuestaController extends Controller
      * @param  \BienestarWeb\PreguntaEncuesta  $preguntaEncuesta
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         return view('admin.preguntaEncuesta.edit')
         ->with('preguntaEncuesta',PreguntaEncuesta::findOrFail($id));
     }
@@ -92,8 +85,7 @@ class PreguntaEncuestaController extends Controller
      * @param  \BienestarWeb\PreguntaEncuesta  $preguntaEncuesta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $preguntaEncuesta = PreguntaEncuesta::findOrFail($id);
         $preguntaEncuesta->enunciado = $request->get('enunciado');
         $preguntaEncuesta->update();
@@ -108,8 +100,7 @@ class PreguntaEncuestaController extends Controller
      * @param  \BienestarWeb\PreguntaEncuesta  $preguntaEncuesta
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $preguntaEncuesta = PreguntaEncuesta::findOrFail($id);
         $preguntaEncuesta->delete();
         return redirect()->back();

@@ -8,17 +8,14 @@ use BienestarWeb\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Redirect;
 
-class TipoPersonaController extends Controller
-{
+class TipoPersonaController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        if($request)
-        {
+    public function index(Request $request) {
+        if($request){
             $tiposPersona=TipoPersona::Search($request->tipo)->paginate(7);
             $tiposPersona->each(function($tiposPersona){
              	$tiposPersona->persona;
@@ -32,8 +29,7 @@ class TipoPersonaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         return view('admin.tipoPersona.create');
     }
 
@@ -43,8 +39,7 @@ class TipoPersonaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'tipo' => 'required'
             ]);
@@ -60,8 +55,7 @@ class TipoPersonaController extends Controller
      * @param  \sisVentas\TipoPersona  $tipoPersona
      * @return \Illuminate\Http\Response
      */
-    public function show( $id)
-    {
+    public function show( $id){
         return view('admin.tipoPersona.show')->with('tipoPersona',TipoPersona::findOrFail($id));
     }
 
@@ -71,8 +65,7 @@ class TipoPersonaController extends Controller
      * @param  \sisVentas\TipoPersona  $tipoPersona
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         return view('admin.tipoPersona.edit',['tipoPersona'=>TipoPersona::findOrFail($id)]);
     }
 
@@ -83,12 +76,11 @@ class TipoPersonaController extends Controller
      * @param  \sisVentas\TipoPersona  $tipoPersona
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $request->validate([
             'tipo' => 'required'
             ]);
-        $tipoPersona=TipoPersona::findOrFail($id);   
+        $tipoPersona=TipoPersona::findOrFail($id);
         $tipoPersona->tipo = $request->get('tipo');
         $tipoPersona->update();
         return Redirect::to('admin/tipoPersona');
@@ -100,8 +92,7 @@ class TipoPersonaController extends Controller
      * @param  \sisVentas\TipoPersona  $tipoPersona
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $tipoPersona = TipoPersona::findOrFail($id);
         $tipoPersona->delete();
         return Redirect::to('admin/tipoPersona');

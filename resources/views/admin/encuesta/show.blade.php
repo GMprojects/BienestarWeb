@@ -25,11 +25,13 @@
                  </div>
              </div>
              <div class="caja-body">
+					 <h3 style="color:red;"> <p>Esta es la vista previa de la encuesta que será enviada.</p> </h3>
+					 <br>
                 <div class="">
                          <p class="ff-c-secondary">
                            En Bienestar Farmacia nos interesa su opinión,
                            por favor manifieste su conformidad con la
-                           <strong>Actividad</strong>: <a href="">Aqui el titulo de la actividad</a>
+                           <strong>Actividad</strong>: <strong style="color:#4B367C">Aqui el titulo de la actividad</strong>
                            de la cual participó como <small class="label ff-bg-red">Responsable</small>
                         </p>
                    <p><strong>Elija una de las siguientes opciones:</strong></p>
@@ -74,10 +76,20 @@
 
              </div>
              <div class="caja-footer">
-                <button class="pull-right btn btn-ff" type="button"><i class="fa fa-send"></i>Enviar</button>
+                <button class="pull-right btn btn-ff" type="button" data-toggle="tooltip" data-placement="bottom" title="Es una prueba"><i class="fa fa-send"></i>Enviar</button>
              </div>
          </div>
      </div>
  </div>
  {!!Form::close()!!}
+ <script type="text/javascript">
+ $(document).ready(function(){
+	 $('input').iCheck({
+		 checkboxClass: 'icheckbox_square-green',
+		 radioClass: 'iradio_square-green',
+		 increaseArea: '20%' // optional
+	 });
+	 $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+ });
+ </script>
 @endsection

@@ -35,11 +35,13 @@
 											<td>Inscrito</td>
 										@endif
 										<td>
-											{{--
-											<a href="{{URL::action('EncuestaController@edit',$encuesta->idEncuesta)}}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
-											<a href="" data-target="#modal-delete-{{$encuesta->idEncuesta}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-remove"></i></button></a>
-											--}}
-											<a href="{{URL::action('EncuestaController@show',$encuesta->idEncuesta)}}"><button class="btn btn-ff-blues"><i class="fa fa-eye"></i></button></a>
+											<a href="{{URL::action('EncuestaController@show',$encuesta->idEncuesta)}}">
+												<button class="btn btn-ff-blues" data-toggle="tooltip" data-placement="bottom" title="Vista Preliminar de la Encuesta">
+													<span>
+													  <i class="fa fa-eye"><i class="fa fa-file-text"></i></i>
+													</span>
+												</button>
+											</a>
 										</td>
 									</tr>
 									@include('admin.encuesta.modal')

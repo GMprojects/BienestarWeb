@@ -24,15 +24,13 @@ use Illuminate\Support\Facades\Redirect;
 
 use BienestarWeb\Http\Controllers\Controller;
 
-class EncuestaController extends Controller
-{
+class EncuestaController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $tiposActividad=TipoActividad::get();
         $encuestas = Encuesta::get();
         return view('admin.encuesta.index')->with('encuestas',$encuestas)
@@ -55,23 +53,13 @@ class EncuestaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    /*public function store(Request $request)
-    {
-        $request->validate([
-            'titulo' => 'required'
-            ]);
-        $encuesta = new Encuesta($request->all());
-        $encuesta->save();
-
-        return Redirect::to('admin/encuesta');
-    }*/
     public function store(Request $request){
       $encuesta = Encuesta::create([
          'titulo' => $request->titulo,
          'destino' => $request->destino,
          'idTipoActividad' => $request->idTipoActividad
       ]);
-      
+
       $verificado = 0;
       $i = 0;
       while ((count($request->all())- 8) != $verificado) {
@@ -101,8 +89,7 @@ class EncuestaController extends Controller
      * @param  \BienestarWeb\Encuesta  $encuesta
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
       $encuesta = Encuesta::findOrFail($id);
       //$encResp_insc = EncuestaRespondidaInsc::findOrFail($id);
 
@@ -115,8 +102,7 @@ class EncuestaController extends Controller
      * @param  \BienestarWeb\Encuesta  $encuesta
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $tiposActividad=TipoActividad::get();
         return view('admin.encuesta.edit')
         ->with('encuesta',Encuesta::findOrFail($id))
@@ -130,8 +116,7 @@ class EncuestaController extends Controller
      * @param  \BienestarWeb\Encuesta  $encuesta
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $request->validate([
             'titulo' => 'required'
             ]);
@@ -148,8 +133,7 @@ class EncuestaController extends Controller
      * @param  \BienestarWeb\Encuesta  $encuesta
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $encuesta = Encuesta::findOrFail($id);
         if((PreguntaEncuesta::where('idEncuesta',$id)->count())>0){
             PreguntaEncuesta::where('idEncuesta',$id)->delete();
@@ -186,7 +170,6 @@ class EncuestaController extends Controller
       /* Responsable */
       $resp_act = Actividad::where(['idUserResp' => $request->id, 'estado' => '2'])->pluck('idActividad');
       $resp_noresp = EncuestaRespondidaResp::whereIn('idActividad', $resp_act)->where('estado', '0')->get();
-      //Log::info('me llevaaa'.$resp_noresp);
       if($request->ajax()){
          //$enc_noresp = [ 'insc_noresp' => $insc_noresp, 'resp_noresp' => $resp_noresp ];
          return response()->json(['insc_noresp' => $insc_noresp, 'resp_noresp' => $resp_noresp]);
@@ -200,6 +183,7 @@ class EncuestaController extends Controller
       return view('miembro.mis-encuestas.show')
          ->with(['encResp' => $encResp_insc, 'opt'=>'1']);
    }
+
    public function encuestaResp(Request $request, $id){
       $encResp_resp = EncuestaRespondidaResp::findOrFail($id);
       return view('miembro.mis-encuestas.show')

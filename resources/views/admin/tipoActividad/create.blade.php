@@ -36,7 +36,7 @@
 				<label for="rutaImagen">Imagen</label>
 				<input type="file" required name="rutaImagen" class="form-control dropify"  data-allowed-file-extensions="png jpg jpge"  data-disable-remove="true">
 			</div>
-		</div>
+		</div><br><br>
 		<div class="caja-footer">
 			<div class="pull-left">
 				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>

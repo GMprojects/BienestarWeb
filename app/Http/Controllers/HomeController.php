@@ -14,15 +14,13 @@ use BienestarWeb\InscripcionAdministrativo;
 use BienestarWeb\User;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
-class HomeController extends Controller
-{
+class HomeController extends Controller{
     /**
      * Create a new contaroller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(){
         //$this->middleware('auth');
     }
 
@@ -39,8 +37,7 @@ class HomeController extends Controller
         Mail::send('emails.mailEvent', $user, function($message) use ($user) {
             $message->to($user['email']);
             $message->subject('Mailgun Testing');
-        });
-        dd('Mail Send Successfully');*/
+        });*/
    }
 
 }

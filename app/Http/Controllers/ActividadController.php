@@ -36,8 +36,7 @@ use Log;
 use Validator;
 use Carbon\Carbon;
 
-class ActividadController extends Controller
-{
+class ActividadController extends Controller{
 
    function getFecha($fechaIn){
       $dia = substr( $fechaIn,0 ,2);
@@ -181,9 +180,7 @@ class ActividadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-    //    dd($request);
       $actividades = Actividad::where('estado', '<', '5')->get();
-      //dd($actividades);
       return view('programador.actividad.index',[
          'actividades' => $actividades,
          'idUserProgramador' => $request->idUserProgramador,
@@ -198,11 +195,8 @@ class ActividadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
       $tiposActividad=TipoActividad::get();
-//dd(ActividadController::getSemestre());
-    //  $users=User::get();
       return view('programador.actividad.create')
               ->with('tiposActividad', $tiposActividad)
               ->with('semestre', ActividadController::getSemestre());
@@ -314,23 +308,17 @@ class ActividadController extends Controller
          }
          //---------------Notificacion o E-Mail-------------------//
          if($request->idAlumno != null){
-            Log::info("Actividad de Atencion Medica o Psicologia servicio Social reforzamiento");
             $alumno = Alumno::findOrFail($request->idAlumno);
             $userAl = $alumno->user;
-            Log::info($userAl);
          }else{
             $userAl = null;
          }
 
          if($actividad->idTipoActividad < 3){
-            Log::info("no neviar correoa  ningn reponsable");
             $userResp = null;
          }else{
-            Log::info("no neviar correoa  ningn reponsable");
             $userResp = User::findOrFail($request->idUserResp);
          }
-
-         Log::info(' Tipo de Actividad             ->  '.$actividad->idTipoActividad);
          $job = (new JobEmailNuevaAct($actividad, $actividad->idTipoActividad, $userAl, $userResp, $mensajeR, $mensajeA, $request->idAlumnoTutorado))
             ->delay(Carbon::now()->addSeconds(1));
          dispatch($job);
@@ -357,7 +345,6 @@ class ActividadController extends Controller
             $actividad->actividadPedagogia;
             $actividad->actividadGrupal;
         });
-      //  dd($actividad->actividadesGrupal);
         return view('programador.actividad.show')->with('actividad',$actividad);
     }
 
@@ -368,9 +355,7 @@ class ActividadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-      //dd(count(InscripcionAlumno::where('idActividad', '35')->get()));
         $actividad = Actividad::findOrFail($id);
-        //dd(count(preg_split("/[-]/",$actividad->invitado)));
         switch ($actividad->idTipoActividad) {
           case '1':          case '3':        case '2':         case '4':       case '10':
               if (($actividad->idTipoActividad) == 4 || $actividad->modalidad == 1) {
@@ -381,13 +366,12 @@ class ActividadController extends Controller
               } else {
                 $idAlumnos = null;
               }
-              return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
             break;
           default:
               $idAlumnos = null;
-              return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
           break;
         }
+        return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos, 'semestre' => ActividadController::getSemestre()]);
         //return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
     }
 
@@ -399,7 +383,6 @@ class ActividadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-      dd($request);
           $request->validate([
               'titulo' => 'required|max:100',
               'fechaInicio' => 'required|date_format:d/m/Y',
@@ -407,9 +390,7 @@ class ActividadController extends Controller
               'lugar' => 'required|max:200',
               'rutaImagen' => 'image|mimes:jpeg,png,jpg'
           ]);
-          Log::info('Actualizar actividad');
           $actividad = Actividad::findOrFail($id);
-          Log::info($actividad);
 
           if ($request->idTipoActividad == 1 || $request->idTipoActividad == 2) {
              $fechaFin = $actividad->fechaFin;
@@ -441,16 +422,12 @@ class ActividadController extends Controller
                  //Eliminar Inscripciones anteriores
                  $inscripcionAlumno = InscripcionAlumno::where('idAlumno', $request->idAlumno)->where('idActividad', $actividad->idActividad)->first();
                  if($inscripcionAlumno == null){ //NO Existe esta Inscripcion Alumno
-                   Log::info('NO Existe esta inscripcion');
                    $alumno = Alumno::findOrFail($request->idAlumno);
                    $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->first();
-                   Log::info($inscripcionAlumno);
-                   Log::info('inscripcion alumno  '.$inscripcionAlumno->idInscripcionAlumno);
                    $inscripcionAlumno->asistencia = '0';
                    $inscripcionAlumno->alumno()->associate($alumno);
                    $inscripcionAlumno->update();
                  }
-                 Log::info('Actualizando act 1      -ooooo-          2');
                break;
              case '3':
              case '10':
@@ -458,31 +435,22 @@ class ActividadController extends Controller
                        //Eliminar Inscripciones anteriores
                        $inscripcionAlumno = InscripcionAlumno::where('idAlumno', $request->idAlumno)->where('idActividad', $actividad->idActividad)->first();
                        if($inscripcionAlumno == null){ //NO Existe esta Inscripcion Alumno
-                            Log::info('NO Existe esta inscripcion');
                             $alumno = Alumno::findOrFail($request->idAlumno);
                             $inscripcionAlumno = InscripcionAlumno::where('idActividad', $actividad->idActividad)->first();
-                            Log::info($inscripcionAlumno);
-                            Log::info('inscripcion alumno  '.$inscripcionAlumno->idInscripcionAlumno);
                             $inscripcionAlumno->asistencia = '0';
                             $inscripcionAlumno->alumno()->associate($alumno);
                             $inscripcionAlumno->update();
                        }
-                       Log::info('Actualizando act 3      ----          Individual');
                  }else{//GRUPAL
                        $actGrupal = ActGrupal::where('idActividad', $actividad->idActividad)->first();
                        $actGrupal->cuposDisponibles = $request->cuposTotales;
                        $actGrupal->update();
-                       Log::info('Actualizando act 3      ----          Grupal');
                  }
                break;
              case '4':
                  //eliminar inscripciones anteriores
                  ActPedagogia::where('idActividad', $actividad->idActividad)->delete();
                  $inscripcionAlumnos = InscripcionAlumno::where('idActividad', $actividad->idActividad)->delete();
-                 /*foreach ($inscripcionesAlumnos as $inscripcionAlumno) {
-                    ActPedagogia::where('idActividad', $actividad->idActividad)->delete();
-                    $inscripcionAlumno->delete();
-                 }*/
                  $inscripcionADA = InscripcionADA::where('idActividad', $actividad->idActividad)->delete();
                  //realizar inscripciones
                  for ($i = 0; $i < $actividad->cuposTotales; $i++) {
@@ -511,7 +479,6 @@ class ActividadController extends Controller
            }
            //---------------Notificacion o E-Mail-------------------//
            if ($request->envioCorreos == 'on') {
-             Log::info('envio de notificaciones Actualizar Actividad');
              if ($actividad->idTipoActividad < 2) {
                 $idUserResp = $actividad->idUserResp;
              } else {
@@ -522,8 +489,6 @@ class ActividadController extends Controller
              $job = (new JobEmailActualizarAct($actividad, $userResp, '1'))
                     ->delay(Carbon::now()->addSeconds(1));
              dispatch($job);
-           }else {
-             Log::info('No hay envio de notificaciones');
            }
            return redirect()->action('MiPerfilController@mis_actividades', ['id' => $request->user()->id, 'opcion'=>'3']);
     }
@@ -538,7 +503,6 @@ class ActividadController extends Controller
         $actividad->estado ='5';
         $actividad->update();
         //---------------Notificacion o E-Mail-------------------//
-        Log::info('envio de notificaciones');
         $userResp = User::findOrFail($actividad->idUserResp);
         $job = (new JobEmailActualizarAct($actividad, $userResp, '3'))
                ->delay(Carbon::now()->addSeconds(1));
@@ -551,7 +515,6 @@ class ActividadController extends Controller
         $actividad->estado ='3';
         $actividad->update();
         //---------------Notificacion o E-Mail-------------------//
-        Log::info('envio de notificaciones');
         $userResp = User::findOrFail($actividad->idUserResp);
         $job = (new JobEmailActualizarAct($actividad, $userResp, '2'))
                ->delay(Carbon::now()->addSeconds(1));
@@ -586,7 +549,6 @@ class ActividadController extends Controller
     }
 
     public function updateExecute(Request $request, $id){ //ejecutar una actividad
-      //dd($request);
          $actividad = Actividad::findOrFail($id);
          if ($request->horaEjecutada != null) {
             $actividad->horaEjecutada = (Carbon::parse($request->horaEjecutada))->toTimeString();
@@ -672,13 +634,11 @@ class ActividadController extends Controller
          }
          $estadistica['inscInscripcion'] = $inscInscripcion;
          $estadistica['inscAsistencia'] = $inscAsistencia;
-         Log::info($estadistica);
          return response()->json($estadistica);
       }
     }
 
    public function verActividadesResp(Request $request){
-      Log::info('si llegooooo ');
       if($request->ajax()){
          $actividades = Actividad::where([['idUserResp', $request->id], ['estado', '<', '5']])->get();
          return response()->json($actividades);
@@ -776,13 +736,13 @@ class ActividadController extends Controller
     }
 
     public function member_show(Request $request){
-      $actividad = Actividad::findOrFail($request->id);
-      $relacionadas = Actividad::where([['idTipoActividad', '=', $actividad->idTipoActividad], ['idActividad', '<>', $actividad->idActividad], ['estado', '<', '5']])->get();
-      $inscripciones = $actividad->inscripcionesADA;
-      $insc_alum = [];
-      $insc_doce = [];
-      $insc_admi = [];
-      for ($i=0; $i < count($inscripciones); $i++) {
+         $actividad = Actividad::findOrFail($request->id);
+         $relacionadas = Actividad::where([['idTipoActividad', '=', $actividad->idTipoActividad], ['idActividad', '<>', $actividad->idActividad], ['estado', '<', '5']])->get();
+         $inscripciones = $actividad->inscripcionesADA;
+         $insc_alum = [];
+         $insc_doce = [];
+         $insc_admi = [];
+         for ($i=0; $i < count($inscripciones); $i++) {
          if($inscripciones[$i]->inscripcionAlumno != null){
             array_push( $insc_alum, $inscripciones[$i]->inscripcionAlumno->alumno->user );
          }
@@ -792,23 +752,19 @@ class ActividadController extends Controller
          if($inscripciones[$i]->inscripcionAdministrativo != null){
             array_push( $insc_admi, $inscripciones[$i]->inscripcionAdministrativo->administrativo->user );
          }
-      }
-      return view('miembro.actividad')->with([
-         'actividad' => $actividad,
-         'relacionadas' => $relacionadas,
-         'insc_alum' => $insc_alum,
-         'insc_doce' => $insc_doce,
-         'insc_admi' => $insc_admi
-      ]);
-      //return view('miembro.actividad')->with('actividad',$actividad);
+         }
+         return view('miembro.actividad')->with([
+            'actividad' => $actividad,
+            'relacionadas' => $relacionadas,
+            'insc_alum' => $insc_alum,
+            'insc_doce' => $insc_doce,
+            'insc_admi' => $insc_admi
+         ]);
    }
 
    public function enviarMensaje(Request $request){
-      //dd($request);
       $idEmisor = User::where('id', $request->idEmisor)->value('id');
       $idReceptor = USer::where('id', $request->idReceptor)->value('id');
-      Log::info($idEmisor);
-      Log::info($idReceptor);
       $job = (new JobEmail($idEmisor, $request->mensaje, $request->subject, $idReceptor, '2'))//Comunicarse con el programador y responsable
              ->delay(Carbon::now()->addSeconds(5));
       dispatch($job);

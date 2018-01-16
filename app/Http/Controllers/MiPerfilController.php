@@ -17,13 +17,11 @@ use Illuminate\Support\Facades\Storage;
 use File;
 
 
-class MiPerfilController extends Controller
-{
+class MiPerfilController extends Controller{
 
    function getRutaImagenUpdate($request, $user){
       $path = $user->foto;
       if($request->file('foto')){
-         //dd("Hy foto nueva");
          //Eliminando Foto anterior
          File::delete(storage_path('app/public/'.$path));
          Storage::delete($path);
@@ -36,10 +34,20 @@ class MiPerfilController extends Controller
          }else{
            return $user->foto;
          }
-      }else {
-          //dd("<NO></NO>Hy foto nueva");
+      }else {//no hay foto nueva
           return $path;
       }
+   }
+
+   function getFecha($fechaIn){
+         if ($fechaIn != null) {
+            $dia = substr( $fechaIn,0 ,2);
+            $mes =substr( $fechaIn,3 ,2);
+            $anio=substr( $fechaIn,-4 ,4);
+            return $anio."-".$mes."-".$dia;
+         } else {
+            return null;
+         }
    }
 
    public function show($id){
@@ -81,7 +89,6 @@ class MiPerfilController extends Controller
      }
      $du['inscInscripcion'] = $inscInscripcion;
      $du['inscAsistencia'] = $inscAsistencia;
-     //dd($du);
     return view('miembro.perfil.perfil')->with('du', $du);
    }
    public function edit(Request $request, $id){
@@ -94,7 +101,6 @@ class MiPerfilController extends Controller
    }
 
    public function update(Request $request, $id){
-      //dd($request);
       $user = User::findOrFail($id);
       switch ($request->op) {
          case '1': //Datos Personales
@@ -109,35 +115,14 @@ class MiPerfilController extends Controller
             $user->apellidoPaterno = $request->apellidoPaterno;
             $user->apellidoMaterno = $request->apellidoMaterno;
             $user->email = $request->email;
+            $user->fechaNacimiento = MiPerfilController::getFecha($request->fechaNacimiento);
             $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user);
             $user->direccion = $request->direccion;
             $user->telefono = $request->telefono;
             $user->celular = $request->celular;
             $user->update();
             break;
-         case '2': //Datos Especifico
-            if ($user->idTipoPersona == '1') {//alumno
-               $alumno = Alumno::where('idUser', $user->id)->first();
-               $alumno->condicion = $request->condicion;
-               $alumno->update();
-            } else if ($user->idTipoPersona == '2') {//docente
-               $docente = Docente::where('idUser', $user->id)->first();
-               $docente->categoria = $request->categoria;
-               $docente->dedicacion = $request->dedicacion;
-               $docente->modalidad = $request->modalidad;
-               $docente->update();
-            } else {//aministrativo
-               $administrativo = Administrativo::where('idUser', $user->id)->first();
-               $administrativo->cargo = $request->cargo;
-               $administrativo->update();
-            }
-            break;
-         case '3': //Foto
-            /*$tipo = TipoPersona::where('idTipoPersona', $user->idTipoPersona)->value('tipo');
-            $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user, $tipo);
-            $user->update();*/
-            break;
-         case '4': //Contraseña
+         case '2': //Contraseña
             $var = bcrypt('123456');
             $user->password = bcrypt($request->passwordNewAgain);
             $user->update();

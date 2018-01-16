@@ -11,20 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Query\Builder;
 
-class PreguntaHabitoController extends Controller
-{
+class PreguntaHabitoController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        //$preguntasHabito = PreguntaHabito::Search($request->enunciado)->paginate(10);
+    public function index(Request $request){
         $preguntasHabito = PreguntaHabito::get();
-        /*$preguntasHabito->each(function($preguntasHabito){
-            $preguntasHabito->tipoHabito;
-        });*/
         return view('admin.preguntaHabito.index')->with('preguntasHabito',$preguntasHabito);
 
     }
@@ -34,8 +28,7 @@ class PreguntaHabitoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
         $tiposHabito=TipoHabito::get();
         return view('admin.preguntaHabito.create')->with('tiposHabito',$tiposHabito);
     }
@@ -46,9 +39,7 @@ class PreguntaHabitoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        // dd($request);
+    public function store(Request $request){
         $request->validate([
             'enunciado' => 'required|unique:preguntaHabito'
             ]);
@@ -63,8 +54,7 @@ class PreguntaHabitoController extends Controller
      * @param  \BienestarWeb\PreguntaHabito  $preguntaHabito
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         return view('admin.preguntaHabito.show')->with('preguntaHabito',PreguntaHabito::findOrFail($id));
     }
 
@@ -74,8 +64,7 @@ class PreguntaHabitoController extends Controller
      * @param  \BienestarWeb\PreguntaHabito  $preguntaHabito
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
         $tiposHabito=TipoHabito::get();
         return view('admin.preguntaHabito.edit')
         ->with('preguntaHabito',PreguntaHabito::findOrFail($id))
@@ -89,8 +78,7 @@ class PreguntaHabitoController extends Controller
      * @param  \BienestarWeb\PreguntaHabito  $preguntaHabito
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $request->validate([
             'enunciado' => 'required'
             ]);
@@ -107,8 +95,7 @@ class PreguntaHabitoController extends Controller
      * @param  \BienestarWeb\PreguntaHabito  $preguntaHabito
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $preguntaHabito = PreguntaHabito::findOrFail($id);
         $preguntaHabito->delete();
         return Redirect::to('admin/preguntaHabito');

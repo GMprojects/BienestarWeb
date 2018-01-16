@@ -98,10 +98,10 @@
 							<div class="col-sm-8">
 								<div class="input-group date">
 									<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-									@if (old('fechaNacimiento') == null)
-										<input type="text" name="fechaNacimiento"  placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaNacimiento" >
+									@if ($user->fechaNacimiento != null)
+											<input type="text" name="fechaNacimiento"  value="{{ date("d/m/Y",strtotime($user->fechaNacimiento )) }}" class="form-control"  id="fechaNacimiento" >
 									@else
-										<input type="text" name="fechaNacimiento"  value="{{ date("d/m/Y",strtotime($semestre->fechaNacimiento )) }}" class="form-control"  id="fechaNacimiento" >
+											<input type="text" name="fechaNacimiento"  placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaNacimiento" >
 									@endif
 								</div>
 							</div>
@@ -162,7 +162,7 @@
 				<div class="caja-body">
 					<div class="form-horizontal">
 						<div class="form-group">
-							<label for="codigo" class="col-sm-3 control-label">Código </label>
+							<label for="codigo" class="col-sm-3 control-label">Código <span class="ast">*</span></label>
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
@@ -177,27 +177,46 @@
 						<!-- Campos para el tipo ADMINISTRATIVO -->
 						<div class="camposAdministrativo" id="formAdministrativo" style='display:none;'>
 							<div class="form-group">
-								<label for="cargo" class="col-sm-3 control-label">Cargo </label>
+								<label for="cargo" class="col-sm-3 control-label">Cargo <span class="ast">*</span></label>
 								<div class="col-sm-8">
 									<div class="input-group">
 										 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-										 <input type="cargo" class="form-control" name="cargo" value="{{ $tipoPersona->cargo }}"  onkeypress="return soloLetras(event)"  placeholder="Cargo">
+										 <input type="cargo" id="cargo" class="form-control" name="cargo" value="{{ $tipoPersona->cargo }}"  onkeypress="return soloLetras(event)"  placeholder="Cargo">
 									</div>
 								</div>
 							</div>
 						</div>
 
 						<!-- Campos para el tipo ALUMNO -->
-						<div class="camposAlumno" id="formAlumno" style='display:block;'>
+						<div class="camposAlumno" id="formAlumno" style='display:none;'>
 							<div class="form-group">
 								<label for="condicion" class="col-sm-3 control-label">Condición </label>
 								<div class="col-sm-8">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
 										<select id="condicion" name="condicion" class="form-control" required>
-											<option value="1">Matriculado</option>
-											<option value="2">No Matriculado</option>
-											<option value="3">Egresado</option>
+											@switch($tipoPersona->condicion)
+												@case('1')
+												<option value="1" selected>Matriculado</option>
+												<option value="2">No Matriculado</option>
+												<option value="3">Egresado</option>
+												@break
+												@case('2')
+												<option value="1">Matriculado</option>
+												<option value="2" selected>No Matriculado</option>
+												<option value="3">Egresado</option>
+												@break
+												@case('3')
+												<option value="1">Matriculado</option>
+												<option value="2">No Matriculado</option>
+												<option value="3" selected>Egresado</option>
+												@break
+												@default
+												<option value="1">Matriculado</option>
+												<option value="2">No Matriculado</option>
+												<option value="3">Egresado</option>
+												@break
+											@endswitch
 										</select>
 									</div>
 								</div>
@@ -212,10 +231,38 @@
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
 										<select id="categoria" name="categoria" class="form-control">
-											<option value="1">Principal</option>
-											<option value="2">Asociado</option>
-											<option value="3">Auxiliar</option>
-											<option value="4">Contratado</option>
+											@switch($tipoPersona->categoria)
+												@case('1')
+												<option value="1" selected>Principal</option>
+												<option value="2">Asociado</option>
+												<option value="3">Auxiliar</option>
+												<option value="4">Contratado</option>
+												@break
+												@case('2')
+												<option value="1">Principal</option>
+												<option value="2" selected>Asociado</option>
+												<option value="3">Auxiliar</option>
+												<option value="4">Contratado</option>
+												@break
+												@case('3')
+												<option value="1">Principal</option>
+												<option value="2">Asociado</option>
+												<option value="3" selected>Auxiliar</option>
+												<option value="4">Contratado</option>
+												@break
+												@case('4')
+												<option value="1">Principal</option>
+												<option value="2">Asociado</option>
+												<option value="3">Auxiliar</option>
+												<option value="4" selected>Contratado</option>
+												@break
+												@default
+												<option value="1">Principal</option>
+												<option value="2">Asociado</option>
+												<option value="3">Auxiliar</option>
+												<option value="4">Contratado</option>
+												@break
+											@endswitch
 										</select>
 									</div>
 								</div>
@@ -226,9 +273,28 @@
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
 										<select id="dedicacion" name="dedicacion" class="form-control">
-											<option value="1">Exclusiva</option>
-											<option value="2">Tiempo Completo</option>
-											<option value="3">Tiempo Parcial</option>
+											@switch($tipoPersona->dedicacion)
+												@case('1')
+												<option value="1" selected>Exclusiva</option>
+												<option value="2">Tiempo Completo</option>
+												<option value="3">Tiempo Parcial</option>
+												@break
+												@case('2')
+												<option value="1">Exclusiva</option>
+												<option value="2" selected>Tiempo Completo</option>
+												<option value="3">Tiempo Parcial</option>
+												@break
+												@case('3')
+												<option value="1">Exclusiva</option>
+												<option value="2">Tiempo Completo</option>
+												<option value="3" selected>Tiempo Parcial</option>
+												@break
+												@default
+												<option value="1">Exclusiva</option>
+												<option value="2">Tiempo Completo</option>
+												<option value="3">Tiempo Parcial</option>
+												@break
+											@endswitch
 										</select>
 									</div>
 								</div>
@@ -239,8 +305,20 @@
 									<div class="input-group">
 										<span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
 										<select id="modalidad" name="modalidad" class="form-control">
-											<option value="1">Ordinario</option>
-											<option value="2">Contratado</option>
+											@switch($tipoPersona->modalidad)
+												@case('1')
+												<option value="1" selected>Ordinario</option>
+												<option value="2">Contratado</option>
+												@break
+												@case('2')
+												<option value="1">Ordinario</option>
+												<option value="2" selected>Contratado</option>
+												@break
+												@default
+												<option value="1">Ordinario</option>
+												<option value="2">Contratado</option>
+												@break
+											@endswitch
 										</select>
 									</div>
 								</div>
@@ -296,7 +374,9 @@
 	<script type="text/javascript">
 
 		window.onload = iniciar();
-
+		$('#fechaNacimiento').datetimepicker({
+			format: 'DD/MM/YYYY'
+		});
 		function iniciar(){
 			var tipo = '', funcion = '';
 			switch({{ $user->funcion }}){
@@ -305,15 +385,24 @@
 				case 3: funcion = 'radioAdmin'; break;
 			}
 			document.getElementById(funcion).checked = true;
-			cambiarColorFuncion({{ $user->idTipoPersona }});
+			switch ({{ $user->idTipoPersona }}) {
+				case 1: 	document.getElementById('formAlumno').style.display = 'block';
+							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Alumno";break;
+				case 2: 	document.getElementById('formDocente').style.display = 'block';
+							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Docente";break;
+				case 3: 	document.getElementById('formAdministrativo').style.display = 'block';
+							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";
+							$('#cargo').attr('required', 'true');break;
+			}
+			cambiarColorFuncion();
 		}
 
-		function cambiarColorFuncion(icono){
+		function cambiarColorFuncion(){
 			document.getElementById('icoMiembro').style.color = 'rgba(0,0,0, 0.5)';
 			document.getElementById('icoProgramador').style.color = 'rgba(0,0,0, 0.5)';
 			document.getElementById('icoAdmin').style.color = 'rgba(0,0,0, 0.5)';
 			var iconoElegido = "";
-			switch (icono) {
+			switch ({{ $user->funcion }}) {
 				case 1: iconoElegido = 'icoMiembro'; break;
 				case 2: iconoElegido = 'icoProgramador'; break;
 				case 3: iconoElegido = 'icoAdmin'; break;

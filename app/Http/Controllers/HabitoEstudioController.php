@@ -15,15 +15,13 @@ use BienestarWeb\Alumno;
 use BienestarWeb\Http\Controllers\Controller;
 use Carbon\Carbon;
 use DB;
-class HabitoEstudioController extends Controller
-{
+class HabitoEstudioController extends Controller{
     /**
      * Display a listing of the resourceC
      *hebitoEstudioRespuesta
      * @return \Illuminate\Http\Response
      */
-   public function index(Request $request)
-    {
+   public function index(Request $request){
 
     }
 
@@ -32,8 +30,7 @@ class HabitoEstudioController extends Controller
      *
      * @return \Illuminate\Http\ResponsetutorTutorados
      */
-     public function create()
-     {    /*
+     public function create(){    /*
          $preguntasHabito = PreguntaHabito::orderBy('idTipoHabito')->get();
          return view('miembro.habitoEstudio.create')->with('preguntasHabito',$preguntasHabito);*/
         $preguntasHabito = PreguntaHabito::all();
@@ -81,8 +78,7 @@ class HabitoEstudioController extends Controller
          }
 
     }
-     public function store(Request $request)
-     {   //dd($request);
+     public function store(Request $request){
          /* $array = explode("-",HabitoEstudioController::getSemestre());
          $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ; */
 
@@ -101,7 +97,6 @@ class HabitoEstudioController extends Controller
              $habitoEstudio->respuestasHabito()->attach($pregunta,['rpta'=> $request->input($pregunta->idPreguntaHabito)]);
          }
          $request->user()->alumno->tutores()->updateExistingPivot($tutorTutorado->idDocente, ['habitoEstudioRespondido' => '1'] );
-         //dd($habitoEstudio);
          return redirect('/');
 
      }
@@ -119,9 +114,6 @@ class HabitoEstudioController extends Controller
                   ->where([['habitoEstudio.idHabitoEstudio', $tutorTutorado->habitoEstudio->idHabitoEstudio]])
                   ->select('detalleHabito.rpta',DB::raw('count(detalleHabito.rpta) as cantidad'))
                   ->groupBy('detalleHabito.rpta')->get();
-
-         //dd($si->toArray()[0]['rpta']);
-        //dd($si);
         return view('miembro.tutor.habitoEstudio.show')->with('tutorTutorado', $tutorTutorado)
                                                        ->with('alumno', $alumno->user)
                                                        ->with('respuesta_cantidad', $respuesta_cantidad->toArray());
@@ -154,8 +146,7 @@ class HabitoEstudioController extends Controller
      * @param  \BienestarWeb\HabitoEstudio  $habitoEstudio
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         //
     }
 }

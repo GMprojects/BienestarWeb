@@ -38,7 +38,7 @@
                         {{--<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">--}}
                         <div class="form-group">
                            <div class="input-group input-group-lg">
-                              <span class="input-group-addon rounded-left"><i class="fa fa-envelope"></i></span>
+                              <span class="input-group-addon rounded-left"><i class="fa fa-at"></i></span>
                               <input required minlength="6" maxlength="100" type="email" class="form-control input-addon-left" name="email"  value="{{old('email')}}" placeholder="e.g. mguevaral@unitru.edu.pe" autofocus>
                            </div>
                         </div>

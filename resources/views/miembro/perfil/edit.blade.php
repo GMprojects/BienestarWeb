@@ -110,6 +110,20 @@
 							</div>
 						</div>
 					</div>
+					<!-- Campo Fecha Nacimiento -->
+					<div class="form-group">
+						<label for="fechaNacimiento" class="col-sm-3 control-label">Nacimiento </label>
+						<div class="col-sm-8">
+							<div class="input-group date">
+								<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+								@if ($user->fechaNacimiento != null)
+										<input type="text" name="fechaNacimiento"  value="{{ date("d/m/Y",strtotime($user->fechaNacimiento )) }}" class="form-control"  id="fechaNacimiento" >
+								@else
+										<input type="text" name="fechaNacimiento"  placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaNacimiento" >
+								@endif
+							</div>
+						</div>
+					</div>
 					<!-- Campo Telefono -->
 					<div class="form-group">
 						<label for="telefono" class="col-sm-3 control-label">Teléfono </label>
@@ -134,6 +148,9 @@
 			</div>
 			<br><br>
 			<div class="caja-footer">
+				<div class="pull-left">
+					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
+				</div>
 				<div class="pull-right">
 					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
@@ -141,199 +158,13 @@
 	      </div>
 		{!! Form::close() !!}
 	   </div>
-
-	{{--	<div class="caja">
-			{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off']) !!}
-			{{Form::token()}}
-			{!!Form::hidden('op',2)!!}
-			<div class="caja-header">
-				<div class="caja-icon">	<i class="fa fa-user"></i></div>
-				<div class="caja-title">Datos Específicos</div>
-			</div>
-			<div class="caja-body">
-				<div  class="row">
-					<div class="col-lg-12 col-sm-12 col-xs-12">
-						@if (count($errors) >0)
-						<div class="alert alert-danger">
-							<ul>
-							@foreach($errors->all() as $error)
-								<li>{{$error}}</li>
-							@endforeach
-							</ul>
-						</div>
-						@endif
-					</div>
-				</div>
-				<div class="row">
-					<div class="form-horizontal">
-						@if ($user->idTipoPersona == 1)
-							<div class="form-group">
-								<label for="condicion" class="col-sm-3 control-label">Condición <span class="ast">*</span></label>
-								<div class="col-sm-8">
-									<div class="input-group">
-										<span class="input-group-addon"><i class="fa fa-graduation-cap"></i></span>
-										<select name="condicion" class="form-control" required>
-											@switch ($user->alumno->condicion)
-												@case(1)
-												<option value="1" selected>Matriculado</option>
-												<option value="2">No Matriculado</option>
-												@break
-												@case(2)
-												<option value="1">Matriculado</option>
-												<option value="2" selected>No Matriculado</option>
-												@break
-											@endswitch
-										</select>
-									</div>
-								</div>
-							</div>
-						@elseif ($user->idTipoPersona == 2)
-									<div class="form-group">
-										<label for="categoria" class="col-sm-3 control-label">Categoría </label>
-										<div class="col-sm-8">
-											<div class="input-group">
-												<span class="input-group-addon"><i class="fa fa-star fa-rotate-90"></i><i class="fa fa-suitcase"></i></span>
-												<select name="categoria" class="form-control">
-													@switch ($user->docente->categoria)
-														@case(1)
-														<option value="1" selected>Principal</option>
-														<option value="2">Asociado</option>
-														<option value="3">Auxiliar</option>
-														<option value="4">Contratado</option>
-														@break
-														@case(2)
-														<option value="1">Principal</option>
-														<option value="2" selected>Asociado</option>
-														<option value="3">Auxiliar</option>
-														<option value="4">Contratado</option>
-														@break
-														@case(3)
-														<option value="1">Principal</option>
-														<option value="2">Asociado</option>
-														<option value="3" selected>Auxiliar</option>
-														<option value="4">Contratado</option>
-														@break
-														@case(4)
-														<option value="1">Principal</option>
-														<option value="2">Asociado</option>
-														<option value="3">Auxiliar</option>
-														<option value="4" selected>Contratado</option>
-														@break
-													@endswitch
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="dedicacion" class="col-sm-3 control-label">Dedicación </label>
-										<div class="col-sm-8">
-											<div class="input-group">
-												<span class="input-group-addon"><i class="fa fa-clock-o"> <i class="fa fa-briefcase"></i></i></span>
-												<select name="dedicacion" class="form-control">
-													@switch ($user->docente->dedicacion)
-														@case(1)
-														<option value="1" selected>Exclusiva</option>
-														<option value="2">Tiempo Completo</option>
-														<option value="3">Tiempo Parcial</option>
-														@break
-														@case(2)
-														<option value="1">Exclusiva</option>
-														<option value="2" selected>Tiempo Completo</option>
-														<option value="3">Tiempo Parcial</option>
-														@break
-														@case(3)
-														<option value="1">Exclusiva</option>
-														<option value="2">Tiempo Completo</option>
-														<option value="3" selected>Tiempo Parcial</option>
-														@break
-													@endswitch
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="modalidad" class="col-sm-3 control-label">Modalidad </label>
-										<div class="col-sm-8">
-											<div class="input-group">
-												<span class="input-group-addon"><i class="fa fa-tag fa-rotate-90"></i> <i class="fa fa-briefcase"></i></span>
-												<select name="modalidad" class="form-control">
-													@switch ($user->docente->dedicacion)
-														@case(1)
-														<option value="1" selected>Ordinario</option>
-														<option value="2">Contratado</option>
-														@break
-														@case(2)
-														<option value="1">Ordinario</option>
-														<option value="2" selected>Contratado</option>
-														@break
-													@endswitch
-												</select>
-											</div>
-										</div>
-									</div>
-						@else
-							<div class="form-group">
-								<label for="cargo" class="col-sm-3 control-label">Cargo <span class="ast">*</span></label>
-								<div class="col-sm-8">
-									<div class="input-group">
-										 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-										 <input type="cargo" id="cargo" class="form-control" name="cargo" value="{{ $user->administrativo->cargo}}" placeholder="Cargo">
-									</div>
-								</div>
-							</div>
-						@endif
-					</div>
-				</div>
-			</div>
-			<br><br>
-			<div class="caja-footer">
-				<div class="pull-right">
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
-				</div>
-			</div>
-			{!! Form::close() !!}
-		</div>--}}
 	</div>
 	<div class="col-md-2"></div>
 </div>
-		{{--<div class="caja">
-			{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
-			{{Form::token()}}
-			{!!Form::hidden('op',3)!!}
-	      <div class="caja-header">
-	         <div class="caja-icon">	<i class="fa fa-user-circle"></i></div>
-	         <div class="caja-title">Foto de Perfil</div>
-	      </div>
-			<div class="caja-body">
-				<div  class="row">
-					<div class="col-lg-12 col-sm-12 col-xs-12">
-						@if (count($errors) >0)
-						<div class="alert alert-danger">
-							<ul>
-							@foreach($errors->all() as $error)
-								<li>{{$error}}</li>
-							@endforeach
-							</ul>
-						</div>
-						@endif
-					</div>
-				</div>
-
-			</div>
-			<br><br>
-			<div class="caja-footer">
-				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-				</div>
-	      </div>
-			{!! Form::close() !!}
-		</div>--}}
 
 {{--{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off']) !!}
 {{Form::token()}}
-	{!!Form::hidden('op',4)!!}
+	{!!Form::hidden('op',2)!!}
 		<div class="caja">
 
 	      <div class="caja-header">
@@ -407,12 +238,19 @@
 </style>
 
 <script type="text/javascript">
-function soloNumeros(evento){
-	console.log(evento.charCode);
-	if ((evento.charCode >= 48 && evento.charCode <= 57)) {
-		return true;
+	$('#fechaNacimiento').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+
+	function soloNumeros(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 48 && evento.charCode <= 57)) {
+			return true;
+		}
+		return false;
 	}
-	return false;
-}
+
+	
+
 </script>
 @endsection

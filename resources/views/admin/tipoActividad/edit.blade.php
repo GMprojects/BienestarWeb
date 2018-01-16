@@ -23,7 +23,11 @@
 			</div>
 			<div class="form-group">
 				<label for="tipo">Nombre Categoría</label>
-				<input type="text" required name="tipo" value="{{ $tipoActividad->tipo }}" class="form-control" placeholder="Nombre">
+				@if ( $tipoActividad->id < 11)
+					<input type="text" required readonly onclick="visualizarMensaje()"name="tipo" value="{{ $tipoActividad->tipo }}" class="form-control" placeholder="Nombre">
+				@else
+					<input type="text" required name="tipo" value="{{ $tipoActividad->tipo }}" class="form-control" placeholder="Nombre">
+				@endif
 			</div>
 			<div class="form-group">
 				<label for="tipo">Dirigido a</label>
@@ -72,7 +76,7 @@
 
 				<input type="file"  name="rutaImagen" class="form-control dropify"  data-allowed-file-extensions="png jpg jpge" data-default-file="{{ asset('storage/'.$tipoActividad['rutaImagen']) }}"  data-disable-remove="true">
 			</div>
-		</div>
+		</div><br><br>
 		<div class="caja-footer">
 			<div class="pull-left">
 				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
@@ -84,4 +88,41 @@
 		</div>
 	</div>
 	{!! Form::close() !!}
+	<div class="modal fade" id="modal-ayuda">
+		 <!-- /.modal-dialog -->
+		 <div class="modal-dialog">
+			   <!-- /.modal-content -->
+			   <div class="modal-content">
+			        <div class="modal-header" style="background-color:red; color:white; border-radius:6px 6px 0px 0px;">
+				          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				            <span aria-hidden="true"  class="fa fa-remove"></span></button>
+				          <h4 class="modal-title"  style="color:white;"><i class="fa fa-warning"></i>&nbsp; &nbsp;<b>Error</b></h4>
+			        </div>
+			        <div class="modal-body">
+			          	<p> Esta es una categoría por defecto, no puede editar el campo nombre.</p>
+			        </div>
+			        <div class="modal-footer">
+							  <div class="pull-right">
+								  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+							  </div>
+			        </div>
+			   </div>
+		      <!-- /.modal-content -->
+		 </div>
+	    <!-- /.modal-dialog -->
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('input').iCheck({
+				checkboxClass: 'icheckbox_square-green',
+				radioClass: 'iradio_square-green',
+				increaseArea: '20%' // optional
+			});
+			$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+		});
+		function visualizarMensaje(){
+			$('#modal-ayuda').modal('show');
+		}
+	</script>
 @endsection

@@ -11,15 +11,13 @@ use BienestarWeb\Docente;
 use BienestarWeb\InscripcionAlumno;
 use BienestarWeb\TutorTutorado;
 
-class ActPedagogiaController extends Controller
-{
+class ActPedagogiaController extends Controller{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         //
     }
 
@@ -28,14 +26,13 @@ class ActPedagogiaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $idActividad, $idTutoradoADA)
-    {
+    public function create(Request $request, $idActividad, $idTutoradoADA){
          $inscAlumno = InscripcionAlumno::where([['idActividad',$idActividad], ['idInscripcionADA', $idTutoradoADA]])->first();
          $alumno = $inscAlumno->alumno;
          $actividad = Actividad::findOrFail($idActividad);
          $actPedagogia = ActPedagogia::where([['idActividad',$idActividad], ['idInscripcionAlumno', $inscAlumno->idInscripcionAlumno]])->first();
          $tutorTutorado = TutorTutorado::where([['idAlumno', $alumno->idAlumno], ['idDocente', Docente::where('idUser', $actividad->idUserResp)->value('idDocente')], ['anioSemestre', $actividad->anioSemestre], ['numeroSemestre', $actividad->numeroSemestre]])->first();
-         
+
          return view('programador.actividad.actTutoria.create',['tutorado' => $alumno->user, 'actPedagogia' => $actPedagogia, 'idTutor' => $actividad->responsable->docente->idDocente, 'anioSemestre' => $actividad->anioSemestre, 'numeroSemestre' => $actividad->numeroSemestre, 'tutorTutorado' => $tutorTutorado]);
     }
 
@@ -45,8 +42,7 @@ class ActPedagogiaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
     }
 
@@ -56,8 +52,7 @@ class ActPedagogiaController extends Controller
      * @param  \BienestarWeb\ActPedagogia  $actPedagogia
      * @return \Illuminate\Http\Response
      */
-    public function show(ActPedagogia $actPedagogia)
-    {
+    public function show(ActPedagogia $actPedagogia){
         //
     }
 
@@ -67,8 +62,7 @@ class ActPedagogiaController extends Controller
      * @param  \BienestarWeb\ActPedagogia  $actPedagogia
      * @return \Illuminate\Http\Response
      */
-    public function edit(ActPedagogia $actPedagogia)
-    {
+    public function edit(ActPedagogia $actPedagogia){
         //
     }
 
@@ -79,8 +73,7 @@ class ActPedagogiaController extends Controller
      * @param  \BienestarWeb\ActPedagogia  $actPedagogia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
          $actPedagogia = ActPedagogia::findOrFail($id);
          $actPedagogia->canalizacion = $request->canalizacion;
          $actPedagogia->update();
@@ -93,8 +86,7 @@ class ActPedagogiaController extends Controller
      * @param  \BienestarWeb\ActPedagogia  $actPedagogia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ActPedagogia $actPedagogia)
-    {
+    public function destroy(ActPedagogia $actPedagogia){
         //
     }
 }

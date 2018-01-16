@@ -63,7 +63,7 @@
 		</div>
 		<div class="pull-right">
 			<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-			<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Vincular</button>
+			<button class="btn btn-ff" type="submit"><i class="fa fa-link"></i> Vincular</button>
 		</div>
    </div>
 </div>

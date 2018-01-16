@@ -16,8 +16,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use File;
 
-class UserController extends Controller
-{
+class UserController extends Controller{
+
    function getFecha($fechaIn){
          if ($fechaIn != null) {
             $dia = substr( $fechaIn,0 ,2);
@@ -27,14 +27,12 @@ class UserController extends Controller
          } else {
             return null;
          }
-
    }
 
    function getRutaImagenUpdate($request, $user){
+          $path = $user->foto;
           if($request->file('foto')){
-             //dd("Hy foto nueva");
              //Eliminando Foto anterior
-             $path = $user->foto;
              File::delete(storage_path('app/public/'.$path));
              Storage::delete($path);
              //Guardar la nueva imagen
@@ -47,7 +45,7 @@ class UserController extends Controller
                 return $path;
              }
           }else {
-              //dd("<NO></NO>Hy foto nueva");
+             //no hay foto nueva
               return $path;
           }
     }
@@ -56,8 +54,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-   public function index(Request $request)
-   {
+   public function index(Request $request){
       $users = User::where('estado','1')->get();
       return view('admin.user.index')->with('users', $users);
    }
@@ -67,8 +64,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {    return view('admin.user.create');
+    public function create(){
+       return view('admin.user.create');
     }
 
     /**
@@ -78,7 +75,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-      //Ydd($request);
        $request->validate([
            'nombre'=>'required|min:2|max:45',
            'apellidoPaterno' => 'required|min:2|max:20',
@@ -102,7 +98,6 @@ class UserController extends Controller
            'cargo' => 'max:50'
         ]);
         $file = $request->file('foto');
-        $tipoUser = TipoPersona::find($request->tipo);
 
         $nuevoUser = new User();
         $nuevoUser->nombre = strtoupper($request->nombre);
@@ -120,7 +115,7 @@ class UserController extends Controller
         $nuevoUser->password = bcrypt($request->codigo);
         $file = $request->file('foto');
         if($file != null){
-           $name = 'usr_'. $tipoUser->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
+           $name = 'usr_'. $request->tipo .'_'. $request->apellidoPaterno.'_'. $request->apellidoMaterno.'_' . $request->codigo.'.'.$file->getClientOriginalExtension();
            $storage = Storage::disk('users')->put($name, \File::get($file));
            if($storage){
              $path = 'users/'.$name;
@@ -156,8 +151,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -167,8 +161,8 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {   $user = User::findOrFail($id);
+    public function edit($id){
+        $user = User::findOrFail($id);
         switch ($user->idTipoPersona) {
            case '1': $alumno = Alumno::where('idUser', $id)->get();
                      return view('admin.user.edit')->with('user', $user)->with('tipoPersona', $alumno[0]);
@@ -186,12 +180,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-      //dd($request);
+    public function update(Request $request, $id){
          $user = User::findOrFail($id);
          if ($user->email == $request->email) {
-             //dd('igual');
              $request->validate([
                  'nombre'=>'required|min:2|max:45',
                  'apellidoPaterno' => 'required|min:2|max:20',
@@ -202,7 +193,6 @@ class UserController extends Controller
                  'celular' => 'max:15'
              ]);
          } else {
-             //dd('duff');
              $request->validate([
                  'nombre'=>'required|min:2|max:45',
                  'apellidoPaterno' => 'required|min:2|max:20',
@@ -214,12 +204,7 @@ class UserController extends Controller
                  'celular' => 'max:15'
              ]);
          }
-        switch ($user->idTipoPersona)
-        {
-           case '1': $alumno = Alumno::findOrFail($user->idTipoPersona); break;
-           case '2': $docente = Docente::findOrFail($user->idTipoPersona); break;
-           case '3': $administrativo = Administrativo::findOrFail($user->idTipoPersona); break;
-        }
+
         $user->nombre = strtoupper($request->nombre);
         $user->apellidoPaterno = strtoupper($request->apellidoPaterno);
         $user->apellidoMaterno = strtoupper($request->apellidoMaterno);
@@ -230,33 +215,25 @@ class UserController extends Controller
         $user->direccion = $request->direccion;
         $user->telefono = $request->telefono;
         $user->celular = $request->celular;
-
-        $tipoUser = TipoPersona::find($request->tipo);
         $user->foto = UserController::getRutaImagenUpdate($request, $user);
-        //dd($user->foto);
         $user->funcion = $request->funcion;
-      //dd($user);
         $user->update();
-
-        /*switch ($request->tipo) {
+        switch ($user->idTipoPersona){
            case '1': $alumno = $user->alumno()->get();
                      $alumno[0]->condicion = $request->condicion;
                      $alumno[0]->update();
                      break;
-
            case '2': $docente = $user->docente()->get();
                      $docente[0]->categoria = $request->categoria;
                      $docente[0]->dedicacion = $request->dedicacion;
                      $docente[0]->modalidad = $request->modalidad;
                      $docente[0]->update();
                      break;
-
            case '3': $administrativo = $user->administrativo()->get();
                      $administrativo[0]->cargo = $request->cargo;
                      $administrativo[0]->update();
                      break;
-        }*/
-        //return Redirect::to('admin/user');
+        }
         return  redirect()->back();
     }
 

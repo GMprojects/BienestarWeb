@@ -33,7 +33,7 @@ class ActividadActualizadaMail extends Mailable
      */
     public function build()
     {
-        Log::info('ActividadActualizadaMail');
+        //Log::info('ActividadActualizadaMail');
         return $this->markdown('emails.actividadActualizadaEmail',['actividad' => $this->actividad])
                     ->subject($this->subject);
     }

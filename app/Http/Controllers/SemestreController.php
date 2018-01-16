@@ -11,8 +11,7 @@ use BienestarWeb\Rules\NumSemestreValidation;
 
 use Illuminate\Support\Facades\Redirect;
 
-class SemestreController extends Controller
-{
+class SemestreController extends Controller{
 
       function getFecha($fechaIn){
          $dia = substr( $fechaIn,0 ,2);
@@ -25,8 +24,7 @@ class SemestreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
           $semestres = Semestre::get();
           return view('admin.semestre.index')->with('semestres', $semestres)->with('numSemestres', count($semestres));
     }
@@ -36,8 +34,7 @@ class SemestreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create(){
        return view('admin.semestre.create');
     }
 
@@ -47,8 +44,7 @@ class SemestreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
           $request->validate([
              'fechaInicio' => [new SemestreValidation(null)],
              'fechaFin' => [new SemestreValidation(null)],
@@ -69,8 +65,7 @@ class SemestreController extends Controller
      * @param  \BienestarWeb\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function show(Semestre $semestre)
-    {
+    public function show(Semestre $semestre){
         //
     }
 
@@ -80,8 +75,7 @@ class SemestreController extends Controller
      * @param  \BienestarWeb\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id){
        return view('admin.semestre.edit')->with('semestre', Semestre::findOrFail($id));
     }
 
@@ -92,8 +86,7 @@ class SemestreController extends Controller
      * @param  \BienestarWeb\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
          $request->validate([
            'fechaInicio' => [new SemestreValidation($id)],
            'fechaFin' => [new SemestreValidation($id)]
@@ -112,8 +105,7 @@ class SemestreController extends Controller
      * @param  \BienestarWeb\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
        Semestre::findOrFail($id)->delete();
        return Redirect::to('admin/semestre');
     }
