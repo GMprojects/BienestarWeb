@@ -12,6 +12,7 @@ use BienestarWeb\TutorTutorado;
 use BienestarWeb\Actividad;
 
 use Illuminate\Validation\Rule;
+use BienestarWeb\Rules\EmailValidation;
 
 use Illuminate\Support\Facades\Storage;
 use File;
@@ -75,12 +76,15 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
        $request->validate([
            'nombre'=>'required|min:2|max:45',
            'apellidoPaterno' => 'required|min:2|max:20',
            'apellidoMaterno' => 'required|min:2|max:20',
            'codigo' => 'required|min:4|max:20|unique:user',
-           'email' => 'required|max:100|unique:user',
+           //'email' => 'required|max:100|unique:user',
+           //'email' => [new EmailValidation()],
+           'email' => ['required', 'max:100', new EmailValidation()],
            'direccion'=> 'max:100',
            'telefono' => 'max:15',
            'celular' => 'max:15',
@@ -97,6 +101,7 @@ class UserController extends Controller{
            //validacion si tipo = 3 (ADMINISTRATIVO)
            'cargo' => 'max:50'
         ]);
+        dd('o');
         $file = $request->file('foto');
 
         $nuevoUser = new User();
@@ -198,7 +203,8 @@ class UserController extends Controller{
                  'apellidoPaterno' => 'required|min:2|max:20',
                  'apellidoMaterno' => 'required|min:2|max:20',
                  'sexo' => 'required',
-                 'email' => 'required|max:100|unique:user',
+                 //'email' => 'required|max:100|unique:user',                 
+                 'email' => ['required', 'max:100', new EmailValidation()],
                  'direccion'=> 'max:100',
                  'telefono' => 'max:15',
                  'celular' => 'max:15'

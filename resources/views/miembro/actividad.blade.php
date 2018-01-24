@@ -21,16 +21,16 @@
             @if(Auth::user() != null)
                @include('layouts.partials.sidebar')
             @endif
-{{-- <div class="row">
-   <div class="col-md-12">
-      <ol class="breadcrumb">
-         <li><a href="{{ route('home') }}">Inicio</a></li>
-         <li><a href="#">Categorías</a></li>
-         <li><a href="#">{{ $actividad->tipoactividad->tipo }}</a></li>
-         <li class="active">{{ str_limit($actividad->titulo, 20) }}</li>
-      </ol>
-   </div>
-</div>--}}
+            <div class="row">
+               <div class="col-md-12">
+                  <ol class="breadcrumb">
+                     <li><a href="{{ route('home') }}">Inicio</a></li>
+                     <li><a href="{{ action('ActividadController@indexCategorias') }}">Categorías</a></li>
+                     <li><a href="{{ action('ActividadController@indexPorCategoria', ['idTipoActividad' => $actividad->idTipoActividad, 'fecha' => date('Y-m-d')]) }}">{{ $actividad->tipoactividad->tipo }}</a></li>
+                     <li class="active">{{ str_limit($actividad->titulo, 20) }}</li>
+                  </ol>
+               </div>
+            </div>
 
             <div class="row">
                <section class="organizadores col-md-3">
@@ -45,9 +45,9 @@
                      <div class="member">
                         <div class="member-img pull-left">
                            @if($actividad->programador->foto == null)
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Encontrada" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Disponible" class="img-circle"></a>
                            @else
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('storage/'.$actividad->programador->foto) }}" alt="No Encontrada" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('storage/'.$actividad->programador->foto) }}" alt="No Disponible" class="img-circle"></a>
                            @endif
                         </div>
                         <div class="member-data">
@@ -64,9 +64,9 @@
                      <div class="member">
                         <div class="member-img pull-left">
                            @if($actividad->responsable->foto == null)
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Encontrada" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Disponible" class="img-circle"></a>
                            @else
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('storage/'.$actividad->responsable->foto) }}" alt="No Encontrada" class="img-circle"></a>
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('storage/'.$actividad->responsable->foto) }}" alt="No Disponible" class="img-circle"></a>
                            @endif
                         </div>
                         <div class="member-data">
@@ -83,7 +83,7 @@
                         </div>
                         <div class="member">
                            <div class="member-img pull-left">
-                              <a><img src="{{ asset('img/avatar3.png') }}" alt="No Encontrada" class="img-circle"></a>
+                              <a><img src="{{ asset('img/avatar3.png') }}" alt="No Disponible" class="img-circle"></a>
                            </div>
                            <div class="member-data">
                               <div class="member-name">{{ preg_split("/[-]/",$actividad->invitado)[0] }} {{ preg_split("/[-]/",$actividad->invitado)[1] }}</div>
@@ -94,13 +94,12 @@
                   @endif
                </section>
                <section class="col-md-6">
-
                   <div class="act-view">
                      <div class="act-view-img">
                         @if($actividad->rutaImagen == null)
-                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="No Encontrada">
+                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="No Disponible">
                         @else
-                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No Encontrada">
+                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No Disponible">
                         @endif
                      </div>
                      <div class="act-view-title">{{ $actividad->titulo }}</div>
@@ -129,7 +128,7 @@
                            </div>
                            <div class="dt-txt">
                               <span class="text-muted">Dónde?</span>
-                              <div class="dt-txt-big"><a href="#">{{ $actividad->lugar }}</a></div>
+                              <div class="dt-txt-big">{{ $actividad->lugar }}</div>
                            </div>
                         </div>
                         @if($actividad->referencia != null)
@@ -166,9 +165,9 @@
                            @if(Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad) ||
                               Auth::user()->idTipoPersona == 2 && Auth::user()->docente->misInscripciones->contains('idActividad', $actividad->idActividad) ||
                               Auth::user()->idTipoPersona == 3 && Auth::user()->administrativo->misInscripciones->contains('idActividad', $actividad->idActividad))
-                              <a class="btn btn-ff pull-right" data-toggle="tooltip" data-placement="bottom" title="Ver detalles">
-                                 <i class="fa fa-check-circle"></i> Asistiré
-                              </a>
+                              <div class="pull-right">
+                                 <h4><i class="fa fa-check-circle"></i> Asistiré</h4>
+                              </div>
                            @else
                               @if( $actividad->estado == 1 )
                                  @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
@@ -224,11 +223,15 @@
                         </div>
                         <section class="actividades-relacionadas">
                            @foreach ($relacionadas as $key => $relacionada)
-                              <section class="activity-item">
-                                 <a href="{{ action('ActividadController@member_show', ['id'=>$relacionada->idActividad]) }}" class="list-group-item act-rec">
-                                    <img class="img-thumbnail pull-left" src="{{ asset('img/act1.jpg') }}" alt="No disponible">
+                              <section class="activity-item"  style="height:90px;">
+                                 <a href="{{ action('ActividadController@member_show', ['id'=>$relacionada->idActividad]) }}" class="list-group-item act-rec"  style="height:90px;">
+                                    @if($actividad->rutaImagen == null)
+                                       <img class="img-thumbnail pull-left" src="{{ asset('storage/'.$relacionada->tipoActividad->rutaImagen) }}" alt="No Disponible">
+                                    @else
+                                       <img class="img-thumbnail pull-left" src="{{ asset('storage/'.$relacionada->rutaImagen) }}" alt="No Disponible">
+                                    @endif
                                     <h5 class="act-rec-title"><b>{{ $relacionada->titulo }}</b></h5>
-                                    <p class="act-rec-descripcion text-justify"> {{ $relacionada->descripcion }} </p>
+                                    <p class="act-rec-descripcion text-justify"> {{ str_limit($relacionada->descripcion, 160) }} </p>
                                  </a>
                               </section>
                            @endforeach
@@ -247,16 +250,16 @@
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $alumno->id ]) }}">
                                     <div class="signed-up-img pull-left">
                                        @if($alumno->foto != null)
-                                          <img src="{{ asset('storage/'.$alumno->foto ) }}" class="img-circle" alt="No Encontrada">
+                                          <img src="{{ asset('storage/'.$alumno->foto ) }}" class="img-circle" alt="No Disponible">
                                        @else
                                           @if ($alumno->sexo == 'h')
                                              {{-- Hombre --}}
-                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
+                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Disponible">
                                           @else{{-- Mujer --}}
-                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
+                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Disponible">
                                           @endif
                                        @endif
-                                       {{--<img src="{{ asset('storage/'.$alumno->foto ) }}" alt="No Encontrada" class="img-circle">--}}
+                                       {{--<img src="{{ asset('storage/'.$alumno->foto ) }}" alt="No Disponible" class="img-circle">--}}
                                     </div>
                                     <div class="signed-up-data">
                                        <div class="member-name"></i>{{ $alumno->nombre }} {{ $alumno->apellidoPaterno }}</div>
@@ -279,15 +282,15 @@
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $docente->id ]) }}">
                                     <div class="signed-up-img pull-left">
                                        @if($docente->foto != null)
-                                          <img src="{{ asset('storage/'.$docente->foto ) }}" class="img-circle" alt="No Encontrada">
+                                          <img src="{{ asset('storage/'.$docente->foto ) }}" class="img-circle" alt="No Disponible">
                                        @else
                                           @if ($docente->sexo == 'h'){{-- Hombre --}}
-                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
+                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Disponible">
                                           @else{{-- Mujer --}}
-                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
+                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Disponible">
                                           @endif
                                        @endif
-                                       {{--<img src="{{ asset('storage/'.$docente->foto ) }}" alt="No Encontrada" class="img-circle">--}}
+                                       {{--<img src="{{ asset('storage/'.$docente->foto ) }}" alt="No Disponible" class="img-circle">--}}
                                     </div>
                                     <div class="signed-up-data">
                                        <div class="member-name"></i>{{ $docente->nombre }} {{ $docente->apellidoPaterno }}</div>
@@ -310,15 +313,15 @@
                                  <a href="{{ action('MiPerfilController@show', ['idPerfil' => $administrativo->id ]) }}">
                                     <div class="signed-up-img pull-left">
                                        @if($administrativo->foto != null)
-                                          <img src="{{ asset('storage/'.$administrativo->foto ) }}" class="img-circle" alt="No Encontrada">
+                                          <img src="{{ asset('storage/'.$administrativo->foto ) }}" class="img-circle" alt="No Disponible">
                                        @else
                                           @if ($administrativo->sexo == 'h'){{-- Hombre --}}
-                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
+                                             <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Disponible">
                                           @else{{-- Mujer --}}
-                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
+                                             <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Disponible">
                                           @endif
                                        @endif
-                                       {{--<img src="{{ asset('storage/'.$administrativo->foto ) }}" alt="No Encontrada" class="img-circle">--}}
+                                       {{--<img src="{{ asset('storage/'.$administrativo->foto ) }}" alt="No Disponible" class="img-circle">--}}
                                     </div>
                                     <div class="signed-up-data">
                                        <div class="member-name"></i>{{ $administrativo->nombre }} {{ $administrativo->apellidoPaterno }}</div>

@@ -16,7 +16,7 @@ class CrearTriggerHabitoEstudioRespuesta extends Migration
       DB::unprepared('
            CREATE TRIGGER `farmaciabd`.`habitoestudio_AFTER_INSERT` AFTER INSERT ON `habitoestudio` FOR EACH ROW
          BEGIN
-         	UPDATE tutorTutorado SET `habitoEstudioRespondido` = ´1´  WHERE tutorTutorado.idTutorTutorado = NEW.idTutorTutorado;
+         	UPDATE tutorTutorado SET `habitoEstudioRespondido` = 1 WHERE tutorTutorado.idTutorTutorado = NEW.idTutorTutorado;
          END
           ');
     }

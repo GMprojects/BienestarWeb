@@ -2,6 +2,17 @@
 @section('contenido')
 	{!! Form::model($tipoActividad, ['method'=>'PATCH', 'route'=>['tipoActividad.update', $tipoActividad->idTipoActividad], 'files'=>'true', 'onsubmit'=>'return validar()']) !!}
 	{{ Form::token() }}
+<div class="row">
+	<div class="col-xs-12">
+		<div class="second-bar">
+			<div class="pull-left">
+				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin-top: 70px;">
 	<div class="caja">
       <div class="caja-header">
          <div class="caja-icon">1</div>
@@ -78,16 +89,14 @@
 			</div>
 		</div><br><br>
 		<div class="caja-footer">
-			<div class="pull-left">
-				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
-			</div>
 			<div class="pull-right">
 				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
 			</div>
 		</div>
 	</div>
-	{!! Form::close() !!}
+</div>
+{!! Form::close() !!}
 	<div class="modal fade" id="modal-ayuda">
 		 <!-- /.modal-dialog -->
 		 <div class="modal-dialog">

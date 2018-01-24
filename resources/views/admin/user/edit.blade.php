@@ -3,6 +3,16 @@
 {!!Form::model([$user, $tipoPersona],['method'=>'PATCH','files'=>'true', 'route'=>['user.update',$user->id]] )!!}
 {{Form::token()}}
 <div class="row">
+	<div class="col-xs-12">
+		<div class="second-bar">
+			<div class="pull-left">
+				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin-top: 70px;">
 	<div class="col-md-6">
 		<div class="caja">
 	      <div class="caja-header">
@@ -359,9 +369,6 @@
 				<br><br>
 				<!-- FOOTER de CAJA de FUNCION de usuario -->
 		      <div class="caja-footer">
-					<div class="pull-left">
-						<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
-					</div>
 					<div class="pull-right">
 						<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
 						<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
@@ -387,28 +394,32 @@
 			document.getElementById(funcion).checked = true;
 			switch ({{ $user->idTipoPersona }}) {
 				case 1: 	document.getElementById('formAlumno').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Alumno";break;
+							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Alumno";
+							cambiarColorFuncion(1);break;
 				case 2: 	document.getElementById('formDocente').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Docente";break;
+							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Docente";
+							cambiarColorFuncion(2);break;
 				case 3: 	document.getElementById('formAdministrativo').style.display = 'block';
 							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";
-							$('#cargo').attr('required', 'true');break;
+							$('#cargo').attr('required', 'true');
+							cambiarColorFuncion(3);break;
 			}
-			cambiarColorFuncion();
+			//cambiarColorFuncion();
 		}
 
-		function cambiarColorFuncion(){
+		function cambiarColorFuncion(icono){
 			document.getElementById('icoMiembro').style.color = 'rgba(0,0,0, 0.5)';
 			document.getElementById('icoProgramador').style.color = 'rgba(0,0,0, 0.5)';
 			document.getElementById('icoAdmin').style.color = 'rgba(0,0,0, 0.5)';
 			var iconoElegido = "";
-			switch ({{ $user->funcion }}) {
+			switch (icono) {
 				case 1: iconoElegido = 'icoMiembro'; break;
 				case 2: iconoElegido = 'icoProgramador'; break;
 				case 3: iconoElegido = 'icoAdmin'; break;
 			}
 			document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 		}
+
 		function soloNumeros(evento){
 			console.log(evento.charCode);
 			if ((evento.charCode >= 48 && evento.charCode <= 57)) {

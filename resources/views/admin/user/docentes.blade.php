@@ -38,8 +38,16 @@
 								@case(1) <td><span class="label label-success rounded">Miembro</span></td> @break
 							@endswitch
                      <td>
-								<a href="{{URL::action('UserController@edit',$user->id)}}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
-								<a href="" data-target="#modal-delete-{{$user->id}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
+								<a href="{{URL::action('UserController@edit',$user->id)}}">
+									<button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar Usuario">
+										<i class="fa fa-edit"></i>
+									</button>
+								</a>
+								<a href="" data-target="#modal-delete-{{$user->id}}" data-toggle="modal">
+									<button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Usuario">
+										<i class="fa fa-trash"></i>
+									</button>
+								</a>
 							</td>
 						</tr>
 						@include('admin.user.modal')

@@ -8,7 +8,7 @@ class PreguntaEncuesta extends Model
 {
   protected $table = 'PreguntaEncuesta';
   protected $primaryKey = 'idPreguntaEncuesta';
-  protected $fillable = ['enunciado', 'idEncuesta'];
+  protected $fillable = ['enunciado', 'orden', 'idEncuesta'];
   public $timestamps = false;
 
   public function encuesta(){

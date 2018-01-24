@@ -47,7 +47,7 @@ class CrearTablaActividad extends Migration
             $tabla->string('observaciones', 500)->default('Ninguna');
             $tabla->string('recomendaciones', 500)->default('Ninguna');
             $tabla->mediumtext('rutaImagen')->nullable();
-            $tabla->string('invitado', 500)->nullable();
+            $tabla->string('invitado', 600)->nullable();
             //Clave foranea de la tabla tipoActividad
             $tabla->integer('idTipoActividad')->unsigned();
             $tabla->foreign('idTipoActividad')->references('idTipoActividad')->on('TipoActividad');
@@ -64,7 +64,7 @@ class CrearTablaActividad extends Migration
         {
            $tabla->increments('idEvidenciaActividad');
            $tabla->string('nombre', 100)->default('Evidencia');
-           $tabla->mediumtext('ruta')->nullable();
+           $tabla->mediumtext('ruta');
            //Clave foranea de la tabla Actividad
            $tabla->integer('idActividad')->unsigned();
            $tabla->foreign('idActividad')->references('idActividad')->on('Actividad');

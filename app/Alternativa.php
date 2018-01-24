@@ -8,7 +8,7 @@ class Alternativa extends Model
 {
   protected $table = 'Alternativa';
   protected $primaryKey = 'idAlternativa';
-  protected $fillable = ['etiqueta', 'idEncuesta'];
+  protected $fillable = ['etiqueta', 'valor', 'idEncuesta'];
   public $timestamps = false;
 
   public function encuesta(){

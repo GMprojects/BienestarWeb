@@ -35,16 +35,12 @@ class SemestreValidation implements Rule
     public function passes($attribute, $value)//llega fecha
     {
 
-         Log::info('mismo ID '. $this->id);
         //convertir Fecha a formato de la bd
          $fecha = SemestreValidation::getFecha($value);
-         Log::info('pasare por aqui'.$fecha);
         //verificar que no este dentro del palzo de ningun otro registro
         if ($this->id == '') {
-           Log::info('no ID '. $this->id);
             $semestres = Semestre::whereDate('fechaFin','>',$fecha)->get();
         } else {
-           Log::info('ID');
             $semestres = Semestre::whereDate('fechaFin','>',$fecha)->where('idSemestre','<>',$this->id)->get();
         }
 

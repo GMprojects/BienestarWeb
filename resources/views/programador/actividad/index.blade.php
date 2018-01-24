@@ -90,9 +90,21 @@
 												<span><i class="fa fa-child"><i class="fa fa-cogs"></i></i></span>
 												</button>
 											</a>
-											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"  data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"></i></button></a>
-											<a href="" data-target = "#modal-cancel-{{ $actividad->idActividad }}" data-toggle = "modal"> <button  class="btn btn-ff-dark-red" data-toggle="tooltip" data-placement="bottom" title="Cancelar Actividad"><i class="fa fa-ban" ></i></button></a>
-											<a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-trash"></i></button></a>
+											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}">
+												<button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad">
+													<i class="fa fa-edit"></i>
+												</button>
+											</a>
+											<a href="" data-target = "#modal-cancel-{{ $actividad->idActividad }}" data-toggle = "modal">
+												<button  class="btn btn-ff-dark-red" data-toggle="tooltip" data-placement="bottom" title="Cancelar Actividad">
+													<i class="fa fa-ban" ></i>
+												</button>
+											</a>
+											<a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal">
+												<button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad">
+													<i class="fa fa-trash"></i>
+												</button>
+											</a>
 										@break
 										@case('2')
 											<a href="{{ action('ActividadController@execute',$actividad->idActividad) }}">

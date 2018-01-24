@@ -30,7 +30,6 @@ class NumSemestreValidation implements Rule
     {
         $ciclo = ($value == 1) ? 'I' : 'II' ;
          //verificar sino hay otro registro del mismo años y ciclo
-         Log::info($this->anioSemestre.'-'.$ciclo);
          $semestres = Semestre::where('semestre', $this->anioSemestre.'-'.$ciclo)->get();
          if (count($semestres)==0) {
               return true;

@@ -1,22 +1,25 @@
 @extends('template')
 @section('contenido')
 @include('programador.actividad.modalAyuda')
-<div class="row">
-	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-		@if($errors->any())
-			<div class="alert alert-danger">
-				<ul>
-					@foreach ($errors->all() as $error)
-						<li>{{ $error }}</li>
-					@endforeach
-				</ul>
-			</div>
-		@endif
-   </div>
-</div>
+
 {!! Form::open(['url'=>'programador/actividad', 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true', 'onsubmit'=>'return validar()']) !!}
 {{ Form::token() }}
+
 <div class="row">
+	<div class="col-xs-12">
+		<div class="second-bar">
+			<div class="pull-left">
+				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
+			</div>
+			<div class="pull-right">
+				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Publicar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin-top: 70px;">
 	<div class="col-md-6 col-sm-6">
 		<div class="caja">
 	      <div class="caja-header">
@@ -24,6 +27,19 @@
 	         <div class="caja-title">Datos Generales</div>
 	      </div>
 	      <div class="caja-body">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						@if($errors->any())
+							<div class="alert alert-danger">
+								<ul>
+									@foreach ($errors->all() as $error)
+										<li>{{ $error }}</li>
+									@endforeach
+								</ul>
+							</div>
+						@endif
+				   </div>
+				</div>
 				<div>
 					<p style="color:red;"> <span class="ast">*</span> Requerido
 						<span>
@@ -61,15 +77,6 @@
 					<textarea style="resize: none;" name="informacionAdicional"  class="form-control" value ="{{old('informacionAdicional')}}"  rows="6" cols="30" placeholder="Añadir información Adicional"></textarea>
 				</div>
 			</div>
-	      <div class="caja-footer">
-				<div class="pull-left">
-					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
-				</div>
-				<div class="pull-right">
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Publicar</button>
-				</div>
-	      </div>
 	   </div>
 	</div>
 	<div class="col-md-6 col-sm-6">

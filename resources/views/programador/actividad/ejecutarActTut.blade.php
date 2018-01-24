@@ -86,7 +86,7 @@
 				<div class="form-group">
 					<label for="horaEjecutada">Asistencias &nbsp; <i class="fa fa-check-square-o" aria-hidden="true"></i><span class="ast">*</span></label>
 					<div class="input-group">
-							<button type="button" name="button" data-target="#modal-asistencia" data-toggle="modal" class="btn btn-ff-yellow">Registrar</button>
+							<button type="button" name="button" data-target="#modal-asistencia" data-toggle="modal" class="btn btn-ff-orange">Registrar</button>
 					</div>
 				</div>
 			</div>

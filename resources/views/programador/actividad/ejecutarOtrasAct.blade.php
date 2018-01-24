@@ -52,7 +52,7 @@
 						<div class="form-group">
 							<label for="horaEjecutada">Asistencias &nbsp; <i class="fa fa-check-square-o" aria-hidden="true"></i><span class="ast">*</span></label>
 							<div class="input-group">
-									<button type="button" name="button" data-target="#modal-asistencia" data-toggle="modal" class="btn btn-ff-yellow">Registrar</button>
+									<button type="button" name="button" data-target="#modal-asistencia" data-toggle="modal" class="btn btn-ff-orange">Registrar</button>
 							</div>
 						</div>
 					</div>
@@ -106,7 +106,7 @@
 							<div class="panel panel-default">
 								@if($array[$count-1] == 'jpg'|| $array[$count-1] == 'png' || $array[$count-1] == 'jpeg')
 									<div class="panel-body">
-										<img src="{{ asset('storage/'.$evidenciaActividad->ruta) }}" alt="No Encontrada"  height="80px"  class="img-responsive">
+										<img src="{{ asset('storage/'.$evidenciaActividad->ruta) }}" alt="No Disponible"  height="80px"  class="img-responsive">
 									</div>
 									<div class="panel-footer">
 										{{ $evidenciaActividad->nombre }}

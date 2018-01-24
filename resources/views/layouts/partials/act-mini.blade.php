@@ -126,7 +126,7 @@
             <div class="pull-right">
                <button type="submit" class="btn btn-ff" onclick="event.preventDefault();
                document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-               <i class="fa fa-check-circle"></i> Confirmar</button>
+               <i class="fa fa-check"></i> Confirmar</button>
                <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
                   {{ csrf_field() }}
                </form>

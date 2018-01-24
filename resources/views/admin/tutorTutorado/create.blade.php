@@ -3,6 +3,20 @@
 {!! Form::open(['url'=>'admin/tutorTutorado', 'method'=>'POST', 'autocomplete'=>'off', 'onsubmit'=>'return validar()']) !!}
 {{ Form::token() }}
 <div class="row">
+	<div class="col-xs-12">
+		<div class="second-bar">
+			<div class="pull-left">
+				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
+			</div>
+			<div class="pull-right">
+				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+				<button class="btn btn-ff" type="submit"><i class="fa fa-link"></i> Vincular</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin-top: 70px;">
 	<div class="col-md-6 col-sm-6">
 		<div class="caja">
 			<div class="caja-header">
@@ -85,15 +99,6 @@
 					</div>
 			   </div>
 		  	</div>
-			<div class="caja-footer">
-				<div class="pull-left">
-					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
-				</div>
-				<div class="pull-right">
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-					<button class="btn btn-ff" type="submit"><i class="fa fa-link"></i> Vincular</button>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>

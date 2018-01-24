@@ -3,9 +3,9 @@
 
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
+			<div class="modal-header" style="background-color:red; color:white; border-radius:6px 6px 0px 0px;">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
-				<h4 class="modal-title"><b>Eliminar Tutor - Tutorado</b></h4>
+				<h4 class="modal-title"><b style="color:white;">Eliminar Tutor - Tutorado</b></h4>
 			</div>
 			<div class="modal-body">
 				<p>Confirme si desea ELIMINAR de la lista de tutorados del docente

@@ -31,10 +31,18 @@ class EncuestaController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        $tiposActividad=TipoActividad::get();
-        $encuestas = Encuesta::get();
-        return view('admin.encuesta.index')->with('encuestas',$encuestas)
-                                           ->with('tiposActividad',$tiposActividad);
+      $tiposActividad=TipoActividad::get();
+      $encuestas = Encuesta::get();
+      $cant_enc_resp = [];
+      foreach ($encuestas as $encuesta) {
+         if($encuesta->destino == 'r')
+            array_push($cant_enc_resp, EncuestaRespondidaResp::where(['idEncuesta' => $encuesta->id, 'estado' => '1'])->count());
+         else {
+            array_push($cant_enc_resp, EncuestaRespondidainsc::where(['idEncuesta' => $encuesta->id, 'estado' => '1'])->count());
+         }
+      }
+      //dd($cant_enc_resp);
+      return view('admin.encuesta.index')->with('encuestas',$encuestas)->with('cant_enc_resp', $cant_enc_resp);
     }
 
     /**
@@ -54,15 +62,44 @@ class EncuestaController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-      $encuesta = Encuesta::create([
+      //dd($request);
+      $request->validate([
+         'titulo' => 'required',
+         'destino' => 'required',
+         'idTipoActividad' => 'required'
+      ]);
+      $nueva_encuesta = Encuesta::create([
          'titulo' => $request->titulo,
          'destino' => $request->destino,
          'idTipoActividad' => $request->idTipoActividad
       ]);
-
+      $inputs = $request->except(['_method', '_token', 'titulo', 'destino', 'idTipoActividad']);
+      $valor = 1;
+      $orden = 1;
+      foreach ( $inputs as $in_put) {
+         $llave = key($inputs);
+         if(strpos($llave, 'e_a') !== false){ //etiqueta añadida
+            Alternativa::create([
+               'etiqueta' => $in_put,
+               'valor' => $valor,
+               'idEncuesta' => $nueva_encuesta->idEncuesta
+            ]);
+            $valor++;
+         }
+         if(strpos(key($inputs), 'p_a') !== false){ //pregunta añadida
+            PreguntaEncuesta::create([
+               'enunciado' => $in_put,
+               'orden' => $orden,
+               'idEncuesta' => $nueva_encuesta->idEncuesta
+            ]);
+            $orden++;
+         }
+         next($inputs);
+      }
+      /*
       $verificado = 0;
       $i = 0;
-      while ((count($request->all())- 8) != $verificado) {
+      while ((count($request->all())- 7) != $verificado) {
          if($request->input('e'.$i) != null){
             Alternativa::create([
                'etiqueta' => $request->input('e'.$i),
@@ -79,7 +116,7 @@ class EncuestaController extends Controller{
             $verificado++;
          }
          $i++;
-      }
+      }*/
       return Redirect::to('admin/encuesta');
     }
 
@@ -104,6 +141,7 @@ class EncuestaController extends Controller{
      */
     public function edit($id){
         $tiposActividad=TipoActividad::get();
+        $preguntas = PreguntaEncuesta::where('idEncuesta', $id);
         return view('admin.encuesta.edit')
         ->with('encuesta',Encuesta::findOrFail($id))
         ->with('tiposActividad',$tiposActividad);
@@ -117,14 +155,58 @@ class EncuestaController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $request->validate([
-            'titulo' => 'required'
+      //dd($request->except(['_method', '_token', 'titulo', 'destino']));
+      $request->validate([
+         'titulo' => 'required'
+      ]);
+      $encuesta = Encuesta::findOrFail($id);
+      $encuesta->titulo = $request->titulo;
+      $encuesta->destino = $request->destino;
+      $encuesta->update();
+
+      $inputs = $request->except(['_method', '_token', 'titulo', 'destino']);
+      $valor = 1;
+      $orden = 1;
+
+      $alternativas = $encuesta->alternativas;
+      $preguntas_actuales = $encuesta->preguntas;
+      //dd($preguntas->whereNotIn('idPreguntaEncuesta', [52]));
+      foreach ( $inputs as $in_put) {
+         $llave = key($inputs);
+         if(strpos($llave, 'e_a') !== false){ //etiqueta añadida
+            Alternativa::create([
+               'etiqueta' => $in_put,
+               'valor' => $valor,
+               'idEncuesta' => $id
             ]);
-        $encuesta = Encuesta::findOrFail($id);
-        $encuesta->titulo = $request->get('titulo');
-        $encuesta->destino = $request->get('destino');
-        $encuesta->update();
-        return Redirect::to('admin/encuesta');
+            $valor++;
+         }else if(strpos($llave, 'e') !== false){ //etiqueta existente
+            $alternativa = Alternativa::findOrFail(str_replace("e", "", $llave));
+            $alternativa->etiqueta = $in_put;
+            $alternativa->valor = $valor;
+            $alternativa->update();
+            $valor++;
+         }if(strpos(key($inputs), 'p_a') !== false){ //pregunta añadida
+            PreguntaEncuesta::create([
+               'enunciado' => $in_put,
+               'idEncuesta' => $id
+            ]);
+            $orden++;
+         }else if(strpos(key($inputs), 'p') !== false){ //pregunta existente
+            $pregunta = PreguntaEncuesta::findOrFail(str_replace("p", "", $llave));
+            $pregunta->enunciado = $in_put;
+            $pregunta->orden = $orden;
+            $pregunta->update();
+            $preguntas_actuales = $preguntas_actuales->whereNotIn('idPreguntaEncuesta', [str_replace("p", "", $llave)]);
+            $orden++;
+         }
+         next($inputs);
+      }
+      foreach ($preguntas_actuales as $pregunta_actual) {
+         $pregunta_actual->estado = 0;
+         $pregunta_actual->update();
+      }
+      return Redirect::to('admin/encuesta');
     }
 
     /**
@@ -134,17 +216,9 @@ class EncuestaController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id){
-        $encuesta = Encuesta::findOrFail($id);
-        if((PreguntaEncuesta::where('idEncuesta',$id)->count())>0){
-            PreguntaEncuesta::where('idEncuesta',$id)->delete();
-        }
-      //dd(Alternativa::where('idEncuesta',$id)->count());
-        if((Alternativa::where('idEncuesta',$id)->count())>0){
-            Alternativa::where('idEncuesta',$id)->delete();
-            //dd(Alternativa::where('idEncuesta',$id));
-        }
-        Encuesta::destroy($id);
-        return Redirect::to('admin/encuesta');
+      $encuesta = Encuesta::findOrFail($id);
+      Encuesta::destroy($id);
+      return Redirect::to('admin/encuesta');
     }
 
     public function misEncuPendientes(Request $request){

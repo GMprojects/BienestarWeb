@@ -28,11 +28,11 @@
 							<tr>
 								<td>{{ $tutor->codigo }}</td>
 								<td>{{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</td>
-								<td>{{ $tutor->anioSemestre.'-'.$tutor->numeroSemestre }}</td>
+								<td>{{ $tutor->anioSemestre }} - @if ( $tutor->numeroSemestre == 1 )I	@else	II @endif</td>
 								<td>{{ $tutor->nroTutorados }}
 								<td>
 			                  <a href="{{ action('TutorTutoradoController@show',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ])}}">
-			                    <button class="btn btn-ff-blues" type="button" data-toggle="tooltip" data-target="#modal-default" data-toggle="tooltip" data-placement="bottom" title="Ver lista de tutorados">
+			                    <button class="btn btn-ff-blues" type="button" data-toggle="tooltip" data-target="#modal-default" data-toggle="tooltip" data-placement="bottom" title="Ver o Desvincular tutorados">
 			                    		<i class="fa fa-eye"></i>
 			                    </button>
 			                  </a>

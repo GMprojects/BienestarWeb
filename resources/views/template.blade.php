@@ -11,6 +11,8 @@
       <link rel="stylesheet" href="{{ asset('facfar/facfar.css') }}"/>
       <link href="https://fonts.googleapis.com/css?family=Coming+Soon|Raleway" rel="stylesheet">
       <!-- CSS adicionales -->
+      <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.12.1.custom/jquery-ui.min.css')}}"/>
+
       <link rel="stylesheet" href="{{ asset('plugins/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/datatables.net-bs/css/responsive.bootstrap.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/datepicker/dist/css/bootstrap-datepicker.min.css') }}"/>
@@ -27,6 +29,8 @@
       <script src="{{ asset('plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
       <!-- Scripts adicionales -->
+      <script src="{{ asset('plugins/jquery-ui-1.12.1.custom/jquery-ui.min.js')}}"></script>
+
       <script src="{{ asset('plugins/datatables.net-bs/js/jquery.dataTables.js') }}"></script>
       <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
       <script src="{{ asset('plugins/datatables.net-bs/js/dataTables.responsive.min.js') }}"></script>

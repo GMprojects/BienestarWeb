@@ -38,9 +38,9 @@
                            <img src="{{ asset('storage/'.$du['user']->foto) }}" class="img-circle img-profile-img">
                         @else
                            @if ($du['user']->sexo == 'h'){{-- Hombre --}}
-                              <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Encontrada">
+                              <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Disponible">
                            @else{{-- Mujer --}}
-                              <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Encontrada">
+                              <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Disponible">
                            @endif
                            {{--<img src="{{ asset('img/user.png') }}" class="img-circle img-profile-img">--}}
                         @endif

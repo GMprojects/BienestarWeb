@@ -24,28 +24,44 @@
 									<th>Dirigido A</th>
 									<th>Opciones</th>
 								</thead>
-								@foreach($encuestas as $encuesta)
+								@for($i = 0; $i < count($encuestas); $i++)
 									<tr>
-										<td>{{$encuesta->idEncuesta}}</td>
-										<td>{{$encuesta->titulo}}</td>
-										<td>{{$encuesta->tipoActividad['tipo']}}</td>
-										@if($encuesta->destino === 'r')
+										<td>{{$encuestas[$i]->idEncuesta}}</td>
+										<td>{{$encuestas[$i]->titulo}}</td>
+										<td>{{$encuestas[$i]->tipoActividad['tipo']}}</td>
+										@if($encuestas[$i]->destino === 'r')
 											<td>Responsable</td>
 										@else
-											<td>Inscrito</td>
+											<td>Inscritos</td>
 										@endif
 										<td>
-											<a href="{{URL::action('EncuestaController@show',$encuesta->idEncuesta)}}">
-												<button class="btn btn-ff-blues" data-toggle="tooltip" data-placement="bottom" title="Vista Preliminar de la Encuesta">
+											<a href="{{URL::action('EncuestaController@show',$encuestas[$i]->idEncuesta)}}">
+												<button class="btn btn-ff-blues" data-toggle="tooltip" data-placement="bottom" title="Vista Preliminar Encuesta">
 													<span>
 													  <i class="fa fa-eye"><i class="fa fa-file-text"></i></i>
 													</span>
 												</button>
 											</a>
+
+											<a href="{{URL::action('EncuestaController@edit',$encuestas[$i]->idEncuesta)}}">
+												<button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar encuesta">
+													<span>
+													  <i class="fa fa-edit"></i></i>
+													</span>
+												</button>
+											</a>
+											@if($cant_enc_resp[$i] == 0)
+											<a href="" data-target="#modal-delete-{{$encuestas[$i]->idEncuesta}}" data-toggle="modal">
+												<button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar encuesta">
+													<i class="fa fa-trash"></i>
+												</button>
+											</a>
+											@endif
+
 										</td>
 									</tr>
 									@include('admin.encuesta.modal')
-								@endforeach
+								@endfor
 							</table>
 					</div>
 			</div>

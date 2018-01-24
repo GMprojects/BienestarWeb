@@ -32,7 +32,12 @@
                            En Bienestar Farmacia nos interesa su opinión,
                            por favor manifieste su conformidad con la
                            <strong>Actividad</strong>: <strong style="color:#4B367C">Aqui el titulo de la actividad</strong>
-                           de la cual participó como <small class="label ff-bg-red">Responsable</small>
+                           de la cual participó como
+									@if($encuesta->destino == 'r')
+										<small class="label ff-bg-red">Responsable</small>
+									@else
+										<small class="label ff-bg-green">Inscritos</small>
+									@endif
                         </p>
                    <p><strong>Elija una de las siguientes opciones:</strong></p>
 
@@ -41,7 +46,7 @@
                    <div class="item hidden-xs hidden-sm">
                        <div class="question" style="background: white;"></div>
                        <div class="alternatives" style="background: white;">
-                          @foreach ( $encuesta->alternativas as $alternativa )
+                          @foreach ( $encuesta->alternativas->sortby('valor') as $alternativa )
                              <div class="env-alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); background-color: #D3C7E8; padding: 0px; border-radius: 7px 7px 0px 0px;">
                                 <div class="alternative" style="text-align:left;">
                                    <label>{{ $alternativa->etiqueta }}</label>
@@ -51,25 +56,28 @@
                        </div>
                     </div>
                     <ol style="padding: 0px;" class="enc-list">
-                       @foreach ( $encuesta->preguntas as $pregunta )
-                          <div class="item">
-                             <div class="question">
-                               <li>
-                                  <span class="quest-text">
-                                     {{ $pregunta->enunciado }}
-                                  </span>
-                              </li>
-                             </div>
-                             <div class="alternatives">
-                                @foreach ( $encuesta->alternativas as $alternativa )
-                                   <div class="env-alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
-                                      <div class="alternative">
-                                        <input required type="radio" name="{{ $pregunta->idPreguntaEncuesta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
-                                      </div>
-                                   </div>
-                                @endforeach
-                             </div>
-                          </div>
+                       @foreach ( $encuesta->preguntas->sortby('orden') as $pregunta )
+								  @if($pregunta->estado == 1)
+									  <div class="item">
+	                             <div class="question">
+	                               <li>
+	                                  <span class="quest-text">
+	                                     {{ $pregunta->enunciado }}
+	                                  </span>
+	                              </li>
+	                             </div>
+	                             <div class="alternatives">
+	                                @foreach ( $encuesta->alternativas as $alternativa )
+	                                   <div class="env-alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
+	                                      <div class="alternative">
+	                                        <input required type="radio" name="{{ $pregunta->idPreguntaEncuesta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+	                                      </div>
+	                                   </div>
+	                                @endforeach
+	                             </div>
+	                          </div>
+								  @endif
+
                        @endforeach
                     </ol>
                 </div>

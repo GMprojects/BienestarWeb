@@ -15,14 +15,14 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('tipoPersona','TipoPersonaController');
-    Route::resource('tipoHabito','TipoHabitoController');
-    Route::resource('preguntaHabito','PreguntaHabitoController');
+    //Route::resource('tipoHabito','TipoHabitoController');
+    //Route::resource('preguntaHabito','PreguntaHabitoController');
     Route::resource('tipoActividad', 'TipoActividadController');
     Route::resource('egresado', 'EgresadoController');
     Route::resource('trabajo', 'TrabajoController');
     Route::resource('encuesta', 'EncuestaController');
-    Route::resource('alternativa', 'AlternativaController');
-    Route::resource('preguntaEncuesta', 'PreguntaEncuestaController');
+    //Route::resource('alternativa', 'AlternativaController');
+    //Route::resource('preguntaEncuesta', 'PreguntaEncuestaController');
     Route::resource('user', 'UserController');
     Route::resource('tutorTutorado', 'TutorTutoradoController');
     Route::get('tutorTutorado/{tutorTutorado}/destroy', 'TutorTutoradoController@destroyTutor');
@@ -59,6 +59,8 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('inscripcion', 'InscripcionADAController');
 
     Route::resource('evidenciaActividad', 'EvidenciaActividadController');
+    Route::get('actividad/categoria/{idTipoActividad}/', ['uses' => 'ActividadController@indexPorCategoria','as' => 'actividad.indexPorCategoria']);
+    Route::get('actividad/categoria', 'ActividadController@indexCategorias');
     Route::get('actividad/{idActividad}/cancel', 'ActividadController@cancel');
     Route::get('actividad/{idActividad}/execute', 'ActividadController@execute');
     Route::get('actividad/{idActividad}/execute/{idInsAlumno}/tutoria', 'ActPedagogiaController@create');

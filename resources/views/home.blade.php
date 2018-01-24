@@ -20,7 +20,7 @@
       @else
          @include('layouts.partials.member-nav')
       @endif
-
+{{--<span hidden='hidden'> <a href="www.google.com"></a> </span>--}}
       <div id="wrapper">
          <section id="page-content-wrapper" class="content-princ container">
             @if(Auth::user() != null)
