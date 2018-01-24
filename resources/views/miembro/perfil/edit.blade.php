@@ -1,13 +1,25 @@
 @extends('template')
 @section('contenido')
-
+{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
+{{Form::token()}}
+{!!Form::hidden('op',1)!!}
 <div class="row">
+	<div class="col-xs-12">
+		<div class="second-bar">
+			<div class="pull-left">
+				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
+			</div>
+			<div class="pull-right">
+				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> <span class="hidden-xs">Limpiar</span></button>
+				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> <span class="hidden-xs">Grabar</span></button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row" style="margin-top: 70px;">
 	<div class="col-md-2"></div>
 	<div class="col-md-8">
 		<div class="caja">
-			{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
-			{{Form::token()}}
-			{!!Form::hidden('op',1)!!}
 	      <div class="caja-header">
 	         <div class="caja-icon">	<i class="fa fa-address-card"></i></div>
 	         <div class="caja-title">Datos Personales
@@ -147,15 +159,6 @@
 				</div>
 			</div>
 			<br><br>
-			<div class="caja-footer">
-				<div class="pull-left">
-					<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> Volver</button>
-				</div>
-				<div class="pull-right">
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
-				</div>
-	      </div>
 		{!! Form::close() !!}
 	   </div>
 	</div>
@@ -250,7 +253,7 @@
 		return false;
 	}
 
-	
+
 
 </script>
 @endsection
