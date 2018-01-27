@@ -15,17 +15,13 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('tipoPersona','TipoPersonaController');
-    //Route::resource('tipoHabito','TipoHabitoController');
-    //Route::resource('preguntaHabito','PreguntaHabitoController');
     Route::resource('tipoActividad', 'TipoActividadController');
     Route::resource('egresado', 'EgresadoController');
     Route::resource('trabajo', 'TrabajoController');
     Route::resource('encuesta', 'EncuestaController');
-    //Route::resource('alternativa', 'AlternativaController');
-    //Route::resource('preguntaEncuesta', 'PreguntaEncuestaController');
     Route::resource('user', 'UserController');
     Route::resource('tutorTutorado', 'TutorTutoradoController');
-    Route::get('tutorTutorado/{tutorTutorado}/destroy', 'TutorTutoradoController@destroyTutor');
+    Route::delete('tutorTutorado/{tutorTutorado}/destroy/{anioSemestre}/{numeroSemestre}', ['uses' =>  'TutorTutoradoController@destroyTutor','as' => 'tutorTutorado.destroyTutor']);
     Route::get('dashboard', 'DashboardController@index');
     Route::get('dashboard/actividades', 'DashboardController@listarActividades');
     Route::get('alumnos', 'UserController@indexAlumnos');
@@ -33,16 +29,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('administrativos', 'UserController@indexAdministrativos');
 
     Route::resource('semestre', 'SemestreController');
-   /* Route::get('tutorTutorado', 'TutorTutoradoController@index');
-    Route::get('tutorTutorado/create', 'TutorTutoradoController@create');
-    Route::get('tutorTutorado/{tutorTutorado}/edit', 'TutorTutoradoController@edit');
-    Route::put('tutorTutorado/{tutorTutorado}', ['uses' => 'TutorTutoradoController@update', 'as' => 'tutorTutorado.update']);
-    Route::put('tutorTutorado', ['uses' => 'TutorTutoradoController@store', 'as' => 'tutorTutorado.store']);*/
 });
 
-//Route::get('tutorTutorado/{tutorTutorado}', 'TutorTutoradoController@show');
-
-//Route::get('perfilTipo', 'UserController@getUserTipo');
 
 Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
    Route::resource('actividad', 'ActividadController');

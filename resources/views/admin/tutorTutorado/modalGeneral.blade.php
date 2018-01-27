@@ -1,6 +1,5 @@
-<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-delete-{{$tutorado->idTutorTutorado}}">
-	{{Form::Open(['action'=>['TutorTutoradoController@destroy',$tutorado->idTutorTutorado],'method'=>'delete'])}}
-
+<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-deleteG-{{ $tutor->idDocente }}">
+	{{Form::Open(['route'=>['tutorTutorado.destroyTutor', $tutor->idDocente,  $tutor->anioSemestre, $tutor->numeroSemestre],'method'=>'delete'])}}
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header" style="background-color:red; color:white; border-radius:6px 6px 0px 0px;">
@@ -8,8 +7,8 @@
 				<h4 class="modal-title"><b style="color:white;">Eliminar Tutor - Tutorado</b></h4>
 			</div>
 			<div class="modal-body">
-				<p>Confirme si desea ELIMINAR de la lista de tutorados de
-               <b> {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }} </b> al tutorado <b> {{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</b></p>
+				<p>Confirme si desea ELIMINAR a
+               <b> {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }} </b> y a todos sus tutorados.</p>
 			</div>
 			<div class="modal-footer">
 				<div class="pull-left">

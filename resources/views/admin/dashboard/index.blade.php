@@ -33,7 +33,7 @@
           <p>Pendientes</p>
          </div>
          <div class="icon">
-            <i class="fa fa-calendar-plus-o"></i>
+            <i class="fa fa-calendar-minus-o"></i>
          </div>
          <a href="" id="ide" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
       </div>
@@ -46,7 +46,7 @@
           <p>Ejecutadas</p>
          </div>
          <div class="icon">
-            <i class="fa fa-thumbs-o-up"></i>
+            <i class="fa fa-calendar-check-o"></i>
          </div>
          <a href="" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
       </div>
@@ -59,7 +59,7 @@
           <p>Canceladas</p>
          </div>
          <div class="icon">
-            <i class="fa fa-calendar-plus-o"></i>
+            <i class="fa fa-times-circle"></i>
          </div>
          <a href="" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
       </div>
@@ -72,7 +72,7 @@
           <p>Expiradas</p>
          </div>
          <div class="icon">
-            <i class="fa fa-thumbs-o-up"></i>
+            <i class="fa fa-calendar-times-o"></i>
          </div>
          <a href="" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
       </div>

@@ -204,9 +204,9 @@
                      <div class="ff-card">
                         <div class="header-card" style="margin-bottom:20px;">
                            @if( $du['user']->sexo == 'm' )
-                              <span class="label title-box"><i class="fa fa-tasks"></i>Soy Programadora</span>
+                              <span class="label title-box"><i class="fa fa-calendar"></i>Soy Programadora</span>
                            @else
-                              <span class="label title-box"><i class="fa fa-tasks"></i>Soy Programador</span>
+                              <span class="label title-box"><i class="fa fa-calendar"></i>Soy Programador</span>
                            @endif
                         </div>
                         <div class="body-card" style="margin-left:0px;">

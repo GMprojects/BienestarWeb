@@ -3,11 +3,13 @@
 <div class="box box-info">
 	<div class="box-header">
 		<div class="row">
-			<div class="col-xs-6">
-				<h3 class="box-title">Tutores </h3>
-			</div>
-			<div class="col-xs-6" style="text-align:right;">
-				<a href="tutorTutorado/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Tutor - Tutorados</button></a>
+			<div class="col-md-12">
+				<div class="pull-left">
+					<h3 class="box-title">Tutores </h3>
+				</div>
+				<div class="pull-right">
+					<a href="tutorTutorado/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nuevo Tutor - Tutorados</button></a>
+				</div>
 			</div>
 		</div>
 
@@ -39,10 +41,11 @@
 									<a href="{{ action('TutorTutoradoController@edit',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
 					               <button class="btn btn-ff-green"  type="button" data-toggle="tooltip" data-placement="bottom" title="Añadir un tutorado"><i class="fa fa-plus"></i></button>
 					            </a>
-									<a href="{{ action('TutorTutoradoController@destroyTutor',['idDocente' => $tutor->idDocente, 'anioSemestre' => $tutor->anioSemestre, 'numeroSemestre' => $tutor->numeroSemestre ]) }}">
+									<a href=""  data-target = "#modal-deleteG-{{ $tutor->idDocente }}" data-toggle = "modal">
 					               <button class="btn btn-ff-red" type="button"  data-toggle="tooltip" data-placement="bottom" title="Eliminar a tutor y sus tutorados"><i class="fa fa-trash"></i></button>
 					            </a>
                 		  </td>
+							  @include('admin.tutorTutorado.modalGeneral')
 							</tr>
 							@endforeach
 						</table>

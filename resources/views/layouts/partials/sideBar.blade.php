@@ -66,11 +66,11 @@
                <li class="ff-li-nav"><a class="ff-li-b" href="{{ action('TrabajoController@index',[ 'op' => '2'  ]) }}"><i class="fa fa-circle-o"></i> Trabajos</a></li>
             </ul>
          </li>
-         {{--<li class="dropdown ">
+         <li class="dropdown ">
             <a class="ff-li-a" href="{{ action('DashboardController@index')}}">
                <i class="fa fa-dashboard"></i> Dashboard
             </a>
-         </li>--}}
+         </li>
          <li class="dropdown ">
             <a class="ff-li-a" href="{{ action('SemestreController@index')}}">
                <i class="fa fa-gear"></i> Configuración

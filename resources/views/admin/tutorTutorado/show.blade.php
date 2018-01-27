@@ -19,15 +19,15 @@
 
   	<div class="box-body">
       <div class="row">
-			<div class="col-md-6">
-				<label><i class="fa fa-user margin-r-5"></i><b>Tutor: </b></label> <b>  &nbsp; &nbsp; {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</b>&nbsp; &nbsp;
-
-			</div>
-			<div class="col-md-3"></div>
-			<div class="col-md-3 text-right">
-				<label><i class="glyphicon glyphicon-calendar margin-r-5"></i><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $anioSemestre.'-'.$numeroSemestre }}
-			</div>
-	   </div>
+         <div class="col-md-12">
+            <div class="pull-left">
+               <label><i class="fa fa-user margin-r-5"></i><b>Tutor: </b></label> <b>  &nbsp; &nbsp; {{ $tutor->nombre.' '.$tutor->apellidoPaterno.' '.$tutor->apellidoMaterno }}</b>&nbsp; &nbsp;
+            </div>
+            <div class="pull-right">
+               <label><i class="glyphicon glyphicon-calendar margin-r-5"></i><b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $anioSemestre }} - @if ( $numeroSemestre == 1 )I	@else	II @endif
+            </div>
+         </div>
+      </div>
      <br>
      <div class="row">
         <div class="col-md-12">

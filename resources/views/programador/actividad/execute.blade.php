@@ -92,14 +92,14 @@
 {!! Form::close() !!}
 
 <script type="text/javascript">
-	$(document).ready(function(){
+	/*$(document).ready(function(){
 		$('input').iCheck({
 			checkboxClass: 'icheckbox_square-green',
 			radioClass: 'iradio_square-green',
 			increaseArea: '20%' // optional
 		});
 		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-	});
+	});*/
 	$("#checkTodos").change(function () {
 		//console.log('chekBoxTotal');
 		$("input:checkbox").prop('checked', $(this).prop("checked"));
@@ -112,60 +112,68 @@
 		minDate: moment('{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}','DD/MM/YYYY')
 	});
 	$(document).ready(function() {
-			 $('#tabAsistentes').DataTable({
-					"lengthMenu": [ 15, 25, 50, 75, 100 ],
-					"oLanguage" : {
-						 "sProcessing":     "Procesando...",
-						 "sLengthMenu":     "Mostrar _MENU_ registros",
-						 "sZeroRecords":    "No se encontraron resultados",
-						 "sEmptyTable":     "Ningún dato disponible en esta tabla",
-						 "sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
-						 "sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
-						 "sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
-						 "sInfoPostFix":    "",
-						 "sSearch":         "Buscar:",
-						 "sUrl":            "",
-						 "sInfoThousands":  ",",
-						 "sLoadingRecords": "Cargando...",
-						 "oPaginate": {
-							 "sFirst":    "Primero",
-							 "sLast":     "Último",
-							 "sNext":     "Sig",
-							 "sPrevious": "Ant"
-						 },
-						 "oAria": {
-							 "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-							 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-						 }
-					},
-			 });
-			 $('#tabTutorados').DataTable({
-					"lengthMenu": [ 15, 25, 50, 75, 100 ],
-					"oLanguage" : {
-						 "sProcessing":     "Procesando...",
-						 "sLengthMenu":     "Mostrar _MENU_ registros",
-						 "sZeroRecords":    "No se encontraron resultados",
-						 "sEmptyTable":     "Ningún dato disponible en esta tabla",
-						 "sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
-						 "sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
-						 "sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
-						 "sInfoPostFix":    "",
-						 "sSearch":         "Buscar:",
-						 "sUrl":            "",
-						 "sInfoThousands":  ",",
-						 "sLoadingRecords": "Cargando...",
-						 "oPaginate": {
-							 "sFirst":    "Primero",
-							 "sLast":     "Último",
-							 "sNext":     "Sig",
-							 "sPrevious": "Ant"
-						 },
-						 "oAria": {
-							 "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-							 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-						 }
-					},
-			 });
+		$('#tabAsistentes').DataTable({
+		  "oLanguage" : {
+				"sProcessing":     "Procesando...",
+				"sLengthMenu":     "Mostrar _MENU_ registros",
+				"sZeroRecords":    "No se encontraron resultados",
+				"sEmptyTable":     "Ningún dato disponible en esta tabla",
+				"sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
+				"sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
+				"sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
+				"sInfoPostFix":    "",
+				"sSearch":         "Buscar:",
+				"sUrl":            "",
+				"sInfoThousands":  ",",
+				"sLoadingRecords": "Cargando...",
+				"oPaginate": {
+					"sFirst":    "Primero",
+					"sLast":     "Último",
+					"sNext":     "Sig",
+					"sPrevious": "Ant"
+				},
+				"oAria": {
+					"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+					"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+				}
+		  },
+		  "order": [[ 1, 'asc' ]],
+		  "scrollY": "400px",
+		  "scrollCollapse": true,
+		  "paging": false
+	});
+
+	$('#tabTutorados').DataTable({
+		  "oLanguage" : {
+				"sProcessing":     "Procesando...",
+				"sLengthMenu":     "Mostrar _MENU_ registros",
+				"sZeroRecords":    "No se encontraron resultados",
+				"sEmptyTable":     "Ningún dato disponible en esta tabla",
+				"sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
+				"sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
+				"sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
+				"sInfoPostFix":    "",
+				"sSearch":         "Buscar:",
+				"sUrl":            "",
+				"sInfoThousands":  ",",
+				"sLoadingRecords": "Cargando...",
+				"oPaginate": {
+					"sFirst":    "Primero",
+					"sLast":     "Último",
+					"sNext":     "Sig",
+					"sPrevious": "Ant"
+				},
+				"oAria": {
+					"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+					"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+				}
+		  },
+		  "order": [[ 1, 'asc' ]],
+		  "scrollY": "400px",
+		  "scrollCollapse": true,
+		  "paging": false
+	});
+
 			 init_contador('#observaciones', '#contadorObservaciones');
 			 init_contador('#recomendaciones', '#contadorRecomendaciones');
 	});

@@ -30,20 +30,20 @@ class EncuestaController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request){
-      $tiposActividad=TipoActividad::get();
-      $encuestas = Encuesta::get();
-      $cant_enc_resp = [];
-      foreach ($encuestas as $encuesta) {
-         if($encuesta->destino == 'r')
-            array_push($cant_enc_resp, EncuestaRespondidaResp::where(['idEncuesta' => $encuesta->id, 'estado' => '1'])->count());
-         else {
-            array_push($cant_enc_resp, EncuestaRespondidainsc::where(['idEncuesta' => $encuesta->id, 'estado' => '1'])->count());
-         }
-      }
-      //dd($cant_enc_resp);
-      return view('admin.encuesta.index')->with('encuestas',$encuestas)->with('cant_enc_resp', $cant_enc_resp);
-    }
+     public function index(Request $request){
+       $tiposActividad=TipoActividad::get();
+       $encuestas = Encuesta::get();
+       $cant_enc_resp = [];
+       foreach ($encuestas as $encuesta) {
+          if($encuesta->destino == 'r'){
+             array_push($cant_enc_resp, EncuestaRespondidaResp::where(['idEncuesta' => $encuesta->idEncuesta, 'estado' => '1'])->count());
+          }else {
+             array_push($cant_enc_resp, EncuestaRespondidaInsc::where(['idEncuesta' => $encuesta->idEncuesta, 'estado' => '1'])->count());
+          }
+       }
+       //dd($cant_enc_resp);
+       return view('admin.encuesta.index')->with('encuestas',$encuestas)->with('cant_enc_resp', $cant_enc_resp);
+     }
 
     /**
      * Show the form for creating a new resource.

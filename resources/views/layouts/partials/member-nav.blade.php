@@ -23,6 +23,11 @@
                      <i class="fa fa-home" style="font-size: 1.6em;" aria-hidden="true"></i> <span class="hidden-sm hidden-xs" style="font-size: 1.3em;">Inicio</span>
                   </a>
                </li>
+               <li>
+                  <a href="{{ action('ActividadController@indexCategorias') }}" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Categorías">
+                     <i class="fa fa-tags" aria-hidden="true"></i> <span class="hidden-sm hidden-xs" style="font-size: 1.3em;">Categorías</span>
+                  </a>
+               </li>
             </ul>
 
          {{--<div class="div-buttons">

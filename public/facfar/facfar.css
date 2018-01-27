@@ -1712,10 +1712,10 @@ textarea:focus {
    box-shadow: 0 0 2px green;
 }
 .st-3{
-   box-shadow: 0 0 2px orange;
+   box-shadow: 0 0 2px red;
 }
 .st-4{
-   box-shadow: 0 0 2px red;
+   box-shadow: 0 0 2px orange;
 }
 /*               */
 .ui-state-highlight {

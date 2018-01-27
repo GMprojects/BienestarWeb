@@ -35,21 +35,21 @@
              </div>
              <div class="caja-body">
                 <div class="">
-                   @switch( $opt )
+						 @switch( $opt )
                       @case('1') {{--encuesta de inscrito--}}
                          <p class="ff-c-secondary">
                             En BienestarWeb nos interesa su opini'on,
                             por favor manifieste su conformidad con la
-                            <strong>Actividad</strong>: <a href="">{{ $encResp->inscripcionADA->actividad->titulo }}</a>
-                            de la cual particip'o como <small class="label ff-bg-green">Asistente</small>, llenando la siguiente encuesta.
+                            <strong>Actividad</strong>: <a href="{{ action('ActividadController@member_show', ['id'=>$encResp->inscripcionADA->actividad->idActividad]) }}">{{ $encResp->inscripcionADA->actividad->titulo }}</a>
+                            de la cual participó como <small class="label ff-bg-green">Asistente</small>, llenando la siguiente encuesta.
                          </p>
                          @break
                       @case('2') {{--encuesta de responsable--}}
                          <p class="ff-c-secondary">
                            En BienestarWeb nos interesa su opini'on,
                            por favor manifieste su conformidad con la
-                           <strong>Actividad</strong>: {{ $encResp->actividad->titulo }}
-                           de la cual particip'o como <small class="label ff-bg-red">Responsable</small>
+                           <strong>Actividad</strong>: <a href="{{ action('ActividadController@member_show', ['id'=>$encResp->actividad->idActividad]) }}">{{ $encResp->actividad->titulo }}</a>
+                           de la cual participó como <small class="label ff-bg-red">Responsable</small>
                         </p>
                          @break
                    @endswitch

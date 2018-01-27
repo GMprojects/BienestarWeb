@@ -191,9 +191,8 @@ class ActividadController extends Controller{
    }
 
    public function indexPorCategoria($idTipoActividad, Request $request){
-      //dd($request->fecha);
       $tipoActividad = TipoActividad::findOrFail($idTipoActividad);
-      $actividades = Actividad::where([['estado', '<', '5'],['idTipoActividad', '=',$request->idTipoActividad],['fechaInicio','>=',$request->fecha]])->orderBy('fechaInicio', 'asc')->get();
+      $actividades = Actividad::where([['estado', '=', '1'],['idTipoActividad', '=',$request->idTipoActividad],['fechaInicio','>=',$request->fecha]])->orderBy('fechaInicio', 'asc')->get();
       return view('miembro.actividades-categoria',[
          'tipoActividad' => $tipoActividad,
          'actividades' => $actividades,
@@ -201,7 +200,6 @@ class ActividadController extends Controller{
    }
 
    public function indexCategorias(){
-      //dd($idTipoActividad);
       $tiposActividad = TipoActividad::get();
       return view('miembro.categorias',['tiposActividad' => $tiposActividad]);
    }
@@ -753,7 +751,7 @@ class ActividadController extends Controller{
 
     public function member_show(Request $request){
          $actividad = Actividad::findOrFail($request->id);
-         $relacionadas = Actividad::where([['idTipoActividad', '=', $actividad->idTipoActividad], ['idActividad', '<>', $actividad->idActividad], ['estado', '<', '5']])->get();
+         $relacionadas = Actividad::where([['estado', '=', 1], ['idTipoActividad', '=', $actividad->idTipoActividad], ['idActividad', '<>', $actividad->idActividad], ['estado', '<', '5']])->get();
          $inscripciones = $actividad->inscripcionesADA;
          $insc_alum = [];
          $insc_doce = [];

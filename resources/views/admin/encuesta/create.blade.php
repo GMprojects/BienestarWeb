@@ -122,7 +122,7 @@
 		pre_adds++;
 	});
 	$('#btAddAlternativa').on('click', function(){
-		$('#alternativas ol').append('<li class="item-edit" id="a_a'+alt_adds+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar etiqueta" type="button" class="close close-red" onclick="removeElemento(\'a_a'+alt_adds+'\')"><span aria-hidden="true">&times;</span></button><label for="etiqueta">Etiqueta: </label><input id="e_a'+alt_adds+'" type="text" name="e_a'+alt_adds+'"  required  class="form-control" placeholder="Una etiqueta que indique la valoración" /></li>');
+		$('#alternativas ol').append('<li class="item-edit" id="a_a'+alt_adds+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar etiqueta" type="button" class="close close-red" onclick="removeElemento(\'a_a'+alt_adds+'\')"><span aria-hidden="true">&times;</span></button><div class="row"><div class="col-md-8 col-sm-8 col-xs-8"><label for="etiqueta">Etiqueta: </label><input id="e_a'+pre_adds+'" type="text" name="e_a'+pre_adds+'" class="form-control" required placeholder="Una etiqueta que indique la valoración"></div><div class="col-md-4 col-sm-4 col-xs-4"><label for="valor">Valor: </label><input id="v_a'+alt_adds+'" required type="number" name="v_a'+alt_adds+'" class="form-control"></div></div></li>');
 		alt_adds++;
 	});
 	$( function() {

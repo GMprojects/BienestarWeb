@@ -20,22 +20,17 @@
       @else
          @include('layouts.partials.member-nav')
       @endif
-{{--<span hidden='hidden'> <a href="www.google.com"></a> </span>--}}
       <div id="wrapper">
          <section id="page-content-wrapper" class="content-princ container">
             @if(Auth::user() != null)
                @include('layouts.partials.sidebar')
             @endif
             <div class="row">
-
                @include('layouts.partials.carousel')
                <br />
-               {{-- @include('layouts.partials.act-mini-demo') --}}
-
                @foreach ($actividades as $actividad)
                   @include('layouts.partials.act-mini', [$actividad])
                @endforeach
-
             </div>
             @include('layouts.partials.footer')
          </section>

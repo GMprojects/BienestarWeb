@@ -1,7 +1,7 @@
 @extends('template')
 @section('contenido')
    <div class="row">
-      <div class="col-md-offset-2 col-md-8">
+      <div class="col-md-offset-1 col-md-10">
          {{ Form::hidden('opcion',  $opcion ,['id' => 'idOpcion']) }}
          <div class="ff-nav-box">
             <ul class="ff-nav-tab">
@@ -23,10 +23,10 @@
                   <ul class="ff-list-act">
                      @foreach ($mis_resp as $actividad)
                         <div class="row">
-                           <div class="col-md-9">
+                           <div class="col-md-8">
                               @include('layouts.partials.list-act', $actividad)
                            </div>
-                           <div class="col-md-3 pull-right">
+                           <div class="col-md-4 pull-right">
                              <div class="mis-act-op" valign="middle">
                                 @if ( Auth::user()->id == $actividad->idUserResp)
                                     <a href="{{ action('ActividadController@execute',$actividad->idActividad) }}" class="btn btn-ff-greenOs" data-toggle="tooltip" data-placement="bottom" title="Ejecutar Actividad">
@@ -45,10 +45,10 @@
                   <ul class="ff-list-act">
                      @foreach ($mis_prog as $actividad)
                         <div class="row">
-                           <div class="col-md-9">
+                           <div class="col-md-8">
                               @include('layouts.partials.list-act', $actividad)
                            </div>
-                           <div class="col-md-3 pull-right">
+                           <div class="col-md-4 pull-right">
                              <div class="mis-act-op" valign="middle">
                                 @switch($actividad->estado)
                                    @case('1')

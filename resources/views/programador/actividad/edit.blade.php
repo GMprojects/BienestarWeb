@@ -11,8 +11,8 @@
 				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
 			</div>
 			<div class="pull-right">
-				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Publicar</button>
+				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> <span class="hidden-xs">Limpiar</span></button>
+				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> <span class="hidden-xs">Publicar</span></button>
 			</div>
 		</div>
 	</div>

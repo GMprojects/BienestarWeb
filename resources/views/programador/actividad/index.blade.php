@@ -3,11 +3,13 @@
 <div class="box box-info">
 	<div class="box-header">
 		<div class="row">
-			<div class="col-xs-6">
-				<h3 class="box-title">Lista de Actividades</h3>
-			</div>
-			<div class="col-xs-6" style="text-align:right;">
-				<a href="actividad/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nueva Actividad</button></a>
+			<div class="col-md-12">
+				<div class="pull-left">
+					<h3 class="box-title">Lista de Actividades</h3>
+				</div>
+				<div class="pull-right">
+					<a href="actividad/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nueva Actividad</button></a>
+				</div>
 			</div>
 		</div>
 	</div>

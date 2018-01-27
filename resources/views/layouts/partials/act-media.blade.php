@@ -77,21 +77,29 @@
                <span class="act-categoria"> Categoría: <a href="{{ action('ActividadController@indexCategorias') }}">{{ $actividad->tipoActividad->tipo }}</a>
                   <span class="act-separator">/</span>
                </span>
-               <span class="label ff-bg-green2 act-estado">
+
                   @php
                      $diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d'));
                      $diasRestantes = intval($diferencia/86400);
                   @endphp
-                  @if ($diasRestantes < 0)
-                     Expirada
-                  @else
-                     @if ($diasRestantes == 1)
-                        Faltan {{ '1 día'}}
+                  {{--@if ($actividad->estado == '3')
+                        <span class="label ff-bg-red act-estado">Cancelada</span>
+                  @elseif($actividad->estado == '2')
+                        <span class="label ff-bg-green act-estado">Ejecutada</span>
+                  @else--}}
+                     @if ($diasRestantes < 0)
+                        <span class="label ff-bg-orange act-estado">Expirada</span>
                      @else
-                        Faltan {{$diasRestantes.' días'}}
+                        <span class="label ff-bg-blue act-estado">
+                           @if ($diasRestantes == 1)
+                              Faltan {{ '1 día'}}
+                           @else
+                              Faltan {{$diasRestantes.' días'}}
+                           @endif
+                        </span>
                      @endif
-                  @endif
-               </span>
+                  {{--@endif--}}
+
             </small>
          </div>
       </div>

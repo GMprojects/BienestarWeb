@@ -140,17 +140,17 @@ class MiPerfilController extends Controller{
          case '1'://Alumno
             $idAlumno = Alumno::where('idUser', $id)->value('idAlumno');
             $inscripciones = InscripcionAlumno::where('idAlumno', $idAlumno)->pluck('idActividad');
-            $actividades = Actividad::whereIn('idActividad', $inscripciones)->where('estado','<',5)->get();
+            $actividades = Actividad::whereIn('idActividad', $inscripciones)->where('estado','<',5)->orderBy('fechaInicio', 'asc')->get();
             break;
          case '2'://Docente
             $idDocente = Docente::where('idUser', $id)->value('idDocente');
             $inscripciones = InscripcionDocente::where('idDocente', $idDocente)->pluck('idActividad');
-            $actividades = Actividad::whereIn('idActividad', $inscripciones)->where('estado','<',5)->get();
+            $actividades = Actividad::whereIn('idActividad', $inscripciones)->where('estado','<',5)->orderBy('fechaInicio', 'asc')->get();
             break;
          case '3'://Administrativo
             $idAdministrativo = Administrativo::where('idUser', $id)->value('idAdministrativo');
             $inscripciones = InscripcionAdministrativo::where('idAdministrativo', $idAdministrativo)->pluck('idActividad');
-            $actividades = Actividad::whereIn('idActividad', $inscripciones)->where('estado','<',5)->get();
+            $actividades = Actividad::whereIn('idActividad', $inscripciones)->where('estado','<',5)->orderBy('fechaInicio', 'asc')->get();
             break;
       }
       for ($i=0; $i < count($inscripciones) ; $i++) {
@@ -159,11 +159,11 @@ class MiPerfilController extends Controller{
       return array($actividades, $list_insc);
    }
    public function misActResponsable($id){
-      $actividades = Actividad::where([['idUserResp', $id],['estado','<',5]])->get();
+      $actividades = Actividad::where([['idUserResp', $id],['estado','<',5]])->orderBy('fechaInicio', 'asc')->get();
       return $actividades;
    }
    public function misActProgramador($id){
-      $actividades = Actividad::where([['idUserProg', $id],['estado','<',5]])->get();
+      $actividades = Actividad::where([['idUserProg', $id],['estado','<',5]])->orderBy('fechaInicio', 'asc')->get();
       return $actividades;
 
    }

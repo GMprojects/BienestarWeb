@@ -61,7 +61,7 @@ class TutorTutoradoController extends Controller{
                            ->select('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
                            ->get();
 
-         $alumnos = Alumno::join('user','alumno.idUser', '=','user.id' )
+       $alumnos = Alumno::join('user','alumno.idUser', '=','user.id' )
                           ->whereNotIn('alumno.idAlumno', $idAlumnosTutorados)
                           ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
                           ->get();
@@ -82,7 +82,7 @@ class TutorTutoradoController extends Controller{
         $idDocente = $array[0];
         $docente = Docente::findOrFail($idDocente);
         for ($i = 0; $i < count($request->alumnos); $i++) {
-          $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $arraySemestre[0],
+          $docente->tutorados()->attach( (preg_split("/[_]/",$request->alumnos[$i]))[0], ['anioSemestre' => $arraySemestre[0],
                                                                  'numeroSemestre' => $numeroSemestre]);
         }
         $job = (new JobEmailHabitosEstudios($idDocente, $arraySemestre[0], $numeroSemestre))
@@ -144,12 +144,13 @@ class TutorTutoradoController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $idTutor){
+        $numeroSemestre = ($request->numeroSemestre == 'I') ? 1 : 2 ;
         $docente = Docente::findOrFail($idTutor);
         for ($i = 0; $i < count($request->alumnos); $i++) {
           $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
-                                                                 'numeroSemestre' => $request->numeroSemestre]);
+                                                                 'numeroSemestre' => $numeroSemestre]);
         }
-        $job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $request->numeroSemestre))
+        $job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $numeroSemestre))
            ->delay(Carbon::now()->addSeconds(1));
         dispatch($job);
         return Redirect::to('admin/tutorTutorado');
@@ -221,14 +222,14 @@ class TutorTutoradoController extends Controller{
 
     }
 
-    public function destroyTutor(Request $request, $idTutor){
+    public function destroyTutor($idTutor, $anioSemestre, $numeroSemestre){
          $actividades = Actividad::where([
                                        ['idUserResp', Docente::findOrFail($idTutor)->user->id],
-                                       ['numeroSemestre', $request->numeroSemestre],
-                                       ['anioSemestre', $request->anioSemestre]])->get();
+                                       ['numeroSemestre', $numeroSemestre],
+                                       ['anioSemestre', $anioSemestre]])->get();
          $tutorTutorados = TutorTutorado::where([
-                                              ['numeroSemestre', $request->numeroSemestre],
-                                              ['anioSemestre',  $request->anioSemestre],
+                                              ['numeroSemestre', $numeroSemestre],
+                                              ['anioSemestre',  $anioSemestre],
                                               ['idDocente',  $idTutor]])->get();
          foreach ($tutorTutorados as $tutorTutorado) {
             if ($actividades != null) {
