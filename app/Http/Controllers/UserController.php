@@ -87,7 +87,8 @@ class UserController extends Controller{
            'codigo' => 'required|min:4|max:20|unique:user',
            //'email' => 'required|max:100|unique:user',
            //'email' => [new EmailValidation()],
-           'email' => ['required', 'max:100', new EmailValidation()],
+           //['required', 'max:100', new EmailValidation()],
+           'email' => 'required|max:100|unique:user',
            'direccion'=> 'max:100',
            'telefono' => 'max:15',
            'celular' => 'max:15',
@@ -226,8 +227,8 @@ class UserController extends Controller{
                  'apellidoPaterno' => 'required|min:2|max:20',
                  'apellidoMaterno' => 'required|min:2|max:20',
                  'sexo' => 'required',
-                 //'email' => 'required|max:100|unique:user',
-                 'email' => ['required', 'max:100', new EmailValidation()],
+                 'email' => 'required|max:100|unique:user',
+                 //'email' => ['required', 'max:100', new EmailValidation()],
                  'direccion'=> 'max:100',
                  'telefono' => 'max:15',
                  'celular' => 'max:15'
@@ -302,6 +303,7 @@ class UserController extends Controller{
 
         if ($tieneRelaciones) {
            $user->estado = '0';
+           $user->email = $user->email.'-';
            $user->update();
         } else {
            switch ($user->idTipoPersona){

@@ -80,8 +80,6 @@ return array(
     'BienestarWeb\\Jobs\\JobEmailHabitosEstudios' => $baseDir . '/app/Jobs/JobEmailHabitosEstudios.php',
     'BienestarWeb\\Jobs\\JobEmailNuevaAct' => $baseDir . '/app/Jobs/JobEmailNuevaAct.php',
     'BienestarWeb\\Jobs\\JobEmailVerify' => $baseDir . '/app/Jobs/JobEmailVerify.php',
-    'BienestarWeb\\Mail\\ActividadActualizadaMail' => $baseDir . '/app/Mail/ActividadActualizadaMail.php',
-    'BienestarWeb\\Mail\\ActividadProgramadaMail' => $baseDir . '/app/Mail/ActividadProgramadaMail.php',
     'BienestarWeb\\Mail\\Email' => $baseDir . '/app/Mail/Email.php',
     'BienestarWeb\\Mail\\MailVerify' => $baseDir . '/app/Mail/MailVerify.php',
     'BienestarWeb\\Notifications\\ActividadActualizadaNotif' => $baseDir . '/app/Notifications/ActividadActualizadaNotif.php',
