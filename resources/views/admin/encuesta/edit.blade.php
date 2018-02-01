@@ -10,6 +10,8 @@
 				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
 			</div>
 			<div class="pull-right">
+				<button data-toggle="tooltip" data-placement="bottom" title="Agregar nuevo enunciado" type="button" name="btAddPregunta" id="btAddPregunta" class="btn btn-ff-green"><i class="fa fa-plus"></i>Enunciado</button>
+				<button data-toggle="tooltip" data-placement="bottom" title="Agregar nueva etiqueta" type="button" name="btAddAlternativa" id="btAddAlternativa" class="btn btn-ff-green2"><i class="fa fa-plus"></i>Etiqueta</button>
 				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> <span class="hidden-xs">Grabar</span></button>
 			</div>
 		</div>

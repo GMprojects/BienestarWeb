@@ -4,7 +4,6 @@ namespace BienestarWeb\Http\Controllers;
 
 use BienestarWeb\Semestre;
 use Illuminate\Http\Request;
-use Log;
 
 use BienestarWeb\Rules\SemestreValidation;
 use BienestarWeb\Rules\NumSemestreValidation;

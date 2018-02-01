@@ -39,6 +39,9 @@ class CrearTablaPersona extends Migration
               0. Inactivo
               1. Activo
             */
+            $tabla->boolean('confirmed')->default(0);
+            $tabla->string('confirmation_code')->nullable();
+            $tabla->boolean('changed_pass')->default(0);
             //Clave foranea de la tablais TipoPersona
             $tabla->integer('idTipoPersona')->unsigned();
             $tabla->foreign('idTipoPersona')->references('idTipoPersona')->on('TipoPersona');

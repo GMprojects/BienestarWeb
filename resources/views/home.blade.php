@@ -15,7 +15,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
    </head>
    <body>
-      @if(Auth::user() == null)
+	  @if(Auth::user() == null)
             @include('layouts.partials.nav')
       @else
          @include('layouts.partials.member-nav')
@@ -29,7 +29,7 @@
                @include('layouts.partials.carousel')
                <br />
                @foreach ($actividades as $actividad)
-                  @include('layouts.partials.act-mini', [$actividad])
+                     @include('layouts.partials.act-mini', [$actividad])
                @endforeach
             </div>
             @include('layouts.partials.footer')

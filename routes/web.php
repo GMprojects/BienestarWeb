@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('register/verify/{code}', 'UserController@verify');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('tipoPersona','TipoPersonaController');
@@ -91,6 +92,8 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
    Route::resource('perfil', 'MiPerfilController');
    Route::get('mis-actividades/{id}', ['uses' => 'MiPerfilController@mis_actividades', 'as' => 'miembro.misActividades']);
 });*/
+
+
 
 Auth::routes();
 

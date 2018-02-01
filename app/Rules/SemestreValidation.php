@@ -4,7 +4,6 @@ namespace BienestarWeb\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use BienestarWeb\Semestre;
-use Log;
 
 class SemestreValidation implements Rule
 {

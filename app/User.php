@@ -42,6 +42,9 @@ class User extends Authenticatable
       'foto',
       'funcion',
       'estado',
+      'changed_pass',
+      'confirmed',
+      'confirmation_code',
       'idTipoPersona'
     ];
 /**

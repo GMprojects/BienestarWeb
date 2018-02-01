@@ -18,7 +18,6 @@ use BienestarWeb\TipoActividad;
 use BienestarWeb\PreguntaEncuesta;
 use BienestarWeb\Alternativa;
 
-use Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 

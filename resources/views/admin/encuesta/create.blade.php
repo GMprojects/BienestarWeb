@@ -9,6 +9,8 @@
 				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
 			</div>
 			<div class="pull-right">
+				<button data-toggle="tooltip" data-placement="bottom" title="Agregar nuevo enunciado" type="button" name="btAddPregunta" id="btAddPregunta" class="btn btn-ff-green"><i class="fa fa-plus"></i>Enunciado</button>
+				<button data-toggle="tooltip" data-placement="bottom" title="Agregar nueva etiqueta" type="button" name="btAddAlternativa" id="btAddAlternativa" class="btn btn-ff-greenOs"><i class="fa fa-plus"></i>Etiqueta</button>
 				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> <span class="hidden-xs">Grabar</span></button>
 			</div>
 		</div>
@@ -63,9 +65,6 @@
 						<div class="caja-header large">
 					      <div class="caja-icon">2</div>
 					      <div class="caja-title">Escala de valoración
-								<div class="pull-right">
-									<button data-toggle="tooltip" data-placement="bottom" title="Agregar nueva etiqueta" type="button" name="btAddAlternativa" id="btAddAlternativa" class="btn btn-ff-green"><i class="fa fa-plus"></i>Etiqueta</button>
-								</div>
 							</div>
 					   </div>
 
@@ -90,9 +89,6 @@
 			<div class="caja-header">
 		      <div class="caja-icon">3</div>
 		      <div class="caja-title">Lista de enunciados
-					<div class="pull-right">
-						<button data-toggle="tooltip" data-placement="bottom" title="Agregar nuevo enunciado" type="button" name="btAddPregunta" id="btAddPregunta" class="btn btn-ff-green"><i class="fa fa-plus"></i>Enunciado</button>
-					</div>
 				</div>
 		   </div>
 

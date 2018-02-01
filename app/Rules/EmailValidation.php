@@ -4,7 +4,6 @@ namespace BienestarWeb\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use BienestarWeb\User;
-use Log;
 
 class EmailValidation implements Rule
 {

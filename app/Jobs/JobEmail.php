@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Mail\Mailer;
 use BienestarWeb\Mail\Email;
 use BienestarWeb\User;
-use Log;
+
 class JobEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -41,9 +41,6 @@ class JobEmail implements ShouldQueue
      */
     public function handle()
     {
-         //Log::info("enviar Email Simple");
-         //Log::info("Subject    ".$this->subject);
-
          $destinatario = User::findOrFail($this->idReceptor);
          $nombreDestinatario = $destinatario->nombre.' '.$destinatario->apellidoPaterno.' '.$destinatario->apellidoMaterno;
          $remitente = User::findOrFail($this->idUserRemitente);

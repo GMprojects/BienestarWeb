@@ -18,7 +18,6 @@ use BienestarWeb\Administrativo;
 use BienestarWeb\InscripcionAlumno;
 use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
-use Log;
 
 class JobEmailActualizarAct implements ShouldQueue
 {
@@ -48,7 +47,6 @@ class JobEmailActualizarAct implements ShouldQueue
      */
     public function handle()
     {
-         //Log::info("---------------------------------------------------------------------------------- ");
          if ($this->opcion == '1') {
               $subject = 'Actividad Actualizada';
          } elseif($this->opcion == '2') {
@@ -56,12 +54,10 @@ class JobEmailActualizarAct implements ShouldQueue
          } else {
               $subject = 'Actividad Eliminada';
          }
-        //Log::info("JobEmailActualizarAct ");
-        //Log::info("Inicio enviar Responsable");
+        //"Inicio enviar Responsable");
         $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
         $this->userResp->notify(new ActividadActualizadaNotif($this->actividad, $subject, $url));
-        //Log::info($this->userResp->email);
-        //Log::info("Fin enviar Responsable");
+        //"Fin enviar Responsable");
         // -------------------------------------------------------------------------------------------------------------------
         //verificar si existe inscripciones de Alumnos
         $inscripcionesAlumnos = InscripcionAlumno::where('idActividad', $this->actividad->idActividad)->get();
@@ -101,13 +97,11 @@ class JobEmailActualizarAct implements ShouldQueue
         $users = array_merge($users, $docentes);
 
         //-----------enviar los emails-------------------------------------------------------------------------
-        //Log::info("---------------------------------------------------------------------------------- ");
-        //Log::info("Enviar correo a los inscritos ");
+        //Enviar correo a los inscritos "
         foreach ($users as $user) {
-             //Log::info($user->email);
              $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
              $user->notify(new ActividadActualizadaNotif($this->actividad, $subject, $url));
         }
-        //Log::info("Fin Enviar Correos");
+        //Fin Enviar Correos
     }
 }

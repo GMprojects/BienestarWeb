@@ -13,6 +13,8 @@
 	</div>
 
 	<div class="box-body">
+			<h3 style="color:red;"> <p>Esta es la vista previa de la encuesta que será enviada.</p> </h3>
+			<br>
 			<div class="table">
 					<div class="table-responsive">
 							<table id="tabPreguntaHabito" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">

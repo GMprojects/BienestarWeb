@@ -8,8 +8,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-use Log;
-
 use BienestarWeb\User;
 use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
@@ -46,15 +44,13 @@ class JobEmailHabitosEstudios implements ShouldQueue
                         ->join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
                         ->where([['tutorTutorado.idDocente', $this->idDocente],['tutorTutorado.anioSemestre', $this->anioSemestre],['tutorTutorado.numeroSemestre', $this->numeroSemestre],['tutorTutorado.habitoEstudioRespondido', '0']])
                         ->get();
-         //-----------enviar los emails-------------------------------------------------------------------------
-         //Log::info("---------------------------------------------------------------------------------- ");
-         //Log::info("Enviar correo a los inscritos ");
+         //-----------enviar los emails------------------------------------------------------------------------
+         //"Enviar correo a los inscritos "
          foreach ($users as $user) {
-              //Log::info($user->email);
               $url = url(route('habitoEstudio.create'));
               $user->notify(new HabitoEstudioNotif($user, $url));
          }
-         //Log::info("Fin Enviar Correos");
+         //Fin Enviar Correos;
 
     }
 }

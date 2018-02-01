@@ -8,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Log;
+
 class ActividadProgramadaMail extends Mailable
 {
     use Queueable, SerializesModels;
@@ -33,7 +33,7 @@ class ActividadProgramadaMail extends Mailable
      */
     public function build()
     {
-        //Log::info('ActividadProgramadaMail');
+        //'ActividadProgramadaMail'
         return $this->markdown('emails.actividadProgramadaEmail',['actividad' => $this->actividad, 'mensaje' => $this->mensaje])
                     ->subject('Nueva Actividad Programada ');
     }

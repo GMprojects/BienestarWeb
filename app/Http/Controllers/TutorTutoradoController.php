@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Mail;
 use BienestarWeb\Jobs\JobEmail;
 use BienestarWeb\Jobs\JobEmailHabitosEstudios;
 use DB;
-use Log;
 use Carbon\Carbon;
 
 class TutorTutoradoController extends Controller{
@@ -48,7 +47,7 @@ class TutorTutoradoController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create(){
-         $array = explode("-",TutorTutoradoController::getSemestre());
+         $array = explode("-",$this->getSemestre());
          $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ;
          $tutorTutorados = TutorTutorado::where('numeroSemestre',$numeroSemestre)
                                              ->where('anioSemestre', $array[0])
@@ -76,7 +75,7 @@ class TutorTutoradoController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        $arraySemestre = explode("-",TutorTutoradoController::getSemestre());
+        $arraySemestre = explode("-",$this->getSemestre());
         $numeroSemestre  = ($arraySemestre[1] == 'I') ? 1 : 2 ;
         $array = preg_split("/[_]/",$request->tutor);
         $idDocente = $array[0];
@@ -304,7 +303,7 @@ class TutorTutoradoController extends Controller{
 
     public function getTutores(Request $request){
          if($request->ajax()){
-            $array = explode("-",TutorTutoradoController::getSemestre());
+            $array = explode("-",$this->getSemestre());
             $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ;
             $users = Docente::join('tutorTutorado','docente.idDocente', '=','tutorTutorado.idDocente' )
                 ->join('user','docente.idUser', '=','user.id' )
@@ -318,7 +317,7 @@ class TutorTutoradoController extends Controller{
 
     public function getTutorados(Request $request){
          if($request->ajax()){
-             $array = explode("-",TutorTutoradoController::getSemestre());
+             $array = explode("-",$this->getSemestre());
              $numeroSemestre  = ($array[1] == 'I') ? 1 : 2 ;
              $idDocente = Docente::where('idUser',   $request->id )->value('idDocente');
              $tutorados = Alumno::join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )

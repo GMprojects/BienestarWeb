@@ -15,7 +15,10 @@ use Illuminate\Validation\Rule;
 use BienestarWeb\Rules\EmailValidation;
 
 use Illuminate\Support\Facades\Storage;
+
+use BienestarWeb\Jobs\JobEmailVerify;
 use File;
+use Carbon\Carbon;
 
 class UserController extends Controller{
 
@@ -101,7 +104,7 @@ class UserController extends Controller{
            //validacion si tipo = 3 (ADMINISTRATIVO)
            'cargo' => 'max:50'
         ]);
-        dd('o');
+        //dd('o');
         $file = $request->file('foto');
 
         $nuevoUser = new User();
@@ -117,6 +120,8 @@ class UserController extends Controller{
         $nuevoUser->celular = $request->celular;
         $nuevoUser->funcion = $request->funcion;
         $nuevoUser->idTipoPersona = $request->tipo;
+        $nuevoUser->confirmation_code = str_random(40);
+        //dd($nuevoUser->confirmation_code );
         $nuevoUser->password = bcrypt($request->codigo);
         $file = $request->file('foto');
         if($file != null){
@@ -129,6 +134,7 @@ class UserController extends Controller{
         }
         $nuevoUser->save();
         $user = User::where('codigo', $request->codigo)->get();
+        //dd($user[0]->confirmation_code);
         switch ($request->tipo) {
            case '1': $nuevoAlumno = new Alumno();
                      $nuevoAlumno->condicion = $request->condicion;
@@ -147,8 +153,25 @@ class UserController extends Controller{
                      $user[0]->administrativo()->save($nuevoAdministrativo);
                      break;
         }
+
+        $job = (new JobEmailVerify(($user[0]->nombre.' '.$user[0]->apellidoPaterno.' '.$user[0]->apellidoMaterno),$request->email, $user[0]->confirmation_code, $user[0]->sexo))
+           ->delay(Carbon::now()->addSeconds(1));
+        dispatch($job);
         return Redirect::to('admin/user');
     }
+
+    public function verify($code){
+      $user = User::where('confirmation_code', $code)->first();
+      if ($user == null) {
+         return redirect('/');
+      }else{
+         $user->confirmed = true;
+         $user->confirmation_code = null;
+         $user->update();
+      }
+
+      return view('miembro.confirmacionMail');
+   }
 
     /**
      * Display the specified resource.
@@ -203,7 +226,7 @@ class UserController extends Controller{
                  'apellidoPaterno' => 'required|min:2|max:20',
                  'apellidoMaterno' => 'required|min:2|max:20',
                  'sexo' => 'required',
-                 //'email' => 'required|max:100|unique:user',                 
+                 //'email' => 'required|max:100|unique:user',
                  'email' => ['required', 'max:100', new EmailValidation()],
                  'direccion'=> 'max:100',
                  'telefono' => 'max:15',
@@ -251,48 +274,49 @@ class UserController extends Controller{
      */
     public function destroy($id)
     {
-        /*$user = User::findOrFail($id);
-        $user->estado = '0';
-        $user->update();*/
+        $tieneRelaciones = false;
         $user = User::findOrFail($id);
-        $tieneRelaciones = true;
-        if (count($user->docente) == 0) {
-           $tieneRelaciones = false;
+
+        if (count($user->actividadesProgramador) != 0 || count($user->actividadesProgramador) != 0 ) {
+           $tieneRelaciones = true;
         }
-        if (count($user->alumno) == 0) {
-           $tieneRelaciones = false;
-        }
-        if (count($user->administrativo) == 0) {
-           $tieneRelaciones = false;
-        }
-        if (count($user->actividadesProgramador) == 0) {
-           $tieneRelaciones = false;
-        }
-        if (count($user->actividadesResponsable) == 0) {
-           $tieneRelaciones = false;
+        switch ($user->idTipoPersona){
+           case '1': if (count($user->alumno->misInscripciones) != 0 ||
+                         count($user->alumno->soyTutorado) != 0  ||
+                         count($user->alumno->actividadesMovilidad) != 0 ||
+                         count($user->alumno->actividadesComedor) != 0 ) {
+                        $tieneRelaciones = true;
+                     }
+                     break;
+           case '2': if (count($user->docente->misInscripciones) != 0 ||
+                         count($user->docente->tutorados) != 0 ||
+                         count($user->docente->horariosDisponible) != 0 ) {
+                        $tieneRelaciones = true;
+                     }
+                     break;
+           case '3': if (count($user->administrativo->misInscripciones) != 0) {
+                        $tieneRelaciones = true;
+                     }
+                     break;
         }
 
         if ($tieneRelaciones) {
            $user->estado = '0';
            $user->update();
         } else {
+           switch ($user->idTipoPersona){
+              case '1': ($user->alumno)->delete();
+                        break;
+              case '2': ($user->docente)->delete();
+                        break;
+              case '3': ($user->administrativo)->delete();
+                        break;
+           }
            $user->delete();
         }
-
-
-        /*echo 'docente   '.count($user->docente);
-        echo 'alumno   '.count($user->alumno);
-        echo 'administrativo   '.count($user->administrativo);
-
-        echo 'actividadesProgramador   '.count($user->actividadesProgramador);
-        echo 'actividadesResponsable   '.count($user->actividadesResponsable);*/
-dd('e');
-        //return Redirect::to('admin/user');
+        return Redirect::to('admin/user');
     }
 
-    public function asignarResponsable(Request $request)
-    {
-    }
     public function getUsers(Request $request){
     //    dd($request);
       if($request->ajax()){

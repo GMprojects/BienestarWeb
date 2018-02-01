@@ -7,8 +7,6 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-use Log;
-
 use BienestarWeb\User;
 
 class HabitoEstudioNotif extends Notification
@@ -46,7 +44,6 @@ class HabitoEstudioNotif extends Notification
      */
     public function toMail($notifiable)
     {
-      //Log::info('HabitoEstudioNotification');
       return (new MailMessage)->markdown('emails.habitoEstudioEmail',['user' => $this->user,
                                                                        'url' => $this->url ])
                               ->subject('Registrar Hábito de Estudio');

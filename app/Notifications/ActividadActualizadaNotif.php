@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Log;
+
 use BienestarWeb\Actividad;
 
 class ActividadActualizadaNotif extends Notification
@@ -51,8 +51,6 @@ class ActividadActualizadaNotif extends Notification
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');*/
-        //Log::info('ActividadActualizadaNotif');
-        //Log::info($this->subject);
         return (new MailMessage)->markdown('emails.actividadActualizadaEmail',['actividad' => $this->actividad,
                                                                                'url' => $this->url])
                                 ->subject($this->subject);

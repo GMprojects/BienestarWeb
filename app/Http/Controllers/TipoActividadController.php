@@ -11,8 +11,6 @@ use BienestarWeb\Actividad;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use File;
-use Log;
-
 
 class TipoActividadController extends Controller{
 

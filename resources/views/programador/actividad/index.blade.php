@@ -28,8 +28,8 @@
 						<th>Fecha Inicio</th>
 						<th>Hora Inicio</th>
 						<th>Estado</th>
-						<th>Fecha Ejecución</th>
-						<th>Hora Ejecución</th>
+						<!--<th>Fecha Ejecución</th>
+						<th>Hora Ejecución</th>-->
 						<th>Opciones</th>
 					</thead>
 					<tbody>
@@ -40,7 +40,7 @@
 							@php($i++)
 							<tr>
 								<td>{{ $i }}</td>
-								<td>{{ $actividad->titulo }}</td>
+								<td><a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}">{{ $actividad->titulo }}</a></td>
 								<td>{{ $actividad->tipoActividad->tipo }}</td>
 								@switch($actividad->modalidad)
 									@case(1)
@@ -65,23 +65,23 @@
 								@switch($actividad->estado)
 									@case(1)
 									<td><small class="label ff-bg-blue rounded">Pendiente</small></td>
-									<td>Pendiente</td>
-									<td>Pendiente</td>
+									<!--<td>Pendiente</td>
+									<td>Pendiente</td>-->
 									@break
 									@case(2)
 									<td><small class="label ff-bg-green rounded">Ejecutada</small></td>
-									<td>{{ date("d/m/Y",strtotime($actividad->fechaEjecutada)) }}</td>
-									<td>{{ date("g:i A",strtotime($actividad->horaEjecutada)) }}</td>
+									{{--<td>{{ date("d/m/Y",strtotime($actividad->fechaEjecutada)) }}</td>
+									<td>{{ date("g:i A",strtotime($actividad->horaEjecutada)) }}</td>--}}
 									@break
 									@case(3)
 									<td><small class="label ff-bg-red rounded">Cancelada</small></td>
-									<td>Cancelada</td>
-									<td>Cancelada</td>
+									<!--<td>Cancelada</td>
+									<td>Cancelada</td>-->
 									@break
 									@case(4)
 									<td><small class="label ff-bg-orange rounded">Expirada</small></td>
-									<td>Expirada</td>
-									<td>Expirada</td>
+									<!--<td>Expirada</td>
+									<td>Expirada</td>-->
 									@break
 								@endswitch
 								<td>
@@ -89,38 +89,37 @@
 										@case('1')
 											<a href="{{ action('ActividadController@execute',$actividad->idActividad) }}">
 												<button class="btn btn-ff-greenOs" data-toggle="tooltip" data-placement="bottom" title="Ejecutar Actividad">
-												<span><i class="fa fa-child"><i class="fa fa-cogs"></i></i></span>
+													<span>
+													  <i class="fa fa-child"><i class="fa fa-cogs"></i></i>
+													</span>
 												</button>
 											</a>
-											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}">
-												<button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad">
-													<i class="fa fa-edit"></i>
-												</button>
-											</a>
-											<a href="" data-target = "#modal-cancel-{{ $actividad->idActividad }}" data-toggle = "modal">
-												<button  class="btn btn-ff-dark-red" data-toggle="tooltip" data-placement="bottom" title="Cancelar Actividad">
-													<i class="fa fa-ban" ></i>
-												</button>
-											</a>
-											<a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal">
-												<button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad">
-													<i class="fa fa-trash"></i>
-												</button>
-											</a>
+											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"><i class="fa fa-edit"></i></button></a>
+											<a href="" data-target = "#modal-cancel-{{ $actividad->idActividad }}" data-toggle = "modal"> <button  class="btn btn-ff-dark-red" data-toggle="tooltip" data-placement="bottom" title="Cancelar Actividad"><i class="fa fa-ban" ></i></button></a>
+											<a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-trash"></i></button></a>
 										@break
 										@case('2')
 											<a href="{{ action('ActividadController@execute',$actividad->idActividad) }}">
 												<button class="btn btn-ff-greenOs" data-toggle="tooltip" data-placement="bottom" title="Ejecutar Actividad">
-												<span><i class="fa fa-child"><i class="fa fa-cogs"></i></i></span>
+													<span>
+													  <i class="fa fa-child"><i class="fa fa-cogs"></i></i>
+													</span>
 												</button>
 											</a>
+											<a href="" data-target = "#modal-ejecutada" data-toggle = "modal"><button class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Función no Disponible "><i class="fa fa-edit"></i></button></a>
+											<a href="" data-target = "#modal-ejecutada" data-toggle = "modal"> <button  class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Función no Disponible "><i class="fa fa-ban" ></i></button></a>
+											<a href="" data-target = "#modal-ejecutada" data-toggle = "modal"><button class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Función no Disponible "><i class="fa fa-trash"></i></button></a>
+
 										@break
 										@case('3')
-											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"  data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"></i></button></a>
+											<a href="" data-target = "#modal-cancelada" data-toggle = "modal"><button class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Función no Disponible "><span><i class="fa fa-child"><i class="fa fa-cogs"></i></i></span></button></a>
+											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"><i class="fa fa-edit"></i></button></a>
+											<a href="" data-target = "#modal-cancelada" data-toggle = "modal"> <button  class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Función no Disponible "><i class="fa fa-ban" ></i></button></a>
 											<a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-trash"></i></button></a>
 										@break
 										@case('4')
-											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow"><i class="fa fa-edit"  data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"></i></button></a>
+											<a href="" data-target = "#modal-expirada" data-toggle = "modal"><button class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Función no Disponible "><span><i class="fa fa-child"><i class="fa fa-cogs"></i></i></span></button></a>
+											<a href="{{ action('ActividadController@edit',$actividad->idActividad) }}"><button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar o Habilitar Actividad"><i class="fa fa-edit"></i></button></a>
 											<a href="" data-target = "#modal-cancel-{{ $actividad->idActividad }}" data-toggle = "modal"> <button  class="btn btn-ff-dark-red" data-toggle="tooltip" data-placement="bottom" title="Cancelar Actividad"><i class="fa fa-ban" ></i></button></a>
 											<a href="" data-target = "#modal-delete-{{ $actividad->idActividad }}" data-toggle = "modal"><button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar Actividad"><i class="fa fa-trash"></i></button></a>
 										@break
@@ -136,6 +135,80 @@
 		</div>
 	</div>
 </div>
+
+<!-- MODALES -->
+   <div class="modal fade" id="modal-expirada">
+   	 <!-- /.modal-dialog -->
+   	 <div class="modal-dialog">
+   		   <!-- /.modal-content -->
+   		   <div class="modal-content">
+   		        <div class="modal-header" style="background-color:#444; color:white; border-radius:6px 6px 0px 0px;">
+   			          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+   			            <span aria-hidden="true"  class="fa fa-remove"></span></button>
+   			          <h4 class="modal-title"  style="color:white;"><i class="fa fa-warning"></i>&nbsp; &nbsp;<b>Función no Disponible </b></h4>
+   		        </div>
+   		        <div class="modal-body">
+   		          	<p> Esta función <b>NO DISPONIBLE</b> por que la actividad ha <b>EXPIRADO</b>.</p>
+   		        </div>
+   		        <div class="modal-footer">
+   						  <div class="pull-right">
+   							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+   						  </div>
+   		        </div>
+   		   </div>
+   	      <!-- /.modal-content -->
+   	 </div>
+       <!-- /.modal-dialog -->
+   </div>
+
+   <div class="modal fade" id="modal-ejecutada">
+   	 <!-- /.modal-dialog -->
+   	 <div class="modal-dialog">
+   		   <!-- /.modal-content -->
+   		   <div class="modal-content">
+   		        <div class="modal-header" style="background-color:#444; color:white; border-radius:6px 6px 0px 0px;">
+   			          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+   			            <span aria-hidden="true"  class="fa fa-remove"></span></button>
+   			          <h4 class="modal-title"  style="color:white;"><i class="fa fa-warning"></i>&nbsp; &nbsp;<b>Función no Disponible </b></h4>
+   		        </div>
+   		        <div class="modal-body">
+   		          	<p> Esta función <b>NO DISPONIBLE</b> por que la actividad ya ha sido <b>EJECUTADA</b>.</p>
+   		        </div>
+   		        <div class="modal-footer">
+   						  <div class="pull-right">
+   							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+   						  </div>
+   		        </div>
+   		   </div>
+   	      <!-- /.modal-content -->
+   	 </div>
+       <!-- /.modal-dialog -->
+   </div>
+
+   <div class="modal fade" id="modal-cancelada">
+   	 <!-- /.modal-dialog -->
+   	 <div class="modal-dialog">
+   		   <!-- /.modal-content -->
+   		   <div class="modal-content">
+   		        <div class="modal-header" style="background-color:#444; color:white; border-radius:6px 6px 0px 0px;">
+   			          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+   			            <span aria-hidden="true"  class="fa fa-remove"></span></button>
+   			          <h4 class="modal-title"  style="color:white;"><i class="fa fa-warning"></i>&nbsp; &nbsp;<b>Función no Disponible </b></h4>
+   		        </div>
+   		        <div class="modal-body">
+   		          	<p> Esta función <b>NO DISPONIBLE</b> por que la actividad ya ha sido <b>CANCELADA</b>.</p>
+   		        </div>
+   		        <div class="modal-footer">
+   						  <div class="pull-right">
+   							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+   						  </div>
+   		        </div>
+   		   </div>
+   	      <!-- /.modal-content -->
+   	 </div>
+       <!-- /.modal-dialog -->
+   </div>
+<!-- MODALES -->
 
 <script>
 	$(document).ready(function() {

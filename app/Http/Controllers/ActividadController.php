@@ -32,7 +32,6 @@ use BienestarWeb\Jobs\JobEmailActualizarAct;
 use BienestarWeb\Jobs\JobEmail;
 
 use File;
-use Log;
 use Validator;
 use Carbon\Carbon;
 
@@ -192,7 +191,7 @@ class ActividadController extends Controller{
 
    public function indexPorCategoria($idTipoActividad, Request $request){
       $tipoActividad = TipoActividad::findOrFail($idTipoActividad);
-      $actividades = Actividad::where([['estado', '=', '1'],['idTipoActividad', '=',$request->idTipoActividad],['fechaInicio','>=',$request->fecha]])->orderBy('fechaInicio', 'asc')->get();
+      $actividades = Actividad::where([['estado', '<', '5'],['idTipoActividad', '=',$request->idTipoActividad],['fechaInicio','>=',$request->fecha]])->orderBy('fechaInicio', 'asc')->get();
       return view('miembro.actividades-categoria',[
          'tipoActividad' => $tipoActividad,
          'actividades' => $actividades,
@@ -213,7 +212,7 @@ class ActividadController extends Controller{
       $tiposActividad=TipoActividad::get();
       return view('programador.actividad.create')
               ->with('tiposActividad', $tiposActividad)
-              ->with('semestre', ActividadController::getSemestre());
+              ->with('semestre', $this->getSemestre());
     }
 
       /**
@@ -235,15 +234,15 @@ class ActividadController extends Controller{
             'rutaImagen' => 'image|mimes:jpeg,png,jpg'
          ]);
          if ($request->idTipoActividad == 1 || $request->idTipoActividad == 2) {
-            $fechaFin = ActividadController::getFecha($request->fechaInicio);
+            $fechaFin = $this->getFecha($request->fechaInicio);
             $horaFin = (Carbon::parse($request->horaInicio))->toTimeString();
          } else {
-            $fechaFin = ActividadController::getFecha($request->fechaFin);
+            $fechaFin = $this->getFecha($request->fechaFin);
             $horaFin = (Carbon::parse($request->horaFin))->toTimeString();
          }
          $actividad = Actividad::create([
             'titulo' => $request->titulo,
-            'fechaInicio' => ActividadController::getFecha($request->fechaInicio),
+            'fechaInicio' => $this->getFecha($request->fechaInicio),
             'horaInicio' => (Carbon::parse($request->horaInicio))->toTimeString(),
             'fechaFin' => $fechaFin,
             'horaFin' => $horaFin,
@@ -251,14 +250,14 @@ class ActividadController extends Controller{
             'referencia' => $request->referencia,
             'descripcion' => $request->descripcion,
             'informacionAdicional' => $request->informacionAdicional,
-            'rutaImagen' => ActividadController::getRutaImagen($request),
-            'invitado' => ActividadController::getInivitado($request),
-            'cuposTotales' => ActividadController::getCuposTotales($request),
+            'rutaImagen' => $this->getRutaImagen($request),
+            'invitado' => $this->getInivitado($request),
+            'cuposTotales' => $this->getCuposTotales($request),
             'anioSemestre' => 2017,
             'numeroSemestre' => 2,
-            'modalidad' => ActividadController::getModalidad($request),
+            'modalidad' => $this->getModalidad($request),
             'idTipoActividad' => $request->idTipoActividad,
-            'idUserResp' => ActividadController::getResp($request),
+            'idUserResp' => $this->getResp($request),
             'idUserProg' => $request->user()->id
          ]);
 
@@ -385,7 +384,7 @@ class ActividadController extends Controller{
               $idAlumnos = null;
           break;
         }
-        return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos, 'semestre' => ActividadController::getSemestre()]);
+        return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos, 'semestre' => $this->getSemestre()]);
         //return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
     }
 
@@ -410,11 +409,11 @@ class ActividadController extends Controller{
              $fechaFin = $actividad->fechaFin;
              $horaFin = $actividad->horaFin;
           } else {
-             $fechaFin = ActividadController::getFecha($request->fechaFin);
+             $fechaFin = $this->getFecha($request->fechaFin);
              $horaFin = (Carbon::parse($request->horaFin))->toTimeString();
           }
            $actividad->titulo = $request->titulo;
-           $actividad->fechaInicio = ActividadController::getFecha($request->fechaInicio);
+           $actividad->fechaInicio = $this->getFecha($request->fechaInicio);
            $actividad->horaInicio = (Carbon::parse($request->horaInicio))->toTimeString();
            $actividad->fechaFin = $fechaFin;
            $actividad->horaFin = $horaFin;
@@ -422,12 +421,12 @@ class ActividadController extends Controller{
            $actividad->referencia = $request->referencia;
            $actividad->descripcion = $request->descripcion;
            $actividad->informacionAdicional = $request->informacionAdicional;
-           $actividad->rutaImagen = ActividadController::getRutaImagenUpdate($request, $actividad->rutaImagen);
-           $actividad->invitado = ActividadController::getInivitado($request);
-           $actividad->cuposTotales = ActividadController::getCuposTotalesUpdate($request, $actividad);
+           $actividad->rutaImagen = $this->getRutaImagenUpdate($request, $actividad->rutaImagen);
+           $actividad->invitado = $this->getInivitado($request);
+           $actividad->cuposTotales = $this->getCuposTotalesUpdate($request, $actividad);
            $actividad->estado = '1';
-           $actividad->modalidad = ActividadController::getModalidadUpdate($request, $actividad);
-           $actividad->idUserResp = ActividadController::getResp($request);
+           $actividad->modalidad = $this->getModalidadUpdate($request, $actividad);
+           $actividad->idUserResp = $this->getResp($request);
            $actividad->update();
 
            switch ($actividad->idTipoActividad) {
@@ -496,7 +495,7 @@ class ActividadController extends Controller{
              if ($actividad->idTipoActividad < 2) {
                 $idUserResp = $actividad->idUserResp;
              } else {
-                $idUserResp = ActividadController::getResp($request);
+                $idUserResp = $this->getResp($request);
              }
 
              $userResp = User::findOrFail($idUserResp);
@@ -566,7 +565,7 @@ class ActividadController extends Controller{
          $actividad = Actividad::findOrFail($id);
          if ($request->horaEjecutada != null) {
             $actividad->horaEjecutada = (Carbon::parse($request->horaEjecutada))->toTimeString();
-            $actividad->fechaEjecutada = ActividadController::getFecha($request->fechaEjecutada);
+            $actividad->fechaEjecutada = $this->getFecha($request->fechaEjecutada);
          }
          $actividad->estado = '2';
 

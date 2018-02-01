@@ -5,7 +5,6 @@ namespace BienestarWeb\Http\Controllers;
 use Illuminate\Http\Request;
 
 use BienestarWeb\Actividad;
-use Log;
 use DB;
 
 class DashboardController extends Controller{

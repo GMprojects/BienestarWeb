@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Log;
+
 use BienestarWeb\Actividad;
 
 class ActividadProgramadaNotif extends Notification
@@ -59,7 +59,6 @@ class ActividadProgramadaNotif extends Notification
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');*/
-        //Log::info('ActividadProgramadaNotificacion');
         return (new MailMessage)->markdown('emails.actividadProgramadaEmail',['actividad' => $this->actividad,
                                                                               'mensaje' => $this->mensaje,
                                                                               'sexo' => $this->sexo,

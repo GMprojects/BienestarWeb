@@ -19,8 +19,8 @@
 				<table id="tabAlumnos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
 					<thead>
 						<th>Código</th>
-						<th>Nombres</th>
 						<th>Apellidos</th>
+						<th>Nombres</th>
 						<th>Email</th>
 						<th>Funcion</th>
 						<th>Opciones</th>
@@ -29,8 +29,8 @@
 						@foreach ($alumnos as $user)
 						<tr>
 							<td>{{ $user->codigo }}</td>
-							<td>{{$user->nombre}}</td>
 							<td >{{$user->apellidoPaterno}} {{$user->apellidoMaterno}}</td>
+							<td>{{$user->nombre}}</td>
 							<td>{{$user->email}}</td>
 							@switch( $user->funcion)
 								@case(3) <td><span class="label label-danger rounded">Administrador</span></td> @break
@@ -86,7 +86,7 @@
 	              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 				  }
 	         },
-				"order":[[2,"asc"]]
+				"order":[[1,"asc"]]
 	      })
 	   });
 	</script>
