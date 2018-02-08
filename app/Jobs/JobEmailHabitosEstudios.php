@@ -42,13 +42,15 @@ class JobEmailHabitosEstudios implements ShouldQueue
     {
          $users = User::join('alumno','user.id','=','alumno.idUser')
                         ->join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
-                        ->where([['tutorTutorado.idDocente', $this->idDocente],['tutorTutorado.anioSemestre', $this->anioSemestre],['tutorTutorado.numeroSemestre', $this->numeroSemestre],['tutorTutorado.habitoEstudioRespondido', '0']])
+                        ->where([['tutorTutorado.idDocente', $this->idDocente], ['tutorTutorado.anioSemestre', $this->anioSemestre], ['tutorTutorado.numeroSemestre', $this->numeroSemestre], ['tutorTutorado.habitoEstudioRespondido', '0'], ['confirmed', '=', 1]])
                         ->get();
          //-----------enviar los emails------------------------------------------------------------------------
          //"Enviar correo a los inscritos "
-         foreach ($users as $user) {
-              $url = url(route('habitoEstudio.create'));
-              $user->notify(new HabitoEstudioNotif($user, $url));
+         if (count($users)!=0) {
+            foreach ($users as $user) {
+                 $url = url(route('habitoEstudio.create'));
+                 $user->notify(new HabitoEstudioNotif($user, $url));
+            }
          }
          //Fin Enviar Correos;
 

@@ -17,7 +17,6 @@ class DashboardController extends Controller{
       $estados = array($actPendientes, $actEjecutadas, $actCanceladas, $actExpiradas);
       $semestres = Actividad::select('anioSemestre','numeroSemestre')->distinct()->get();
       return view('admin.dashboard.index')->with('semestres', $semestres->toArray())->with('estados', $estados);
-
    }
 
    public function reIndex(Request $request){

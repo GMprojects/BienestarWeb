@@ -98,7 +98,7 @@
          dataType: 'json',
          success:function(data) {
             if(data.tutorados > 0){
-               $('#buttons-list').append('<a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados',[]) }}"><i class="fa fa-plus"></i>Mis Tutorados</a>');
+               $('#buttons-list').append('<a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados',[]) }}"><i class="fa fa-book"></i>Mis Tutorados</a>');
             }
          },
          error:function() {

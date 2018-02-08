@@ -143,11 +143,10 @@ class TutorTutoradoController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $idTutor){
-        $numeroSemestre = ($request->numeroSemestre == 'I') ? 1 : 2 ;
         $docente = Docente::findOrFail($idTutor);
         for ($i = 0; $i < count($request->alumnos); $i++) {
           $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
-                                                                 'numeroSemestre' => $numeroSemestre]);
+                                                                 'numeroSemestre' => $request->numeroSemestre]);
         }
         $job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $numeroSemestre))
            ->delay(Carbon::now()->addSeconds(1));

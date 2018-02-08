@@ -14,6 +14,8 @@ use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use File;
 
 
@@ -51,10 +53,10 @@ class MiPerfilController extends Controller{
    }
 
    public function show($id){
-     $user = User::findOrFail($id);
-     $du['user'] = $user;
+      $user = User::findOrFail($id);
+      $du['user'] = $user;
          //SI SOY PROGRAMADOR(organizador) o ADMINISTRADOR
-     if($user->funcion != 1){
+      if($user->funcion != 1){
         $progPendientes = Actividad::where([['idUserProg', $id ], ['estado', '1']])->count('idUserProg');
         $du['progPendientes'] = $progPendientes;
         $progEjecutadas = Actividad::where([['idUserProg', $id ], ['estado', '2']])->count('idUserProg');
@@ -63,14 +65,14 @@ class MiPerfilController extends Controller{
         $du['progCanceladas'] = $progCanceladas;
         $progExpiradas = Actividad::where([['idUserProg', $id ], ['estado', '4']])->count('idUserProg');
         $du['progExpiradas'] = $progExpiradas;
-     }
-     //SI SOY RESPONSABLE
-     $respPendientes = Actividad::where([['idUserResp', $id ], ['estado', '1']])->count('idUserResp');
-     $du['respPendientes'] = $respPendientes;
-     $respEjecutadas = Actividad::where([['idUserResp', $id ], ['estado', '2']])->count('idUserResp');
-     $du['respEjecutadas'] = $respEjecutadas;
-     //ACTIVIDADES INSCRITAS
-     switch ($user->idTipoPersona) {
+      }
+      //SI SOY RESPONSABLE
+      $respPendientes = Actividad::where([['idUserResp', $id ], ['estado', '1']])->count('idUserResp');
+      $du['respPendientes'] = $respPendientes;
+      $respEjecutadas = Actividad::where([['idUserResp', $id ], ['estado', '2']])->count('idUserResp');
+      $du['respEjecutadas'] = $respEjecutadas;
+      //ACTIVIDADES INSCRITAS
+      switch ($user->idTipoPersona) {
          case '1'://Alumno
             $idAlumno = Alumno::where('idUser', $id)->value('idAlumno');
             $inscInscripcion = InscripcionAlumno::where('idAlumno', $idAlumno)->count('idAlumno');
@@ -86,10 +88,10 @@ class MiPerfilController extends Controller{
             $inscInscripcion= InscripcionAdministrativo::where('idAdministrativo', $idAdministrativo)->count('idAdministrativo');
             $inscAsistencia = InscripcionAdministrativo::where('idAdministrativo', $idAdministrativo)->where('asistencia', '1')->count('idAdministrativo');
             break;
-     }
-     $du['inscInscripcion'] = $inscInscripcion;
-     $du['inscAsistencia'] = $inscAsistencia;
-    return view('miembro.perfil.perfil')->with('du', $du);
+      }
+      $du['inscInscripcion'] = $inscInscripcion;
+      $du['inscAsistencia'] = $inscAsistencia;
+      return view('miembro.perfil.perfil')->with('du', $du);
    }
    public function edit(Request $request, $id){
       if($id == $request->user()->id){ //FUNCION DE middleware QUE NO PUDE IMPLEMENTAR EN UNMIDDLEWARE :(
@@ -99,41 +101,50 @@ class MiPerfilController extends Controller{
          return abort(401);
       }
    }
-
    public function update(Request $request, $id){
       $user = User::findOrFail($id);
-      switch ($request->op) {
-         case '1': //Datos Personales
-         /*"op" => "1"
-            "nombre" => "admin admin admin"
-            "codigo" => "123456"
-            "direccion" => null
-            "email" => "admin@facfar.com"
-            "telefono" => null
-            "celular" => null*/
-            $user->nombre = $request->nombre;
-            $user->apellidoPaterno = $request->apellidoPaterno;
-            $user->apellidoMaterno = $request->apellidoMaterno;
-            $user->email = $request->email;
-            $user->fechaNacimiento = MiPerfilController::getFecha($request->fechaNacimiento);
-            $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user);
-            $user->direccion = $request->direccion;
-            $user->telefono = $request->telefono;
-            $user->celular = $request->celular;
-            $user->update();
-            break;
-         case '2': //Contraseña
-            $var = bcrypt('123456');
-            $user->password = bcrypt($request->passwordNewAgain);
-            $user->update();
-            break;
-         default:
-            # code...
-            break;
-      }
+         //Datos Personales
+         $request->validate([
+            'direccion'=> 'max:100',
+            'telefono' => 'max:15',
+            'celular' => 'max:15',
+            'foto' => 'file'
+         ]);
+         $user->nombre = $request->nombre;
+         $user->apellidoPaterno = $request->apellidoPaterno;
+         $user->apellidoMaterno = $request->apellidoMaterno;
+         $user->fechaNacimiento = MiPerfilController::getFecha($request->fechaNacimiento);
+         $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user);
+         $user->direccion = $request->direccion;
+         $user->telefono = $request->telefono;
+         $user->celular = $request->celular;
+         $user->update();
+
       return redirect()->back();
    }
+   public function editPassword(Request $request, $id){
+      $user = User::findOrFail($request->user()->id);
+      return view('miembro.perfil.cambiarPassword')->with('user', $user);
+   }
+   public function updatePassword(Request $request){
 
+      if(Hash::check($request->myPassword, Auth::user()->password)){
+         $request->validate([
+            'myPassword'=>'required',
+            'password' => 'required|confirmed|min:6'
+         ]);
+         $user = User::where([['email', '=', Auth::user()->email]])->first();
+         if($user != null){
+            $user->password = bcrypt($request->password);
+            $user->changed_pass = '1';
+            $user->update();
+            //return redirect()->back()->with('status','Contraseña Cambiada');
+            return redirect()->action('MiPerfilController@show',['id' =>  Auth::user()->id])->with('status','Su contraseña ha sido cambiada satisfactoriamente');
+         }
+      }else{
+            return redirect()->back()->with('message','Contraseña Incorrecta');
+      }
+   }
    public function misActInscrito($tipo, $id){
       $list_insc = array('hd');
       switch ($tipo) {
@@ -165,9 +176,7 @@ class MiPerfilController extends Controller{
    public function misActProgramador($id){
       $actividades = Actividad::where([['idUserProg', $id],['estado','<',5]])->orderBy('fechaInicio', 'asc')->get();
       return $actividades;
-
    }
-
    public function mis_actividades(Request $request, $id){
       if($id == $request->user()->id){ //FUNCION DE middleware QUE NO PUDE IMPLEMENTAR EN UNMIDDLEWARE :(
          $aux = MiPerfilController::misActInscrito($request->user()->idTipoPersona, $request->user()->id);

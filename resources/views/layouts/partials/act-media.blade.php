@@ -1,4 +1,8 @@
 <article class="actividad clearfix">
+   @php
+      $diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d'));
+      $diasRestantes = intval($diferencia/86400);
+   @endphp
    <div class="act-header">
       <div class="row">
          <div class="col-md-12">
@@ -9,7 +13,7 @@
             </div>
             <div class="pull-right">
                @switch( $actividad->estado )
-                  @case(1)-
+                  @case(1)
                      @if( $actividad->idTipoActividad == 4 )
                         @if(Auth::user() !=null && Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad)))
                            <div class="act-mini-txt pull-right">DEBO ASISTIR</div>
@@ -27,7 +31,7 @@
                                  <i style="color:black;" class="fa fa-check-circle"></i> <span style="color:black;">Asistiré</span>
                               </div>
                            @else
-                              @if( $actividad->estado == 1 )
+                              @if( $actividad->estado == 1 && $diasRestantes > 0 )
                                  @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
                                     @if( $actividad->idUserResp != Auth::user()->id )
                                        @if (Auth::user()!=null)
@@ -59,9 +63,7 @@
                         @endif
                      @else
                         @if (Auth::user()!=null)
-                           <a class="btn btn-ff pull-right" href="{{ route('inscripcion.store') }}"
-                              onclick="event.preventDefault();
-                              document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                           <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
                               <i class="fa fa-circle-o"></i> Quiero Asistir
                            </a>
                         @endif
@@ -98,16 +100,8 @@
                <span class="act-categoria"> Categoría: <a href="{{ action('ActividadController@indexCategorias') }}">{{ $actividad->tipoActividad->tipo }}</a>
                   <span class="act-separator">/</span>
                </span>
-
-                  @php
-                     $diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d'));
-                     $diasRestantes = intval($diferencia/86400);
-                  @endphp
-                  {{--@if ($actividad->estado == '3')
-                        <span class="label ff-bg-red act-estado">Cancelada</span>
-                  @elseif($actividad->estado == '2')
-                        <span class="label ff-bg-green act-estado">Ejecutada</span>
-                  @else--}}
+               @switch( $actividad->estado )
+                  @case(1)  @case(4)
                      @if ($diasRestantes < 0)
                         <span class="label ff-bg-orange act-estado">Expirada</span>
                      @else
@@ -119,8 +113,14 @@
                            @endif
                         </span>
                      @endif
-                  {{--@endif--}}
-
+                  @break
+                  @case(2)
+                        <span class="label ff-bg-green act-estado">Ejecutada</span>
+                  @break
+                  @case(3)
+                        <span class="label ff-bg-red act-estado">Cancelada</span>
+                  @break
+               @endswitch
             </small>
          </div>
       </div>
@@ -136,20 +136,20 @@
                <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}" class="thumb pull-left"><img class="thumb pull-left" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No Disponible"></a>
             @endif
             @switch( $actividad->estado )
+               @case(1) @case(4)
+                  @php
+                     $diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d'));
+                     $diasRestantes = intval($diferencia/86400);
+                  @endphp
+                  @if ($diasRestantes < 0)
+                     <span class="label-imagen" style="background-color:#FF8D00;">Expirada<span>
+                  @endif
+               @break
                @case(2)
-                  <div style="background-color:green; padding: 3px; position: absolute;top: 20px; box-shadow: 0px 0px 0px 1px; ">
-                     <span style="color:white;">Realizada<span>
-                  </div>
+                     <span class="label-imagen" style="background-color:#4CAE4C;">Realizada<span>
                @break
                @case(3)
-                  <div style="background-color:red; padding: 3px; position: absolute;top: 20px; box-shadow: 0px 0px 0px 1px; ">
-                     <span style="color:white;">Cancelada</span>
-                  </div>
-               @break
-               @case(4)
-                  <div style="background-color:orange; padding: 3px; position: absolute;top: 20px; box-shadow: 0px 0px 0px 1px; ">
-                     <span style="color:white;">Expirada<span>
-                  </div>
+                     <span class="label-imagen" style="background-color:#C3301F;">Cancelada</span>
                @break
             @endswitch
          </p>

@@ -22,7 +22,38 @@
       @endif
       <div id="wrapper">
          <section id="page-content-wrapper" class="content-princ container">
-            <h3>Has confirmado correctamente tu correo :D . Bienvenido!</h3>
+            <div class="caja">
+               <div class="caja-header">
+      	         <div class="caja-icon">	<i class="fa fa-at"></i></div>
+      	         <div class="caja-title">Verificación de Correo</div>
+      	      </div>
+               <div class="caja-body">
+                  <div class="row">
+                     <h1 style="text-align:center;">
+                        <span class="fa fa-stack fa-lg">
+                           <i class="fa fa-envelope fa-stack-2x" style="color:#555;"></i>
+                           <i class="fa fa-check-circle fa-stack-1x" style="color:#4CAE4C; left:40px; bottom:25px;"></i>
+                        </span>
+                     </h1>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-12">
+                        <p style="font-size:2em; text-align:center;">Has confirmado correctamente tu correo :D . Bienvenido! <br> <i class="fa fa-child fa-stack-2x" style="color:#444;"></i></p>
+                     </div>
+                  </div>
+               </div>
+               <br><br><br><br>
+               <div class="caja-footer">
+                  <div class="row">
+                     <h1 style="text-align:center;">
+                        <a style="left:50%;" href="{{ route('login') }}" class="btn btn-ff">
+                           <i style="font-size: 1.4em;" class="fa fa-user"></i>
+                           <span class="" style="font-size: 1.3em; padding-left:5px;">Iniciar Sesión</span>
+                        </a>
+                     </h1>
+                  </div>
+               </div>
+            </div>
             @include('layouts.partials.footer')
          </section>
       </div>

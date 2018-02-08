@@ -21,8 +21,7 @@
 		<div class="caja">
 	      <div class="caja-header">
 	         <div class="caja-icon">	<i class="fa fa-address-card"></i></div>
-	         <div class="caja-title">Datos Personales
-				</div>
+	         <div class="caja-title">Datos Personales	</div>
 	      </div>
 	      <div class="caja-body">
 				<!-- Imagen de usuario -->

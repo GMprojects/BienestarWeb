@@ -146,6 +146,63 @@ a:hover{
    height: 55px;
 }
 
+.navbar-nav .menu-notificaciones .dropdown-menu{
+   border-top-right-radius: 0;
+   border-top-left-radius: 0;
+   border-bottom-left-radius: 0;
+   border-bottom-right-radius: 0;
+   padding: 1px 0 0 0;
+   border-top-width: 0;
+   width: 260px;
+   height: 240px;
+   position: absolute;
+   right: 0px;
+   left: auto;
+   background-color: #FFFFFF;
+}
+.navbar-nav .menu-notificaciones .dropdown-menu > li{
+   position: relative;
+}
+.navbar-nav > .menu-notificaciones > .dropdown-menu > li.header-notif{
+   border-top-left-radius: 0;
+   border-top-right-radius: 0;
+   border-bottom-left-radius: 0;
+   border-bottom-right-radius: 0;
+   background-color: #FFFFFF;
+   padding: 7px 15px 0px 15px;
+   border-bottom: 1px solid #F4F4F4;
+   color: #444444;
+   font-size: 14px;
+}
+.navbar-nav > .menu-notificaciones > .dropdown-menu > li.divider{
+   background-color: #eee;
+
+   padding: 0;
+}
+.navbar-nav > .menu-notificaciones > .dropdown-menu > li .menu{
+   list-style: none;
+   overflow-x: hidden;
+   margin: 0;
+   padding: 0;
+   max-height: 200px;
+}
+.navbar-nav > .menu-notificaciones > .dropdown-menu > li .menu > li > a{
+   display: block;
+   white-space: nowrap;
+   border-bottom: 1px solid #f4f4f4;
+   padding: 8px 15px;
+      color: #444444;
+      overflow: hidden;
+      text-overflow: ellipsis;
+}
+.navbar-nav > .menu-notificaciones > .dropdown-menu > li .menu > li > a:hover{
+   background: #f4f4f4;
+   text-decoration: none;
+}
+.navbar-nav > .menu-notificaciones > .dropdown-menu > li .menu > li > a > .fa,
+.navbar-nav > .menu-notificaciones > .dropdown-menu > li .menu > li > a > .glyphicon{
+   width: 10px;
+}
 .nav > li > a:focus, .nav > li > a:hover{
    height: 50px;
    color: white !important;
@@ -194,7 +251,12 @@ a:hover{
    .navbar-nav > .menu-usu > .dropdown-menu{
       background-color: white;
       position: absolute;
-      top: 46px;
+      top: 42px;
+   }
+   .navbar-nav .menu-notificaciones .dropdown-menu{
+      background-color: white;
+      position: absolute;
+      top: 42px;
    }
    .nav > li > a:focus, .nav > li > a:hover{
       float: inherit;
@@ -1746,4 +1808,13 @@ textarea:focus {
    position: fixed;
    border: 2px solid #D3C7E8;
    z-index:1000;
+}
+
+.label-imagen{
+   color:white; 
+   padding: 3px;
+   position: absolute;
+   left: 15px;
+   top: 0px;
+   box-shadow: 0px 0px 0px 1px;
 }

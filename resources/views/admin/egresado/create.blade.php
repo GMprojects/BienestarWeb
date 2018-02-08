@@ -89,7 +89,7 @@
 							</div>
 						</div>
 
-						<div class="form-group">Grabar
+						<div class="form-group">
 							<label for="celular" class="col-sm-3 control-label">Celular </label>
 							<div class="col-sm-8">
 								<div class="input-group">

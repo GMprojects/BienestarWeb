@@ -54,8 +54,10 @@ class JobEmailNuevaAct implements ShouldQueue
     public function handle(){
       if( $this->userAl != null){
           $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
-          $nombres = $this->userAl->nombre.' '.$this->userAl->apellidoPaterno.' '.$this->userAl->apellidoMaterno;
-          $this->userAl->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $this->userAl->sexo, $url, $nombres, '0', '1'));
+          if ($userAl->confirmed) {
+             $nombres = $this->userAl->nombre.' '.$this->userAl->apellidoPaterno.' '.$this->userAl->apellidoMaterno;
+             $this->userAl->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $this->userAl->sexo, $url, $nombres, '0', '1'));
+          }
       }else{
           $tipoActividad = TipoActividad::findOrFail($this->tipoActividad);
           if (strlen($tipoActividad->dirigidoA) == 1){
@@ -76,27 +78,29 @@ class JobEmailNuevaAct implements ShouldQueue
                         $alumno = User::join('alumno', 'user.id', '=', 'alumno.idUser' )
                                   ->where('alumno.idAlumno', $this->tutorados[$i])
                                   ->whereNotNull('email')->first();
-                        if ($alumno != null) {
-                           //enviar Alumno
-                           $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
-                           $nombres = $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno;
-                           $alumno->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $alumno->sexo, $url, $nombres, '0', '1'));
-                           //Fin enviar Alumno
-                       }else{
-                          //ALumno no tiene correo'
-                       }
+                         if ($alumno->confirmed) {
+                              if ($alumno != null) {
+                                 //enviar Alumno
+                                 $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
+                                 $nombres = $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno;
+                                 $alumno->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $alumno->sexo, $url, $nombres, '0', '1'));
+                                 //Fin enviar Alumno
+                             }
+                         }
                   }
              } else {
-                  $users = User::where('idTipoPersona', $tipoPersona)->whereNotNull('email')->get();
+                  $users = User::where([['idTipoPersona', '=', $tipoPersona],['confirmed', '=', 1]])->get();
                   //numero de users
-                  $i=0;
-                  foreach ($users as $user) {
-                       $i++;
-                       //enviar mail
-                       $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
-                       $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
-                       $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, $nombres, '0', '0'));
-                       //Fin enviar de enviar mail");
+                  if (count($users)!=0) {
+                     $i=0;
+                     foreach ($users as $user) {
+                          $i++;
+                          //enviar mail
+                          $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
+                          $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
+                          $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, $nombres, '0', '0'));
+                          //Fin enviar de enviar mail");
+                     }
                   }
              }
           }elseif (strlen($tipoActividad->dirigidoA) == 2){
@@ -110,37 +114,41 @@ class JobEmailNuevaAct implements ShouldQueue
                 $tipoPersona[0] = '2';
                 $tipoPersona[1] = '3';
              }
-             $users = User::where('idTipoPersona', $tipoPersona[0])->where('idTipoPersona', $tipoPersona[1])->whereNotNull('email')->get();
+             $users = User::where([['idTipoPersona', '=', $tipoPersona[0]], ['idTipoPersona', '=', $tipoPersona[1]], ['confirmed', '=', 1]])->get();
              //numero de users
-             $i=0;
-             foreach ($users as $user) {
-                  $i++;
-                  //enviar mail
-                  $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
-                  $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
-                  $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, $nombres, '0', '0'));
-                  //"Fin enviar de enviar mail"
+             if (count($users)!=0) {
+                $i=0;
+                foreach ($users as $user) {
+                     $i++;
+                     //enviar mail
+                     $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
+                     $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
+                     $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, $nombres, '0', '0'));
+                     //"Fin enviar de enviar mail"
+                }
              }
           }else{ //Alumnos-Docentes-Administrativos
-             Log:info('Todos users');
-             $users = User::whereNotNull('email')->get();
-             //'numero de users'.count($users));
-             $i=0;
-             foreach ($users as $user) {
-               $i++;
-               //"enviar mail  "
-               $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
-               $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
-               $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, $nombres, '0', '0'));
-               //"Fin enviar de enviar mail"
-            }
+             $users = User::where([['confirmed', '=', 1]])->get();
+             if (count($users)!=0) {
+                $i=0;
+                foreach ($users as $user) {
+                     $i++;
+                     //"enviar mail  "
+                     $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
+                     $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
+                     $user->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeA, $user->sexo, $url, $nombres, '0', '0'));
+                     //"Fin enviar de enviar mail"
+                 }
+              }
           }
       }
 
       if($this->tipoActividad > 2){
          //"enviar Responsable"
-         $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
-         $this->userResp->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeR, $this->userResp->sexo, $url, '1', '0'));
+         if ($this->userResp->confirmed) {            
+            $url = action('ActividadController@member_show', ['id'=> $this->actividad->idActividad]);
+            $this->userResp->notify(new ActividadProgramadaNotif($this->actividad, $this->mensajeR, $this->userResp->sexo, $url, '1', '0'));
+         }
          //"Fin enviar Responsable"
       }
 

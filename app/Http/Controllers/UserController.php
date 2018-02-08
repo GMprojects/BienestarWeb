@@ -79,7 +79,6 @@ class UserController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-
        $request->validate([
            'nombre'=>'required|min:2|max:45',
            'apellidoPaterno' => 'required|min:2|max:20',
@@ -105,9 +104,7 @@ class UserController extends Controller{
            //validacion si tipo = 3 (ADMINISTRATIVO)
            'cargo' => 'max:50'
         ]);
-        //dd('o');
         $file = $request->file('foto');
-
         $nuevoUser = new User();
         $nuevoUser->nombre = strtoupper($request->nombre);
         $nuevoUser->apellidoPaterno = strtoupper($request->apellidoPaterno);
@@ -122,7 +119,6 @@ class UserController extends Controller{
         $nuevoUser->funcion = $request->funcion;
         $nuevoUser->idTipoPersona = $request->tipo;
         $nuevoUser->confirmation_code = str_random(40);
-        //dd($nuevoUser->confirmation_code );
         $nuevoUser->password = bcrypt($request->codigo);
         $file = $request->file('foto');
         if($file != null){
@@ -135,26 +131,22 @@ class UserController extends Controller{
         }
         $nuevoUser->save();
         $user = User::where('codigo', $request->codigo)->get();
-        //dd($user[0]->confirmation_code);
         switch ($request->tipo) {
            case '1': $nuevoAlumno = new Alumno();
                      $nuevoAlumno->condicion = $request->condicion;
                      $user[0]->alumno()->save($nuevoAlumno);
                      break;
-
            case '2': $nuevoDocente = new Docente();
                      $nuevoDocente->categoria = $request->categoria;
                      $nuevoDocente->dedicacion = $request->dedicacion;
                      $nuevoDocente->modalidad = $request->modalidad;
                      $user[0]->docente()->save($nuevoDocente);
                      break;
-
            case '3': $nuevoAdministrativo = new Administrativo();
                      $nuevoAdministrativo->cargo = $request->cargo;
                      $user[0]->administrativo()->save($nuevoAdministrativo);
                      break;
         }
-
         $job = (new JobEmailVerify(($user[0]->nombre.' '.$user[0]->apellidoPaterno.' '.$user[0]->apellidoMaterno),$request->email, $user[0]->confirmation_code, $user[0]->sexo))
            ->delay(Carbon::now()->addSeconds(1));
         dispatch($job);
@@ -170,8 +162,15 @@ class UserController extends Controller{
          $user->confirmation_code = null;
          $user->update();
       }
-
       return view('miembro.confirmacionMail');
+   }
+
+   public function enviarMailVerify(Request $request){
+      $user = User::findOrFail($request->id);
+      $job = (new JobEmailVerify(($user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno),$user->email, $user->confirmation_code, $user->sexo))
+         ->delay(Carbon::now()->addSeconds(1));
+      dispatch($job);
+      return redirect()->back();
    }
 
     /**

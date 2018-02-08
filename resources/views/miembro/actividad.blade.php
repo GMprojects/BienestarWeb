@@ -93,6 +93,10 @@
                      </div>
                   @endif
                </section>
+                  @php
+                     $diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d'));
+                     $diasRestantes = intval($diferencia/86400);
+                  @endphp
                <section class="col-md-6">
                   <div class="act-view">
                      <div class="act-view-img">
@@ -169,34 +173,29 @@
                                  <h4><i class="fa fa-check-circle"></i> Asistiré</h4>
                               </div>
                            @else
-                              @if( $actividad->estado == 1 )
+                              @if( $actividad->estado == 1  && $diasRestantes > 0 )
                                  @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
-                                    <a class="btn btn-ff pull-right" href="{{ route('inscripcion.store') }}"
-                                       onclick="event.preventDefault();
-                                       document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
-                                       <i class="fa fa-circle-o"></i> Quiero Asistir
-                                    </a>
+                                   <a class="btn btn-ff pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
+                                      <i class="fa fa-circle-o"></i> Quiero Asistir
+                                   </a>
                                  @else
-                                    <span class="label ff-red">
-                                       <i class="fa fa-times-circle"></i> No hay vacantes
-                                    </span>
+                                    <div class="pull-right">
+                                       <h4><i class="fa fa-times-circle"></i> No hay vacantes</h4>
+                                    </div>
                                  @endif
                               @else
-                                 <span class="label ff-red">
-                                    <i class="fa fa-times-circle"></i> No disponible
-                                 </span>
+                                 <div class="pull-right">
+                                    <h4><i class="fa fa-times-circle"></i> No disponible</h4>
+                                 </div>
                               @endif
-
                            @endif
                         @else
-                           <div class="act-mini-txt pull-right">
-                              <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No es para mí</span>
+                           <div class="pull-right">
+                              <h4><i class="fa fa-times-circle"></i> No es para mí</h4>
                            </div>
                         @endif
                      @else
-                        <a class="btn btn-ff pull-right" href="{{ route('inscripcion.store') }}"
-                           onclick="event.preventDefault();
-                           document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                        <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
                            <i class="fa fa-circle-o"></i> Quiero Asistir
                         </a>
                      @endif
@@ -336,6 +335,40 @@
                </aside>
             </div>
             @include('layouts.partials.footer')
+            <div class="modal fade" id="confirmModal-{{ $actividad->idActividad }}" tabindex="-1" role="dialog" aria-labelledby="lb-confMod-{{ $actividad->idActividad }}">
+               <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                     <div class="modal-header" style="background-color:#337AB7; color:white; border-radius:6px 6px 0px 0px;">
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
+                           <h4 class="modal-title" id="lb-confMod-{{ $actividad->idActividad }}"><b>Confirme su Inscripción</b></h4>
+                     </div>
+                     <div class="modal-body">
+                        <p> <b>Actividad:</b>  <b style="color: #4B367C">"{{ $actividad->titulo }}" </b> </p>
+                        <p> <b>Fecha:</b>
+                           @if (date("d/m/Y",strtotime($actividad->fechaInicio)) == date("d/m/Y",strtotime($actividad->fechaFin)))
+                                 {{ Date::make($actividad->fechaInicio)->format('l\, d \d\e F') .'  desde las '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta las '.date("g:i A",strtotime($actividad->horaFin)) }}
+                           @else
+                                 {{ Date::make($actividad->fechaInicio)->format('l\, d \d\e F').' '.date("g:i A",strtotime($actividad->horaInicio)).'  hasta '.Date::make($actividad->fechaFin)->format('l\, d \d\e F').' '.date("g:i A",strtotime($actividad->horaFin)) }}
+                           @endif
+                        </p>
+                        <p> <b>Lugar:</b>  {{ $actividad->lugar }}</p>
+                     </div>
+                     <div class="modal-footer">
+                        <div class="pull-left">
+                           <button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+                        </div>
+                        <div class="pull-right">
+                           <button type="submit" class="btn btn-ff" onclick="event.preventDefault();
+                           document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                           <i class="fa fa-check"></i> Confirmar</button>
+                           <form id="inscripcion-form-{{ $actividad->idActividad }}" action="{{ route('inscripcion.store', ['idActividad' => $actividad->idActividad]) }}" method="POST" style="display: none;">
+                              {{ csrf_field() }}
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
          </section>
       </div>
    </body>

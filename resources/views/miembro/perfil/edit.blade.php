@@ -2,7 +2,6 @@
 @section('contenido')
 {!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
 {{Form::token()}}
-{!!Form::hidden('op',1)!!}
 <div class="row">
 	<div class="col-xs-12">
 		<div class="second-bar">
@@ -64,31 +63,11 @@
 				<div class="form-horizontal">
 					<!-- Campo nombre -->
 					<div class="form-group">
-						<label for="nombre" class="col-sm-3 control-label">Nombre <span class="ast">*</span></label>
+						<label for="nombre" class="col-sm-3 control-label">Usuario <span class="ast">*</span></label>
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input maxlength="100" required type="nombre" class="form-control" name="nombre" value="{{ $user->nombre }}">
-							</div>
-						</div>
-					</div>
-					<!-- Campo apellidoPaterno -->
-					<div class="form-group">
-						<label for="apellidoPaterno" class="col-sm-3 control-label">Apellido Paterno <span class="ast">*</span></label>
-						<div class="col-sm-8">
-							<div class="input-group">
-								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input maxlength="100" required type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $user->apellidoPaterno }}">
-							</div>
-						</div>
-					</div>
-					<!-- Campo apellidoMaterno -->
-					<div class="form-group">
-						<label for="apellidoMaterno" class="col-sm-3 control-label">Apellido Materno <span class="ast">*</span></label>
-						<div class="col-sm-8">
-							<div class="input-group">
-								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input maxlength="100" required type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $user->apellidoMaterno }}">
+								 <input maxlength="100" required type="nombre" class="form-control" name="nombre" readonly value="{{ $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno }}">
 							</div>
 						</div>
 					</div>
@@ -102,6 +81,16 @@
 							</div>
 						</div>
 					</div>
+					<!-- Campo Email -->
+					<div class="form-group">
+						<label for="email" class="col-sm-3 control-label">Email <span class="ast">*</span></label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email" readonly value="{{ $user->email }}"  onkeypress="return soloEmail(event)" placeholder="e.g. ejemplo@unitru.edu.pe">
+							</div>
+						</div>
+					</div>
 					<!-- Campo Direccion -->
 					<div class="form-group">
 						<label for="direccion" class="col-sm-3 control-label">Direccion </label>
@@ -112,16 +101,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- Campo Email -->
-					<div class="form-group">
-						<label for="email" class="col-sm-3 control-label">Email <span class="ast">*</span></label>
-						<div class="col-sm-8">
-							<div class="input-group">
-								 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email" value="{{ $user->email }}"  onkeypress="return soloEmail(event)" placeholder="e.g. ejemplo@unitru.edu.pe">
-							</div>
-						</div>
-					</div>
+
 					<!-- Campo Fecha Nacimiento -->
 					<div class="form-group">
 						<label for="fechaNacimiento" class="col-sm-3 control-label">Nacimiento </label>
@@ -165,74 +145,6 @@
 	<div class="col-md-2"></div>
 </div>
 
-{{--{!! Form::open(['route'=>['perfil.update',$user->id], 'method'=>'POST', 'autocomplete'=>'off']) !!}
-{{Form::token()}}
-	{!!Form::hidden('op',2)!!}
-		<div class="caja">
-
-	      <div class="caja-header">
-	         <div class="caja-icon">	<i class="fa fa-lock"></i></div>
-	         <div class="caja-title" id="tituloCamposPropios">Cambio de Contraseña</div>
-	      </div>
-			<div class="caja-body">
-				<div  class="row">
-					<div class="col-lg-12 col-sm-12 col-xs-12">
-						@if (count($errors) >0)
-						<div class="alert alert-danger">
-							<ul>
-							@foreach($errors->all() as $error)
-								<li>{{$error}}</li>
-							@endforeach
-							</ul>
-						</div>
-						@endif
-					</div>
-				</div>
-				<div class="form-horizontal">
-					<!-- Campo Contraseña Anterior -->
-					<div class="form-group">
-						<label for="passwordNow" class="col-sm-3 control-label">Contraseña Actual </label>
-						<div class="col-sm-8">
-							<div class="input-group">
-								 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-								 <input type="password" class="form-control" name="passwordNow">
-							</div>
-						</div>
-					</div>
-					<!-- Campo Contraseña Nueva -->
-					<div class="form-group">
-						<label for="passwordNew" class="col-sm-3 control-label">Contraseña Nueva </label>
-						<div class="col-sm-8">
-							<div class="input-group">
-								 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-								 <input type="password" class="form-control" name="passwordNew">
-							</div>
-						</div>
-					</div>
-					<!-- Campo Contraseña Nueva Again -->
-					<div class="form-group">
-						<label for="passwordNewAgain" class="col-sm-3 control-label">Repetir Contraseña </label>
-						<div class="col-sm-8">
-							<div class="input-group">
-								 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-								 <input type="password" class="form-control" name="passwordNewAgain">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<br><br>
-			<div class="caja-footer">
-				<div class="pull-right">
-					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
-				</div>
-	      </div>
-
-		</div>
-
-{!! Form::close() !!}--}}
-
 <style type="text/css">
 	.ast{
 		color: red;
@@ -252,8 +164,5 @@
 		}
 		return false;
 	}
-
-
-
 </script>
 @endsection

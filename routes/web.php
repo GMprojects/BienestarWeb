@@ -28,23 +28,25 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('alumnos', 'UserController@indexAlumnos');
     Route::get('docentes', 'UserController@indexDocentes');
     Route::get('administrativos', 'UserController@indexAdministrativos');
-
     Route::resource('semestre', 'SemestreController');
 });
 
 
 Route::middleware(['programador', 'auth'])->prefix('programador')->group(function () {
-   Route::resource('actividad', 'ActividadController');
-
+    Route::resource('actividad', 'ActividadController');
 });
 
 //PERMISOS DE MIEMBRO
 Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::resource('habitoEstudio','HabitoEstudioController');
 
-    Route::get('perfil','MiPerfilController@index');
+    //Route::get('perfil','MiPerfilController@index');
+
+    Route::resource('perfil', 'MiPerfilController');
     Route::get('perfil/{idPerfil}/edit', 'MiPerfilController@edit');
     Route::post('perfil/{idPerfil}',  ['uses' => 'MiPerfilController@update','as' => 'perfil.update']);
+    Route::get('perfil/{idPerfil}/editPassword', 'MiPerfilController@editPassword');
+    Route::post('perfil/cambioPassword/{idPerfil}',  ['uses' => 'MiPerfilController@updatePassword','as' => 'perfil.updatePassword']);
     Route::resource('inscripcion', 'InscripcionADAController');
 
     Route::resource('evidenciaActividad', 'EvidenciaActividadController');
@@ -58,21 +60,17 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::get('actividad/{id}/beneficiario/{idBeneficiario}/edit', 'BeneficiarioController@editBeneficiario');
     Route::post('actividad/{id}/beneficiario/{idBeneficiario}', ['uses' => 'BeneficiarioController@updateBeneficiario','as' => 'beneficiario.update']);
     Route::delete('actividad/{id}/beneficiario/{idBeneficiario}','BeneficiarioController@destroyBeneficiario');
-
-
     Route::post('actividad/execute/{idActividad}', ['uses' => 'ActividadController@updateExecute','as' => 'actividad.updateExecute']);
     Route::post('actividad/registrarAsistencias/{idActividad}', ['uses' => 'InscripcionADAController@registrarAsistencias','as' => 'actividad.registrarAsistencias']);
     Route::post('actividad/nuevoMotivo/{idActividad}', ['uses' => 'DetallePedagogiaController@store',  'as' => 'detallePedagogia.store']);
     Route::post('actividad/deleteMotivo/{idActividad}', ['uses' => 'DetallePedagogiaController@update',  'as' => 'detallePedagogia.update']);
     Route::delete('actividad/nuevoMotivo/{idMotivo}', 'DetallePedagogiaController@destroy');
     Route::post('actividad/actualizarActPedagogia/{idActividadPedagogia}', ['uses' => 'ActPedagogiaController@update', 'as' => 'actPedagogia.update']);
-
     Route::get('actividad/{id}/beneficiario/{idBeneficiario}/evidencias', 'BeneficiarioController@indexEvidenciasBeneficiario');
     Route::post('actividad/{id}/beneficiario/{idBeneficiario}/evidencias', ['uses' => 'BeneficiarioController@storeEvidenciaBeneficiario','as' => 'evidenciaBeneficiario.store']);
     Route::delete('actividad/{id}/beneficiario/{idBeneficiario}/evidencias/{idEvidencia}','BeneficiarioController@destroyEvidenciaBeneficiario');
 
     Route::get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
-    Route::resource('perfil', 'MiPerfilController');
     Route::get('mis-actividades/{id}', ['uses' => 'MiPerfilController@mis_actividades', 'as' => 'miembro.misActividades']);
 
     Route::post('enviarMailHabito', ['uses' => 'TutorTutoradoController@enviarEmail', 'as' => 'tutorTutorado.enviarMailHabito']);
@@ -83,6 +81,8 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::get('encuestaInsc/{id}', ['uses' => 'EncuestaController@encuestaInsc']);
     Route::get('encuestaResp/{id}', ['uses' => 'EncuestaController@encuestaResp']);
     Route::post('encuesta/registrar_respuestas/{id}/{opt}', ['uses' => 'EncuestaController@registrar_respuestas']);
+
+    Route::post('enviar/verify', ['uses' => 'UserController@enviarMailVerify', 'as' => 'user.enviarMailVerify']);
 });
 //Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
 

@@ -1,5 +1,8 @@
 <div class="col-md-4 col-sm-6 act-mini-container">
-
+   @php
+      $diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d'));
+      $diasRestantes = intval($diferencia/86400);
+   @endphp
    <div class="act-mini">
       <div class="act-mini-header">
          @if( $actividad->rutaImagen == null )
@@ -74,11 +77,11 @@
                            <i style="color:white;" class="fa fa-check-circle"></i> <span style="color:white;">Asistiré</span>
                         </div>
                      @else
-                        @if( $actividad->estado == 1 )
+                        @if( $actividad->estado == 1  && $diasRestantes > 0 )
                            @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
                               @if( $actividad->idUserResp != Auth::user()->id )
                                  @if (Auth::user()!=null)
-                                    <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
+                                   <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
                                       <i class="fa fa-circle-o"></i> Quiero Asistir
                                    </a>
                                  @endif
@@ -106,9 +109,7 @@
                   @endif
                @else
                   @if (Auth::user()!=null)
-                     <a class="btn-footer pull-right" href="{{ route('inscripcion.store') }}"
-                        onclick="event.preventDefault();
-                        document.getElementById('inscripcion-form-{{ $actividad->idActividad }}').submit();">
+                     <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
                         <i class="fa fa-circle-o"></i> Quiero Asistir
                      </a>
                   @endif

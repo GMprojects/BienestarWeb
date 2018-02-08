@@ -69,7 +69,9 @@ class JobEmailActualizarAct implements ShouldQueue
         if(count($inscripcionesAlumnos)>0){
           $i = 0;
           foreach ($inscripcionesAlumnos as $inscripcionAlumno) {
-            $alumnos[$i] = $inscripcionAlumno->alumno->user;
+             if ($inscripcionAlumno->alumno->user->confirmed) {
+                  $alumnos[$i] = $inscripcionAlumno->alumno->user;
+             }
             $i++;
           }
         }else {
@@ -78,7 +80,9 @@ class JobEmailActualizarAct implements ShouldQueue
         if(count($inscripcionesAdministrativos)>0){
           $i = 0;
           foreach ($inscripcionesAdministrativos as $inscripcionAdministrativo) {
-            $administrativos[$i] = $inscripcionAdministrativo->administrativo->user;
+             if ($inscripcionAdministrativo->administrativo->user->confirmed) {
+                  $administrativos[$i] = $inscripcionAdministrativo->administrativo->user;
+             }
             $i++;
           }
         }else {
@@ -87,7 +91,9 @@ class JobEmailActualizarAct implements ShouldQueue
         if(count($inscripcionesDocentes)>0){
           $i = 0;
           foreach ($inscripcionesDocentes as $inscripcionDocente) {
-            $docentes[$i] = $inscripcionDocente->docente->user;
+             if ($inscripcionDocente->docente->user->confirmed) {
+                  $docentes[$i] = $inscripcionDocente->docente->user;
+             }
             $i++;
           }
         }else {

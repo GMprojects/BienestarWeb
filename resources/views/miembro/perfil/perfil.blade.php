@@ -85,8 +85,56 @@
                            @case(2) <p><i class="fa fa-key"></i><span class="label label-warning">Programador</span></p> @break
                            @case(3) <p><i class="fa fa-key"></i><span class="label label-danger">Administrador</span></p> @break
                         @endswitch
-
+                        @if (Auth::user()->id == $du['user']->id)
+                           @if (!Auth::user()->confirmed)
+                              <p>
+                                 <a href="" data-target = "#modal-enviarMailVerify" data-toggle = "modal" style="color:red;">
+                                    <i class="fa fa-warning" style="color:red;"></i> Debe verificar su correo, para poder recibir los e-mails.
+                                 </a>
+                              </p>
+                           @endif
+                           @if (!Auth::user()->changed_pass)
+                              <p>
+                                 <a href="{{ action('MiPerfilController@editPassword',['id' => Auth::user()->id ]) }}" style="color:red;">
+                                    <i class="fa fa-warning" style="color:red;"></i> Debe cambiar su contraseña.
+                                 </a>
+                              </p>
+                           @else
+                              <p>
+                                 <a href="{{ action('MiPerfilController@editPassword',['id' => Auth::user()->id ]) }}" style="color:#4B367C;">
+                                    <i class="fa fa-lock fa-lg" style="color:#4B367C;"></i>  Cambiar Contraseña
+                                 </a>
+                              </p>
+                           @endif
+                        @endif
                      </div>
+
+                     <!---- MODALES ---->
+                        <div class="modal fade modal-slide-in-right" aria-hidden = "true" role = "dialog" tabindex = "-1" id="modal-enviarMailVerify">
+                           {{Form::Open(['action'=>['UserController@enviarMailVerify'],'method'=>'post'])}}
+                           {{ Form::hidden('id', Auth::user()->id) }}
+                              <div class="modal-dialog">
+                                 <div class="modal-content">
+                                    <div class="modal-header" style="background-color:#4CAE4C; color:white; border-radius:6px 6px 0px 0px;">
+                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
+                                       <h4 class="modal-title"><b style="color:white;">Eliminar Egresado</b></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                       <p> Enviar link de verificación de correo.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                       <div class="pull-left">
+                                          <button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+                                       </div>
+                                       <div class="pull-right">
+                                          <button class="btn btn-ff-green" type="submit"><i class="fa fa-send"></i> Enviar</button>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           {{ Form::close() }}
+                        </div>
+                     <!---- FIN DE MODALES ---->
                      <hr class="act-hr"/>
 
                      <div class="footer-card">
@@ -123,8 +171,6 @@
                                  </div>
                                  @if(Auth::user()->id == $du['user']->id)
                                     <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
-                                 @else
-
                                  @endif
                               </div>
                            </div>
@@ -140,8 +186,6 @@
                                  </div>
                                  @if(Auth::user()->id == $du['user']->id)
                                     <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
-                                 @else
-
                                  @endif
                               </div>
                            </div>
@@ -170,8 +214,6 @@
                                  </div>
                                  @if(Auth::user()->id == $du['user']->id)
                                     <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'2']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
-                                 @else
-
                                  @endif
                               </div>
                            </div>
@@ -269,19 +311,43 @@
                                  <a href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'3']) }}" class="small-box-footer">Ver detalles <i class="fa fa-arrow-circle-right"></i></a>
                               </div>
                            </div>
-
                         </div>
-
                      </div>
-
                   </div>
                   @endif
-
                </div>
-
-
             </div>
          </section>
       </div>
+
+      <div class="modal fade" id="modal-status" tabindex="-1" role="dialog" aria-labelledby="lb-modal-status">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header" style="background-color:#4CAE4C; color:white; border-radius:6px 6px 0px 0px;">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
+                     <h4 class="modal-title" id="lb-modal-status"><b>Información</b></h4>
+               </div>
+               <div class="modal-body">
+                  <b><p id="mensaje-status">  </p></b>
+               </div>
+               <div class="modal-footer">
+                  <div class="pull-left">
+                     <button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <script type="text/javascript">
+      $(document).ready(function(){
+         if ({{Session::has('status')}}) {
+            console.log('aquis');
+            document.getElementById('mensaje-status').innerHTML = '{{Session::get('status')}}';
+      		$('#modal-status').modal('show');
+         }
+   	});
+
+      </script>
    </body>
 </html>
