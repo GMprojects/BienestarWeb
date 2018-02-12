@@ -27,6 +27,19 @@ class TipoActividadController extends Controller{
          }
          return $dirigidoA;
     }
+    function getResponsable(Request $request){
+         $responsable = "";
+         if ($request->responsableA1 == 'on') {
+            $responsable = $responsable.'1';
+         }
+         if ($request->responsableA2 == 'on') {
+            $responsable = $responsable.'2';
+         }
+         if ($request->responsableA3 == 'on') {
+            $responsable = $responsable.'3';
+         }
+         return $responsable;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -69,7 +82,8 @@ class TipoActividadController extends Controller{
                if($storage){
                  $rutaImagen = 'actividades/'.$preRuta.$name;
                  $tipoActividad->rutaImagen = $rutaImagen;
-                 $tipoActividad->dirigidoA = TipoActividadController::getDirigidoA($request);
+                 $tipoActividad->dirigidoA = $this->getDirigidoA($request);
+                 $tipoActividad->responsable = $this->getResponsable($request);
                  $tipoActividad->save();
                }
         }
@@ -125,8 +139,9 @@ class TipoActividadController extends Controller{
          }else {
            $rutaImagen = $tipoActividad->rutaImagen;
          }
-        $tipoActividad->dirigidoA = TipoActividadController::getDirigidoA($request);
         $tipoActividad->rutaImagen = $rutaImagen;
+        $tipoActividad->dirigidoA = $this->getDirigidoA($request);
+        $tipoActividad->responsable = $this->getResponsable($request);
         $tipoActividad->update();
 
         return Redirect::to('admin/tipoActividad');
@@ -139,8 +154,7 @@ class TipoActividadController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id){
-        $tipoActividad = TipoActividad::findOrFail($id);
-        $tipoActividad->delete();
+        TipoActividad::destroy($id);
 
         return Redirect::to('admin/tipoActividad');
     }

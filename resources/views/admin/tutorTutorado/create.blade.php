@@ -153,10 +153,8 @@
 
 <script type="text/javascript">
 
-	var primeraVez;
 	$(document).ready(function() {
 		var tutorGeneral;
-		primeraVez = true;
 		 $('#tabDocentes').DataTable({
 				"oLanguage" : {
 					 "sProcessing":     "Procesando...",
@@ -228,8 +226,8 @@
 		});
 
 		$('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
-        $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
-    } );
+        	$.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+      });
 
 	});
 
@@ -270,10 +268,6 @@
 			var datosTutor = datosDocente.split("_");
 			tutorGeneral = datosTutor[4]+' '+datosTutor[3]+' '+datosTutor[2];
 			document.getElementById('tutor').innerHTML = datosTutor[4]+' '+datosTutor[3]+' '+datosTutor[2];
-			if(primeraVez == true){
-
-				primeraVez = false;
-			}
 		}
 	}
 

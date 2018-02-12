@@ -29,21 +29,30 @@
 					</ul>
 				</div>
 			@endif
-			<div id="divError" class="alert alert-danger" style='display:none;'>
-					<h4><b>Error</b></h4>
-					<p id="pError">Mensaje</p>
-			</div>
 			<div class="form-group">
 				<label for="tipo">Nombre Categoría</label>
 				<input type="text" required name="tipo" class="form-control" onkeypress="return soloLetras(event)" placeholder="Nombre">
 			</div>
 			<div class="form-group">
+				<label for="tipo">Que usuario puede ser el responsable</label>
+				<br>
+				<input type="checkbox" name="responsableA1" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="responsableA2" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="responsableA3" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Administrativos
+			</div>
+			<span class="help-block"  style='display:none;' id="spanErrorResponsable">
+				<strong style="color:red;"><p id="pErrorResponsable"></p></strong>
+			</span>
+			<div class="form-group">
 				<label for="tipo">Dirigido a</label>
 				<br>
-				<input type="checkbox" name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="checkbox" name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
+				<input type="checkbox" name="dirigidoA1" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="dirigidoA2" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="dirigidoA3" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Administrativos
 			</div>
+			<span class="help-block"  style='display:none;' id="spanErrorDirigidoA">
+				<strong style="color:red;"><p id="pErrorDirigidoA"></p></strong>
+			</span>
 			<div class="form-control-file">
 				<label for="rutaImagen">Imagen</label>
 				<input type="file" required name="rutaImagen" class="form-control dropify"  data-allowed-file-extensions="png jpg jpge"  data-disable-remove="true">
@@ -71,7 +80,6 @@
 	});
 
 	function soloLetras(evento){
-		console.log(evento.charCode);
 		if ((evento.charCode >= 65 && evento.charCode <= 90) ||
 			 (event.charCode >= 97 && event.charCode <= 122) ||
 			 (event.charCode == 225) || (event.charCode == 193) || //á Á
@@ -85,16 +93,24 @@
 		return false;
 	}
 
-	function ocultar(){
-		document.getElementById('divError').style.display = 'none';
+	function ocultarDirigidoA(){
+		document.getElementById('spanErrorDirigidoA').style.display = 'none';
+	}
+
+	function ocultarResponsable(){
+		document.getElementById('spanErrorResponsable').style.display = 'none';
 	}
 
 	function validar(){
 		var todoBien = true;
-		if ($('input[type=checkbox]').is(':checked')) {
-		} else {
-			document.getElementById('pError').innerHTML = 'Debe dirigir las actividad de esta categoría a al menos uno';
-			document.getElementById('divError').style.display = 'block';
+		if (!$('.iDirigidoA').is(':checked')) {
+			document.getElementById('pErrorDirigidoA').innerHTML = 'Debe dirigir las actividad de esta categoría a al menos un tipo de usuario';
+			document.getElementById('spanErrorDirigidoA').style.display = 'block';
+			todoBien = false;
+		}
+		if (!$('.iResponsable').is(':checked')) {
+			document.getElementById('pErrorResponsable').innerHTML = 'Debe seleccionar que tipos de usuario pueden ser responsables de este tipo de actividades.';
+			document.getElementById('spanErrorResponsable').style.display = 'block';
 			todoBien = false;
 		}
 		return todoBien;

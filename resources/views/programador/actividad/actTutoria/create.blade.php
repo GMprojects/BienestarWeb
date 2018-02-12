@@ -42,9 +42,10 @@
 				<div class="caja-footer">
 					<a href="http://aplicaciones.unitru.edu.pe/index.php"><button type="button" class="btn btn-ff-blues" name="button">Historial Académico</button></a>
 					{{--<a href="#"><button type="button" class="btn btn-ff-blues" name="button">Información General</button></a>--}}
-					@if ($tutorado->habitoEstudioRespondido == '1')
+		{{--			@if ($tutorado->habitoEstudioRespondido == '1')
 						<a href="{{ action('HabitoEstudioController@show',['$idTutorTutorado' => $tutorTutorado->idTutorTutorado ])}}"><button type="button" class="btn btn-ff-blues" name="button">&nbsp; Hábito de Estudio</button></a>
-					@endif
+					@endif--}}
+					<a href="#"><button type="button" class="btn btn-ff-blues" name="button">&nbsp; Hábito de Estudio</button></a>
 				</div>
 			</div>
 		</div>

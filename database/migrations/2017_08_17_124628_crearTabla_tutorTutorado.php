@@ -31,61 +31,6 @@ class CrearTablaTutorTutorado extends Migration
             $tabla->timestamps();
 
         });
-
-        Schema::create('HabitoEstudio', function(Blueprint $tabla)
-        {
-            $tabla->increments('idHabitoEstudio');
-
-            //Clave foranea de la tabla TutorTutorado
-            $tabla->integer('idTutorTutorado')->unsigned();
-            $tabla->foreign('idTutorTutorado')->references('idTutorTutorado')->on('TutorTutorado');
-
-            $tabla->timestamps();
-        });
-
-        Schema::create('TipoHabito', function(Blueprint $tabla)
-        {
-            $tabla->increments('idTipoHabito');
-            $tabla->String('tipo', 50);
-            $tabla->integer('estado')->default('1');
-            //0 desactivada
-            //1 activada
-        });
-
-        Schema::create('PreguntaHabito', function(Blueprint $tabla)
-        {
-            $tabla->increments('idPreguntaHabito');
-            $tabla->mediumtext('enunciado');
-
-            //Clave foranea de la tabla CategoriaHabito
-            $tabla->integer('idTipoHabito')->unsigned();
-            $tabla->foreign('idTipoHabito')->references('idTipoHabito')->on('TipoHabito');
-        });
-
-        Schema::create('DetalleHabito', function(Blueprint $tabla)
-        {
-                $tabla->increments('idDetalleHabito');
-                $tabla->enum('rpta', ['1', '2', '3', '4']);
-                /*
-                    1. Nunca
-                    2. Pocas Veces
-                    3. Muchas Veces
-                    4. Siempre
-                */
-
-                //Clave foranea de la tabla HabitoEstudio
-                $tabla->integer('idHabitoEstudio')->unsigned();
-                $tabla->foreign('idHabitoEstudio')->references('idHabitoEstudio')->on('HabitoEstudio');
-
-                //Clave foranea de la tabla HabitoEstudio
-                $tabla->integer('idPreguntaHabito')->unsigned();
-                $tabla->foreign('idPreguntaHabito')->references('idPreguntaHabito')->on('PreguntaHabito');
-        });
-
-
-
-
-
     }
 
     /**
@@ -96,9 +41,5 @@ class CrearTablaTutorTutorado extends Migration
     public function down()
     {
         Schema::dropIfExists('TutorTutorado');
-        Schema::dropIfExists('HabitoEstudio');
-        Schema::dropIfExists('DetalleHabito');
-        Schema::dropIfExists('PreguntaHabito');
-        Schema::dropIfExists('TipoHabito');
     }
 }

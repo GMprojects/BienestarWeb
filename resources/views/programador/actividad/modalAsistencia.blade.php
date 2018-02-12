@@ -16,15 +16,13 @@
 							<thead>
 							<th>Código</th>
 							<th>Inscrito</th>
-							<th>Asistencia  &nbsp; &nbsp; <input type="checkbox" id="checkTodos"/></th>
+							<th>Asistencia
 							</thead>
 							<tbody>
-								@php($i=0)
 	                     @foreach($inscripciones as $inscripcion)
 	                       <tr>
-	                           @php($i++)
 	                           <td> {{ $inscripcion->codigo }} </td>
-	                           <td> {{ $inscripcion->nombre }}  {{ $inscripcion->apellidoPaterno }}  {{ $inscripcion->apellidoMaterno }} </td>
+	                           <td> {{ preg_split("/[ ]/",$inscripcion->nombre)[0] }}  {{ $inscripcion->apellidoPaterno }}  {{ $inscripcion->apellidoMaterno }} </td>
 	                           <td>
                                  @if ($inscripcion->asistencia == 0)
                                     <input id="check" type="checkbox"  class="icheckbox_square-green" value={{ $inscripcion->idInscripcionADA.'-'.$inscripcion->idTipoPersona }} name="asistencia[]">

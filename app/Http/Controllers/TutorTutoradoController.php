@@ -3,7 +3,8 @@
 namespace BienestarWeb\Http\Controllers;
 
 use BienestarWeb\TutorTutorado;
-use BienestarWeb\HabitoEstudio;
+use BienestarWeb\EncuestaRespondida;
+use BienestarWeb\Encuesta;
 use BienestarWeb\Docente;
 use BienestarWeb\Alumno;
 use BienestarWeb\Persona;
@@ -84,9 +85,21 @@ class TutorTutoradoController extends Controller{
           $docente->tutorados()->attach( (preg_split("/[_]/",$request->alumnos[$i]))[0], ['anioSemestre' => $arraySemestre[0],
                                                                  'numeroSemestre' => $numeroSemestre]);
         }
-        $job = (new JobEmailHabitosEstudios($idDocente, $arraySemestre[0], $numeroSemestre))
+        /* Crenando habitos de estudio */
+        $idUserTutorados = (Alumno::whereIn('idUser', $request->alumnos)->pluck('idUser'))->toArray();
+        $idTutorTutorados = TutorTutorado::where([['idDocente', $idDocente], ['anioSemestre', $arraySemestre[0]], ['numeroSemestre', $numeroSemestre]])->pluck('idTutorTutorado');
+        for ($i=0; $i < count($idUserTutorados) ; $i++) {
+           $encuesta = new EncuestaRespondida;
+           $encuesta->idUser = $idUserTutorados[$i];
+           $encuesta->idEncuesta = '3';
+           $encuesta->idTutorTutorado = $idTutorTutorados[$i];
+           $encuesta->idTutorTutorado = $idTutorTutorados[$i];
+           $encuesta->save();
+        }
+        /* --------------------------- */
+        /*$job = (new JobEmailHabitosEstudios($idDocente, $arraySemestre[0], $numeroSemestre))
            ->delay(Carbon::now()->addSeconds(1));
-        dispatch($job);
+        dispatch($job);*/
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -148,9 +161,18 @@ class TutorTutoradoController extends Controller{
           $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
                                                                  'numeroSemestre' => $request->numeroSemestre]);
         }
-        $job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $numeroSemestre))
+        /* Crenando habitos de estudio */
+        $idUserTutorados = (Alumno::whereIn('idUser', $request->alumnos)->pluck('idUser'))->toArray();
+        for ($i=0; $i < count($idUserTutorados) ; $i++) {
+          $encuesta = new EncuestaRespondida;
+          $encuesta->idUser = $idUserTutorados[$i];
+          $encuesta->idEncuesta = '3';
+          $encuesta->save();
+        }
+        /* --------------------------- */
+        /*$job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $numeroSemestre))
            ->delay(Carbon::now()->addSeconds(1));
-        dispatch($job);
+        dispatch($job);*/
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -203,7 +225,6 @@ class TutorTutoradoController extends Controller{
             }
          }
          if ($tutorTutorado->habitoEstudioRespondido == 1) {
-            $tutorTutorado->habitoEstudio->respuestasHabito()->detach();
             $tutorTutorado->habitoEstudio->delete();
          }// else : -> habito de estudio  no Respondido
          $tutorTutorado->delete();
@@ -255,7 +276,6 @@ class TutorTutoradoController extends Controller{
             }
             if ($tutorTutorado->habitoEstudioRespondido == 1) {
                //Habito d e Estudio Respondido
-               $tutorTutorado->habitoEstudio->respuestasHabito()->detach();
                $tutorTutorado->habitoEstudio->delete();
             }//  else  Habito d e Estudio NO Respondido'
             $tutorTutorado->delete();

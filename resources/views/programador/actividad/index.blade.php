@@ -62,9 +62,16 @@
 								<td>{{ $actividad->anioSemestre }} - @if ( $actividad->numeroSemestre == 1 )I	@else	II @endif</td>
 								<td>{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}</td>
 								<td>{{ date("g:i A",strtotime($actividad->horaInicio)) }}</td>
+
 								@switch($actividad->estado)
 									@case(1)
-									<td><small class="label ff-bg-blue rounded">Pendiente</small></td>
+										@php($diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d')))
+										@php($diasRestantes = intval($diferencia/86400))
+										@if ($diasRestantes < 0)
+											<td><small class="label ff-bg-orange rounded">Expirada</small></td>
+										@else
+											<td><small class="label ff-bg-blue rounded">Pendiente</small></td>
+										@endif
 									<!--<td>Pendiente</td>
 									<td>Pendiente</td>-->
 									@break
@@ -213,7 +220,7 @@
 <script>
 	$(document).ready(function() {
 		$('#tabActividades').DataTable({
-			"lengthMenu": [ 10, 25, 50, 75, 100 ],
+			"lengthMenu":[[15, 25, 50, 75, -1 ], [15, 25, 50, 75, "Todas" ]],
 			"oLanguage" : {
 				"sProcessing":     "Procesando...",
 				"sLengthMenu":     "Mostrar _MENU_ registros",

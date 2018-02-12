@@ -21,6 +21,7 @@
 										<thead>
 											<th>Id</th>
 											<th>Nombre Categoría</th>
+											<th>Responsable</th>
 											<th>Dirigido A</th>
 											<th>Imagen</th>
 											<th>Opciones</th>
@@ -31,36 +32,26 @@
 													<td>{{ $tipoActividad->idTipoActividad }}</td>
 													<td>{{ $tipoActividad->tipo }}</td>
 													<td>
-														<ul>
-															@if (strlen($tipoActividad->dirigidoA) == 1)
-																@switch($tipoActividad->dirigidoA[0])
-																	@case('1')
-																		<li>Alumnos</li>
-																	@break
-																	@case('2')
-																		<li>Docentes</li>
-																	@break
-																	@case('3')
-																		<li>Administrativos</li>
-																	@break
-																@endswitch
-															@elseif (strlen($tipoActividad->dirigidoA) == 2)
-																@if ($tipoActividad->dirigidoA[0] == 1 && $tipoActividad->dirigidoA[1] == 2)
-																	<li>Alumnos</li>
-																	<li>Docentes</li>
-																@elseif ($tipoActividad->dirigidoA[0] == 1 && $tipoActividad->dirigidoA[1] == 3)
-																	<li>Alumnos</li>
-																	<li>Administrativos</li>
-																@else{{-- 2 y 3 --}}
-																	<li>Docentes</li>
-																	<li>Administrativos</li>
-																@endif
-															@else
-																<li>Alumnos</li>
-																<li>Docentes</li>
-																<li>Administrativos</li>
+															@if (stripos($tipoActividad->responsable,'1')!==false)
+																<p>Alumnos</p>
 															@endif
-														</ul>
+															@if (stripos($tipoActividad->responsable,'2')!==false)
+																<p>Docentes</p>
+															@endif
+															@if (stripos($tipoActividad->responsable,'3')!==false)
+																<p>Administrativos</p>
+															@endif
+													</td>
+													<td>
+															@if (stripos($tipoActividad->dirigidoA,'1')!==false)
+																<p>Alumnos</p>
+															@endif
+															@if (stripos($tipoActividad->dirigidoA,'2')!==false)
+																<p>Docentes</p>
+															@endif
+															@if (stripos($tipoActividad->dirigidoA,'3')!==false)
+																<p>Administrativos</p>
+															@endif
 													</td>
 													<td><img src="{{ asset('storage/'.$tipoActividad->rutaImagen) }}" width="100px" alt="No encontrada"></td>
 													<td>

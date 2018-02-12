@@ -18,6 +18,7 @@ class CrearTablaTipoActividad extends Migration
             $tabla->increments('idTipoActividad');
             $tabla->string('tipo', 45)->unique();
             $tabla->string('dirigidoA', 4);
+            $tabla->string('responsable', 4);
             /*
                 Categoría:
                 1. ActAtencionMedica

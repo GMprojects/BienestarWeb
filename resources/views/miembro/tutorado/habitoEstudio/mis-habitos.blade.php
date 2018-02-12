@@ -1,5 +1,7 @@
 @extends('template')
 @section('contenido')
+{!! Form::open(['route'=>['encuesta.storeHabitoEstudio', $idEncuestaRespondida], 'method'=>'POST', 'autocomplete'=>'off']) !!}
+{{ Form::token() }}
 <div class="row">
 	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 		@if(count($errors)>0)
@@ -13,9 +15,7 @@
 		@endif
 	</div>
 </div>
-{!!Form::open(['url'=>'miembro/habitoEstudio','method'=>'POST','autocomplete'=>'off'])!!}
-{{ Form::token() }}
- <div class="row">
+<div class="row">
      <div class="col-md-12">
          <div class="caja">
              <div class="caja-header large">
@@ -23,101 +23,111 @@
                      <i class="fa fa-list-ul"></i>
                  </div>
                  <div class="caja-title">
-                     Habitos de Estudio
+                     {{ $encuesta->titulo }}
                  </div>
              </div>
              <div class="caja-body">
-                <div class="">
-                   <p class="ff-c-secondary">
-                      En BienestarWeb nos preocupamos por sus H'abitos de Estudio.
-                   </p>
-                   <p><strong>Elija una de las siguientes opciones:</strong></p>
+                <!--fin  -->
+					<p style="font-size: 1.3em;"> <strong>Por favor, elija una de las alternativas siguientes.</strong> </p>
+					<!-- NOTA NO-SECCION:  por si hay preguntas que no están dentro de alguna sección -->
+					@if(count($encuesta->preguntas->where('idSeccion', null))> 0)
+						<div class="no-sec-items items">
+							<div class="alternatives hidden-xs hidden-sm">
+								@foreach ( $encuesta->alternativas as $alternativa )
+									<div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
+									  <span>{{ $alternativa->etiqueta }}</span>
+								  </div>
+								@endforeach
+							</div>
 
-                </div>
-                <div class="items">
-                   <div class="item hidden-xs hidden-sm">
-                       <div class="question" style="background: white;"></div>
-                       <div class="alternatives" style="background: white;">
-                          <div class="env-alternative"  style="width:25%; background-color: #D3C7E8; padding: 0px; border-radius: 7px 7px 0px 0px;">
-                             <div class="alternative" style="text-align:left;">
-                                <label>No</label>
-                             </div>
-                          </div>
-                          <div class="env-alternative"  style="width:25%; background-color: #D3C7E8; padding: 0px; border-radius: 7px 7px 0px 0px;">
-                             <div class="alternative" style="text-align:left;">
-                                <label>Pocas Veces</label>
-                             </div>
-                          </div>
-                          <div class="env-alternative"  style="width:25%; background-color: #D3C7E8; padding: 0px; border-radius: 7px 7px 0px 0px;">
-                             <div class="alternative" style="text-align:left;">
-                                <label>Muchas Veces</label>
-                             </div>
-                          </div>
-                          <div class="env-alternative"  style="width:25%; background-color: #D3C7E8; padding: 0px; border-radius: 7px 7px 0px 0px;">
-                             <div class="alternative" style="text-align:left;">
-                                <label>Sí</label>
-                             </div>
-                          </div>
-                       </div>
-                    </div>
-                    <ol style="padding: 0px;" class="enc-list">
-                       @for ($i=0; $i < count($preguntas); $i++)
-                          <div class="enc-type">
-                             {{ $preguntas[$i][0]->tipoHabito->tipo }}
-                          </div>
-                          @for ($j=0; $j < count($preguntas[$i]); $j++)
-                             <div class="item">
-                                <div class="question">
-                                  <li>
-                                     <span class="quest-text">
-                                        {{ $preguntas[$i][$j]->enunciado }}
-                                     </span>
-                                 </li>
-                                </div>
-                                <div class="alternatives">
-                                   <div class="env-alternative"  style="width:25%;">
-                                      <div class="alternative">
-                                        <input required type="radio" name="{{ $preguntas[$i][$j]->idPreguntaHabito}}" value="1"><label class="hidden-lg hidden-md">No</label>
-                                      </div>
-                                   </div>
-                                   <div class="env-alternative"  style="width:25%;">
-                                      <div class="alternative">
-                                        <input required type="radio" name="{{ $preguntas[$i][$j]->idPreguntaHabito}}" value="2"><label class="hidden-lg hidden-md">Pocas Veces</label>
-                                      </div>
-                                   </div>
-                                   <div class="env-alternative"  style="width:25%;">
-                                      <div class="alternative">
-                                        <input required type="radio" name="{{ $preguntas[$i][$j]->idPreguntaHabito}}" value="3"><label class="hidden-lg hidden-md">Muchas Veces</label>
-                                      </div>
-                                   </div>
-                                   <div class="env-alternative"  style="width:25%;">
-                                      <div class="alternative">
-                                        <input required type="radio" name="{{ $preguntas[$i][$j]->idPreguntaHabito}}" value="4"><label class="hidden-lg hidden-md">Sí</label>
-                                      </div>
-                                   </div>
-                                </div>
-                             </div>
-                          @endfor
-                       @endfor
-                    </ol>
-                </div>
+							<ol class="enc-list">
 
+								@foreach ($encuesta->preguntas->where('idSeccion', null) as $pregunta)
+								 <div class="item">
+									 <div class="question">
+										<li>
+											<span class="quest-text">
+												{{ $pregunta->enunciado }}
+											</span>
+									  </li>
+									 </div>
+									 <div class="alternatives">
+										 @foreach ( $encuesta->alternativas as $alternativa )
+											 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
+												 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+											 </div>
+										 @endforeach
+									 </div>
+								 </div>
+								 @endforeach
+							</ol>
+						</div>
+					@endif
+					<!-- FIN de la NOTA NO-SECCION-->
+
+					@if(count($encuesta->secciones) > 0)
+						<div class="secciones">
+							@foreach ($encuesta->secciones as $seccion)
+								<div class="seccion">
+									<div class="s-header">
+										<div class="s-icon"> {{ $seccion->orden }} </div>
+										<div class="s-title"> {{ $seccion->titulo }} </div>
+									</div>
+									<div class="s-body">
+										<div class="s-description"> {{ $seccion->descripcion }} </div>
+										<div class="items">
+											<div class="alternatives hidden-xs hidden-sm">
+												@foreach ( $encuesta->alternativas as $alternativa )
+													<div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
+													  <span>{{ $alternativa->etiqueta }}</span>
+												  </div>
+												@endforeach
+											</div>
+
+											<ol class="enc-list">
+												@foreach ($seccion->preguntas as $pregunta)
+												 <div class="item">
+													 <div class="question">
+														<li>
+															<span class="quest-text">
+																{{ $pregunta->enunciado }}
+															</span>
+													  </li>
+													 </div>
+													 <div class="alternatives">
+														 @foreach ( $encuesta->alternativas as $alternativa )
+															 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
+																 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+															 </div>
+														 @endforeach
+													 </div>
+												 </div>
+												 @endforeach
+											</ol>
+										</div>
+									</div>
+								</div>
+							@endforeach
+
+
+						</div>
+					@endif
              </div>
              <div class="caja-footer">
-                <button class="pull-right btn btn-ff" type="submit"><i class="fa fa-send"></i>Enviar</button>
+                <button class="pull-right btn btn-ff" type="submit" data-toggle="tooltip" data-placement="bottom" title="Enviar Hábitos"><i class="fa fa-send"></i>Enviar</button>
              </div>
          </div>
      </div>
  </div>
  {!!Form::close()!!}
  <script type="text/javascript">
-	 $(document).ready(function(){
-		 $('input').iCheck({
-			 checkboxClass: 'icheckbox_square-green',
-			 radioClass: 'iradio_square-green',
-			 increaseArea: '20%' // optional
-		 });
-		 $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+ $(document).ready(function(){
+	 $('input').iCheck({
+		 checkboxClass: 'icheckbox_square-green',
+		 radioClass: 'iradio_square-green',
+		 increaseArea: '20%' // optional
 	 });
+	 $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+ });
  </script>
 @endsection

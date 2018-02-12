@@ -100,11 +100,30 @@
                <section class="col-md-6">
                   <div class="act-view">
                      <div class="act-view-img">
-                        @if($actividad->rutaImagen == null)
-                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="No Disponible">
-                        @else
-                           <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No Disponible">
-                        @endif
+                        <p>
+                           @if($actividad->rutaImagen == null)
+                              <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="No Disponible">
+                           @else
+                              <img class="img-thumbnail" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No Disponible">
+                           @endif
+                           @switch( $actividad->estado )
+                              @case(1) @case(4)
+                                 @php
+                                    $diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d'));
+                                    $diasRestantes = intval($diferencia/86400);
+                                 @endphp
+                                 @if ($diasRestantes < 0)
+                                    <span class="label-imagen-actividad" style="background-color:#FF8D00;">Expirada<span>
+                                 @endif
+                              @break
+                              @case(2)
+                                    <span class="label-imagen-actividad" style="background-color:#4CAE4C;">Realizada<span>
+                              @break
+                              @case(3)
+                                    <span class="label-imagen-actividad" style="background-color:#C3301F;">Cancelada</span>
+                              @break
+                           @endswitch
+                        </p>
                      </div>
                      <div class="act-view-title">{{ $actividad->titulo }}</div>
                      <div class="act-view-www">
@@ -158,47 +177,84 @@
                               <span class="label ff-bg-blue">TUTORADOS</span>
                            @endif
                         </div>
-                     @if( $actividad->idTipoActividad == 4 )
-                        @if(Auth::user()!= null && Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad))
-                           <h5><span class="label ff-bg-red">DEBO ASISTIR</span></h5>
-                        @endif
-                     @elseif($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
-                        <span class="pull-right label ff-bg-red rounded" style="font-size: 1.3em;">Presentar documentos</span>
-                     @elseif(Auth::user()!=null)
-                        @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
-                           @if(Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad) ||
-                              Auth::user()->idTipoPersona == 2 && Auth::user()->docente->misInscripciones->contains('idActividad', $actividad->idActividad) ||
-                              Auth::user()->idTipoPersona == 3 && Auth::user()->administrativo->misInscripciones->contains('idActividad', $actividad->idActividad))
-                              <div class="pull-right">
-                                 <h4><i class="fa fa-check-circle"></i> Asistiré</h4>
-                              </div>
+                        <div class="act-view-insc pull-right">
+                           @if( $actividad->idTipoActividad == 4 )
+                              @if(Auth::user() !=null && Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad))
+                                 <div class="label ff-bg-blue" style="border-radius: 25px;">Debo Asistir</div>
+                              @else
+                                 <div class="label ff-bg-red" style="border-radius: 25px;">Exclusiva: Tutorados</div>
+                              @endif
+                           @elseif($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
+                              <div class="label ff-bg-aqua" style="border-radius: 25px;">Presentar documentos</div>
+                           @elseif(Auth::user()!=null)
+                                 @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
+                                       @if(Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad) ||
+                                          Auth::user()->idTipoPersona == 2 && Auth::user()->docente->misInscripciones->contains('idActividad', $actividad->idActividad) ||
+                                          Auth::user()->idTipoPersona == 3 && Auth::user()->administrativo->misInscripciones->contains('idActividad', $actividad->idActividad))
+                                          <div class="label ff-bg-blue" style="border-radius: 25px;">
+                                                <i class="fa fa-check-circle"></i> <span>Asistiré</span>
+                                          </div>
+                                       @else
+                                             @if( $actividad->estado == 1  && $diasRestantes > 0 )
+                                                   @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
+                                                         @if( $actividad->idUserResp != Auth::user()->id )
+                                                               @if (Auth::user()!=null)
+                                                                 <a class="btn btn-ff pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}" style="border-radius: 25px;" >
+                                                                   <i class="fa fa-circle-o"></i> Quiero Asistir
+                                                                </a>
+                                                               @endif
+                                                         @else
+                                                            <div class="label ff-bg-aqua" style="border-radius: 25px;">
+                                                               <span style="color:white;">Soy Responsable</span>
+                                                            </div>
+                                                         @endif
+                                                   @else
+                                                      <div class="label ff-bg-red" style="border-radius: 25px;">
+                                                         <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No hay vacantes</span>
+                                                      </div>
+                                                   @endif
+                                             @else
+                                                <div class="label ff-bg-red" style="border-radius: 25px;">
+                                                   <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No disponible</span>
+                                                </div>
+                                             @endif
+
+                                       @endif
+                                 @else
+                                    @if (strlen($actividad->tipoActividad->dirigidoA) == 1)
+                                       @if (stripos($actividad->tipoActividad->dirigidoA,'1')!==false)
+                                          <div class="label ff-bg-red" style="border-radius: 25px;">Exclusiva: Alumnos</div>
+                                       @elseif (stripos($actividad->tipoActividad->dirigidoA,'2')!==false)
+                                          <div class="label ff-bg-red" style="border-radius: 25px;">Exclusiva: Docentes</div>
+                                       @else
+                                          <div class="label ff-bg-red" style="border-radius: 25px;">Exclusiva: Administrativos</div>
+                                       @endif
+                                    @elseif(strlen($actividad->tipoActividad->dirigidoA) == 2)
+                                       @if (stripos($actividad->tipoActividad->dirigidoA,'1')!==false && stripos($actividad->tipoActividad->dirigidoA,'2')!==false)
+                                          {{-- Alumnos-Docentes --}}
+                                          <div class="label ff-bg-red" style="border-radius: 25px;">Exclusiva: Alumnos y Docentes</div>
+                                       @elseif (stripos($actividad->tipoActividad->dirigidoA,'1')!==false && stripos($actividad->tipoActividad->dirigidoA,'3')!==false)
+                                          {{-- Alumnos-Administrativos --}}
+                                          <div class="label ff-bg-red" style="border-radius: 25px;">Exclusiva: Alumnos y Administrativos</div>
+                                       @else
+                                          {{-- Docentes-Administrativos --}}
+                                          <div class="label ff-bg-red" style="border-radius: 25px;">Exclusiva: Docentes y Administrativos</div>
+                                       @endif
+                                    @else
+                                       {{-- Alumnos-Docentes-Administrativos --}}
+                                       <div class="label ff-bg-red" style="border-radius: 25px;">
+                                          <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No disponible</span>
+                                       </div>
+                                    @endif
+                                 @endif
                            @else
-                              @if( $actividad->estado == 1  && $diasRestantes > 0 )
-                                 @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
-                                   <a class="btn btn-ff pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
+                                 @if (Auth::user()!=null)
+                                    <a class="btn btn-ff pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}" style="border-radius: 25px;" >
                                       <i class="fa fa-circle-o"></i> Quiero Asistir
                                    </a>
-                                 @else
-                                    <div class="pull-right">
-                                       <h4><i class="fa fa-times-circle"></i> No hay vacantes</h4>
-                                    </div>
                                  @endif
-                              @else
-                                 <div class="pull-right">
-                                    <h4><i class="fa fa-times-circle"></i> No disponible</h4>
-                                 </div>
-                              @endif
                            @endif
-                        @else
-                           <div class="pull-right">
-                              <h4><i class="fa fa-times-circle"></i> No es para mí</h4>
-                           </div>
-                        @endif
-                     @else
-                        <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
-                           <i class="fa fa-circle-o"></i> Quiero Asistir
-                        </a>
-                     @endif
+                        </div>
                      </div>
                      <div class="act-view-desc">
                         <div class="dt-txt-big">Descripción</div>

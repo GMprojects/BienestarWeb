@@ -38,7 +38,7 @@
                              </td>
                            @else
                              <td>
-                               <a href="{{ action('HabitoEstudioController@show',['idTutorTutorado' => $tutorado->idTutorTutorado ])}}">
+                               <a href="{{ action('EncuestaController@showHabitoEstudio', ['idTutorTutorado' => $tutorado->idTutorTutorado]) }}">
                                  <button type="button" class="btn btn-ff-blues" >
                                     <span>
                                       <i class="fa fa-eye"><i class="glyphicon glyphicon-list-alt"></i></i>

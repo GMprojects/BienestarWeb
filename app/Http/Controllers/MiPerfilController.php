@@ -110,9 +110,6 @@ class MiPerfilController extends Controller{
             'celular' => 'max:15',
             'foto' => 'file'
          ]);
-         $user->nombre = $request->nombre;
-         $user->apellidoPaterno = $request->apellidoPaterno;
-         $user->apellidoMaterno = $request->apellidoMaterno;
          $user->fechaNacimiento = MiPerfilController::getFecha($request->fechaNacimiento);
          $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user);
          $user->direccion = $request->direccion;

@@ -3,13 +3,13 @@
 
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header" style="background-color:red; color:white; border-radius:6px 6px 0px 0px;">
+			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
-				<h4 class="modal-title"><b style="color:white;">Eliminar Encuesta</b></h4>
+				<h4 class="modal-title"><b>Eliminar Encuesta</b></h4>
 			</div>
 			<div class="modal-body">
 				<p>
-					Confirme si desea ELIMINAR la Encuesta: "<strong>{{$encuestas[$i]->titulo}}</strong>" para
+					Confirme si desea <strong style="color: red;">ELIMINAR</strong> la Encuesta: "<strong>{{$encuestas[$i]->titulo}}</strong>" para
 					@if($encuestas[$i]->destino == 'r')
 						<small class="label ff-bg-red">Responsable</small>
 					@else
@@ -19,12 +19,8 @@
 
 			</div>
 			<div class="modal-footer">
-				<div class="pull-left">
-					<button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
-				</div>
-				<div class="pull-right">
-					<button class="btn btn-ff-red" type="submit"><i class="fa fa-check"></i> Confirmar</button>
-				</div>
+				<button type="submit" class="btn btn-ff"><i class="fa fa-check"></i>Confirmar</button>
+				<button type="button" class="btn btn-ff-default"  data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
 			</div>
 		</div>
 	</div>

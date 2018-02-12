@@ -47,6 +47,7 @@
                      </div>
                      <hr class="act-hr"/>
                      <div class="body-card">
+                        <p><i class="fa fa-qrcode"></i>{{ $du['user']->codigo }}</p>
                         <p><i class="fa fa-user"></i>{{ $du['user']->nombre }}</p>
                         <p><i class="fa fa-user"></i>{{ $du['user']->apellidoPaterno }} {{ $du['user']->apellidoMaterno }}</p>
                         @if (Auth::user()->id == $du['user']->id)

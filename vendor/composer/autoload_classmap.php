@@ -44,7 +44,6 @@ return array(
     'BienestarWeb\\Http\\Controllers\\EgresadoController' => $baseDir . '/app/Http/Controllers/EgresadoController.php',
     'BienestarWeb\\Http\\Controllers\\EncuestaController' => $baseDir . '/app/Http/Controllers/EncuestaController.php',
     'BienestarWeb\\Http\\Controllers\\EvidenciaActividadController' => $baseDir . '/app/Http/Controllers/EvidenciaActividadController.php',
-    'BienestarWeb\\Http\\Controllers\\HabitoEstudioController' => $baseDir . '/app/Http/Controllers/HabitoEstudioController.php',
     'BienestarWeb\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
     'BienestarWeb\\Http\\Controllers\\InscripcionADAController' => $baseDir . '/app/Http/Controllers/InscripcionADAController.php',
     'BienestarWeb\\Http\\Controllers\\MiPerfilController' => $baseDir . '/app/Http/Controllers/MiPerfilController.php',

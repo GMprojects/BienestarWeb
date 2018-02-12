@@ -17,8 +17,8 @@ class CrearTablaPersona extends Migration
          {
             $tabla->increments('id');
             $tabla->string('nombre', 45);
-            $tabla->string('apellidoPaterno', 20);
-            $tabla->string('apellidoMaterno', 20);
+            $tabla->string('apellidoPaterno', 25);
+            $tabla->string('apellidoMaterno', 25);
             $tabla->date('fechaNacimiento')->nullable();
             $tabla->enum('sexo', ['h', 'm'])->nullable();
             $tabla->string('codigo', 20)->unique();

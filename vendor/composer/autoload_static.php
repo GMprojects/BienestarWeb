@@ -384,7 +384,6 @@ class ComposerStaticInitaff5353d4f922c9dd36a21abb4707b47
         'BienestarWeb\\Http\\Controllers\\EgresadoController' => __DIR__ . '/../..' . '/app/Http/Controllers/EgresadoController.php',
         'BienestarWeb\\Http\\Controllers\\EncuestaController' => __DIR__ . '/../..' . '/app/Http/Controllers/EncuestaController.php',
         'BienestarWeb\\Http\\Controllers\\EvidenciaActividadController' => __DIR__ . '/../..' . '/app/Http/Controllers/EvidenciaActividadController.php',
-        'BienestarWeb\\Http\\Controllers\\HabitoEstudioController' => __DIR__ . '/../..' . '/app/Http/Controllers/HabitoEstudioController.php',
         'BienestarWeb\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'BienestarWeb\\Http\\Controllers\\InscripcionADAController' => __DIR__ . '/../..' . '/app/Http/Controllers/InscripcionADAController.php',
         'BienestarWeb\\Http\\Controllers\\MiPerfilController' => __DIR__ . '/../..' . '/app/Http/Controllers/MiPerfilController.php',

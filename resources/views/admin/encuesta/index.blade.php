@@ -13,6 +13,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="box-body">
 			<div class="table">
 					<div class="table-responsive">
@@ -29,33 +30,43 @@
 										<td>{{$encuestas[$i]->idEncuesta}}</td>
 										<td>{{$encuestas[$i]->titulo}}</td>
 										<td>{{$encuestas[$i]->tipoActividad['tipo']}}</td>
-										@if($encuestas[$i]->destino === 'r')
-											<td>Responsable</td>
-										@else
-											<td>Inscritos</td>
-										@endif
+										@if($encuestas[$i]->tipo == 1)
+											@if($encuestas[$i]->destino === 'r')
+												<td>Responsable</td>
+											@else
+												<td>Inscritos</td>
+											@endif
+										@elseif($encuestas[$i]->tipo == 2)
+											<td>
+												@if(strpos($encuestas[$i]->destino, '1') !== false)
+													<p>Alumnos</p>
+												@endif
+												@if(strpos($encuestas[$i]->destino, '2') !== false)
+													<p>Docentes</p>
+												@endif
+												@if(strpos($encuestas[$i]->destino, '3') !== false)
+													<p>Administradores</p>
+												@endif
+				  							 </td>
+				  						 @endif
 										<td>
 											<a href="{{URL::action('EncuestaController@show',$encuestas[$i]->idEncuesta)}}">
-												<button class="btn btn-ff-blues" data-toggle="tooltip" data-placement="bottom" title="Vista Preliminar Encuesta">
+												<button class="btn btn-ff-blues" data-toggle="tooltip" data-placement="bottom" title="Vista Preliminar de la Encuesta">
 													<span>
 													  <i class="fa fa-eye"><i class="fa fa-file-text"></i></i>
 													</span>
 												</button>
 											</a>
 
-											<a href="{{URL::action('EncuestaController@edit',$encuestas[$i]->idEncuesta)}}">
-												<button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar encuesta">
+											{{--<a href="{{URL::action('EncuestaController@edit',$encuestas[$i]->idEncuesta)}}">
+												<button class="btn btn-ff-orange" data-toggle="tooltip" data-placement="bottom" title="Editar esta encuesta">
 													<span>
 													  <i class="fa fa-edit"></i></i>
 													</span>
 												</button>
-											</a>
+											</a>--}}
 											@if($cant_enc_resp[$i] == 0)
-											<a href="" data-target="#modal-delete-{{$encuestas[$i]->idEncuesta}}" data-toggle="modal">
-												<button class="btn btn-ff-red" data-toggle="tooltip" data-placement="bottom" title="Eliminar encuesta">
-													<i class="fa fa-trash"></i>
-												</button>
-											</a>
+												<a href="" data-target="#modal-delete-{{$encuestas[$i]->idEncuesta}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 											@endif
 
 										</td>

@@ -54,7 +54,6 @@ class ActividadController extends Controller{
             return NULL;
          }
       }
-
    }
    function getRutaImagenUpdate($request, $rutaImgAnterior){
        //Eliminando Foto anterior
@@ -83,7 +82,7 @@ class ActividadController extends Controller{
       }
    }
    function getModalidad($request){
-      switch($request->idTipoActividad) {
+      switch(preg_split("/[-]/",$request->idTipoActividad)[0]) {
          case '1': case '2': return 1;
          case '4':
             if(count($request->idAlumnoTutorado) > 1){
@@ -109,7 +108,7 @@ class ActividadController extends Controller{
       }
    }
    function getCuposTotales($request){
-      switch($request->idTipoActividad) {
+      switch(preg_split("/[-]/",$request->idTipoActividad)[0]) {
          case '1':
          case '2': return 1;
          case '4': return count($request->idAlumnoTutorado);
@@ -179,12 +178,12 @@ class ActividadController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-      $actividades = Actividad::where('estado', '<', '5')->orderBy('fechaInicio', 'asc')->get();
+      //$actividades = Actividad::where('estado', '<', '5')->orderBy('fechaInicio', 'asc')->get();
+      $actividades = Actividad::where('estado', '<', '5')->get();
       return view('programador.actividad.index',[
          'actividades' => $actividades,
          'idUserProgramador' => $request->idUserProgramador,
          'idUserResponsable', $request->idUserResponsable,
-         'idUserInscrito', $request->idUserInscrito,
          'idUserInscrito', $request->idUserInscrito,
          'estadoCancelado', $request->estadoCancelado]);
    }
@@ -233,13 +232,15 @@ class ActividadController extends Controller{
             'modalidad' => 'required',
             'rutaImagen' => 'image|mimes:jpeg,png,jpg'
          ]);
-         if ($request->idTipoActividad == 1 || $request->idTipoActividad == 2) {
+         $idTipoActividad = preg_split("/[-]/",$request->idTipoActividad)[0];
+         if ($idTipoActividad == 1 || $idTipoActividad == 2) {
             $fechaFin = $this->getFecha($request->fechaInicio);
             $horaFin = (Carbon::parse($request->horaInicio))->toTimeString();
          } else {
             $fechaFin = $this->getFecha($request->fechaFin);
             $horaFin = (Carbon::parse($request->horaFin))->toTimeString();
          }
+         $arraySemestre = explode("-",$this->getSemestre());
          $actividad = Actividad::create([
             'titulo' => $request->titulo,
             'fechaInicio' => $this->getFecha($request->fechaInicio),
@@ -253,15 +254,14 @@ class ActividadController extends Controller{
             'rutaImagen' => $this->getRutaImagen($request),
             'invitado' => $this->getInivitado($request),
             'cuposTotales' => $this->getCuposTotales($request),
-            'anioSemestre' => 2017,
-            'numeroSemestre' => 2,
+            'anioSemestre' => $arraySemestre[0],
+            'numeroSemestre' => ($arraySemestre[1] == 'I') ? 1 : 2 ,
             'modalidad' => $this->getModalidad($request),
-            'idTipoActividad' => $request->idTipoActividad,
+            'idTipoActividad' => $idTipoActividad,
             'idUserResp' => $this->getResp($request),
             'idUserProg' => $request->user()->id
          ]);
-
-         switch ($request->idTipoActividad) {
+         switch ($idTipoActividad) {
             case '1':
             case '2':
                $alumno = Alumno::findOrFail($request->idAlumno);
@@ -271,7 +271,7 @@ class ActividadController extends Controller{
                $inscripcionAlumno->alumno()->associate($alumno);
                $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
                $mensajeA = 'Ud. ha sido inscrito en una actividad';
-               break;
+            break;
             case '3':
             case '10':
                if($request->modalidad == 1){//INDIVIDUAL
@@ -326,7 +326,6 @@ class ActividadController extends Controller{
          }else{
             $userAl = null;
          }
-
          if($actividad->idTipoActividad < 3){
             $userResp = null;
          }else{

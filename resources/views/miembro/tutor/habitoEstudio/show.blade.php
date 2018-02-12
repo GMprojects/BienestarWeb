@@ -12,14 +12,14 @@
 
 	<div class="box-body">
 		<div class="col-md-12">
-			@if ($alumno->sexo == 'm')
+			@if ($user->sexo == 'm')
 				<label>&nbsp; &nbsp; <i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;<b>Alumna: </b> </label>
 			@else
 				<label>&nbsp; &nbsp; <i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;<b>Alumno: </b> </label>
 			@endif
-			<b>  &nbsp; &nbsp; {{ $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno }}</b>&nbsp; &nbsp; <br>
+			<b>  &nbsp; &nbsp; {{ $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno }}</b>&nbsp; &nbsp; <br>
 			<div class="pull-right"><label>&nbsp; &nbsp; <i class="fa fa-calendar margin-r-5"></i>&nbsp; &nbsp;<b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $tutorTutorado->anioSemestre.'-'.$tutorTutorado->numeroSemestre }}</div>
-			<label>&nbsp; &nbsp; <i class="fa fa-qrcode margin-r-5"></i>&nbsp; &nbsp;<b>Código: </b></label> <b>  &nbsp; &nbsp; {{ $alumno->codigo }}</b>&nbsp; &nbsp; <br>
+			<label>&nbsp; &nbsp; <i class="fa fa-qrcode margin-r-5"></i>&nbsp; &nbsp;<b>Código: </b></label> <b>  &nbsp; &nbsp; {{ $user->codigo }}</b>&nbsp; &nbsp; <br>
 		</div>
 	 </div>
 </div>
@@ -36,229 +36,239 @@
 		<div class="col-12 col-sm-12 col-md-6 col-lg-6">
 			<label style="color:#4B367C">Resumen de respuestas: </label><br>
 			<br>
-			<label>&nbsp; &nbsp;  Nunca (1) : </label> {{ $respuesta_cantidad[0]['cantidad'] }} <br>
-			<label>&nbsp; &nbsp;  Pocas Veces (2) : </label> {{ $respuesta_cantidad[1]['cantidad'] }} <br>
-			<label>&nbsp; &nbsp;  Muchas Veces (3) : </label> {{ $respuesta_cantidad[2]['cantidad'] }} <br>
-			<label>&nbsp; &nbsp;  Siempre (4) : </label> {{ $respuesta_cantidad[3]['cantidad'] }} <br>
+			@php($i=0)
+			@php($total=0)
+			@foreach ( $encuesta->alternativas as $alternativa )
+				<label>&nbsp; &nbsp;  {{ $alternativa->etiqueta }} ({{ $alternativa->valor }}) : </label> {{ $respuesta_cantidad[$i] }} <br>
+				@php($total = $total + ($respuesta_cantidad[$i]*$alternativa->valor))
+				@php($i++)
+			@endforeach
 			<br>
 			<label style="color:#4B367C">Totales: </label><br>
 			<br>
-			<label>&nbsp; &nbsp;  Total : </label> {{ ($respuesta_cantidad[0]['cantidad']*1)+($respuesta_cantidad[1]['cantidad']*2)+($respuesta_cantidad[2]['cantidad']*3)+($respuesta_cantidad[3]['cantidad']*4) }} ptos.<br>
+			<label>&nbsp; &nbsp;  Total : </label> {{ $total }} ptos.<br>
 		</div>
 	 </div>
 </div>
 
-<div class="box box-info">
-	<div class="box-header">
-		<h3 class="box-title">Habito de Estudio </h3>
-	</div>
+<div class="row">
+	 <div class="col-md-12">
+		  <div class="box box-info">
+			  <div class="box-header">
+			  		<h3 class="box-title">Hábitos de Estudio</h3>
+			  	</div>
+			   <div class="box-body">
+					<!--fin  -->
+				  <p style="font-size: 1.3em;"> <strong>Respuestas del alumno.</strong> </p>
+				  <!-- NOTA NO-SECCION:  por si hay preguntas que no están dentro de alguna sección -->
+				  @if(count($encuesta->preguntas->where('idSeccion', null))> 0)
+					  <div class="no-sec-items items">
+						  <div class="alternatives hidden-xs hidden-sm">
+							  @foreach ( $encuesta->alternativas as $alternativa )
+								  <div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
+									 <span>{{ $alternativa->etiqueta }}</span>
+								 </div>
+							  @endforeach
+						  </div>
+						  <ol class="enc-list">
+							  @foreach ($encuesta->preguntas->where('idSeccion', null) as $pregunta)
+								<div class="item">
+									<div class="question">
+									  <li>
+										  <span class="quest-text">
+											  {{ $pregunta->enunciado }}
+										  </span>
+									 </li>
+									</div>
+									<div class="alternatives">
+										@foreach ( $encuesta->alternativas as $alternativa )
+											<div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
+												<input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+											</div>
+										@endforeach
+									</div>
+								</div>
+								@endforeach
+						  </ol>
+					  </div>
+				  @endif
+				  <!-- FIN de la NOTA NO-SECCION-->
 
-	<div class="box-body">
-		<div class="col-md-12">
-			<div class="table-responsive">
-				<table class="table table-striped table-bordered table-consdensed ">
-					<thead>
-						<tr>
-							<th rowspan="2" style="text-align:center; vertical-align:middle;">Id</th>
-							<th rowspan="2" style="text-align:center; vertical-align:middle;"> Enunciado</th>
-							<th colspan="4" style="text-align:center;">Respuesta</th>
-						</tr>
-						<tr>
-							<th style="text-align:center;"> Nunca (1) </th>
-							<th style="text-align:center;"> Pocas Veces (2) </th>
-							<th style="text-align:center;"> Muchas Veces  (3) </th>
-							<th style="text-align:center;"> Siempre (4) </th>
-						</tr>
-					</thead>
-					@php($i=0)
-					@php($aux=6)
-					<tbody>
-						@foreach($tutorTutorado->habitoEstudio->respuestasHabito as $respuestaHabito)
-							@php($i++)
-							<tr>
-								@if($respuestaHabito->idTipoHabito < $aux)
-										@php($aux=$respuestaHabito->idTipoHabito)
-									<td colspan="6" style="background:#808080;"> <h4 style="color:white;">{{$respuestaHabito->tipoHabito['tipo']}}</h4> </td>
-									<tr>
-										<td>{{$i}}</td>
-										<td>{{$respuestaHabito->enunciado}}</td>
-										@switch ($respuestaHabito->pivot->rpta)
-												@case ('1')
-													<td class="radioCC"> <input type="radio" checked> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													@break
-												@case ('2')
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" checked> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													@break
-												@case ('3')
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" checked> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													@break
-												@case ('4')
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" disabled> </td>
-													<td class="radioCC"> <input type="radio" checked> </td>
-													@break
-										@endswitch
-									</tr>
-								@else
-									<td>{{$i}}</td>
-									<td>{{$respuestaHabito->enunciado}}</td>
-									@switch ($respuestaHabito->pivot->rpta)
-											@case ('1')
-												<td class="radioCC"> <input type="radio" checked> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												@break
-											@case ('2')
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" checked> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												@break
-											@case ('3')
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" checked> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												@break
-											@case ('4')
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" disabled> </td>
-												<td class="radioCC"> <input type="radio" checked> </td>
-												@break
-									@endswitch
-								@endif
-							</tr>
-						@endforeach
-					</tbody>
-				</table>
-			</div>
-		</div>
+				  @if(count($encuesta->secciones) > 0)
+					  <div class="secciones">
+						  @foreach ($encuesta->secciones as $seccion)
+							  <div class="seccion">
+								  <div class="s-header">
+									  <div class="s-icon"> {{ $seccion->orden }} </div>
+									  <div class="s-title"> {{ $seccion->titulo }} </div>
+								  </div>
+								  <div class="s-body">
+									  <div class="s-description"> {{ $seccion->descripcion }} </div>
+									  <div class="items">
+										  <div class="alternatives hidden-xs hidden-sm">
+											  @foreach ( $encuesta->alternativas as $alternativa )
+												  <div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
+													 <span>{{ $alternativa->etiqueta }}</span>
+												 </div>
+											  @endforeach
+										  </div>
+										  <ol class="enc-list">
+											  @php($i = 0)
+											  @foreach ($seccion->preguntas as $pregunta)
+												@php($i++)
+												<div class="item">
+													<div class="question">
+													  <li>
+														  <span class="quest-text">
+															  {{ $pregunta->enunciado }}
+														  </span>
+													 </li>
+													</div>
+													<div class="alternatives">
+														@foreach ( $encuesta->alternativas as $alternativa )
+															<div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
+															   @if ( $alternativa->valor == $respuestas[$i]->respuesta )
+															   	<input  type="radio" checked name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+															   @else
+															   	<input disabled type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+															   @endif
+															</div>
+														@endforeach
+													</div>
+												</div>
+												@endforeach
+										  </ol>
+									  </div>
+								  </div>
+							  </div>
+						  @endforeach
+					  </div>
+				  @endif
+			   </div>
+		  </div>
 	 </div>
 </div>
 
-<style type="text/css">
-	.radioCC{
-		text-align:center;
-	}
-</style>
 <script type="text/javascript">
-	var data = [
-		[0, {{ ($respuesta_cantidad[0]['cantidad'])*1.85 }}],
-		[1, {{ ($respuesta_cantidad[1]['cantidad'])*1.85 }}],
-		[2, {{ ($respuesta_cantidad[2]['cantidad'])*1.85 }}],
-		[3, {{ ($respuesta_cantidad[3]['cantidad'])*1.85 }}],
-	];
-	var dataset = [
-		{//label:'Respuesta',
-		data:data, color: '#3c8dbc'}
-	];
-	var ticks = [
-		[0,'Nunca'], [1,'Pocas Veces'], [2,'Muchas Veces'], [3,'Siempre']
-	];
-	var data = [
-		[0, 10], [1, 80], [2, 20], [3, 50],
-	];
-	var options = {
-		series: {
-			bars:   {
-				show: true,
-			}
-		},
+
+var data = new Array();
+@for ($i=0; $i < count($alternativas); $i++)
+	data[{{ $i }}] = [{{ $i }}, {{ ($respuesta_cantidad[$i])*1.85 }}];
+@endfor
+
+var dataset = [
+	{//label:'Respuesta',
+	data:data, color: '#3c8dbc'}
+];
+
+var ticks = new Array();
+@for ($i=0; $i < count($alternativas); $i++)
+	ticks[{{ $i }}] = [{{ $alternativas[$i]['valor'] }}, '{{ $alternativas[$i]['etiqueta'] }}'];
+@endfor
+
+var data = [
+	[0, 10], [1, 80], [2, 20], [3, 50],
+];
+
+var options = {
+	series: {
 		bars:   {
-			align: "center",
-			barWidth:0.5
-		},
-		xaxis: {
-		 //axisLabel: "World Cities",
-		 axisLabelUseCanvas: true,
-		 axisLabelFontSizePixels: 15,
-		 axisLabelFontFamily: 'Verdana, Arial',
-		 axisLabelPadding: 10,
-		 ticks: ticks
-
-		},
-		yaxis: {
-			 //axisLabel: "Average Temperature",
-			 axisLabelUseCanvas: true,
-			 axisLabelFontSizePixels: 12,
-			 axisLabelFontFamily: 'Verdana, Arial',
-			 axisLabelPadding: 3,
-			 tickFormatter: function (v, axis) {
-				  return v + "%";
-			 }
-		},
-		/*legend: {
-			 noColumns: 0,
-			 labelBoxBorderColor: "#000000",
-			 position: "nw"
-		},*/
-		grid: {
-			 hoverable: true,
-			 borderWidth: 2,
-			 backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+			show: true,
 		}
+	},
+	bars:   {
+		align: "center",
+		barWidth:0.5
+	},
+	xaxis: {
+	 //axisLabel: "World Cities",
+	 axisLabelUseCanvas: true,
+	 axisLabelFontSizePixels: 15,
+	 axisLabelFontFamily: 'Verdana, Arial',
+	 axisLabelPadding: 10,
+	 ticks: ticks
+
+	},
+	yaxis: {
+		 //axisLabel: "Average Temperature",
+		 axisLabelUseCanvas: true,
+		 axisLabelFontSizePixels: 12,
+		 axisLabelFontFamily: 'Verdana, Arial',
+		 axisLabelPadding: 3,
+		 tickFormatter: function (v, axis) {
+			  return v + "%";
+		 }
+	},
+	/*legend: {
+		 noColumns: 0,
+		 labelBoxBorderColor: "#000000",
+		 position: "nw"
+	},*/
+	grid: {
+		 hoverable: true,
+		 borderWidth: 2,
+		 backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
 	}
-	$(document).ready(function () {
-	    $.plot($("#bar-chart"), dataset, options);
-	    $("#bar-chart").UseTooltip();
-	});
-		//color: '#3c8dbc'
-		function gd(year, month, day) {
-	    return new Date(year, month, day).getTime();
-	}
-
-	var previousPoint = null, previousLabel = null;
-
-	$.fn.UseTooltip = function () {
-	    $(this).bind("plothover", function (event, pos, item) {
-	        if (item) {
-	            if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
-	                previousPoint = item.dataIndex;
-	                previousLabel = item.series.label;
-	                $("#tooltip").remove();
-	                var x = item.datapoint[0];
-	                var y = item.datapoint[1];
-	                var color = item.series.color;
-	                //console.log(item.series.xaxis.ticks[x].label);
-	                showTooltip(item.pageX,
-	                        item.pageY,
-	                        color,
-	                        //"<strong>" + item.series.label + "</strong><br>" +
-	                        item.series.xaxis.ticks[x].label + " : <strong>" + y + "</strong> %");
-	            }
-	        } else {
-	            $("#tooltip").remove();
-	            previousPoint = null;
-	        }
-	    });
-	};
-
-	function showTooltip(x, y, color, contents) {
-	    $('<div id="tooltip">' + contents + '</div>').css({
-	        position: 'absolute',
-	        display: 'none',
-	        top: y - 40,
-	        left: x - 120,
-	        border: '2px solid ' + color,
-	        padding: '3px',
-	        'font-size': '9px',
-	        'border-radius': '5px',
-	        'background-color': '#fff',
-	        'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
-	        opacity: 0.9
-	    }).appendTo("body").fadeIn(200);
 }
+
+$(document).ready(function(){
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-green',
+		radioClass: 'iradio_square-green',
+		increaseArea: '20%' // optional
+	});
+	$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+
+	$.plot($("#bar-chart"), dataset, options);
+	$("#bar-chart").UseTooltip();
+
+});
+
+function gd(year, month, day) {
+ 	return new Date(year, month, day).getTime();
+}
+
+var previousPoint = null, previousLabel = null;
+
+$.fn.UseTooltip = function () {
+    $(this).bind("plothover", function (event, pos, item) {
+        if (item) {
+            if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+                previousPoint = item.dataIndex;
+                previousLabel = item.series.label;
+                $("#tooltip").remove();
+                var x = item.datapoint[0];
+                var y = item.datapoint[1];
+                var color = item.series.color;
+                //console.log(item.series.xaxis.ticks[x].label);
+                showTooltip(item.pageX,
+                        item.pageY,
+                        color,
+                        //"<strong>" + item.series.label + "</strong><br>" +
+                        item.series.xaxis.ticks[x].label + " : <strong>" + y + "</strong> %");
+            }
+        } else {
+            $("#tooltip").remove();
+            previousPoint = null;
+        }
+    });
+};
+
+function showTooltip(x, y, color, contents) {
+    $('<div id="tooltip">' + contents + '</div>').css({
+        position: 'absolute',
+        display: 'none',
+        top: y - 40,
+        left: x - 120,
+        border: '2px solid ' + color,
+        padding: '3px',
+        'font-size': '9px',
+        'border-radius': '5px',
+        'background-color': '#fff',
+        'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+        opacity: 0.9
+    }).appendTo("body").fadeIn(200);
+ }
+
 </script>
 @endsection

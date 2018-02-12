@@ -17,7 +17,27 @@ class TutorTutorado extends Pivot
 
     public $timestamps = true;
 
-    public function habitoEstudio(){
-    	return $this->hasOne('BienestarWeb\HabitoEstudio','idTutorTutorado','idTutorTutorado');
+    public function habitoEstudio()
+    {
+        return $this->hasOne('BienestarWeb\EncuestaRespondida', 'idTutorTutorado');
     }
+    public function tutorado()
+    {
+        return $this->belongsTo('BienestarWeb\Alumno', 'idAlumno');
+    }
+    public function tutor()
+    {
+        return $this->belongsTo('BienestarWeb\Docente', 'idDocente');
+    }
+    public function getCreatedAtColumn()
+   {
+       return $this->pivotParent->getCreatedAtColumn();
+   }
+   public function getUpdatedAtColumn()
+   {
+      if ($this->pivotParent) {
+            return $this->pivotParent->getUpdatedAtColumn();
+        }
+        return static::UPDATED_AT;
+   }
 }

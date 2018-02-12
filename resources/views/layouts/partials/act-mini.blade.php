@@ -57,19 +57,21 @@
          </div>
       </div>
       <div class="act-mini-footer act-{{ $actividad->idTipoActividad }}">
-         <div class="act-mini-txt pull-left">Categoría: <span style="color: white;">{{ $actividad->tipoActividad->tipo }}</span> {{--<a href="#">{{ $actividad->tipoActividad->tipo }}</a>--}}</div>
-         {{--@switch( $actividad->estado )
-            @case(1)--}}
-               @if( $actividad->idTipoActividad == 4 )
-                  @if(Auth::user() !=null && Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad)))
-                     <div class="act-mini-txt pull-right">DEBO ASISTIR</div>
-                  @else
-                     <div class="act-mini-txt pull-right">Exclusiva: Tutorados</div>
-                  @endif
-               @elseif($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
-                  <div class="act-mini-txt pull-right">Presentar documentos</div>
-               @elseif(Auth::user()!=null)
-                  @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
+         <div class="act-mini-txt pull-left">Categoría:
+            <span style="color: white;">
+               <a href="{{ action('ActividadController@indexCategorias') }}">{{ $actividad->tipoActividad->tipo }}</a>
+            </span> {{--<a href="#">{{ $actividad->tipoActividad->tipo }}</a>--}}
+         </div>
+         @if( $actividad->idTipoActividad == 4 )
+            @if(Auth::user() !=null && Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad))
+               <div class="act-mini-txt pull-right"><i style="color:white;" class="fa fa-check-circle"></i> Debo Asistir</div>
+            @else
+               <div class="act-mini-txt pull-right">Exclusiva: Tutorados</div>
+            @endif
+         @elseif($actividad->idTipoActividad == 8 || $actividad->idTipoActividad == 9)
+            <div class="act-mini-txt pull-right">Presentar documentos</div>
+         @elseif(Auth::user()!=null)
+               @if(stripos($actividad->tipoActividad->dirigidoA, (String)Auth::user()->idTipoPersona)!== false)
                      @if(Auth::user()->idTipoPersona == 1 && Auth::user()->alumno->misInscripciones->contains('idActividad', $actividad->idActividad) ||
                         Auth::user()->idTipoPersona == 2 && Auth::user()->docente->misInscripciones->contains('idActividad', $actividad->idActividad) ||
                         Auth::user()->idTipoPersona == 3 && Auth::user()->administrativo->misInscripciones->contains('idActividad', $actividad->idActividad))
@@ -77,60 +79,65 @@
                            <i style="color:white;" class="fa fa-check-circle"></i> <span style="color:white;">Asistiré</span>
                         </div>
                      @else
-                        @if( $actividad->estado == 1  && $diasRestantes > 0 )
-                           @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
-                              @if( $actividad->idUserResp != Auth::user()->id )
-                                 @if (Auth::user()!=null)
-                                   <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
-                                      <i class="fa fa-circle-o"></i> Quiero Asistir
-                                   </a>
+                           @if( $actividad->estado == 1  && $diasRestantes > 0 )
+                                 @if( $actividad->actividadGrupal != null && $actividad->actividadGrupal->cuposDisponibles > 0 )
+                                       @if( $actividad->idUserResp != Auth::user()->id )
+                                             @if (Auth::user()!=null)
+                                               <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
+                                                  <i class="fa fa-circle-o"></i> Quiero Asistir
+                                               </a>
+                                             @endif
+                                       @else
+                                          <div class="act-mini-txt pull-right">
+                                             <span style="color:white;">Soy Responsable</span>
+                                          </div>
+                                       @endif
+                                 @else
+                                    <div class="act-mini-txt pull-right">
+                                       <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No hay vacantes</span>
+                                    </div>
                                  @endif
-                              @else
-                                 <div class="act-mini-txt pull-right">
-                                    <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">Soy Responsable</span>
-                                 </div>
-                              @endif
                            @else
                               <div class="act-mini-txt pull-right">
-                                 <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No hay vacantes</span>
+                                 <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No disponible</span>
                               </div>
                            @endif
-                        @else
-                           <div class="act-mini-txt pull-right">
-                              <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No disponible</span>
-                           </div>
-                        @endif
 
                      @endif
+               @else
+                  @if (strlen($actividad->tipoActividad->dirigidoA) == 1)
+                     @if (stripos($actividad->tipoActividad->dirigidoA,'1')!==false)
+                        <div class="act-mini-txt pull-right">Exclusiva: Alumnos</div>
+                     @elseif (stripos($actividad->tipoActividad->dirigidoA,'2')!==false)
+                        <div class="act-mini-txt pull-right">Exclusiva: Docentes</div>
+                     @else
+                        <div class="act-mini-txt pull-right">Exclusiva: Administrativos</div>
+                     @endif
+                  @elseif(strlen($actividad->tipoActividad->dirigidoA) == 2)
+                     @if (stripos($actividad->tipoActividad->dirigidoA,'1')!==false && stripos($actividad->tipoActividad->dirigidoA,'2')!==false)
+                        {{-- Alumnos-Docentes --}}
+                        <div class="act-mini-txt pull-right">Exclusiva: Alumnos y Docentes</div>
+                     @elseif (stripos($actividad->tipoActividad->dirigidoA,'1')!==false && stripos($actividad->tipoActividad->dirigidoA,'3')!==false)
+                        {{-- Alumnos-Administrativos --}}
+                        <div class="act-mini-txt pull-right">Exclusiva: Alumnos y Administrativos</div>
+                     @else
+                        {{-- Docentes-Administrativos --}}
+                        <div class="act-mini-txt pull-right">Exclusiva: Docentes y Administrativos</div>
+                     @endif
                   @else
+                     {{-- Alumnos-Docentes-Administrativos --}}
                      <div class="act-mini-txt pull-right">
                         <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">No disponible</span>
                      </div>
                   @endif
-               @else
-                  @if (Auth::user()!=null)
-                     <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
-                        <i class="fa fa-circle-o"></i> Quiero Asistir
-                     </a>
-                  @endif
                @endif
-            {{--@break
-            @case(2)
-               <div class="act-mini-txt pull-right">
-                  <i style="color:white;" class="fa fa-calendar-check-o"></i> <span style="color:white;">Actividad Realizada</span>
-               </div>
-            @break
-            @case(3)
-               <div class="act-mini-txt pull-right">
-                  <i style="color:white;" class="fa fa-times-circle"></i> <span style="color:white;">Actividad Cancelada</span>
-               </div>
-            @break
-            @case(4)
-               <div class="act-mini-txt pull-right">
-                  <i style="color:white;" class="fa fa-calendar-times-o"></i> <span style="color:white;">Actividad Expirada</span>
-               </div>
-            @break
-         @endswitch--}}
+         @else
+               @if (Auth::user()!=null)
+                  <a class="btn-footer pull-right" href="#" data-toggle="modal" data-target="#confirmModal-{{ $actividad->idActividad }}">
+                     <i class="fa fa-circle-o"></i> Quiero Asistir
+                  </a>
+               @endif
+         @endif
       </div>
    </div>
 </div>

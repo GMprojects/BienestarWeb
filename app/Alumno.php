@@ -18,7 +18,7 @@ class Alumno extends Model
     }
     public function tutores(){
       return $this->belongsToMany('BienestarWeb\Docente','tutorTutorado','idAlumno','idDocente')
-            ->withPivot('idTutorTutorado','anioSemestre','numeroSemestre','habitoEstudioRespondido');
+            ->withPivot('idTutorTutorado','anioSemestre','numeroSemestre','habitoEstudioRespondido')->withTimestamps();
     }
     /*public function inscripcionesAlumno(){
       return $this->belongsToMany('BienestarWeb\InscripcionADA','inscripcionAlumno','idAlumno','idInscripcionADA')

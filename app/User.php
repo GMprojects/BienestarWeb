@@ -86,4 +86,8 @@ class User extends Authenticatable
         return $this->hasMany('BienestarWeb\Actividad', 'idUserResp');
     }
 
+    public function encuestasRespondidas()
+    {
+        return $this->hasMany('BienestarWeb\EncuestaRespondida', 'idUser');
+    }
 }

@@ -105,7 +105,7 @@ class SemestreController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function destroy($id){
-       Semestre::findOrFail($id)->delete();
+       Semestre::destroy($id);
        return Redirect::to('admin/semestre');
     }
 }

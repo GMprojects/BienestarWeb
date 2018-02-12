@@ -25,9 +25,9 @@ class CrearTablaEgresado extends Migration
                 4. Doctor Filósofo
             */
             $tabla->string('nombre', 45);
-            $tabla->string('apellidoPaterno', 20);
-            $tabla->string('apellidoMaterno', 20);
-            $tabla->string('direccion', 50)->nullable();
+            $tabla->string('apellidoPaterno', 25);
+            $tabla->string('apellidoMaterno', 25);
+            $tabla->string('direccion', 100)->nullable();
             $tabla->string('telefono', 15)->nullable();
             $tabla->string('celular', 15)->nullable();
             $tabla->string('email', 100)->nullable();

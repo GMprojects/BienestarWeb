@@ -8,7 +8,7 @@ class TipoActividad extends Model
 {
     protected $table = 'TipoActividad';
     protected $primaryKey = 'idTipoActividad';
-    protected $fillable = ['tipo', 'dirigidoA', 'rutaImagen'];
+    protected $fillable = ['tipo', 'dirigidoA', 'responsable', 'rutaImagen'];
     public $timestamps = false;
 
     public function actividades(){

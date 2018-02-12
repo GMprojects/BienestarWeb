@@ -110,6 +110,8 @@ class EvidenciaActividadController extends Controller{
         File::delete(storage_path('app/public/'.$evidenciaActividad->ruta));
         Storage::delete($path);
         $evidenciaActividad->delete();
+
+        EvidenciaActividad::destroy($id);
         return redirect()->back();
     }
 

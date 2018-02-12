@@ -6,12 +6,17 @@
       @if( Auth::user()->idTipoPersona == 1 && count(Auth::user()->alumno->soyTutorado) > 0)
          @foreach (Auth::user()->alumno->soyTutorado as $tutorado)
             @if($tutorado->habitoEstudioRespondido == '0')
-               <a class="ff-li-a" href="{{ action('HabitoEstudioController@create') }}"><i class="fa fa-plus"></i> Habitos de Estudio</a>
+               <li>
+                   <a class="ff-li-a" href="{{ action('EncuestaController@getHabitoEstudio',[ 'idEncuestaRespondida' => $tutorado->habitoEstudio->idEncuestaRespondida  ]) }}">
+                      <i class="fa fa-plus"></i> Habitos de Estudio</a>
+               </li>
             @endif
          @endforeach
       @endif
       @if( Auth::user()->funcion == 2)
-         <a class="ff-li-a" href="{{ url('programador/actividad/create') }}"><i class="fa fa-plus"></i> Crear Actividad</a>
+         <li>
+            <a class="ff-li-a" href="{{ url('programador/actividad/create') }}"><i class="fa fa-plus"></i> Crear Actividad</a>
+         </li>
       @endif
       <!-- PERMISOS DE ADMINISTRADOR -->
       @if( Auth::user()->funcion == 3)
@@ -53,8 +58,7 @@
                <i class="fa fa-file-text-o"></i> Encuestas<span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-               <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('admin/preguntaHabito/') }}"><i class="fa fa-circle-o"></i> Hábitos de Estudio</a></li>
-               <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/encuesta') }}"><i class="fa fa-circle-o"></i> Todas</a></li>
+               <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('admin/encuesta') }}"><i class="fa fa-circle-o"></i> Todas</a></li>
             </ul>
          </li>
          <li class="dropdown ">
@@ -66,11 +70,11 @@
                <li class="ff-li-nav"><a class="ff-li-b" href="{{ action('TrabajoController@index',[ 'op' => '2'  ]) }}"><i class="fa fa-circle-o"></i> Trabajos</a></li>
             </ul>
          </li>
-         <li class="dropdown ">
+         {{--<li class="dropdown ">
             <a class="ff-li-a" href="{{ action('DashboardController@index')}}">
                <i class="fa fa-dashboard"></i> Dashboard
             </a>
-         </li>
+         </li>--}}
          <li class="dropdown ">
             <a class="ff-li-a" href="{{ action('SemestreController@index')}}">
                <i class="fa fa-gear"></i> Configuración
@@ -106,7 +110,7 @@
          }
       });
 
-      $.ajax({
+   {{--   $.ajax({
          type:'GET',
          url: '{{ action('EncuestaController@misEncuPendientes') }}',
          data: { id: {{ Auth::user()->id }} },
@@ -130,7 +134,7 @@
          error:function() {
             console.log("error AJAX - misEncuPendientes");
          }
-      });
+      });--}}
    //Fin del AJAX
    });
 </script>

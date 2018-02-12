@@ -38,8 +38,6 @@ Route::middleware(['programador', 'auth'])->prefix('programador')->group(functio
 
 //PERMISOS DE MIEMBRO
 Route::middleware('auth')->prefix('miembro')->group(function () {
-    Route::resource('habitoEstudio','HabitoEstudioController');
-
     //Route::get('perfil','MiPerfilController@index');
 
     Route::resource('perfil', 'MiPerfilController');
@@ -77,6 +75,11 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::post('enviarMensaje', ['uses' => 'ActividadController@enviarMensaje', 'as' => 'tutorTutorado.enviarMensaje']);
 
     Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
+
+    Route::get('habitoEstudio/{idEncuestaRespondida}', 'EncuestaController@getHabitoEstudio');
+    Route::post('habitoEstudio/{idEncuestaRespondida}', ['uses' => 'EncuestaController@storeHabitoEstudio', 'as' => 'encuesta.storeHabitoEstudio']);
+    Route::get('habitoEstudio/tutorTutorado/{idTutorTutorado}', 'EncuestaController@showHabitoEstudio');
+
     Route::get('encuesta', 'EncuestaController@encuesta');
     Route::get('encuestaInsc/{id}', ['uses' => 'EncuestaController@encuestaInsc']);
     Route::get('encuestaResp/{id}', ['uses' => 'EncuestaController@encuestaResp']);
@@ -92,18 +95,21 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
    Route::resource('perfil', 'MiPerfilController');
    Route::get('mis-actividades/{id}', ['uses' => 'MiPerfilController@mis_actividades', 'as' => 'miembro.misActividades']);
 });*/
-
-
-
 Auth::routes();
 
 /*                            AJAX                                  */
-Route::get('listaResponsablesGen','UserController@getUsers');
-Route::get('listaResponsablesAdm','UserController@getUsersAdm');
-Route::get('listaResponsablesAdmDoc','UserController@getUsersAdmDoc');
-Route::get('listaAlumnos','UserController@getAlumnos');
+Route::get('listaUsersTodos','UserController@getUsersTodos');
+Route::get('listaUsersAlumnos','UserController@getUsersAlumnos');
+Route::get('listaUsersDocentes','UserController@getUsersDocentes');
+Route::get('listaUsersAdministrativos','UserController@getUsersAdministrativos');
+
+Route::get('listaUsersAlumDoc','UserController@getUsersAlumDoc');
+Route::get('listaUsersAlumAdm','UserController@getUsersAlumAdm');
+Route::get('listaUsersDocAdm','UserController@getUsersDocAdm');
+//--------------------------------------------------------
 Route::get('listaResponsablesTutores','TutorTutoradoController@getTutores');
 Route::get('listaTutorados','TutorTutoradoController@getTutorados');
+//----------------------------------------------------------
 Route::get('descargarEvidencia','EvidenciaActividadController@descargarEvidencia');
 Route::get('descargarEvidenciaBeneficiario','BeneficiarioController@descargarEvidenciaBeneficiario');
 Route::get('alumnosLibresExDoc', 'TutorTutoradoController@getAlumnosLibresExDoc');
@@ -121,7 +127,7 @@ Route::get('actividadesInscritas','ActividadController@verActividadesInsc');
 Route::get('actividadesAsistidas','ActividadController@verActividades');
 Route::get('actividadesNoAsistidas','ActividadController@verActividades');
 Route::get('verMisEstadisticas','ActividadController@verMisEstadisticas');
-Route::get('misEncuPendientes', 'EncuestaController@misEncuPendientes');
+Route::get('misEncuestasPendientes', 'EncuestaController@getMisEncuestasPendientes');
 
 
 Route::get('reIndexDashboard','DashboardController@reIndex');

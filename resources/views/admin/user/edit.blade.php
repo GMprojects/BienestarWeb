@@ -76,7 +76,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $user->apellidoPaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
+									 <input required minlength="2" maxlength="25" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{ $user->apellidoPaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
 								</div>
 							</div>
 						</div>
@@ -86,7 +86,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required minlength="2" maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $user->apellidoMaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Materno">
+									 <input required minlength="2" maxlength="25" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{ $user->apellidoMaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Materno">
 								</div>
 							</div>
 						</div>

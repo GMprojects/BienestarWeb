@@ -81,8 +81,8 @@ class UserController extends Controller{
     public function store(Request $request) {
        $request->validate([
            'nombre'=>'required|min:2|max:45',
-           'apellidoPaterno' => 'required|min:2|max:20',
-           'apellidoMaterno' => 'required|min:2|max:20',
+           'apellidoPaterno' => 'required|min:2|max:25',
+           'apellidoMaterno' => 'required|min:2|max:25',
            'codigo' => 'required|min:4|max:20|unique:user',
            //'email' => 'required|max:100|unique:user',
            //'email' => [new EmailValidation()],
@@ -213,8 +213,8 @@ class UserController extends Controller{
          if ($user->email == $request->email) {
              $request->validate([
                  'nombre'=>'required|min:2|max:45',
-                 'apellidoPaterno' => 'required|min:2|max:20',
-                 'apellidoMaterno' => 'required|min:2|max:20',
+                 'apellidoPaterno' => 'required|min:2|max:25',
+                 'apellidoMaterno' => 'required|min:2|max:25',
                  'sexo' => 'required',
                  'direccion'=> 'max:100',
                  'telefono' => 'max:15',
@@ -223,8 +223,8 @@ class UserController extends Controller{
          } else {
              $request->validate([
                  'nombre'=>'required|min:2|max:45',
-                 'apellidoPaterno' => 'required|min:2|max:20',
-                 'apellidoMaterno' => 'required|min:2|max:20',
+                 'apellidoPaterno' => 'required|min:2|max:25',
+                 'apellidoMaterno' => 'required|min:2|max:25',
                  'sexo' => 'required',
                  'email' => 'required|max:100|unique:user',
                  //'email' => ['required', 'max:100', new EmailValidation()],
@@ -317,42 +317,57 @@ class UserController extends Controller{
         }
         return Redirect::to('admin/user');
     }
-
-    public function getUsers(Request $request){
-    //    dd($request);
+   // -------------------AJAX RESPONSABLEs ----------------------
+    public function getUsersTodos(Request $request){
       if($request->ajax()){
         $users = User::get();
         return response()->json($users);
       }
     }
-    public function getUsersAdm(Request $request){
-    //    dd($request);
+    public function getUsersAlumnos(Request $request){
+      if($request->ajax()){
+         $users = Alumno::join('user','alumno.idUser', '=','user.id' )
+                     ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+                     ->get();
+         return response()->json($users);
+      }
+    }
+    public function getUsersDocentes(Request $request){
       if($request->ajax()){
         $users = User::select('id','nombre','apellidoPaterno','apellidoMaterno','codigo')
-                    ->where('idTipoPersona','=', '2')
-                    ->get();
+                    ->where([['idTipoPersona', '2'], ['estado', '1']])->get();
         return response()->json($users);
       }
     }
-    public function getUsersAdmDoc(Request $request){
-    //    dd($request);
+    public function getUsersAdministrativos(Request $request){
       if($request->ajax()){
         $users = User::select('id','nombre','apellidoPaterno','apellidoMaterno','codigo')
-                    ->where('idTipoPersona','=', '1')
-                    ->where('idTipoPersona','=', '2')
-                    ->get();
+                    ->where([['idTipoPersona', '3'], ['estado', '1']])->get();
         return response()->json($users);
       }
     }
-    public function getAlumnos(Request $request){
-    //    dd($request);
+    public function getUsersAlumDoc(Request $request){
       if($request->ajax()){
-        $users = Alumno::join('user','alumno.idUser', '=','user.id' )
-                    ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-                    ->get();
+        $users = User::select('id','nombre','apellidoPaterno','apellidoMaterno','codigo')
+                    ->where([['idTipoPersona', '<', '3'], ['estado', '1']])->get();
         return response()->json($users);
       }
     }
+    public function getUsersAlumAdm(Request $request){
+      if($request->ajax()){
+        $users = User::select('id','nombre','apellidoPaterno','apellidoMaterno','codigo')
+                    ->where([['idTipoPersona', '!=', '2'], ['estado', '1']])->get();
+        return response()->json($users);
+      }
+    }
+    public function getUsersDocAdm(Request $request){
+      if($request->ajax()){
+        $users = User::select('id','nombre','apellidoPaterno','apellidoMaterno','codigo')
+                    ->where([['idTipoPersona', '>', '1'], ['estado', '1']])->get();
+        return response()->json($users);
+      }
+    }
+    // -------------------------------------------------
     public function indexAlumnos(){
         $alumnos = User::where([['idTipoPersona','1'], ['estado','1']])
                  ->get();

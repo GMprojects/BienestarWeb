@@ -44,7 +44,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required type="text" minlength="2" class="form-control" name="nombre" required value="{{ $egresado->nombre }}" onkeypress="return soloLetras(event)" placeholder="Nombres">
+									 <input required type="text" minlength="2" maxlength="45" class="form-control" name="nombre" required value="{{ $egresado->nombre }}" onkeypress="return soloLetras(event)" placeholder="Nombres">
 								</div>
 							</div>
 						</div>
@@ -54,7 +54,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required type="text" minlength="2" class="form-control" name="apellidoPaterno" required value="{{ $egresado->apellidoPaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
+									 <input required type="text" minlength="2" maxlength="25" class="form-control" name="apellidoPaterno" required value="{{ $egresado->apellidoPaterno }}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
 								</div>
 							</div>
 						</div>
@@ -64,7 +64,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-									 <input required type="text" minlength="2" class="form-control" name="apellidoMaterno" required value="{{ $egresado->apellidoMaterno }}"  onkeypress="return soloLetras(event)"  placeholder="Apellido Materno">
+									 <input required type="text" minlength="2" maxlength="25" class="form-control" name="apellidoMaterno" required value="{{ $egresado->apellidoMaterno }}"  onkeypress="return soloLetras(event)"  placeholder="Apellido Materno">
 								</div>
 							</div>
 						</div>
@@ -74,7 +74,7 @@
 							<div class="col-sm-8">
 								<div class="input-group">
 									 <span class="input-group-addon"><i class="fa fa-home"></i></span>
-									 <input type="text" minlength="2" class="form-control" name="direccion" value="{{ $egresado->direccion }}" placeholder="Direccion">
+									 <input type="text" minlength="6" maxlength="100" class="form-control" name="direccion" value="{{ $egresado->direccion }}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
 								</div>
 							</div>
 						</div>

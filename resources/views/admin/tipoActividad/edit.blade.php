@@ -1,7 +1,7 @@
 @extends('template')
 @section('contenido')
-	{!! Form::model($tipoActividad, ['method'=>'PATCH', 'route'=>['tipoActividad.update', $tipoActividad->idTipoActividad], 'files'=>'true', 'onsubmit'=>'return validar()']) !!}
-	{{ Form::token() }}
+{!! Form::model($tipoActividad, ['method'=>'PATCH', 'route'=>['tipoActividad.update', $tipoActividad->idTipoActividad], 'files'=>'true', 'onsubmit'=>'return validar()']) !!}
+{{ Form::token() }}
 <div class="row">
 	<div class="col-xs-12">
 		<div class="second-bar">
@@ -28,60 +28,69 @@
 					</ul>
 				</div>
 			@endif
-			<div id="divError" class="alert alert-danger" style='display:none;'>
-					<h4><b>Error</b></h4>
-					<p id="pError">Mensaje</p>
-			</div>
 			<div class="form-group">
 				<label for="tipo">Nombre Categoría</label>
-				@if ( $tipoActividad->id < 11)
+				@if ( $tipoActividad->idTipoActividad < 11 )
 					<input type="text" required readonly onclick="visualizarMensaje()"name="tipo" value="{{ $tipoActividad->tipo }}" class="form-control" placeholder="Nombre">
 				@else
 					<input type="text" required name="tipo" value="{{ $tipoActividad->tipo }}" class="form-control" placeholder="Nombre">
 				@endif
 			</div>
+			<span class="help-block"  style='display:none;' id="spanErrorTipo">
+				<strong style="color:red;"><p id="pErrorTipo">Esta es una categoría por defecto, no puede editar el campo nombre.</p></strong>
+			</span>
+			<div class="form-group">
+				<label for="tipo">Que usuario puede ser el responsable</label>
+				<br>
+				@if ($tipoActividad->idTipoActividad != 4)
+					@if (stripos($tipoActividad->responsable,'1')!==false)
+						<input type="checkbox" checked name="responsableA1" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@else
+						<input type="checkbox" name="responsableA1" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@endif
+					@if (stripos($tipoActividad->responsable,'2')!==false)
+						<input type="checkbox" checked name="responsableA2" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@else
+						<input type="checkbox" name="responsableA2" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@endif
+					@if (stripos($tipoActividad->responsable,'3')!==false)
+						<input type="checkbox" checked name="responsableA3" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Administrativos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@else
+						<input type="checkbox" name="responsableA3" onchange="ocultarResponsable()" class="iResponsable"> &nbsp; Administrativos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@endif
+				@else
+					<b style="color:red;">Exclusivo de Tutores</b>
+				@endif
+			</div>
+			<span class="help-block"  style='display:none;' id="spanErrorResponsable">
+				<strong style="color:red;"><p id="pErrorResponsable"></p></strong>
+			</span>
 			<div class="form-group">
 				<label for="tipo">Dirigido a</label>
 				<br>
-
-				@if (strlen($tipoActividad->dirigidoA) == 1)
-					@switch($tipoActividad->dirigidoA[0])
-						@case('1')
-							<input type="checkbox" checked name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="checkbox" name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="checkbox" name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
-						@break
-						@case('2')
-							<input type="checkbox" name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="checkbox" checked name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="checkbox" name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
-						@break
-						@case('3')
-							<input type="checkbox" name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="checkbox" name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="checkbox" checked name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
-						@break
-					@endswitch
-				@elseif (strlen($tipoActividad->dirigidoA) == 2)
-					@if ($tipoActividad->dirigidoA[0] == 1 && $tipoActividad->dirigidoA[1] == 2)
-						<input type="checkbox" checked name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" checked name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
-					@elseif ($tipoActividad->dirigidoA[0] == 1 && $tipoActividad->dirigidoA[1] == 3)
-						<input type="checkbox" checked name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" checked name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
-					@else{{-- 2 y 3 --}}
-						<input type="checkbox" name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" checked name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" checked name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
+				@if ($tipoActividad->idTipoActividad != 3 && $tipoActividad->idTipoActividad != 10)
+					@if (stripos($tipoActividad->dirigidoA,'1')!==false)
+						<input type="checkbox" checked name="dirigidoA1" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@else
+						<input type="checkbox" name="dirigidoA1" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@endif
+					@if (stripos($tipoActividad->dirigidoA,'2')!==false)
+						<input type="checkbox" checked name="dirigidoA2" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@else
+						<input type="checkbox" name="dirigidoA2" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@endif
+					@if (stripos($tipoActividad->dirigidoA,'3')!==false)
+						<input type="checkbox" checked name="dirigidoA3" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Administrativos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@else
+						<input type="checkbox" name="dirigidoA3" onchange="ocultarDirigidoA()" class="iDirigidoA"> &nbsp; Administrativos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					@endif
 				@else
-					<input type="checkbox" checked name="dirigidoA1" onchange="ocultar()" class="minimal"> &nbsp; Alumnos  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="checkbox" checked name="dirigidoA2" onchange="ocultar()" class="minimal"> &nbsp; Docentes  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="checkbox" checked name="dirigidoA3" onchange="ocultar()" class="minimal"> &nbsp; Administrativos
+					<b style="color:red;">Exclusivo de Alumnos</b>
 				@endif
 			</div>
+			<span class="help-block"  style='display:none;' id="spanErrorDirigidoA">
+				<strong style="color:red;"><p id="pErrorDirigidoA"></p></strong>
+			</span>
 			<div class="form-control-file">
 				<label for="rutaImagen">Imagen</label>
 
@@ -97,29 +106,6 @@
 	</div>
 </div>
 {!! Form::close() !!}
-	<div class="modal fade" id="modal-ayuda">
-		 <!-- /.modal-dialog -->
-		 <div class="modal-dialog">
-			   <!-- /.modal-content -->
-			   <div class="modal-content">
-			        <div class="modal-header" style="background-color:red; color:white; border-radius:6px 6px 0px 0px;">
-				          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				            <span aria-hidden="true"  class="fa fa-remove"></span></button>
-				          <h4 class="modal-title"  style="color:white;"><i class="fa fa-warning"></i>&nbsp; &nbsp;<b>Error</b></h4>
-			        </div>
-			        <div class="modal-body">
-			          	<p> Esta es una categoría por defecto, no puede editar el campo nombre.</p>
-			        </div>
-			        <div class="modal-footer">
-							  <div class="pull-right">
-								  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
-							  </div>
-			        </div>
-			   </div>
-		      <!-- /.modal-content -->
-		 </div>
-	    <!-- /.modal-dialog -->
-	</div>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -131,7 +117,33 @@
 			$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
 		});
 		function visualizarMensaje(){
-			$('#modal-ayuda').modal('show');
+			document.getElementById('spanErrorTipo').style.display = 'block';
 		}
+
+		function ocultarDirigidoA(){
+			console.log('ocultarDirigidoA');
+			document.getElementById('spanErrorDirigidoA').style.display = 'none';
+		}
+
+		function ocultarResponsable(){
+			console.log('ocultarResponsable');
+			document.getElementById('spanErrorResponsable').style.display = 'none';
+		}
+
+		function validar(){
+			var todoBien = true;
+			if (!$('.iDirigidoA').is(':checked')) {
+				document.getElementById('pErrorDirigidoA').innerHTML = 'Debe dirigir las actividad de esta categoría a al menos un tipo de usuario';
+				document.getElementById('spanErrorDirigidoA').style.display = 'block';
+				todoBien = false;
+			}
+			if (!$('.iResponsable').is(':checked')) {
+				document.getElementById('pErrorResponsable').innerHTML = 'Debe seleccionar que tipos de usuario pueden ser responsables de este tipo de actividades.';
+				document.getElementById('spanErrorResponsable').style.display = 'block';
+				todoBien = false;
+			}
+			return todoBien;
+		}
+
 	</script>
 @endsection

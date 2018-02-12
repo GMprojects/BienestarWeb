@@ -68,7 +68,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required minlength="2" maxlength="20" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{old('apellidoPaterno')}}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
+								 <input required minlength="2" maxlength="25" type="apellidoPaterno" class="form-control" name="apellidoPaterno" value="{{old('apellidoPaterno')}}" onkeypress="return soloLetras(event)" placeholder="Apellido Paterno">
 							</div>
 						</div>
 					</div>
@@ -78,7 +78,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input required maxlength="20" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" onkeypress="return soloLetras(event)" placeholder="Apellido Materno">
+								 <input required maxlength="25" type="apellidoMaterno" class="form-control" name="apellidoMaterno" value="{{old('apellidoMaterno')}}" onkeypress="return soloLetras(event)" placeholder="Apellido Materno">
 							</div>
 						</div>
 					</div>
@@ -115,7 +115,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-home"></i></span>
-								 <input maxlength="100" type="direccion" class="form-control" name="direccion"  value="{{old('direccion')}}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
+								 <input type="text" minlength="6" maxlength="100" class="form-control" name="direccion" value="{{old('direccion')}}" placeholder="e.g. Las Ponas Mz. 69 Lt. 25">
 							</div>
 						</div>
 					</div>
