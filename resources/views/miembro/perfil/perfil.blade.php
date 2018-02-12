@@ -47,9 +47,14 @@
                      </div>
                      <hr class="act-hr"/>
                      <div class="body-card">
+                        @if (Auth::user()->id == $du['user']->id)
                         <p><i class="fa fa-qrcode"></i>{{ $du['user']->codigo }}</p>
+                        @endif
                         <p><i class="fa fa-user"></i>{{ $du['user']->nombre }}</p>
                         <p><i class="fa fa-user"></i>{{ $du['user']->apellidoPaterno }} {{ $du['user']->apellidoMaterno }}</p>
+                        @if (Auth::user()->id == $du['user']->id)
+                        <p><i class="fa fa-at"></i>{{ $du['user']->email }}</p>
+                        @endif
                         @if (Auth::user()->id == $du['user']->id)
                            @if ($du['user']->direccion != null)
                               <p><i class="fa fa-map-marker"></i>{{ $du['user']->direccion }}</p>
@@ -342,11 +347,12 @@
 
       <script type="text/javascript">
       $(document).ready(function(){
-         if ({{Session::has('status')}}) {
-            console.log('aquis');
+         @if (Session::has('status'))
+
             document.getElementById('mensaje-status').innerHTML = '{{Session::get('status')}}';
-      		$('#modal-status').modal('show');
-         }
+            $('#modal-status').modal('show');
+
+         @endif
    	});
 
       </script>

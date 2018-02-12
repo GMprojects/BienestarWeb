@@ -22,6 +22,11 @@
 	      <div class="caja-header">
 	         <div class="caja-icon">	<i class="fa fa-address-card"></i></div>
 	         <div class="caja-title">Datos Personales
+					<div class="pull-right" style="margin-top:3px;">
+						<a href="{{ action('MiPerfilController@editPassword',['id' => Auth::user()->id ]) }}" class="btn btn-ff">
+							<i class="fa fa-lock fa-lg"></i> Cambiar Contraseña
+						</a>
+					</div>
 				</div>
 	      </div>
 	      <div class="caja-body">
@@ -144,6 +149,7 @@
 	</div>
 	<div class="col-md-2"></div>
 </div>
+
 
 <style type="text/css">
 	.ast{

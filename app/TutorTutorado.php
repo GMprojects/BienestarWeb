@@ -30,14 +30,14 @@ class TutorTutorado extends Pivot
         return $this->belongsTo('BienestarWeb\Docente', 'idDocente');
     }
     public function getCreatedAtColumn()
-   {
-       return $this->pivotParent->getCreatedAtColumn();
-   }
-   public function getUpdatedAtColumn()
-   {
-      if ($this->pivotParent) {
+    {
+        return $this->pivotParent->getCreatedAtColumn();
+    }
+    public function getUpdatedAtColumn()
+    {
+       if ($this->pivotParent) {
             return $this->pivotParent->getUpdatedAtColumn();
-        }
-        return static::UPDATED_AT;
-   }
+       }
+       return static::UPDATED_AT;
+    }
 }

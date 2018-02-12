@@ -1,60 +1,74 @@
 @extends ('template')
 @section ('contenido')
-<div class="box box-info">
-	<div class="box-header">
-		<div class="row">
-			<div class="col-xs-6">
-				<h3 class="box-title">Detalles del Habito de Estudio </h3>
+
+<div class="row">
+	 <div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-header">
+					<div class="row">
+						<div class="col-xs-6">
+							<h3 class="box-title">Detalles del Habito de Estudio </h3>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="box-body">
+					<div class="col-md-12">
+						<div class="pull-left">
+							@if ($user->sexo == 'm')
+								<label>&nbsp; &nbsp; <i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;<b>Alumna: </b> </label>
+							@else
+								<label>&nbsp; &nbsp; <i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;<b>Alumno: </b> </label>
+							@endif
+							<b>  &nbsp; &nbsp; {{ $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno }}</b>&nbsp; &nbsp; <br>
+							<label>&nbsp; &nbsp; <i class="fa fa-qrcode margin-r-5"></i>&nbsp; &nbsp;<b>Código: </b></label> <b>  &nbsp; &nbsp; {{ $user->codigo }}</b>&nbsp; &nbsp; <br>
+						</div>
+						<div class="pull-right">
+							<label>&nbsp; &nbsp; <i class="fa fa-calendar margin-r-5"></i>&nbsp; &nbsp;<b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $tutorTutorado->anioSemestre.'-'.$tutorTutorado->numeroSemestre }}
+						</div>
+
+					</div>
+				 </div>
 			</div>
-		</div>
-
-	</div>
-
-	<div class="box-body">
-		<div class="col-md-12">
-			@if ($user->sexo == 'm')
-				<label>&nbsp; &nbsp; <i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;<b>Alumna: </b> </label>
-			@else
-				<label>&nbsp; &nbsp; <i class="fa fa-user margin-r-5"></i>&nbsp; &nbsp;<b>Alumno: </b> </label>
-			@endif
-			<b>  &nbsp; &nbsp; {{ $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno }}</b>&nbsp; &nbsp; <br>
-			<div class="pull-right"><label>&nbsp; &nbsp; <i class="fa fa-calendar margin-r-5"></i>&nbsp; &nbsp;<b>Semestre Académico: </b> </label> &nbsp; &nbsp;{{ $tutorTutorado->anioSemestre.'-'.$tutorTutorado->numeroSemestre }}</div>
-			<label>&nbsp; &nbsp; <i class="fa fa-qrcode margin-r-5"></i>&nbsp; &nbsp;<b>Código: </b></label> <b>  &nbsp; &nbsp; {{ $user->codigo }}</b>&nbsp; &nbsp; <br>
-		</div>
-	 </div>
-</div>
-
-<div class="box box-info">
-	<div class="box-header">
-		<h3 class="box-title">Análisis del Hábito de Estudio  </h3>
-	</div>
-
-	<div class="box-body"  id="box" class="collapse">
-		<div class="col-12 col-sm-12 col-md-6 col-lg-6" id="chart">
-			<div id="bar-chart" style="width:450px;height:300px;margin:0 auto"></div><br>
-		</div>
-		<div class="col-12 col-sm-12 col-md-6 col-lg-6">
-			<label style="color:#4B367C">Resumen de respuestas: </label><br>
-			<br>
-			@php($i=0)
-			@php($total=0)
-			@foreach ( $encuesta->alternativas as $alternativa )
-				<label>&nbsp; &nbsp;  {{ $alternativa->etiqueta }} ({{ $alternativa->valor }}) : </label> {{ $respuesta_cantidad[$i] }} <br>
-				@php($total = $total + ($respuesta_cantidad[$i]*$alternativa->valor))
-				@php($i++)
-			@endforeach
-			<br>
-			<label style="color:#4B367C">Totales: </label><br>
-			<br>
-			<label>&nbsp; &nbsp;  Total : </label> {{ $total }} ptos.<br>
-		</div>
 	 </div>
 </div>
 
 <div class="row">
 	 <div class="col-md-12">
-		  <div class="box box-info">
-			  <div class="box-header">
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">Análisis del Hábito de Estudio  </h3>
+				</div>
+
+				<div class="box-body"  id="box" class="collapse">
+					<div class="col-12 col-sm-12 col-md-6 col-lg-6" id="chart">
+						<div id="bar-chart" style="width:450px;height:300px;margin:0 auto"></div><br>
+					</div>
+					<div class="col-12 col-sm-12 col-md-6 col-lg-6" style="font-size:1.3em;">
+						<label style="color:#4B367C;">Resumen de respuestas: </label><br>
+						<br>
+						@php($i=0)
+						@php($total=0)
+						@foreach ( $encuesta->alternativas as $alternativa )
+							<label>&nbsp; &nbsp;  {{ $alternativa->etiqueta }} ({{ $alternativa->valor }}) : </label> {{ $respuesta_cantidad[$i] }} <br>
+							@php($total = $total + ($respuesta_cantidad[$i]*$alternativa->valor))
+							@php($i++)
+						@endforeach
+						<br>
+						<label style="color:#4B367C">Totales: </label><br>
+						<br>
+						<label>&nbsp; &nbsp;  Total : </label> {{ $total }} ptos.<br>
+					</div>
+				 </div>
+			</div>
+	 </div>
+</div>
+
+<div class="row">
+	 <div class="col-md-12">
+		  <div class="box box-primary">
+			   <div class="box-header">
 			  		<h3 class="box-title">Hábitos de Estudio</h3>
 			  	</div>
 			   <div class="box-body">
@@ -163,12 +177,9 @@ var dataset = [
 
 var ticks = new Array();
 @for ($i=0; $i < count($alternativas); $i++)
-	ticks[{{ $i }}] = [{{ $alternativas[$i]['valor'] }}, '{{ $alternativas[$i]['etiqueta'] }}'];
+	ticks[{{ $i }}] = [{{ $i }}, '{{ $alternativas[$i]['etiqueta'] }}'];
+	//ticks[{{ $i }}] = [{{ $alternativas[$i]['valor'] }}, '{{ $alternativas[$i]['etiqueta'] }}'];
 @endfor
-
-var data = [
-	[0, 10], [1, 80], [2, 20], [3, 50],
-];
 
 var options = {
 	series: {
@@ -183,7 +194,7 @@ var options = {
 	xaxis: {
 	 //axisLabel: "World Cities",
 	 axisLabelUseCanvas: true,
-	 axisLabelFontSizePixels: 15,
+	 axisLabelFontSizePixels: 25,
 	 axisLabelFontFamily: 'Verdana, Arial',
 	 axisLabelPadding: 10,
 	 ticks: ticks
@@ -192,9 +203,9 @@ var options = {
 	yaxis: {
 		 //axisLabel: "Average Temperature",
 		 axisLabelUseCanvas: true,
-		 axisLabelFontSizePixels: 12,
+		 axisLabelFontSizePixels: 25,
 		 axisLabelFontFamily: 'Verdana, Arial',
-		 axisLabelPadding: 3,
+		 axisLabelPadding: 5,
 		 tickFormatter: function (v, axis) {
 			  return v + "%";
 		 }
