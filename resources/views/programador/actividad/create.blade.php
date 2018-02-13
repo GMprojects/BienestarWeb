@@ -350,15 +350,20 @@
 
 		$('#cuposTotales').removeAttr('required');
 		var tipoActividad = $(this).val().split('-');
+		console.log(tipoActividad);
+		console.log('Categoría Actividad'+($(this).val()));
       switch (tipoActividad[0]) {
 			case '1'://ATENCIÓN MÉDICA
 			case '2'://PSICOLOGÍA
 				document.getElementById('divFechaFin').style.display = 'none';
 				document.getElementById('divHoraFin').style.display = 'none';
+
 				document.getElementById('selectAlumnos').style.display = 'block';
 				dListaAlumnos('{{ action('UserController@getUsersAlumnos') }}','Alumnos');
+
 				$('#fechaFin').removeAttr('required');
 				$('#horaFin').removeAttr('required');
+
 				break;
 			case '3'://SERVICIO SOCIAL
 				document.getElementById('selectResponsables').style.display = 'block';
@@ -367,16 +372,20 @@
 				document.getElementById('rIndividual').checked = true;
 				dListaResponsables(tipoActividad[1]);
 				dListaAlumnos('{{ action('UserController@getUsersAlumnos') }}','Alumno');
+
 				$('#fechaFin').attr('required', 'true');
 				$('#horaFin').attr('required', 'true');
+
 				break;
 			case '4'://TUTORÍA
 				document.getElementById('selectResponsables').style.display = 'block';
 				document.getElementById('selectAlumnosTutorados').style.display = 'block';
 				document.getElementById('etiquetaResponsable').innerHTML = 'Tutor';
 				dListaTutores('{{ action('TutorTutoradoController@getTutores') }}','Tutor');
+
 				$('#fechaFin').attr('required', 'true');
 				$('#horaFin').attr('required', 'true');
+
 				break;
 			case '5'://DEPORTES
 			case '6'://CULTURALES
@@ -385,9 +394,11 @@
 				document.getElementById('divCuposTotales').style.display = 'block';
 				document.getElementById('enlaceRespInvitado').style.display = 'block';
 				dListaResponsables(tipoActividad[1]);
+
 				$('#cuposTotales').attr('required', 'true');
 				$('#fechaFin').attr('required', 'true');
 				$('#horaFin').attr('required', 'true');
+
 				break;
 			case '8'://MOVILIDAD
 			case '9'://COMEDOR
@@ -395,8 +406,10 @@
 				document.getElementById('lblFechaInicio').innerHTML = 'Inicio de la Convocatoria';
 				document.getElementById('lblFechaFin').innerHTML = 'Fin de la Convocatoria';
 				dListaResponsables(tipoActividad[1]);
+
 				$('#fechaFin').removeAttr('required');
 				$('#horaFin').removeAttr('required');
+
 				break;
 			case '10'://REFORZAMIENTO
 				document.getElementById('selectResponsables').style.display = 'block';
@@ -405,20 +418,25 @@
 				document.getElementById('selectAlumnos').style.display = 'block';
 				dListaResponsables(tipoActividad[1]);
 				dListaAlumnos('{{ action('UserController@getUsersAlumnos') }}','Alumno');
+
 				$('#fechaFin').attr('required', 'true');
 				$('#horaFin').attr('required', 'true');
+
 				break;
 			default:
 				document.getElementById('divCuposTotales').style.display = 'block';
 				document.getElementById('selectResponsables').style.display = 'block';
 				document.getElementById('enlaceRespInvitado').style.display = 'block';
 				dListaResponsables(tipoActividad[1]);
+
 				$('#cuposTotales').attr('required', 'true');
 				$('#fechaFin').attr('required', 'true');
 				$('#horaFin').attr('required', 'true');
-				break;
-         }
+
+			break;
+      }
 	});
+
 	var dListaResponsables = function( responsables ) {
 			var tipoActividadResponsable = responsables;
 			var url = '';
@@ -452,7 +470,7 @@
 				$("#selectIdResponsable").children('option').remove();
 			}
 			//Preparando el AJAX
-		   $.ajax({
+		    $.ajax({
 		      type:'GET',
 		      url: url,
 		      data: '',
@@ -460,6 +478,7 @@
 		      success:function(data) {
 		          op ='<option value="" selected> Seleccione un Responsable </option>';
 		          $("#selectIdResponsable").append(op);
+		          console.log('Cantidad de - responsables'+data.length);
 		          for (var i = 0; i < data.length; i++) {
 						 op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
 		            //op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
@@ -468,7 +487,7 @@
 		          $("#selectIdResponsable").selectpicker("refresh");
 		      },
 		      error:function() {
-		          console.log("Error en Obtener lista de Responsables ");
+		          console.log("Error dListaResponsables ");
 		      }
 		    });
 		    //Fin del AJAX
@@ -489,6 +508,7 @@
 	      success:function(data) {
 	          op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
 	          $("#selectIdAlumno").append(op);
+						console.log('Cantidad de alumnos'+data.length);
 	          for (var i = 0; i < data.length; i++) {
 	            op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].idAlumno+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
 	            $("#selectIdAlumno").append(op);
@@ -496,7 +516,7 @@
 	          $("#selectIdAlumno").selectpicker("refresh");
 	      },
 	      error:function() {
-	          console.log("Error en Obtener lista de Alumnos");
+	          console.log("Error dListaAlumnos");
 	      }
 	    });
 	    //Fin del AJAX
@@ -506,40 +526,43 @@
 	    var op ="";
 	    //Preparando el AJAX
 		 $.ajax({
-		      type:'GET',
-		      url: url,
-		      dataType: 'json',
-		      success:function(data) {
-		        if (data == 'error') {
-					  document.getElementById('divNoHayTutor').style.display = 'block';
-	 				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
-					  $('#modal-errorTut').modal('show');
-		        }else{
-					  if(data.length == 0){
-						   document.getElementById('divNoHayTutor').style.display = 'block';
-						   document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
-							$('#modal-errorTut').modal('show');
-					  }else {
-							  op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
-							  $("#selectIdResponsable").append(op);
-							  for (var i = 0; i < data.length; i++) {
-								 op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
-								 $("#selectIdResponsable").append(op);
-							  }
-							  $("#selectIdResponsable").selectpicker("refresh");
-					  }
-				  }
-		      },error:function() {
+	      type:'GET',
+	      url: url,
+	      dataType: 'json',
+	      success:function(data) {
+	        if (data == 'error') {
+				  document.getElementById('divNoHayTutor').style.display = 'block';
+ 				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+				  $('#modal-errorTut').modal('show');
+	        }else{
+				  if(data.length == 0){
+					   document.getElementById('divNoHayTutor').style.display = 'block';
+					   document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
 						$('#modal-errorTut').modal('show');
-						document.getElementById('divNoHayTutor').style.display = 'block';
-						document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
-		          	console.log("Error en Obtener lista de Tutores");
-		      }
+				  }else {
+						  op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
+						  $("#selectIdResponsable").append(op);
+									console.log('Cantidad de Tutores'+data.length);
+						  for (var i = 0; i < data.length; i++) {
+							 op ='<option data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
+							 $("#selectIdResponsable").append(op);
+						  }
+						  $("#selectIdResponsable").selectpicker("refresh");
+				  }
+			  }
+	      },
+	      error:function() {$('#modal-errorTut').modal('show');
+					document.getElementById('divNoHayTutor').style.display = 'block';
+					document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+					//$('#modal-errorTut').modal('show');
+	          	console.log("Error dListaTutores");
+	      }
 	    });
 	    //Fin del AJAX
 	};
 
 	$("#selectIdResponsable").change(function(){
+
 		if(($('#selectIdTipoActividad').val().split('-'))[0] == 4){
 			var op ="";
 			var tamSelectIdAlumno=document.getElementById("selectIdAlumno").length;
@@ -561,6 +584,7 @@
 	 				  document.getElementById('divNoHayTutor').style.display = 'block';
 	  				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
 	 	        }else{
+						console.log('Cantidad de Tutorados'+data.length);
 						for (var i = 0; i < data.length; i++) {
 							op ='<option data-subtext="'+data[i].codigo+'" title="'+data[i].codigo+'" value="'+data[i].idAlumno+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
 							$("#selectIdAlumnoTutorado").append(op);
@@ -569,7 +593,7 @@
 	 			  }
 				},
 				error:function() {
-					console.log("Error en Obtener lista de tutorados");
+					console.log("Error selectResponsable");
 				}
 			});
 		//Fin del AJAX
@@ -580,6 +604,7 @@
 		llenarInvitado = true;
 		document.getElementById('boxResponsableInvitado').style.display = 'block';
 	}
+
 	function ocultarNuevoResponsable(){
 		llenarInvitado = false;
 		document.getElementById('boxResponsableInvitado').style.display = 'none';
@@ -587,6 +612,7 @@
 		$('#apellidosResponsable').val('');
 		$('#emailResponsable').val('');
 	}
+
 	function mostrarSegunModalidad(modalidad){
 			document.getElementById('selectAlumnos').style.display = 'none';
 			document.getElementById('selectAlumnosTutorados').style.display = 'none';
@@ -656,6 +682,7 @@
 				break;
 			case '4'://TUTORÍA
 				var selectIdResponsable = document.getElementById('selectIdResponsable');
+				console.log(selectIdResponsable.options.length);
 				if(selectIdResponsable.options.length == 0){
 					//<MODAL><DE>ERROR</DE></MODAL>
 					document.getElementById('pError').innerHTML = 'Antes de publicar se deben registrar tutores en el semestre académico.'+"{{(String)$semestre}}"+'.';
@@ -703,6 +730,7 @@
 				if(llenarInvitado){
 					if(nombreResponsable == '' || apellidosResponsable == '' || emailResponsable == ''){
 							document.getElementById('respError').style.display = 'block';
+							console.log(nombreResponsable);
 							todoBien = false
 					}
 				}
