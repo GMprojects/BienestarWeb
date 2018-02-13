@@ -26,7 +26,7 @@
 									  </span>
 								  </div>
 								  <div class="col-md-12 col-xs-12">
-									  <input type="radio" name="tipo_encuesta" value="2" onchange="cambiarTipo(2)"  >
+									  <input type="radio" name="tipo_encuesta" value="2" onchange="cambiarTipo(2)" >
 									  <span style="margin-left: 10px;" for="tipo_encuesta">
 										  <strong>Encuesta libre</strong>. Se podrá enviar en cualquier momento.
 									  </span>
@@ -81,6 +81,42 @@
 	 </div>
 	 <!-- /.modal-dialog -->
 </div>
+
+<div class="modal fade" id="enc-alternativas">
+	 <!-- /.modal-dialog -->
+	 <div class="modal-dialog">
+			<!-- /.modal-content -->
+			<div class="modal-content">
+				  <div class="modal-header">
+					 <b style="font-size: 1.5em;">Lista de Alternativas</b>
+					  <div class="pull-right">
+						  <button type="button" name="button1" id="btAddAlternativa" class="btn btn-ff-green"><i class="fa fa-plus"></i>Añadir Alternativa</button>
+					  </div>
+				  </div>
+				  <div class="modal-body">
+					  <div class="caja-body">
+						  <ul class="enc-list" id="entrada_alternativas" style="margin-bottom: 0px;  padding-left:0px; list-style:none;">
+			 				<li class="item-edit" id="a_1">
+								<input value="Alternativa-1" maxlength="20" type="text" name="a_1"  required  class="form-control" placeholder="Una nueva alternativa" /></li>
+							</li>
+							<li class="item-edit" id="a_2">
+								<input value="Alternativa-2" maxlength="20" type="text" name="a_2"  required  class="form-control" placeholder="Una nueva alternativa" /></li>
+							</li>
+			 			 </ul>
+					  </div>
+
+				  </div>
+				  <div class="modal-footer">
+						  <div class="pull-right">
+							  <a class="btn btn-ff pull-right" data-dismiss="modal" onclick="verificarOrden(); actualizar_items(); actualizar_headers();"> <i class="fa fa-refresh"></i> Actualizar</a>
+						  </div>
+				  </div>
+			</div>
+			<!-- /.modal-content -->
+	 </div>
+	 <!-- /.modal-dialog -->
+</div>
+
 <div class="caja encuesta">
 	 <div class="caja-header">
 		  <div class="caja-icon">
@@ -95,11 +131,11 @@
 					  <i class="fa fa-ellipsis-v"></i>
 				  </a>
 				  <ul class="dropdown-menu">
-					  <li class="s-option"> <a href="#!" id="btAddAlternativa">Añadir alternativa</a> </li>
 					  <li class="s-option"> <a href="#!" id="btAddSeccion">Añadir seccion</a> </li>
-					  <li class="s-option"> <a href="#!" id="btAddEnunciado" onclick="addEnunciado(0)">Añadir enunciado</a> </li>
+					  <li class="s-option"> <a href="#!" id="btAddEnunciado" onclick="addEnunciado('s0')">Añadir enunciado</a> </li>
 					  <li role="separator" class="divider"></li>
-					  <li class="s-option"> <a href="#!" data-toggle="modal" data-target="#enc-motivo">Configurar destino</a> </li>
+					  <li class="s-option"> <a href="#!" data-toggle="modal" data-target="#enc-alternativas">Editar Alternativas</a> </li>
+					  <li class="s-option"> <a href="#!" data-toggle="modal" data-target="#enc-motivo">Editar destino</a> </li>
 				  </ul>
 			  </div>
 		  </div>
@@ -113,35 +149,38 @@
 		 <div class="encu-description">
 			 <textarea minlength="2" name="descripcion" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la encuesta (opcional)"></textarea>
 		 </div>
-		 <div class="items" id="seccion_0">
-			 <ul class="alternatives" id="alternativas_ns" style="margin-bottom: 0px;  padding-left:0px; list-style:none;">
-				<li class="alternative alt-header" id="alt_li_1">
-					<span><textarea required maxlength="20" minlength="2" style="text-align: center;" name="a_1" id="a_1" rows="1" class="ff-control" placeholder="Alternativa-1">Alternativa-1</textarea></span>
-				</li>
-				<li class="alternative alt-header" id="alt_li_2">
-					<span><textarea required maxlength="20" minlength="2" style="text-align: center;" name="a_2" id="a_2" rows="1" class="ff-control" placeholder="Alternativa-2">Alternativa-2</textarea></span>
-				</li>
-			 </ul>
-			 <ol class="enc-list sortable" id="ol_s0">
-				 <div class="item" id="item_1">
+
+		 <div class="items" id="s0">
+
+			 <div class="alternatives hidden-xs hidden-sm alt-headers">
+				 <div class="alternative alt-header">
+					 <span>Alternativa-1</span>
+				 </div>
+				 <div class="alternative alt-header">
+					 <span>Alternativa-2</span>
+				 </div>
+			 </div>
+
+			 <ol class="enc-list sortable">
+				 <div class="item" id="s0_i1">
 		 			<div class="question">
 		 			  <li>
 		 				  <span class="quest-text">
-		 					  <textarea required minlength="2" name="s0_e1" rows="1" class="ff-control" placeholder="Un nuevo enunciado">Un nuevo enunciado - 1</textarea>
+		 					  <textarea required minlength="2" name="s0_e1" rows="1" class="ff-control" placeholder="Un nuevo enunciado">Enunciado de ejemplo para empezar. Puede eliminarlo si lo desea, pero estará muy triste :(.</textarea>
 		 				  </span>
 		 			 </li>
 		 			</div>
-		 			<div class="alternatives" id="div_alt_1">
+		 			<div class="alternatives">
 						<div class="alternative">
-							<input type="radio" name="alternativas1" value="">
+							<input type="radio" name="p1" value="">
 							<label class="hidden-lg hidden-md">Alternativa-1</label>
 						</div>
 						<div class="alternative">
-							<input type="radio" name="alternativas1" value="">
+							<input type="radio" name="p1" value="">
 							<label class="hidden-lg hidden-md">Alternativa-2</label>
 						</div>
 		 			</div>
-		 			<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado('item_1')"></i></a></div>
+		 			<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado('s0', 's0_i1')"></i></a></div>
 		 		</div>
 			 </ol>
 		 </div>
@@ -161,50 +200,53 @@ var seccion = 1;
 var enunciado = 2;
 var alternativa = 3;
 //CANTIDAD de los elementos
-var n_sec = 0;
-var n_enu = 1;
-var n_alt = 2;
 //ALTERNATIVAS
-var array_alternativas = [];
+var array_alternativas = ['a_1', 'a_2'];
+var array_enunciados = ['s0_i1']; //items -- enunciados
+var array_secciones = ['s0'];
 //--- funciones de ENCUESTA ---//
-function removeElemento(elemento){
-	$('#'+elemento).remove();
-}
 function removeSeccion(seccion){
 	$('#'+seccion).remove();
-	n_sec--;
+	array_secciones = array_secciones.filter(item => item !== seccion);
 }
-function removeEnunciado(enunciado){
+function removeEnunciado(seccion, enunciado){
+	array_enunciados = array_enunciados.filter(item => item !== enunciado);
 	$('#'+enunciado).remove();
-	n_enu--;
+	if($('#'+seccion+' .item').length == 0){
+		$('#'+seccion+' .alt-headers').html("");
+	}
 }
 function removeAlternativa(alternativa){
+	array_alternativas = array_alternativas.filter(item => item !== alternativa);
 	$('#'+alternativa).remove();
-	n_alt--;
 	actualizar_items();
+	actualizar_headers();
 }
 function addEnunciado( seccion ){
 	var alternativas = my_alternatives( enunciado );
-	$('#ol_s'+seccion).append(
-		'<div class="item" id="item_'+ enunciado +'">'+
+	if($('#'+seccion+' .item').length == 0){
+		$('#'+seccion+' .alt-headers').html(my_headers());
+	}
+	$('#'+seccion+' ol').append(
+		'<div class="item" id="'+ seccion + '_i' + enunciado +'">'+
 			'<div class="question">'+
 			  '<li>'+
 				  '<span class="quest-text">'+
-					  '<textarea required minlength="2" name="s'+ seccion + '_e' + enunciado +'" rows="1" class="ff-control" placeholder="Ingrese aquí el enunciado">Un nuevo enunciado - '+ enunciado +'</textarea>'+
+					  '<textarea required minlength="2" name="'+ seccion + '_e' + enunciado +'" rows="1" class="ff-control" placeholder="Ingrese aquí el enunciado">Un nuevo enunciado - '+ enunciado +'</textarea>'+
 				  '</span>'+
 			 '</li>'+
 			'</div>'+
-			'<div class="alternatives" id="div_alt_'+ enunciado +'">'+ alternativas +
+			'<div class="alternatives">'+ alternativas +
 			'</div>'+
-			'<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado(\'item_'+ enunciado+'\')"></i></a></div>'+
+			'<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado(\''+ seccion + '\', \''+ seccion + '_i' + enunciado +'\')"></i></a></div>'+
 		'</div>'
 	);
+	array_enunciados.push( seccion + '_i' + enunciado );
 	enunciado++;
-	n_enu++;
 }
 $('#btAddSeccion').on('click', function(){
 	$('#secciones').append(
-	'<div class="seccion" id="seccion_'+ seccion +'">'+
+	'<div class="seccion" id="s'+ seccion +'">'+
 		'<div class="s-header">'+
 			'<div class="s-icon">'+ seccion +'</div>'+
 			'<div class="s-title"><textarea required minlength="2" name="titulo_s'+ seccion +'" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la sección">Una nueva sección - '+ seccion +'</textarea></div>'+
@@ -218,12 +260,12 @@ $('#btAddSeccion').on('click', function(){
 							'<i class="fa fa-ellipsis-v"></i>'+
 						'</a>'+
 						'<ul class="dropdown-menu">'+
-							'<li class="s-option"> <a href="#!" onclick="addEnunciado('+ seccion +')">Añadir enunciado</a> </li>'+
+							'<li class="s-option"> <a href="#!" onclick="addEnunciado(\'s'+ seccion +'\')">Añadir enunciado</a> </li>'+
 						'</ul>'+
 					'</div>'+
 				'</div>'+
 				'<div class="s-button">'+
-					'<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion(\'seccion_'+seccion+'\')"><i class="fa fa-remove"></i></a>'+
+					'<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion(\'s'+seccion+'\')"><i class="fa fa-remove"></i></a>'+
 				'</div>'+
 			'</div>'+
 
@@ -234,74 +276,88 @@ $('#btAddSeccion').on('click', function(){
 			'</div>'+
 			'<div class="items"  id="box_s'+ seccion +'">'+
 
-				'<div class="alternatives hidden-xs hidden-sm" id="alternativas_s'+ seccion +'">'+
+				'<div class="alternatives hidden-xs hidden-sm alt-headers">'+
 					//aquí irán las ALTERNATIVAS que se vayan agregando
 				'</div>'+
-				'<ol class="enc-list sortable" id="ol_s'+ seccion +'">'+
+				'<ol class="enc-list sortable">'+
 					//aquí irán los ENUNCIADOS que se vayan agregando
 				'</ol>'+
 			'</div>'+
 		'</div>'+
 	'</div>');
-	n_sec++; seccion++;
+	array_secciones.push('s'+seccion);
+	seccion++;
+	$( ".items ol" ).sortable({
+		placeholder: "ui-state-highlight"
+   });
+   $( ".items ol" ).disableSelection();
 });
 $('#btAddAlternativa').on('click', function(){
-	n_alt++;
-	$('#alternativas_ns').append(
-		'<li class="alternative alt-header" id="alt_li_'+ alternativa +'">'+
-		  '<span><textarea required maxlength="20" minlength="2" style="text-align: center;" name="a_'+ alternativa +'" id="a_'+ alternativa +'" rows="1" class="ff-control" placeholder="Alternativa">Alternativa-'+ alternativa +'</textarea></span>'+
-		  '<div class="a-tools"><a href="#!"><i class="fa fa-remove" onclick="removeAlternativa(\'alt_li_'+ alternativa+'\')"></i></a></div>'+
-		'</li>');
-	alternativa++;
+	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'"  required  class="form-control" placeholder="Una nueva alternativa" /></li>');
+	array_alternativas.push('a_'+alternativa);
 	actualizar_items();
+	actualizar_headers();
+	alternativa++;
 });
+function verificarOrden(){
+	array_alternativas = [];
+	$('#entrada_alternativas input').each(function(){
+		array_alternativas.push($(this).attr('name'));
+	});
+}
 function actualizar_items(){
-	var i=0; var id=1;
-	while (i < n_enu) {
-		if($('#item_'+id).length > 0 ){
-			$('#div_alt_'+id).html(my_alternatives( id ));
-			i++;
-		}
-		id++;
+	for (var i = 0; i < array_enunciados.length; i++) {
+		$('#'+array_enunciados[i]+ ' .alternatives').html(my_alternatives(array_enunciados[i]));
 	}
+}
+function actualizar_headers(){
+	for (var i = 0; i < array_secciones.length; i++) {
+		if($('#'+array_secciones[i]+' .item').length > 0){
+			$('#'+array_secciones[i]+' .alt-headers').html(my_headers());
+		}else {
+			$('#'+array_secciones[i]+' .alt-headers').html("");
+		}
+	}
+}
+function my_headers(){
+	var headers = "";
+	for (var i = 0; i < array_alternativas.length; i++) {
+		headers = headers +
+			'<div class="alternative alt-header">'+
+				'<span>' + $('#'+ array_alternativas[i]+' input').val() + '</span>'+
+			'</div>'
+	}
+	return headers;
 }
 function my_alternatives( enunciado ){
-	var i=0; var id=1;
 	var alternativas = "";
-	var test = "";
-	while (i < n_alt) {
-		if($('#a_'+id).length > 0){
-			alternativas = alternativas +
-				'<div class="alternative">'+
-					'<input readonly type="radio" name="alternativas" value="" class="icheckbox_square-green">'+
-					'<label class="hidden-lg hidden-md">'+ $('#a_'+id).val() +'</label>'+
-				'</div>';
-				test = test + $('#a_'+id).val() + " - ";
-				i++;
-		}
-		id++;
+	for (var i = 0; i < array_alternativas.length; i++) {
+		alternativas = alternativas +
+			'<div class="alternative">'+
+				'<input type="radio" name="p' + enunciado + '" value="">'+
+				'<label class="hidden-lg hidden-md">'+ $('#'+ array_alternativas[i]+' input').val() +'</label>'+
+			'</div>';
 	}
-	if(alternativas == ""){
-		return "<p>No hay alternativas</p>"
-	}else{
-		return alternativas;
-	}
+	return alternativas;
 }
+
+
 $('#enc-motivo').modal('show');
+
 $( function() {
-  $( "#alternativas_ns" ).sortable({
+  $( "#s0 ol" ).sortable({
 	 placeholder: "ui-state-highlight"
   });
-  $( "#alternativas_ns" ).disableSelection();
+  $( "#s0 ol" ).disableSelection();
 } );
 $( function() {
-  $( "#ol_ns" ).sortable({
+  $( "#entrada_alternativas" ).sortable({
 	 placeholder: "ui-state-highlight"
   });
-  $( "#ol_ns" ).disableSelection();
+  $( "#entrada_alternativas" ).disableSelection();
 } );
 $('form').on('submit', function(event){
-	if(n_enu > 0 && n_alt > 1){
+	if(array_enunciados.length > 0 ){
 		return;
 	}else{
 		event.preventDefault();
@@ -367,6 +423,26 @@ function cambiarTipo(tipo){
 	   width: auto;
 	   right: 0px;
 	   left: auto;
+	}
+
+	.ui-state-highlight {
+	   height: 70px;
+	   background-color: #D3C7E8;
+		border: 1px solid #D3C7E8;;
+	}
+	.item{
+		cursor: all-scroll;
+	}
+	.item-edit{
+		cursor: all-scroll;
+		margin-bottom: 5px;
+		background-color: rgba(0, 0, 0, 0.03);
+		display: list-item;
+    	text-align: -webkit-match-parent;
+		padding: 5px;
+	}
+	.item-edit:nth-child(even){
+		background-color: rgba(0, 0, 0, 0.1);
 	}
 </style>
 @endsection

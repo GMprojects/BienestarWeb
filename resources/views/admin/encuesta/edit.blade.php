@@ -1,177 +1,533 @@
 @extends('template')
 @section ('contenido')
+	<script>
+		//EDITARRRRR//
+		$(document).ready(function(){
+			if( {{ $encuesta->tipo }} == 1 ){ //encuesta de ACTIVIDADES
+				$('#rad_1').prop('checked', true);
+				$('#tipo_2').css('display', 'none');
+			}else if( {{ $encuesta->tipo }} == 2){
+				$('#rad_2').prop('checked', true);
+				$('#tipo_1').css('display', 'none');
+				var destino = '{{ $encuesta->destino }}';
+				if(destino.includes('1')){
+					$('#cb_alumnos').prop('checked', true);
+				}
+				if(destino.includes('2')){
+					$('#cb_docentes').prop('checked', true);
+				}
+				if(destino.includes('3')){
+					$('#cb_administrativos').prop('checked', true);
+				}
+			}
+		});
+		//IDs de los elementos
+		var seccion = {{ count( $encuesta->secciones ) + 1 }};
+		var enunciado = {{ count( $encuesta->preguntas ) + 1 }};
+		var alternativa = {{ count( $encuesta->alternativas ) + 1 }};
+		//CANTIDAD de los elementos
+		//ALTERNATIVAS
+		var array_alternativas = [];
+		var array_enunciados = []; //items -- enunciados
+		var array_secciones = [];
+		//--- funciones de ENCUESTA ---//
+		function removeSeccion(seccion) {
+			$('#'+seccion).remove();
+			array_secciones = array_secciones.filter(item => item !== seccion);
+		}
+		function removeEnunciado(seccion, enunciado) {
+			array_enunciados = array_enunciados.filter(item => item !== enunciado);
+			$('#'+enunciado).remove();
+			if($('#'+seccion+' .item').length == 0) {
+				$('#'+seccion+' .alt-headers').html("");
+			}
+		}
+		function removeAlternativa(alternativa) {
+			array_alternativas = array_alternativas.filter(item => item !== alternativa);
+			$('#'+alternativa).remove();
+			actualizar_items();
+			actualizar_headers();
+		}
+		function addEnunciado( seccion ) {
+			var alternativas = my_alternatives( enunciado );
+			if( $('#'+seccion+' .item').length == 0 ){
+				$('#'+seccion+' .alt-headers').html(my_headers());
+			}
+			$('#'+seccion+' ol').append(
+				'<div class="item" id="'+ seccion + '_i' + enunciado +'_new">'+
+					'<div class="question">'+
+					  '<li>'+
+						  '<span class="quest-text">'+
+							  '<textarea required minlength="2" name="'+ seccion + '_e' + enunciado +'_new" rows="1" class="ff-control" placeholder="Ingrese aquí el enunciado">Un nuevo enunciado - '+ enunciado +'</textarea>'+
+						  '</span>'+
+					 '</li>'+
+					'</div>'+
+					'<div class="alternatives">'+ alternativas +
+					'</div>'+
+					'<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado(\''+ seccion + '\', \''+ seccion + '_i' + enunciado +'_new\')"></i></a></div>'+
+				'</div>'
+			);
+			array_enunciados.push( seccion + '_i' + enunciado + '_new');
+			enunciado++;
+		}
+		function verificarOrden() {
+			array_alternativas = [];
+			$( '#entrada_alternativas input' ).each( function(){
+				array_alternativas.push($(this).attr('name'));
+			});
+			console.log( array_alternativas );
+		}
+		function verEnun() {
+			array_enunciados = [];
+			$( '.items .item' ).each( function(){
+				array_enunciados.push($(this).attr('id'));
+			});
+			console.log( array_enunciados );
+		}
+		function verSecc() {
+			array_secciones = ['s0'];
+			$( '#secciones .seccion' ).each( function(){
+				array_secciones.push($(this).attr('id'));
+			});
+			console.log( array_secciones );
+		}
+		function actualizar_items() {
+			for (var i = 0; i < array_enunciados.length; i++) {
+				$('#'+array_enunciados[i]+ ' .alternatives').html(my_alternatives(array_enunciados[i]));
+			}
+		}
+		function actualizar_headers() {
+			for (var i = 0; i < array_secciones.length; i++) {
+				if($('#'+array_secciones[i]+' .item').length > 0) {
+					$('#'+array_secciones[i]+' .alt-headers').html(my_headers());
+				} else {
+					$('#'+array_secciones[i]+' .alt-headers').html("");
+				}
+			}
+		}
+		function my_headers() {
+			var headers = "";
+			for (var i = 0; i < array_alternativas.length; i++) {
+				headers = headers +
+					'<div class="alternative alt-header">'+
+						'<span>' + $('#'+ array_alternativas[i]+' input').val() + '</span>'+
+					'</div>'
+			}
+			return headers;
+		}
+		function my_alternatives( enunciado ) {
+			var alternativas = "";
+			for (var i = 0; i < array_alternativas.length; i++) {
+				alternativas = alternativas +
+					'<div class="alternative">'+
+						'<input type="radio" name="p' + enunciado + '" value="">'+
+						'<label class="hidden-lg hidden-md">'+ $('#'+ array_alternativas[i]+' input').val() +'</label>'+
+					'</div>';
+			}
+			return alternativas;
+		}
+	</script>
 
 {!!Form::model($encuesta,['method'=>'PATCH','route'=>['encuesta.update',$encuesta->idEncuesta]])!!}
 {{Form::token()}}
-<div class="row">
-	<div class="col-xs-12">
-		<div class="second-bar">
-			<div class="pull-left">
-				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
+
+<div class="modal fade" id="enc-motivo">
+	 <!-- /.modal-dialog -->
+	 <div class="modal-dialog">
+			<!-- /.modal-content -->
+			<div class="modal-content">
+				  <div class="modal-header">
+						 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true" class="fa fa-remove"></span></button>
+						 <h4 class="modal-title"><b>Destino</b></h4>
+				  </div>
+				  <div class="modal-body">
+					  <div class="caja-body">
+						  <div class="form-group">
+							  <label for="">Tipo de encuesta: </label>
+							  <div class="row" style="margin-left: 10px;">
+								  <div class="col-md-12 col-xs-12" style="margin-bottom: 15px;">
+									  <input id="rad_1" type="radio" name="tipo_encuesta" value="1" onchange="cambiarTipo(1)" checked>
+									  <span style="margin-left: 10px;"  for="tipo_encuesta">
+										  <strong>Encuesta asociada a un Tipo de Actividad</strong>. Se enviará a los participantes de una activdad ejecutada.
+									  </span>
+								  </div>
+								  <div class="col-md-12 col-xs-12">
+									  <input id="rad_2" type="radio" name="tipo_encuesta" value="2" onchange="cambiarTipo(2)" >
+									  <span style="margin-left: 10px;" for="tipo_encuesta">
+										  <strong>Encuesta libre</strong>. Se podrá enviar en cualquier momento.
+									  </span>
+								  </div>
+							  </div>
+						  </div>
+						  <div class="row" id="tipo_1">
+							  <div class="col-md-8">
+								  <div class="form-group">
+									  <label for="idTipoActividad">Categoría de Actividad: </label>
+									  <select name="idTipoActividad" class="form-control" id="tiposActividad">
+										  @foreach($tipos as $tipo)
+											  @if($encuesta->tipo == 1 && $encuesta->idTipoActividad == $tipo->idTipoActividad)
+												  <option value={{$tipo->idTipoActividad}} selected>{{$tipo->tipo}}</option>
+											  @else
+												  <option value={{$tipo->idTipoActividad}}>{{$tipo->tipo}}</option>
+											  @endif
+										  @endforeach
+									  </select>
+								  </div>
+							  </div>
+							  <div class="col-md-4">
+								  <div class="form-group">
+									  <label for="destino">Dirigida a: </label>
+									  <select name="destino" class="form-control">
+										  <option value="i">Inscritos</option>
+										  <option value="r">Responsable</option>
+									  </select>
+								  </div>
+							  </div>
+						  </div>
+						  <div class="form-group"  id="tipo_2">
+							  <label for="">Dirigida a:</label>
+							  <div class="row" style="margin-left: 10px;">
+
+									  <div class="col-md-12">
+										  <input type="checkbox" id="cb_alumnos" name="destino[]" value="1"><label style="margin-left: 10px;" for=""> Alumnos</label>
+									  </div>
+									  <div class="col-md-12">
+										  <input type="checkbox" id="cb_docentes" name="destino[]" value="2"><label style="margin-left: 10px;" for=""> Docentes</label>
+									  </div>
+									  <div class="col-md-12">
+										  <input type="checkbox" id="cb_administrativos" name="destino[]" value="3"><label style="margin-left: 10px;" for=""> Administrativos</label>
+									  </div>
+
+							  </div>
+						  </div>
+					  </div>
+
+				  </div>
+				  <div class="modal-footer">
+						  <div class="pull-right">
+							  <a class="btn btn-ff pull-right" data-dismiss="modal"> <i class="fa fa-check"></i> Aceptar</a>
+						  </div>
+				  </div>
 			</div>
-			<div class="pull-right">
-				<button data-toggle="tooltip" data-placement="bottom" title="Agregar nuevo enunciado" type="button" name="btAddPregunta" id="btAddPregunta" class="btn btn-ff-green"><i class="fa fa-plus"></i>Enunciado</button>
-				<button data-toggle="tooltip" data-placement="bottom" title="Agregar nueva etiqueta" type="button" name="btAddAlternativa" id="btAddAlternativa" class="btn btn-ff-green2"><i class="fa fa-plus"></i>Etiqueta</button>
-				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> <span class="hidden-xs">Grabar</span></button>
-			</div>
-		</div>
-	</div>
+			<!-- /.modal-content -->
+	 </div>
+	 <!-- /.modal-dialog -->
 </div>
-<div class="row" style="margin-top: 70px;">
-	<div class="col-md-6">
 
-		<div class="row">
+<div class="modal fade" id="enc-alternativas">
+	 <!-- /.modal-dialog -->
+	 <div class="modal-dialog">
+			<!-- /.modal-content -->
+			<div class="modal-content">
+				  <div class="modal-header">
+					 <b style="font-size: 1.5em;">Lista de Alternativas</b>
+					  <div class="pull-right">
+						  <button type="button" name="button1" id="btAddAlternativa" class="btn btn-ff-green"><i class="fa fa-plus"></i>Añadir Alternativa</button>
+					  </div>
+				  </div>
+				  <div class="modal-body">
+					  <div class="caja-body">
+						  <ul class="enc-list" id="entrada_alternativas" style="margin-bottom: 0px;  padding-left:0px; list-style:none;">
+							  @php $i_header = 1; @endphp
+							  @foreach ($encuesta->alternativas->sortBy('valor') as $alternativa)
+								  <li class="item-edit"  id="a_{{ $alternativa->idAlternativa }}" >
+									  	@if($i_header > 2)
+											<button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa('a_{{ $alternativa->idAlternativa }}')">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										@endif
+										<input value="{{ $alternativa->etiqueta }}" maxlength="20" type="text" name="a_{{ $alternativa->idAlternativa }}"  required  class="form-control" placeholder="Una alternativa" />
+									</li>
+									@php $i_header++; @endphp
+							  @endforeach
+			 			 </ul>
+					  </div>
 
-				<div class="col-md-12">
-
-					<div class="caja">
-						<div class="caja-header large">
-					      <div class="caja-icon">1</div>
-					      <div class="caja-title">Editar encuesta de {{ $encuesta->tipoActividad->tipo }}</div>
-					   </div>
-						<div class="caja-body">
-							<div id="divErrorSubmit" class="alert alert-danger" style='display:none;'>
-								<button type="button" class="close" onclick="ocultarErrorSubmit()"><span aria-hidden="true">&times;</span></button>
-								<h4>Error</h4>
-								<p>Por favor ingrese almenos <strong>2 etiquetas</strong> y almenos <strong>1 enunciado</strong></p>
-							</div>
-							<div class="row">
-								<div class="col-md-8">
-									<p> <strong>Titulo:</strong>
-										<input required type="text" name="titulo" value ="{{ $encuesta->titulo }}" class="form-control" placeholder="Título que describa la categoría de actividades a la que va dirigida">
-									</p>
-
-			   				</div>
-								<div class="col-md-4">
-									<p>
-										<label for="destino">Dirigido A: </label>
-										<select name="destino" class="form-control">
-											@if($encuesta->destino == 'i')
-												<option value="i" selected>Inscritos</option>
-												<option value="r">Responsable</option>
-											@else
-												<option value="i">Responsable</option>
-												<option value="r" selected>Responsable</option>
-											@endif
-										</select>
-									</p>
-			   					</div>
-								</div>
-							</div>
-							<div class="caja-footer">
-							</div>
-						</div>
-				</div>
-
-				<div class="col-md-12">
-					<div class="caja">
-						<div class="caja-header large">
-					      <div class="caja-icon">2</div>
-					      <div class="caja-title">Escala de valoración
-								<div class="pull-right">
-									<button data-toggle="tooltip" data-placement="bottom" title="Agregar nueva etiqueta" type="button" name="btAddAlternativa" id="btAddAlternativa" class="btn btn-ff-green"><i class="fa fa-plus"></i>Etiqueta</button>
-								</div>
-							</div>
-					   </div>
-
-						<div class="caja-body">
-							<p>
-								Puede arrastrar las cajas de las <strong>etiquetas</strong> para cambiar el orden
-							</p>
-							<div id="alternativas">
-								 <ol style="padding: 0px;" class="enc-list" id="sortable2">
-									 @for ( $i = 0; $i < count($encuesta->alternativas); $i++ )
-
-										   <li class="item-edit" id="a{{$encuesta->alternativas[$i]->idAlternativa}}">
-				  								 <button data-toggle="tooltip" data-placement="top" title="Eliminar etiqueta" type="button" class="close close-red" onclick="removeElemento('a{{$encuesta->alternativas[$i]->idAlternativa}}')"><span aria-hidden="true">&times;</span></button>
-				  								 <label for="etiqueta">Etiqueta: </label>
-				  				 				<input id="e{{ $encuesta->alternativas[$i]->idAlternativa }}" type="text" name="e{{ $encuesta->alternativas[$i]->idAlternativa }}" required value = "{{ $encuesta->alternativas[$i]->etiqueta }}" class="form-control" placeholder="Una etiqueta que indique la valoración">
-
-					  						</li>
-									 @endfor
-
-								 </ol>
-							</div>
-						</div>
-					</div>
-				</div>
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="caja">
-			<div class="caja-header">
-		      <div class="caja-icon">3</div>
-		      <div class="caja-title">Lista de enunciados
-					<div class="pull-right">
-						<button data-toggle="tooltip" data-placement="bottom" title="Agregar nuevo enunciado" type="button" name="btAddPregunta" id="btAddPregunta" class="btn btn-ff-green"><i class="fa fa-plus"></i>Enunciado</button>
-					</div>
-				</div>
-		   </div>
-
-			<div class="caja-body">
-				<p>
-					Puede arrastrar las cajas de las preguntas para cambiar el orden
-				</p>
-				<div id="preguntas">
-					 <ol style="padding: 0px;" class="enc-list" id="sortable">
-						 @foreach ( $encuesta->preguntas as $pregunta )
-							 @if( $pregunta->estado == 1 )
-								 <li class="item-edit" id="p{{$pregunta->idPreguntaEncuesta}}">
-									 <button data-toggle="tooltip" data-placement="top" title="Eliminar enunciado" type="button" class="close close-red" onclick="removeElemento('p{{$pregunta->idPreguntaEncuesta}}')"><span aria-hidden="true">&times;</span></button>
-									 <textarea style="resize: none;" minlength="10" name="p{{ $pregunta->idPreguntaEncuesta }}" class="form-control" required rows="2" cols="30" >{{ $pregunta->enunciado }}</textarea>
-								 </li>
-							 @endif
-						 @endforeach
-					 </ol>
-				</div>
-
+				  </div>
+				  <div class="modal-footer">
+						  <div class="pull-right">
+							  <a class="btn btn-ff pull-right" data-dismiss="modal" onclick="verificarOrden(); actualizar_items(); actualizar_headers();"> <i class="fa fa-refresh"></i> Actualizar</a>
+						  </div>
+				  </div>
 			</div>
-
-		</div>
-	</div>
+			<!-- /.modal-content -->
+	 </div>
+	 <!-- /.modal-dialog -->
 </div>
+
+<div class="caja encuesta">
+	 <div class="caja-header">
+		  <div class="caja-icon">
+				<i class="fa fa-list-ul"></i>
+		  </div>
+		  <div class="caja-title">
+				<textarea required autofocus minlength="2" name="titulo" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la encuesta">{{ $encuesta->titulo }}</textarea>
+		  </div>
+		  <div class="caja-tools">
+			  <div class="dropdown">
+				  <a href="#!" class="dropdown-toggle" data-toggle="dropdown">
+					  <i class="fa fa-ellipsis-v"></i>
+				  </a>
+				  <ul class="dropdown-menu">
+					  <li class="s-option"> <a href="#!" id="btAddSeccion">Añadir seccion</a> </li>
+					  <li class="s-option"> <a href="#!" id="btAddEnunciado" onclick="addEnunciado('s0')">Añadir enunciado</a> </li>
+					  <li role="separator" class="divider"></li>
+					  <li class="s-option"> <a href="#!" data-toggle="modal" data-target="#enc-alternativas">Editar Alternativas</a> </li>
+					  <li class="s-option"> <a href="#!" data-toggle="modal" data-target="#enc-motivo">Editar destino</a> </li>
+				  </ul>
+			  </div>
+		  </div>
+	 </div>
+	 <div class="caja-body">
+		 <div id="divErrorSubmit" class="alert alert-danger" style='display:none;'>
+			 <button type="button" class="close" onclick="ocultarErrorSubmit()"><span aria-hidden="true">&times;</span></button>
+			 <h4>Ups!</h4>
+			 <p>Por favor ingrese almenos <strong>2 alternativas</strong> y almenos <strong>1 enunciado</strong></p>
+		 </div>
+		 <div class="encu-description">
+			 <textarea minlength="2" name="descripcion" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la encuesta (opcional)">{{ $encuesta->descripcion }}</textarea>
+		 </div>
+
+		 <div class="items" id="s0">
+			 <div class="alternatives hidden-xs hidden-sm alt-headers">
+			 </div>
+			 <ol class="enc-list">
+				 @foreach ($encuesta->preguntas->where('idSeccion', null)->where('estado', 1)->sortBy('orden') as $pregunta_ns)
+					 <div class="item" id="s0_i{{ $pregunta_ns->idPregunta }}">
+			 			<div class="question">
+			 			  <li>
+			 				  <span class="quest-text">
+			 					  <textarea required minlength="2" name="s0_e{{ $pregunta_ns->idPregunta }}" rows="1" class="ff-control" placeholder="Un enunciado">{{ $pregunta_ns->enunciado }}</textarea>
+			 				  </span>
+			 			 </li>
+			 			</div>
+			 			<div class="alternatives">
+			 			</div>
+			 			<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado('s0', 's0_i{{ $pregunta_ns->idPregunta }}')"></i></a></div>
+			 		</div>
+				 @endforeach
+
+			 </ol>
+		 </div>
+		 <div class="secciones" id="secciones">
+			 @foreach ($encuesta->secciones->where('estado', 1)->sortBy('orden') as $seccion)
+				 <div class="seccion" id="s{{ $seccion->idSeccion }}">
+ 			 		<div class="s-header">
+ 			 			<div class="s-icon">{{ $seccion->orden }}</div>
+ 			 			<div class="s-title"><textarea required minlength="2" name="titulo_s{{ $seccion->idSeccion }}" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la sección">{{ $seccion->titulo }}</textarea></div>
+ 			 			<div class="s-tools">
+ 			 				<div class="s-button">
+ 			 					<a data-toggle="collapse" href="#box_s{{ $seccion->idSeccion }}" aria-expanded="false" aria-controls="items_s{{ $seccion->idSeccion }}" > <i class="fa fa-minus"></i></a>
+ 			 				</div>
+ 			 				<div class="s-button">
+ 			 					<div class="dropdown">
+ 			 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+ 			 							<i class="fa fa-ellipsis-v"></i>
+ 			 						</a>
+ 			 						<ul class="dropdown-menu">
+ 			 							<li class="s-option"> <a href="#!" onclick="addEnunciado('s{{ $seccion->idSeccion }}')">Añadir enunciado</a> </li>
+ 			 						</ul>
+ 			 					</div>
+ 			 				</div>
+ 			 				<div class="s-button">
+ 			 					<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion('s{{ $seccion->idSeccion }}')"><i class="fa fa-remove"></i></a>
+ 			 				</div>
+ 			 			</div>
+
+ 			 		</div>
+ 			 		<div class="s-body">
+ 			 			<div class="s-description">
+ 			 				<textarea minlength="2" name="descripcion_s{{ $seccion->idSeccion }}" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la sección (opcional)">{{ $seccion->descripcion }}</textarea>
+ 			 			</div>
+ 			 			<div class="items"  id="box_s{{ $seccion->idSeccion }}">
+ 							<div class="alternatives hidden-xs hidden-sm alt-headers">
+ 			 				</div>
+ 			 				<ol class="enc-list">
+								@foreach ($seccion->preguntas->where('estado', 1) as $pregunta)
+									<div class="item" id="s{{ $seccion->idSeccion }}_i{{ $pregunta->idPregunta }}">
+	 			  			 			<div class="question">
+	 			  			 			  <li>
+	 			  			 				  <span class="quest-text">
+	 			  			 					  <textarea required minlength="2" name="s{{ $seccion->idSeccion }}_e{{ $pregunta->idPregunta }}" rows="1" class="ff-control" placeholder="empty">{{ $pregunta->enunciado }}</textarea>
+	 			  			 				  </span>
+	 			  			 			 </li>
+	 			  			 			</div>
+	 			  			 			<div class="alternatives">
+	 			  			 			</div>
+	 			  			 			<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado('s{{ $seccion->idSeccion }}', 's{{ $seccion->idSeccion }}_i{{ $pregunta->idPregunta }}')"></i></a></div>
+	 			  			 		</div>
+								@endforeach
+ 			 				</ol>
+ 			 			</div>
+ 			 		</div>
+ 				</div>
+			 @endforeach
+			<script>
+				verificarOrden();
+				verSecc();
+				verEnun();
+				actualizar_items();
+				actualizar_headers();
+				$( ".items ol" ).sortable({
+					placeholder: "ui-state-highlight"
+			   });
+			   $( ".items ol" ).disableSelection();
+			</script>
+		 </div>
+	 </div>
+	 <div class="caja-footer">
+		 <button class="btn btn-ff pull-right" type="submit"><i class="fa fa-save"></i> Guardar</button>
+	 </div>
+</div>
+
 {!!Form::close()!!}
 
 <script>
-function removeElemento(elemento){
-	$('#'+elemento).remove();
-}
-var pre_adds = 1, alt_adds = 1;
-$('#btAddPregunta').on('click', function(){
-	$('#preguntas ol').append('<li class="item-edit" id="p_a'+pre_adds+'"><button data-toggle="tooltip" data-placement="top" title="Eliminar enunciado" type="button" class="close close-red" onclick="removeElemento(\'p_a'+pre_adds+'\')"><span aria-hidden="true">&times;</span></button><textarea style="resize: none;" minlength="2" name="p_a'+pre_adds+'" class="form-control" required rows="2" cols="30" placeholder="Un nuevo enunciado..." autofocus></textarea></li>');
-	pre_adds++;
+
+$('#btAddSeccion').on('click', function(){
+	$('#secciones').append(
+	'<div class="seccion" id="s'+ seccion +'_new">'+
+		'<div class="s-header">'+
+			'<div class="s-icon">'+ seccion +'</div>'+
+			'<div class="s-title"><textarea required minlength="2" name="titulo_s'+ seccion +'_new" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la sección">Una nueva sección - '+ seccion +'</textarea></div>'+
+			'<div class="s-tools">'+
+				'<div class="s-button">'+
+					'<a data-toggle="collapse" href="#box_s'+ seccion +'_new" aria-expanded="false" aria-controls="items_s'+ seccion +'" > <i class="fa fa-minus"></i></a>'+
+				'</div>'+
+				'<div class="s-button">'+
+					'<div class="dropdown">'+
+						'<a href="#" class="dropdown-toggle" data-toggle="dropdown">'+
+							'<i class="fa fa-ellipsis-v"></i>'+
+						'</a>'+
+						'<ul class="dropdown-menu">'+
+							'<li class="s-option"> <a href="#!" onclick="addEnunciado(\'s'+ seccion +'_new\')">Añadir enunciado</a> </li>'+
+						'</ul>'+
+					'</div>'+
+				'</div>'+
+				'<div class="s-button">'+
+					'<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion(\'s'+seccion+'_new\')"><i class="fa fa-remove"></i></a>'+
+				'</div>'+
+			'</div>'+
+
+		'</div>'+
+		'<div class="s-body">'+
+			'<div class="s-description">'+
+				'<textarea minlength="2" name="descripcion_s'+ seccion +'_new" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la sección (opcional)"></textarea>'+
+			'</div>'+
+			'<div class="items"  id="box_s'+ seccion +'_new">'+
+
+				'<div class="alternatives hidden-xs hidden-sm alt-headers">'+
+					//aquí irán las ALTERNATIVAS que se vayan agregando
+				'</div>'+
+				'<ol class="enc-list sortable">'+
+					//aquí irán los ENUNCIADOS que se vayan agregando
+				'</ol>'+
+			'</div>'+
+		'</div>'+
+	'</div>');
+	array_secciones.push('s' + seccion + '_new');
+	seccion++;
+	$( ".items ol" ).sortable({
+		placeholder: "ui-state-highlight"
+	});
+	$( ".items ol" ).disableSelection();
 });
 $('#btAddAlternativa').on('click', function(){
-	$('#alternativas ol').append('<li class="item-edit" id="a_a'+alt_adds+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar etiqueta" type="button" class="close close-red" onclick="removeElemento(\'a_a'+alt_adds+'\')"><span aria-hidden="true">&times;</span></button><div class="row"><div class="col-md-8 col-sm-8 col-xs-8"><label for="etiqueta">Etiqueta: </label><input id="e_a'+pre_adds+'" type="text" name="e_a'+pre_adds+'" class="form-control" required placeholder="Una etiqueta que indique la valoración"></div><div class="col-md-4 col-sm-4 col-xs-4"><label for="valor">Valor: </label><input id="v_a'+alt_adds+'" required type="number" name="v_a'+alt_adds+'" class="form-control"></div></div></li>');
-	alt_adds++;
+	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'_new"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'_new\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'_new"  required  class="form-control" placeholder="Una nueva alternativa" /></li>');
+	array_alternativas.push('a_'+alternativa+'_new');
+	actualizar_items();
+	actualizar_headers();
+	alternativa++;
 });
+
+$('#enc-motivo').modal('show');
 $( function() {
-  $( "#sortable" ).sortable({
+  $( "#s0 ol" ).sortable({
 	 placeholder: "ui-state-highlight"
   });
-  $( "#sortable" ).disableSelection();
+  $( "#s0 ol" ).disableSelection();
 } );
-
 $( function() {
-  $( "#sortable2" ).sortable({
+  $( "#entrada_alternativas" ).sortable({
 	 placeholder: "ui-state-highlight"
   });
-  $( "#sortable2" ).disableSelection();
+  $( "#entrada_alternativas" ).disableSelection();
 } );
-
 $('form').on('submit', function(event){
-	var alt = $("#alternativas li").length;
-	var enu = $("#preguntas li").length;
-	if(enu > 0 && alt > 1){
+	if(array_enunciados.length > 0 && array_alternativas.length > 1){
 		return;
 	}else{
 		event.preventDefault();
 		document.getElementById('divErrorSubmit').style.display = 'block';
 	}
 });
-
 function ocultarErrorSubmit(){
 	document.getElementById('divErrorSubmit').style.display = 'none';
 }
+
+$(document).on('change keyup keydown paste cut', 'textarea', function(){
+	$(this).css('height','auto');
+	$(this).height(this.scrollHeight);
+});
+$(document).on('focus', 'textarea', function() {
+	this.select();
+	this.onmouseup = function() {
+		this.onmouseup = null;
+		return false;
+	}
+});
+$(document).on('ready', function(){
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-green',
+		radioClass: 'iradio_square-green',
+		increaseArea: '20%' // optional
+	});
+	$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+});
+function cambiarTipo(tipo){
+	if(tipo == 1){
+		document.getElementById('tipo_2').style.display = 'none';
+		document.getElementById('tipo_1').style.display = 'block';
+	}else{
+		document.getElementById('tipo_1').style.display = 'none';
+		document.getElementById('tipo_2').style.display = 'block';
+	}
+}
 </script>
+
+<style media="screen">
+	textarea{
+		resize: none;
+		overflow:hidden;
+		background-color: transparent;
+	}
+	.dropdown-menu{
+	   padding: 1px 0 0 0;
+	   border-top-width: 0;
+	   width: auto;
+	   right: 0px;
+	   left: auto;
+	}
+
+	.ui-state-highlight {
+	   height: 70px;
+	   background-color: #D3C7E8;
+		border: 1px solid #D3C7E8;;
+	}
+	.item{
+		cursor: all-scroll;
+	}
+	.item-edit{
+		cursor: all-scroll;
+		margin-bottom: 5px;
+		background-color: rgba(0, 0, 0, 0.03);
+		display: list-item;
+    	text-align: -webkit-match-parent;
+		padding: 5px;
+	}
+	.item-edit:nth-child(even){
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+</style>
 @endsection

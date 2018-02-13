@@ -30,8 +30,7 @@ class HomeController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-   public function index(Request $request){
-
+   public function index(Request $request){      
       /*Mail::to('mfernanda.mgl95@gmail.com')
            ->send(new MailVerify('Mafer','mfernanda.mgl95@gmail.com', 'dddddddddsdsfsd', 'M'));*/
       //return Redirect::to('admin/user');

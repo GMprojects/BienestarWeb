@@ -29,7 +29,7 @@
 					</div>
 				</div>
 	      </div>
-	      <div class="caja-body">
+	      <div class="caja-body" id="iiii">
 				<!-- Imagen de usuario -->
 				<div  class="row">
 					<div class="col-lg-12 col-sm-12 col-xs-12">
@@ -58,11 +58,13 @@
 				</div>
 				<br>
 				<div class="row">
-					<div class="col-sm-2"></div>
-					<div class="form-horizontal">
-						<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
+					<div class="col-sm-1"></div>
+					<div class="col-sm-10">
+						<div class="form-horizontal">
+							<p style="color:red;"> <span class="ast">*</span> Los datos que no puede editar sólo lo puede hacer el administrador. Si necesita cambiar algún campo, comuníquese con el administrador.</p>
+						</div>
 					</div>
-					<div class="col-sm-2"></div>
+					<div class="col-sm-1"></div>
 				</div>
 				<!-- Campos Tipo Texto -->
 				<div class="form-horizontal">
@@ -72,7 +74,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-								 <input maxlength="100" required type="nombre" class="form-control" name="nombre" readonly value="{{ $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno }}">
+								 <input data-toggle="tooltip" data-placement="bottom" title="Datos solo lo puede editar el administrador" maxlength="100" required type="nombre" class="form-control" name="nombre" readonly value="{{ $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno }}">
 							</div>
 						</div>
 					</div>
@@ -82,7 +84,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-qrcode"></i></span>
-								 <input maxlength="100" type="coigo" class="form-control" name="codigo" readonly  value="{{ $user->codigo }}">
+								 <input data-toggle="tooltip" data-placement="bottom" title="Datos solo lo puede editar el administrador" maxlength="100" type="coigo" class="form-control" name="codigo" readonly  value="{{ $user->codigo }}">
 							</div>
 						</div>
 					</div>
@@ -92,7 +94,7 @@
 						<div class="col-sm-8">
 							<div class="input-group">
 								 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-								 <input required minlength="6" maxlength="100" type="email" class="form-control" name="email" readonly value="{{ $user->email }}"  onkeypress="return soloEmail(event)" placeholder="e.g. ejemplo@unitru.edu.pe">
+								 <input data-toggle="tooltip" data-placement="bottom" title="Datos solo lo puede editar el administrador" required minlength="6" maxlength="100" type="email" class="form-control" name="email" readonly value="{{ $user->email }}"  onkeypress="return soloEmail(event)" placeholder="e.g. ejemplo@unitru.edu.pe">
 							</div>
 						</div>
 					</div>
@@ -149,7 +151,6 @@
 	</div>
 	<div class="col-md-2"></div>
 </div>
-
 
 <style type="text/css">
 	.ast{

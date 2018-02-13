@@ -57,14 +57,13 @@
 													</span>
 												</button>
 											</a>
-
-											{{--<a href="{{URL::action('EncuestaController@edit',$encuestas[$i]->idEncuesta)}}">
-												<button class="btn btn-ff-orange" data-toggle="tooltip" data-placement="bottom" title="Editar esta encuesta">
+											<a href="{{URL::action('EncuestaController@edit',$encuestas[$i]->idEncuesta)}}">
+												<button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar esta encuesta">
 													<span>
 													  <i class="fa fa-edit"></i></i>
 													</span>
 												</button>
-											</a>--}}
+											</a>
 											@if($cant_enc_resp[$i] == 0)
 												<a href="" data-target="#modal-delete-{{$encuestas[$i]->idEncuesta}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 											@endif

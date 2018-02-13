@@ -125,12 +125,15 @@
 				<div class="caja-header">
 					<div class="caja-icon">3</div>
 					<div class="caja-title">
+						<div class="pull-left">
 						Sesión de Tutoría - Motivo
-						<button type="button" name="button" data-target="#modal-motivo" data-toggle="modal" class="btn btn-ff-green pull-right" style="margin-top:4px;">
-							<i class="fa fa-plus "></i>Nuevo Motivo
-						 </button>
+						</div>
+						<div class="pull-right">
+							<button type="button" name="button" data-target="#modal-motivo" data-toggle="modal" class="btn btn-ff-green pull-right" style="margin-top:4px;">
+								<i class="fa fa-plus "></i>Nuevo Motivo
+							 </button>
+						</div>
 					</div>
-					<div class="caja-title"></div>
 				</div>
 				<div class="caja-body">
 					 <div class="table">

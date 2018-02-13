@@ -14,9 +14,9 @@
 					<div class="table-responsive">
 						<table id="tabAsistentes" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
 							<thead>
-							<th>Código</th>
-							<th>Inscrito</th>
-							<th>Asistencia
+   							<th>Código</th>
+   							<th>Inscrito</th>
+   							<th>Asistencia</th>
 							</thead>
 							<tbody>
 	                     @foreach($inscripciones as $inscripcion)

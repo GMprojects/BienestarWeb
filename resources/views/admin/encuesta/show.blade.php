@@ -29,6 +29,7 @@
 					 <div class="alert alert-danger"> <h4> <b>¡Atención!</b> </h4>
 		   			 <p style="font-size:1.5em;">Esta es la vista previa de la encuesta que será enviada.</p>
 		   		 </div>
+					 <br>
                 <!--fin  -->
 					 <div class="encu-description">
 						 @if($encuesta->tipoActividad != null)
@@ -48,7 +49,7 @@
 	   								 <li><small class="label ff-bg-green">Alumnos</small></li>
 									 @endif
 									 @if(strpos($encuesta->destino, '2') !== false)
-										 <li><small class="label ff-bg-yellow">Docentes</small></li>
+										 <li><small class="label ff-bg-orange">Docentes</small></li>
 									 @endif
 	   							 @if(strpos($encuesta->destino, '3') !== false)
 										 <li><small class="label ff-bg-red">Administradores</small></li>
@@ -58,12 +59,12 @@
 		 				<p>{{ $encuesta->descripcion }}</p>
 
 		 			</div>
-					<p style="font-size: 1.3em;"> <strong>Por favor, elija una de las alternativas siguientes.</strong> </p>
+					<p style="font-size:1.2em;"> <strong>Por favor, elija una de las alternativas siguientes.</strong> </p>
 					<!-- NOTA NO-SECCION:  por si hay preguntas que no están dentro de alguna sección -->
-					@if(count($encuesta->preguntas->where('idSeccion', null))> 0)
+					@if(count($encuesta->preguntas->where('idSeccion', null)->where('estado', 1))> 0)
 						<div class="no-sec-items items">
 							<div class="alternatives hidden-xs hidden-sm">
-								@foreach ( $encuesta->alternativas as $alternativa )
+								@foreach ( $encuesta->alternativas->sortBy('valor') as $alternativa )
 									<div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
 									  <span>{{ $alternativa->etiqueta }}</span>
 								  </div>
@@ -72,7 +73,7 @@
 
 							<ol class="enc-list">
 
-								@foreach ($encuesta->preguntas->where('idSeccion', null) as $pregunta)
+								@foreach ($encuesta->preguntas->where('idSeccion', null)->where('estado', 1)->sortBy('orden') as $pregunta)
 								 <div class="item">
 									 <div class="question">
 										<li>
@@ -82,7 +83,7 @@
 									  </li>
 									 </div>
 									 <div class="alternatives">
-										 @foreach ( $encuesta->alternativas as $alternativa )
+										 @foreach ( $encuesta->alternativas->sortBy('valor') as $alternativa )
 											 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
 												 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
 											 </div>
@@ -97,7 +98,7 @@
 
 					@if(count($encuesta->secciones) > 0)
 						<div class="secciones">
-							@foreach ($encuesta->secciones as $seccion)
+							@foreach ($encuesta->secciones->where('estado', 1) as $seccion)
 								<div class="seccion">
 									<div class="s-header">
 										<div class="s-icon"> {{ $seccion->orden }} </div>
@@ -106,34 +107,36 @@
 									<div class="s-body">
 										<div class="s-description"> {{ $seccion->descripcion }} </div>
 										<div class="items">
-											<div class="alternatives hidden-xs hidden-sm">
-												@foreach ( $encuesta->alternativas as $alternativa )
-													<div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
-													  <span>{{ $alternativa->etiqueta }}</span>
-												  </div>
-												@endforeach
-											</div>
+											@if( count($seccion->preguntas) > 0 )
+												<div class="alternatives hidden-xs hidden-sm">
+													@foreach ( $encuesta->alternativas as $alternativa )
+														<div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
+														  <span>{{ $alternativa->etiqueta }}</span>
+													  </div>
+													@endforeach
+												</div>
 
-											<ol class="enc-list">
-												@foreach ($seccion->preguntas as $pregunta)
-												 <div class="item">
-													 <div class="question">
-														<li>
-															<span class="quest-text">
-																{{ $pregunta->enunciado }}
-															</span>
-													  </li>
+												<ol class="enc-list">
+													@foreach ($seccion->preguntas->where('estado', 1) as $pregunta)
+													 <div class="item">
+														 <div class="question">
+															<li>
+																<span class="quest-text">
+																	{{ $pregunta->enunciado }}
+																</span>
+														  </li>
+														 </div>
+														 <div class="alternatives">
+															 @foreach ( $encuesta->alternativas as $alternativa )
+																 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
+																	 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+																 </div>
+															 @endforeach
+														 </div>
 													 </div>
-													 <div class="alternatives">
-														 @foreach ( $encuesta->alternativas as $alternativa )
-															 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
-																 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
-															 </div>
-														 @endforeach
-													 </div>
-												 </div>
-												 @endforeach
-											</ol>
+													 @endforeach
+												</ol>
+											@endif
 										</div>
 									</div>
 								</div>
@@ -144,7 +147,7 @@
 					@endif
              </div>
              <div class="caja-footer">
-                <button class="pull-right btn btn-ff-default" type="button" data-toggle="tooltip" data-placement="bottom" title="Es una prueba"><i class="fa fa-send"></i>Enviar</button>
+                <button class="pull-right btn btn-ff" type="button" data-toggle="tooltip" data-placement="bottom" title="Es una prueba"><i class="fa fa-send"></i>Enviar</button>
              </div>
          </div>
      </div>

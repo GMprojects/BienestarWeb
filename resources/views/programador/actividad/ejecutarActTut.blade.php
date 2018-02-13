@@ -128,32 +128,31 @@
 	</div>
 	<div class="caja-body">
       <div class="table">
-         <div class="table-responsive">
-            <table id="tabTutorados" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
-               <thead>
-               <th>Código</th>
-               <th>Inscrito</th>
-               <th>Registrar Detalles de la Sesión</th>
-               </thead>
-               <tbody>
+			<div class="table-responsive">
+				<table id="tabTutorados" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+					<thead>
+						<th>Código</th>
+						<th>Inscrito</th>
+						<th>Registrar Detalles de la Sesión</th>
+					</thead>
+					<tbody>
                   @php($i=0)
                   @if($inscripciones != null)
                      @foreach($inscripciones as $inscripcionADA)
-                       <tr>
-								  @if ($inscripcionADA->asistencia == 1)
-                              @php($i++)
-                              <td> {{ $inscripcionADA->codigo }} </td>
-                              <td> {{ $inscripcionADA->nombre }}  {{ $inscripcionADA->apellidoPaterno }}  {{ $inscripcionADA->apellidoMaterno }} </td>
-                              <td>
-                                 <a href="{{ action('ActPedagogiaController@create',[$actividad->idActividad,  $inscripcionADA->idInscripcionADA]) }}"><button class="btn btn-ff-greenOs"> <i class="fa fa-pencil"></i></button></a>
-                              </td>
-								  @endif
-                       </tr>
-                     @endforeach
-                  @endif
-               </tobody>
-            </table>
-         </div>
+							  @if ($inscripcionADA->asistencia == 1)
+								  <tr>
+   									<td> {{ $inscripcionADA->codigo }} </td>
+   									<td> {{ $inscripcionADA->nombre }}  {{ $inscripcionADA->apellidoPaterno }}  {{ $inscripcionADA->apellidoMaterno }} </td>
+   									<td>
+   										<a href="{{ action('ActPedagogiaController@create',[$actividad->idActividad,  $inscripcionADA->idInscripcionADA]) }}"><button class="btn btn-ff-greenOs"> <i class="fa fa-pencil"></i></button></a>
+   									</td>
+   							  </tr>
+							  @endif
+							@endforeach
+						@endif
+					</tobody>
+				</table>
+			</div>
       </div>
    </div>
    <div class="caja-footer">
