@@ -360,4 +360,52 @@ class EncuestaController extends Controller{
       }
       return redirect('/');
    }
+
+   public function getHabitoEstudio($idEncuestaRespondida){
+      $encuesta = Encuesta::findOrFail((EncuestaRespondida::findOrFail($idEncuestaRespondida))->idEncuesta);
+      return view('miembro.tutorado.habitoEstudio.mis-habitos')->with('encuesta', $encuesta)->with('idEncuestaRespondida', $idEncuestaRespondida);
+   }
+
+    public function storeHabitoEstudio(Request $request, $idEncuestaRespondida){
+      $inputs = $request->except(['_method', '_token']);
+      list($keys, $values) = array_divide($inputs);
+      $encuestaRespondida = EncuestaRespondida::findOrFail($idEncuestaRespondida);
+      dd($encuestaRespondida->tutorTutorado);
+      for ($i=0; $i < count($keys) ; $i++) {
+         $rptaEncuesta = new RptaEncuesta;
+         $rptaEncuesta->respuesta = $values[$i];
+         $rptaEncuesta->idEncuestaRespondida = $idEncuestaRespondida;
+         $rptaEncuesta->idPregunta = $keys[$i];;
+         $rptaEncuesta->save();
+      }
+      $encuestaRespondida = EncuestaRespondida::findOrFail($idEncuestaRespondida);
+      TutorTutorado::where('idTutorTutorado', $encuestaRespondida->tutorTutorado->idTutorTutorado)->increment('habitoEstudioRespondido');
+      //return view('miembro.mis-encuestas.todos');
+      return redirect('/');
+   }
+
+   public function showHabitoEstudio($idTutorTutorado){
+      $tutorTutorado = TutorTutorado::where('idTutorTutorado', $idTutorTutorado)->first();
+      $user = $tutorTutorado->tutorado->user;
+
+      $encuestaRespondida = EncuestaRespondida::where('idTutorTutorado', $idTutorTutorado)->first();
+      $encuesta = Encuesta::findOrFail($encuestaRespondida->idEncuesta);
+      $alternativas = Alternativa::where('idEncuesta', $encuesta->idEncuesta)->select('etiqueta', 'valor')->get();
+
+      $i = 0;
+      $respuesta_cantidad = array();
+      foreach ($alternativas as $alternativa) {
+         $respuesta_cantidad[$i] = RptaEncuesta::where([['idEncuestaRespondida', $encuestaRespondida->idEncuestaRespondida],
+                                                        ['respuesta', $alternativa->valor]])
+                                                 ->count('respuesta');
+         $i++;
+      }
+      $respuestas = RptaEncuesta::where([['idEncuestaRespondida', $encuestaRespondida->idEncuestaRespondida]])->get();
+      return view('miembro.tutor.habitoEstudio.show')->with('encuesta', $encuesta)
+                                                     ->with('user', $user)
+                                                     ->with('tutorTutorado', $tutorTutorado)
+                                                     ->with('respuestas', $respuestas)
+                                                     ->with('respuesta_cantidad', $respuesta_cantidad)
+                                                     ->with('alternativas', $alternativas->toArray());
+   }
 }
