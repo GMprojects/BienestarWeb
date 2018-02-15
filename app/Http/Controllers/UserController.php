@@ -91,7 +91,7 @@ class UserController extends Controller{
            'direccion'=> 'max:100',
            'telefono' => 'max:15',
            'celular' => 'max:15',
-           'foto' => 'file',
+           'foto' => 'image|mimes:jpg,jpeg,png|max:4096',
            'sexo' => 'required',
            'funcion' => 'required|numeric|min:1|max:3',
            'tipo' => 'required|numeric|min:1|max:3',
@@ -216,6 +216,7 @@ class UserController extends Controller{
                  'apellidoPaterno' => 'required|min:2|max:25',
                  'apellidoMaterno' => 'required|min:2|max:25',
                  'sexo' => 'required',
+                 'foto' => 'image|mimes:jpg,jpeg,png|max:4096',
                  'direccion'=> 'max:100',
                  'telefono' => 'max:15',
                  'celular' => 'max:15'
@@ -227,13 +228,13 @@ class UserController extends Controller{
                  'apellidoMaterno' => 'required|min:2|max:25',
                  'sexo' => 'required',
                  'email' => 'required|max:100|unique:user',
+                 'foto' => 'image|mimes:jpg,jpeg,png|max:4096',
                  //'email' => ['required', 'max:100', new EmailValidation()],
                  'direccion'=> 'max:100',
                  'telefono' => 'max:15',
                  'celular' => 'max:15'
              ]);
          }
-
         $user->nombre = strtoupper($request->nombre);
         $user->apellidoPaterno = strtoupper($request->apellidoPaterno);
         $user->apellidoMaterno = strtoupper($request->apellidoMaterno);

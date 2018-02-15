@@ -12,7 +12,7 @@
 				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
 			</div>
 			<div class="pull-right">
-				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> <span class="hidden-xs">Limpiar</span></button>
+				<button class="btn btn-ff-red" type="reset" onclick="limpiar();"><i class="fa fa-eraser"></i> <span class="hidden-xs">Limpiar</span></button>
 				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> <span class="hidden-xs">Publicar</span></button>
 			</div>
 		</div>
@@ -51,9 +51,8 @@
 				</div>
 	         <div class="form-control-file">
 					<label for="rutaImagen">Imagen</label>
-					<input type="file" name="rutaImagen" class="form-control dropify"  data-allowed-file-extensions="png jpg jpge"  data-disable-remove="true">
+					<input type="file" name="rutaImagen" class="form-control dropify" data-height="200" data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
 				</div>
-				<br>
             <div class="form-group">
                <label for="titulo">Título de la actividad </label><span class="ast">*</span>
                <input type="text"  minlength="5"  name="titulo" class="form-control"  required value ="{{ old('titulo') }}" placeholder="De preferencia un título corto y llamativo">
@@ -285,7 +284,10 @@
 		}
 	});
 	var llenarInvitado = false;
+	var imagenCorrecta = true;
+
 	$(document).ready(function(){
+		imagenCorrecta = true;
 		$('#modal-ayuda').modal('show');
 		$('input').iCheck({
 			checkboxClass: 'icheckbox_square-green',
@@ -294,6 +296,33 @@
 		});
 		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
 	});
+	/* PLUGIN - Dropify*/
+	$('.dropify').dropify({
+		 messages: {
+			  'default': 'Click o arrastrar y soltar',
+			  'replace': 'Click o arrastrar y soltar',
+			  'remove':  'Quitar',
+			  'error':   'Ops! algo anda mal con el archivo'
+		 },
+		 error: {
+			'fileSize': 'El tamaño de la imagen es muy grande (máx. 4MB).',
+			'fileExtension': 'Formato de Imagen no permitido (sólo .png .jpg .jpeg).'
+		 }
+	 });
+	var drEvent = $('.dropify').dropify();
+	drEvent.on('dropify.error.fileSize', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.error.fileExtension', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.fileReady', function(event, element){
+		imagenCorrecta = true;
+		console.log('fileReady - '+imagenCorrecta);
+	});
+	/* FIN PLUGIN - Dropify*/
 	$('.timepicker').timepicker({
 		showInputs: false
 	})
@@ -761,10 +790,16 @@
 				}
 				break;
 		}
+		if (!imagenCorrecta) {
+			todoBien = false;
+		}
 		return todoBien;
 	}
 	function seleccionarCero(){
 		$("#selectIdTipoActividad option:first").attr('selected', 'selected');
+	}
+	function limpiar(){
+		document.getElementById('boxDatosEspecificos').style.display = 'none';
 	}
 </script>
 

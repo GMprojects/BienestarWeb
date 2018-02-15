@@ -114,9 +114,9 @@
                         <img src="{{ asset('storage/'.Auth::user()->foto ) }}" class="img-usu" alt="not found">
                      @else
                            @if (Auth::user()->sexo == 'h'){{-- Hombre --}}
-                              <img src="{{ asset('img/avatar5.png') }}" class="img-usu" alt="Not found">
+                              <img src="{{ asset('img/avatar5.png') }}" class="img-usu" alt="No Disponible">
                            @else{{-- Mujer --}}
-                              <img src="{{ asset('img/avatar2.png') }}" class="img-usu" alt="Not found">
+                              <img src="{{ asset('img/avatar2.png') }}" class="img-usu" alt="No Disponible">
                            @endif
                         {{--<img src="{{ asset('img/user.png') }}" class="img-usu" alt="not found">--}}
                      @endif
@@ -128,9 +128,9 @@
                            <img src="{{ asset('storage/'.Auth::user()->foto ) }}" class="img-circle" alt="not found">
                         @else
                               @if (Auth::user()->sexo == 'h'){{-- Hombre --}}
-                                 <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="Not found">
+                                 <img src="{{ asset('img/avatar5.png') }}" class="img-circle" alt="No Disponible">
                               @else{{-- Mujer --}}
-                                 <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="Not found">
+                                 <img src="{{ asset('img/avatar2.png') }}" class="img-circle" alt="No Disponible">
                               @endif
                            {{--<img src="{{ asset('img/user.png') }}" class="img-circle" alt="not found">--}}
                         @endif<p>{{ Auth::user()->nombre }} -
@@ -176,7 +176,7 @@
       {{ Form::hidden('id', Auth::user()->id) }}
    		<div class="modal-dialog">
    			<div class="modal-content">
-   				<div class="modal-header" style="background-color:#337AB7; color:white; border-radius:6px 6px 0px 0px;">
+   				<div class="modal-header" style="background-color:#337AB7; color:white; border-radius:4px 4px 0px 0px;">
    					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
    					<h4 class="modal-title"><b style="color:white;">Verificación de Correo</b></h4>
    				</div>

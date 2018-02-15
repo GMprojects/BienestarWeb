@@ -44,10 +44,14 @@
                      </div>
                      <div class="member">
                         <div class="member-img pull-left">
-                           @if($actividad->programador->foto == null)
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Disponible" class="img-circle"></a>
-                           @else
+                           @if($actividad->programador->foto != null)
                               <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('storage/'.$actividad->programador->foto) }}" alt="No Disponible" class="img-circle"></a>
+                           @else
+                              @if ($actividad->programador->sexo == 'h'){{-- Hombre --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('img/avatar5.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @else{{-- Mujer --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}"><img src="{{ asset('img/avatar2.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @endif
                            @endif
                         </div>
                         <div class="member-data">
@@ -56,17 +60,21 @@
                         </div>
                      </div>
                   </div>
-                  {{--@include('miembro.modalEmail')--}}
+                  @include('miembro.modalEmail')
                   <div class="panel panel-default">
                      <div class="panel-heading">
                         <h3 class="panel-title">Responsable</h3>
                      </div>
                      <div class="member">
                         <div class="member-img pull-left">
-                           @if($actividad->responsable->foto == null)
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('img/avatar3.png') }}" alt="No Disponible" class="img-circle"></a>
-                           @else
+                           @if($actividad->responsable->foto != null)
                               <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('storage/'.$actividad->responsable->foto) }}" alt="No Disponible" class="img-circle"></a>
+                           @else
+                              @if ($actividad->responsable->sexo == 'h'){{-- Hombre --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('img/avatar5.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @else{{-- Mujer --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"><img src="{{ asset('img/avatar2.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @endif
                            @endif
                         </div>
                         <div class="member-data">
@@ -394,7 +402,7 @@
             <div class="modal fade" id="confirmModal-{{ $actividad->idActividad }}" tabindex="-1" role="dialog" aria-labelledby="lb-confMod-{{ $actividad->idActividad }}">
                <div class="modal-dialog" role="document">
                   <div class="modal-content">
-                     <div class="modal-header" style="background-color:#337AB7; color:white; border-radius:6px 6px 0px 0px;">
+                     <div class="modal-header" style="background-color:#337AB7; color:white; border-radius:4px 4px 0px 0px;">
                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
                            <h4 class="modal-title" id="lb-confMod-{{ $actividad->idActividad }}"><b>Confirme su Inscripción</b></h4>
                      </div>

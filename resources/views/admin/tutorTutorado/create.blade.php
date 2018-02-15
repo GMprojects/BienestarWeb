@@ -124,7 +124,7 @@
 	 <div class="modal-dialog">
 		   <!-- /.modal-content -->
 		   <div class="modal-content">
-				  <div class="modal-header" style="background-color:#337AB7; color:white; border-radius:6px 6px 0px 0px;">
+				  <div class="modal-header" style="background-color:#337AB7; color:white; border-radius:4px 4px 0px 0px;">
 	               <button type="button"  onclick="cancelarForm()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
 	               <h4 class="modal-title"><b>Mensaje de Confirmación</b></h4>
 	           </div>

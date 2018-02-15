@@ -51,14 +51,11 @@
 	         <div class="form-control-file">
 					<label for="rutaImagen">Imagen</label>
 					@if ($actividad->rutaImagen != null)
-						<!--<img src="{/{ '../../../storage/'.$actividad->rutaImagen }}" data-default-file="{/{ asset('images/avatar3.png') }}"  width="440px" class="img-responsive">-->
-						<input type="file" name="rutaImagen" class="form-control dropify"data-default-file="{{ asset('storage/'.$actividad->rutaImagen) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+						<input type="file" name="rutaImagen" class="form-control dropify" data-height="200" data-default-file="{{ asset('storage/'.$actividad->rutaImagen) }}" data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
 					@else
-						<!--<img src="{/{ '../../../storage/'.$actividad->tipoActividad['rutaImagen'] }}" data-default-file="{/{ asset('images/avatar3.png') }}"  width="440px" class="img-responsive">-->
-						<input type="file" name="rutaImagen" class="form-control dropify"data-default-file="{{ asset('storage/'.$actividad->tipoActividad['rutaImagen']) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+						<input type="file" name="rutaImagen" class="form-control dropify" data-height="200" data-default-file="{{ asset('storage/'.$actividad->tipoActividad['rutaImagen']) }}" data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
 					@endif
 				</div>
-				<br>
             <div class="form-group">
                <label for="titulo">Título de la actividad </label><span class="ast">*</span>
                <input type="text" name="titulo" class="form-control"  required value ="{{$actividad->titulo}}" placeholder="De preferencia un título corto y llamativo">
@@ -312,6 +309,7 @@
 		}
 	});
 	var llenarInvitado = false;
+	var imagenCorrecta = true;
 	$('.timepicker').timepicker({
 		showInputs: false
 	})
@@ -464,8 +462,36 @@
 			$('#fechaFin').attr('required', 'true');
 			$('#horaFin').attr('required', 'true');
 		}
-	});
 
+		imagenCorrecta = true;
+	});
+	/* PLUGIN - Dropify*/
+	$('.dropify').dropify({
+		 messages: {
+			  'default': 'Click o arrastrar y soltar',
+			  'replace': 'Click o arrastrar y soltar',
+			  'remove':  'Quitar',
+			  'error':   'Ops! algo anda mal con el archivo'
+		 },
+		 error: {
+			'fileSize': 'El tamaño de la imagen es muy grande (máx. 4MB).',
+			'fileExtension': 'Formato de Imagen no permitido (sólo .png .jpg .jpeg).'
+		 }
+	 });
+	var drEvent = $('.dropify').dropify();
+	drEvent.on('dropify.error.fileSize', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.error.fileExtension', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.fileReady', function(event, element){
+		imagenCorrecta = true;
+		console.log('fileReady - '+imagenCorrecta);
+	});
+	/* FIN PLUGIN - Dropify*/
 	function in_array(valor, array){
 		var noExiste = true;
 		var i = 0;
@@ -801,6 +827,9 @@
 				break;
 		}
 		return todoBien;
+		if (!imagenCorrecta) {
+			todoBien = false;
+		}
 	}
 </script>
 

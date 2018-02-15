@@ -5,7 +5,28 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="pull-left">
-					<h3 class="box-title">Lista de Actividades</h3>
+					<h3 class="box-title">
+                  Lista de Actividades
+                  <b>
+                     @switch($estado)
+                        @case('1')
+                        Pendientes
+                        @break
+                        @case('2')
+                        Ejecutadas
+                        @break
+                        @case('3')
+                        Canceladas
+                        @break
+                        @case('4')
+                        Expiradas
+                        @break
+                     @endswitch
+                     @if ($anioSemestre != 0 && $numeroSemestre != 0)
+                        del {{ $anioSemestre }} - @if ($numeroSemestre == '1') I @else II @endif
+                     @endif
+                  </b>
+               </h3>
 				</div>
 				<div class="pull-right">
 					<a href="actividad/create"><button class="btn btn-ff-green"><i class="fa fa-plus"></i>Nueva Actividad</button></a>

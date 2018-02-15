@@ -55,12 +55,12 @@
 			</span>
 			<div class="form-control-file">
 				<label for="rutaImagen">Imagen</label>
-				<input type="file" required name="rutaImagen" class="form-control dropify"  data-allowed-file-extensions="png jpg jpge"  data-disable-remove="true">
+				<input type="file" required name="rutaImagen" class="form-control dropify" data-height="200" data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="true">
 			</div>
 		</div><br><br>
 		<div class="caja-footer">
 			<div class="pull-right">
-				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+				<!--<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>-->
 				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Guardar</button>
 			</div>
 		</div>
@@ -69,7 +69,7 @@
 {!! Form::close() !!}
 
 <script type="text/javascript">
-
+	var imagenCorrecta = true;
 	$(document).ready(function(){
 		$('input').iCheck({
 			checkboxClass: 'icheckbox_square-green',
@@ -77,8 +77,39 @@
 			increaseArea: '20%' // optional
 		});
 		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+		imagenCorrecta = true;
 	});
-
+	/* PLUGIN - Dropify*/
+	$('.dropify').dropify({
+	 messages: {
+		  'default': 'Click o arrastrar y soltar',
+		  'replace': 'Click o arrastrar y soltar',
+		  'remove':  'Quitar',
+		  'error':   'Ops! algo anda mal con el archivo'
+	 },
+	 error: {
+		'fileSize': 'El tamaño de la imagen es muy grande (máx. 4MB).',
+		'fileExtension': 'Formato de Imagen no permitido (sólo .png .jpg .jpeg).'
+	 }
+	});
+	var drEvent = $('.dropify').dropify();
+	drEvent.on('dropify.error.fileSize', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.error.fileExtension', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.fileReady', function(event, element){
+		imagenCorrecta = true;
+		console.log('fileReady - '+imagenCorrecta);
+	});
+	drEvent.on('dropify.beforeClear', function(event, element){
+		imagenCorrecta = false;
+		console.log('beforeClear - '+imagenCorrecta);
+	});
+	/* FIN PLUGIN - Dropify*/
 	function soloLetras(evento){
 		if ((evento.charCode >= 65 && evento.charCode <= 90) ||
 			 (event.charCode >= 97 && event.charCode <= 122) ||
@@ -111,6 +142,9 @@
 		if (!$('.iResponsable').is(':checked')) {
 			document.getElementById('pErrorResponsable').innerHTML = 'Debe seleccionar que tipos de usuario pueden ser responsables de este tipo de actividades.';
 			document.getElementById('spanErrorResponsable').style.display = 'block';
+			todoBien = false;
+		}
+		if (!imagenCorrecta) {
 			todoBien = false;
 		}
 		return todoBien;

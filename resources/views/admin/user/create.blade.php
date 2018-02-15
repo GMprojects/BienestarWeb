@@ -1,6 +1,6 @@
 @extends('template')
 @section('contenido')
-{!! Form::open(['url'=>'admin/user','method'=>'POST','autocomplete'=>'off','files'=>'true']) !!}
+{!! Form::open(['url'=>'admin/user','method'=>'POST','autocomplete'=>'off','files'=>'true', 'onsubmit'=>'return validar()']) !!}
 {{ Form::token() }}
 <div class="row">
 	<div class="col-xs-12">
@@ -42,7 +42,7 @@
 					<div class="col-sm-3"></div>
 
 					<div class="col-sm-6">
-						<input type="file" name="foto" class="form-control dropify" value="{{old('foto')}}" data-height="200" data-max-file-size="4M"  data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+						<input type="file" name="foto" class="form-control dropify" data-height="200" data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
 						<div class="form-horizontal"><p style="color:blue; text-align:center;"> Tamaño Max: 4MB	</p></div>
 					</div>
 					<div class="col-sm-3"></div>
@@ -308,16 +308,49 @@
 {!! Form::close() !!}
 
 <script type="text/javascript">
-	$('#fechaNacimiento').datetimepicker({
-		format: 'DD/MM/YYYY'
-	});
+	var imagenCorrecta = true;
+
 	$(document).ready(function(){
+		imagenCorrecta = true;
 		$('input').iCheck({
 			checkboxClass: 'icheckbox_square-green',
 			radioClass: 'iradio_square-green',
 			increaseArea: '20%' // optional
 		});
 		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+	});
+	/* PLUGIN - Dropify*/
+	$('.dropify').dropify({
+		 messages: {
+			  'default': 'Click o arrastrar y soltar',
+			  'replace': 'Click o arrastrar y soltar',
+			  'remove':  'Quitar',
+			  'error':   'Ops! algo anda mal con el archivo'
+		 },
+		 error: {
+			'fileSize': 'El tamaño de la imagen es muy grande (máx. 4MB).',
+			'fileExtension': 'Formato de Imagen no permitido (sólo .png .jpg .jpeg).'
+		 }
+	 });
+	var drEvent = $('.dropify').dropify();
+	drEvent.on('dropify.error.fileSize', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.error.fileExtension', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.fileReady', function(event, element){
+		imagenCorrecta = true;
+		console.log('fileReady - '+imagenCorrecta);
+	});
+	/* FIN PLUGIN - Dropify*/
+	function validar(){
+		return imagenCorrecta;
+	}
+	$('#fechaNacimiento').datetimepicker({
+		format: 'DD/MM/YYYY'
 	});
 	function cambiarColorTipo(icono){
 		document.getElementById('icoAlumno').style.color = 'rgba(0,0,0, 0.5)';
@@ -342,7 +375,6 @@
 		}
 		document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 	}
-
 	function cambiarColorFuncion(icono){
 		document.getElementById('icoMiembro').style.color = 'rgba(0,0,0, 0.5)';
 		document.getElementById('icoProgramador').style.color = 'rgba(0,0,0, 0.5)';
@@ -355,7 +387,6 @@
 		}
 		document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
 	}
-
 	function soloNumeros(evento){
 		console.log(evento.charCode);
 		if ((evento.charCode >= 48 && evento.charCode <= 57)) {
@@ -387,6 +418,13 @@
 			return true;
 		}
 		return false;
+	}
+	function limpiar(){
+		switch({{ $user->funcion }}){
+			case 1: funcion = $('#radioMiembro').attr('checked', true); break;
+			case 2: funcion = $('#radioProgramador').attr('checked', true); break;
+			case 3: funcion = $('#radioAdmin').attr('checked', true); break;
+		}
 	}
 </script>
 <style type="text/css">

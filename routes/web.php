@@ -24,7 +24,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('tutorTutorado', 'TutorTutoradoController');
     Route::delete('tutorTutorado/{tutorTutorado}/destroy/{anioSemestre}/{numeroSemestre}', ['uses' =>  'TutorTutoradoController@destroyTutor','as' => 'tutorTutorado.destroyTutor']);
     Route::get('dashboard', 'DashboardController@index');
-    Route::get('dashboard/actividades', 'DashboardController@listarActividades');
+    Route::get('dashboard/actividades/{estado}', 'DashboardController@listarActividades');
     Route::get('alumnos', 'UserController@indexAlumnos');
     Route::get('docentes', 'UserController@indexDocentes');
     Route::get('administrativos', 'UserController@indexAdministrativos');

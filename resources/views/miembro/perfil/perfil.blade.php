@@ -121,7 +121,7 @@
                            {{ Form::hidden('id', Auth::user()->id) }}
                               <div class="modal-dialog">
                                  <div class="modal-content">
-                                    <div class="modal-header" style="background-color:#4CAE4C; color:white; border-radius:6px 6px 0px 0px;">
+                                    <div class="modal-header" style="background-color:#4CAE4C; color:white; border-radius:4px 4px 0px 0px;">
                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
                                        <h4 class="modal-title"><b style="color:white;">Eliminar Egresado</b></h4>
                                     </div>
@@ -167,7 +167,7 @@
                         <div class="body-card" style="margin-left:0px;">
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['inscInscripcion'] }}</h3>
                                    <p>Inscripciones</p>
@@ -182,7 +182,7 @@
                            </div>
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['inscAsistencia'] }}</h3>
                                    <p>Asistencias</p>
@@ -210,7 +210,7 @@
                         <div class="body-card" style="margin-left:0px;">
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['respEjecutadas'] }}</h3>
                                    <p>Ejecutadas</p>
@@ -225,7 +225,7 @@
                            </div>
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['respPendientes'] }}</h3>
                                    <p>Pendientes</p>
@@ -260,7 +260,7 @@
                         <div class="body-card" style="margin-left:0px;">
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['progExpiradas'] }}</h3>
                                    <p>Expiradas</p>
@@ -277,7 +277,7 @@
                            </div>
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['progEjecutadas'] }}</h3>
                                    <p>Ejecutadas</p>
@@ -293,7 +293,7 @@
                            </div>
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['progPendientes'] }}</h3>
                                    <p>Pendientes</p>
@@ -306,7 +306,7 @@
                            </div>
 
                            <div class="col-md-6 col-sm-6">
-                              <div class="small-box">
+                              <div class="small-box small-box-default">
                                  <div class="inner">
                                    <h3>{{ $du['progCanceladas'] }}</h3>
                                    <p>Canceladas</p>
@@ -329,7 +329,7 @@
       <div class="modal fade" id="modal-status" tabindex="-1" role="dialog" aria-labelledby="lb-modal-status">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
-               <div class="modal-header" style="background-color:#4CAE4C; color:white; border-radius:6px 6px 0px 0px;">
+               <div class="modal-header" style="background-color:#4CAE4C; color:white; border-radius:4px 4px 0px 0px;">
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="fa fa-remove"></span></button>
                      <h4 class="modal-title" id="lb-modal-status"><b>Información</b></h4>
                </div>

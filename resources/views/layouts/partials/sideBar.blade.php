@@ -1,5 +1,13 @@
 <div class="navbar navbar-fixed-top toggled" id="sidebar-wrapper" role="navigation">
    <ul id="buttons-list" class="nav sidebar-nav">
+
+      @if( Auth::user()->funcion == 3)
+         <li class="dropdown ">
+            <a class="ff-li-a" href="{{ action('DashboardController@index')}}">
+               <i class="fa fa-dashboard"></i> Dashboard
+            </a>
+         </li>
+      @endif
       <li>
          <a class="ff-li-a" href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}"><i class="fa fa-puzzle-piece"></i>Mis Actividades</a>
       </li>
@@ -20,7 +28,6 @@
       @endif
       <!-- PERMISOS DE ADMINISTRADOR -->
       @if( Auth::user()->funcion == 3)
-
          <li class="dropdown ">
             <a href="#" class="ff-li-a dropdown-toggle" data-toggle="dropdown">
                <i class="fa fa-calendar"></i> Actividades <span class="caret"></span>
@@ -70,11 +77,6 @@
                <li class="ff-li-nav"><a class="ff-li-b" href="{{ action('TrabajoController@index',[ 'op' => '2'  ]) }}"><i class="fa fa-circle-o"></i> Trabajos</a></li>
             </ul>
          </li>
-         {{--<li class="dropdown ">
-            <a class="ff-li-a" href="{{ action('DashboardController@index')}}">
-               <i class="fa fa-dashboard"></i> Dashboard
-            </a>
-         </li>--}}
          <li class="dropdown ">
             <a class="ff-li-a" href="{{ action('SemestreController@index')}}">
                <i class="fa fa-gear"></i> Configuración

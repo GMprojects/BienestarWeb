@@ -1,6 +1,6 @@
 <!-- /.modal -->
 <div class="modal fade modal-slide-in-right" id="modal-evidencia">
-   {!! Form::open(['action'=>['EvidenciaActividadController@store'], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true']) !!}
+   {!! Form::open(['action'=>['EvidenciaActividadController@store'], 'method'=>'POST', 'autocomplete'=>'off', 'files'=>'true', 'onsubmit'=>'return validar()']) !!}
 	<!-- /.modal-dialog -->
 	<div class="modal-dialog">
 		<!-- /.modal-content -->
@@ -19,7 +19,7 @@
                   </div>
                   <div class="form-group">
                      <label for="ruta">Archivo y/o Imagen</label>
-                     <input type="file" name="ruta" required class="form-control dropify" >
+                     <input type="file" required name="rutaImagen" class="form-control dropify" data-height="200" data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
                   </div>
                </div>
             </div>
@@ -29,7 +29,7 @@
 					<button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
 				</div>
 				<div class="pull-right">
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<!--<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>-->
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 				</div>
 			</div>

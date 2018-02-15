@@ -1324,12 +1324,26 @@ textarea:focus {
 .small-box {
    width: 100%;
    color: #444;
-   background-color: #D3C7E8;
    border-radius: 2px;
    position: relative;
    display: block;
    margin-bottom: 20px;
    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.small-box.small-box-default {
+   background-color: #D3C7E8;
+}
+.small-box.small-box-cancelada {
+   background-color: #DD4B39;
+}
+.small-box.small-box-ejecutada {
+   background-color: #00A65A;
+}
+.small-box.small-box-pendiente {
+   background-color: #4B6FD0
+}
+.small-box.small-box-expirada {
+   background-color: #FF8D00;
 }
 .small-box > .inner {
   padding: 10px;

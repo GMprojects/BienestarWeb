@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use File;
+use Validator;
 
 
 class MiPerfilController extends Controller{
@@ -108,7 +109,7 @@ class MiPerfilController extends Controller{
             'direccion'=> 'max:100',
             'telefono' => 'max:15',
             'celular' => 'max:15',
-            'foto' => 'file'
+            'foto' => 'image|mimes:jpg,jpeg,png|max:4096'
          ]);
          $user->fechaNacimiento = MiPerfilController::getFecha($request->fechaNacimiento);
          $user->foto = MiPerfilController::getRutaImagenUpdate($request, $user);

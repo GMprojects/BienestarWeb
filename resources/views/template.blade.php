@@ -20,7 +20,6 @@
       <link rel="stylesheet" href="{{ asset('plugins/select-1.12.4/dist/css/bootstrap-select.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/timepicker/bootstrap-timepicker.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}"/>
-      <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/flaticon/flaticon.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/iCheck/skins/square/green.css') }}"/>
       <link rel="stylesheet" href="{{ asset('plugins/datetimepicker-4.17.47/build/css/bootstrap-datetimepicker.min.css') }}"/>
@@ -63,7 +62,6 @@
             @if(Auth::user() != null)
                @include('layouts.partials.sidebar')
             @endif
-
             <!-- aqui el contenido -->
                @yield('contenido', 'Default')
             <!-- fin del contenido -->
@@ -77,26 +75,14 @@
       $(document).ready(function(){
          $('[data-toggle="tooltip"]').tooltip();
       });
-      $('.dropify').dropify({
-       messages: {
-      	  'default': 'Click o arrastrar y soltar',
-      	  'replace': 'Click o arrastrar y soltar',
-      	  'remove':  'Quitar',
-      	  'error':   'Ops! el archivo es demasiado grande'
-       },
-       error: {
-           'imageFormat': 'Formato de Imagen no permitido (solo .png .jpg y .jpge).'
-        }
-      });
-
-   	/*$(document).ready(function(){
+      {{--$(document).ready(function(){
          $('input').iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
             increaseArea: '20%' // optional
          });
          $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-   	});*/
+   	});--}}
    </script>
 
 </html>

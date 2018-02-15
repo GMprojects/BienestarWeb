@@ -1,6 +1,6 @@
 @extends('template')
 @section('contenido')
-{!!Form::model([$user, $tipoPersona],['method'=>'PATCH','files'=>'true', 'route'=>['user.update',$user->id]] )!!}
+{!!Form::model([$user, $tipoPersona],['method'=>'PATCH','files'=>'true', 'route'=>['user.update',$user->id], 'onsubmit'=>'return validar()'] )!!}
 {{Form::token()}}
 <div class="row">
 	<div class="col-xs-12">
@@ -9,7 +9,7 @@
 				<button class="btn btn-ff-default" type="button" onclick="javascript:history.back()"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Volver</span></button>
 			</div>
 			<div class="pull-right">
-				<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> <span class="hidden-xs">Limpiar</span></button>
+				<button class="btn btn-ff-red" type="reset" onclick="limpiar();"><i class="fa fa-eraser"></i> <span class="hidden-xs">Limpiar</span></button>
 				<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> <span class="hidden-xs">Grabar</span></button>
 			</div>
 		</div>
@@ -42,9 +42,16 @@
 						<div class="col-sm-3"></div>
 						<div class="col-sm-6">
 							@if($user->foto != null)
-								<input type="file" name="foto" class="form-control dropify" data-height="200" data-max-file-size="4M" data-default-file="{{ asset('storage/'.$user->foto ) }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+								<input type="file" name="foto" class="form-control dropify" data-height="200" data-default-file="{{ asset('storage/'.$user->foto ) }}"  data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
 							@else
-								<input type="file" name="foto" class="form-control dropify" data-height="200" data-max-file-size="4M" data-default-file="{{ asset('storage/users/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-disable-remove="true">
+								@if ($user->sexo == 'h'){{-- Hombre --}}
+									<input type="file" name="foto" class="form-control dropify" data-height="200" data-default-file="{{ asset('img/avatar5.png') }}"  data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
+								@else{{-- Mujer --}}
+									<input type="file" name="foto" class="form-control dropify" data-height="200" data-default-file="{{ asset('img/avatar2.png') }}"  data-allowed-file-extensions="png jpg jpge" data-max-file-size="4M" data-errors-position="outside" data-show-remove="false">
+								@endif
+							@endif
+							@if ($errors->has('foto'))
+							fdffd
 							@endif
 							<div class="form-horizontal"><p style="color:blue; text-align:center;"> Tamaño Max: 4MB	</p></div>
 						</div>
@@ -377,92 +384,128 @@
 	</div>
 	{!! Form::close() !!}
 	<script type="text/javascript">
+	var imagenCorrecta = true;
 
-		window.onload = iniciar();
-		$('#fechaNacimiento').datetimepicker({
-			format: 'DD/MM/YYYY'
+	$(document).ready(function(){
+		imagenCorrecta = true;
+		iniciar();
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+			increaseArea: '20%' // optional
 		});
-		function iniciar(){
-			var tipo = '', funcion = '';
-			switch({{ $user->funcion }}){
-				case 1: funcion = 'radioMiembro'; break;
-				case 2: funcion = 'radioProgramador'; break;
-				case 3: funcion = 'radioAdmin'; break;
-			}
-			document.getElementById(funcion).checked = true;
-			switch ({{ $user->idTipoPersona }}) {
-				case 1: 	document.getElementById('formAlumno').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Alumno";
-							cambiarColorFuncion(1);break;
-				case 2: 	document.getElementById('formDocente').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Docente";
-							cambiarColorFuncion(2);break;
-				case 3: 	document.getElementById('formAdministrativo').style.display = 'block';
-							document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";
-							$('#cargo').attr('required', 'true');
-							cambiarColorFuncion(3);break;
-			}
-			//cambiarColorFuncion();
+		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+	});
+	/* PLUGIN - Dropify*/
+	$('.dropify').dropify({
+		 messages: {
+			  'default': 'Click o arrastrar y soltar',
+			  'replace': 'Click o arrastrar y soltar',
+			  'remove':  'Quitar',
+			  'error':   'Ops! algo anda mal con el archivo'
+		 },
+		 error: {
+			'fileSize': 'El tamaño de la imagen es muy grande (máx. 4MB).',
+			'fileExtension': 'Formato de Imagen no permitido (sólo .png .jpg .jpeg).'
+		 }
+	 });
+	var drEvent = $('.dropify').dropify();
+	drEvent.on('dropify.error.fileSize', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.error.fileExtension', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.fileReady', function(event, element){
+		imagenCorrecta = true;
+		console.log('fileReady - '+imagenCorrecta);
+	});
+	/* FIN PLUGIN - Dropify*/
+	function validar(){
+		return imagenCorrecta;
+	}
+	$('#fechaNacimiento').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+	function iniciar(){
+		var tipo = '', funcion = '';
+		switch({{ $user->funcion }}){
+			case 1: funcion = 'radioMiembro'; break;
+			case 2: funcion = 'radioProgramador'; break;
+			case 3: funcion = 'radioAdmin'; break;
 		}
-
-		function cambiarColorFuncion(icono){
-			document.getElementById('icoMiembro').style.color = 'rgba(0,0,0, 0.5)';
-			document.getElementById('icoProgramador').style.color = 'rgba(0,0,0, 0.5)';
-			document.getElementById('icoAdmin').style.color = 'rgba(0,0,0, 0.5)';
-			var iconoElegido = "";
-			switch (icono) {
-				case 1: iconoElegido = 'icoMiembro'; break;
-				case 2: iconoElegido = 'icoProgramador'; break;
-				case 3: iconoElegido = 'icoAdmin'; break;
-			}
-			document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
+		document.getElementById(funcion).checked = true;
+		switch ({{ $user->idTipoPersona }}) {
+			case 1: 	document.getElementById('formAlumno').style.display = 'block';
+						document.getElementById('tituloCamposPropios').innerHTML = "Datos de Alumno";
+						cambiarColorFuncion(1);break;
+			case 2: 	document.getElementById('formDocente').style.display = 'block';
+						document.getElementById('tituloCamposPropios').innerHTML = "Datos de Docente";
+						cambiarColorFuncion(2);break;
+			case 3: 	document.getElementById('formAdministrativo').style.display = 'block';
+						document.getElementById('tituloCamposPropios').innerHTML = "Datos de Administrativo";
+						$('#cargo').attr('required', 'true');
+						cambiarColorFuncion(3);break;
 		}
-
-		function soloNumeros(evento){
-			console.log(evento.charCode);
-			if ((evento.charCode >= 48 && evento.charCode <= 57)) {
-				return true;
-			}
-			return false;
+	}
+	function cambiarColorFuncion(icono){
+		document.getElementById('icoMiembro').style.color = 'rgba(0,0,0, 0.5)';
+		document.getElementById('icoProgramador').style.color = 'rgba(0,0,0, 0.5)';
+		document.getElementById('icoAdmin').style.color = 'rgba(0,0,0, 0.5)';
+		var iconoElegido = "";
+		switch (icono) {
+			case 1: iconoElegido = 'icoMiembro'; break;
+			case 2: iconoElegido = 'icoProgramador'; break;
+			case 3: iconoElegido = 'icoAdmin'; break;
 		}
-		function soloLetras(evento){
-			console.log(evento.charCode);
-			if ((evento.charCode >= 65 && evento.charCode <= 90) ||
-			    (event.charCode >= 97 && event.charCode <= 122) ||
-				 (event.charCode == 225) || (event.charCode == 193) || //á Á
-				 (event.charCode == 233) || (event.charCode == 201) || //é É
-				 (event.charCode == 237) || (event.charCode == 205) || //í Í
-				 (event.charCode == 243) || (event.charCode == 211) || //ó Ó
-				 (event.charCode == 250) || (event.charCode == 218) || //ú Ú
-				 (event.charCode == 32)) {
-				return true;
-			}
-			return false;
+		document.getElementById(iconoElegido).style.color = 'rgba(0,0,0,1)';
+	}
+	function soloNumeros(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 48 && evento.charCode <= 57)) {
+			return true;
 		}
-		function soloEmail(evento){
-			console.log(evento.charCode);
-			if ((evento.charCode >= 48 && evento.charCode <= 57) ||
-				 (event.charCode >= 97 && event.charCode <= 122) ||
-				 (event.charCode == 46)||
-				 (event.charCode == 64)||
-				 (event.charCode == 95)){
-				return true;
-			}
-			return false;
+		return false;
+	}
+	function soloLetras(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 65 && evento.charCode <= 90) ||
+		    (event.charCode >= 97 && event.charCode <= 122) ||
+			 (event.charCode == 225) || (event.charCode == 193) || //á Á
+			 (event.charCode == 233) || (event.charCode == 201) || //é É
+			 (event.charCode == 237) || (event.charCode == 205) || //í Í
+			 (event.charCode == 243) || (event.charCode == 211) || //ó Ó
+			 (event.charCode == 250) || (event.charCode == 218) || //ú Ú
+			 (event.charCode == 32)) {
+			return true;
 		}
-		$(document).ready(function(){
-         $('input').iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',
-            increaseArea: '20%' // optional
-         });
-         $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-   	});
-	</script>
-	<style type="text/css">
-		.ast{
-			color: red;
-			font-size: 20px;
+		return false;
+	}
+	function soloEmail(evento){
+		console.log(evento.charCode);
+		if ((evento.charCode >= 48 && evento.charCode <= 57) ||
+			 (event.charCode >= 97 && event.charCode <= 122) ||
+			 (event.charCode == 46)||
+			 (event.charCode == 64)||
+			 (event.charCode == 95)){
+			return true;
 		}
-	</style>
+		return false;
+	}
+	function limpiar(){
+		switch({{ $user->funcion }}){
+			case 1: funcion = $('#radioMiembro').attr('checked', true); break;
+			case 2: funcion = $('#radioProgramador').attr('checked', true); break;
+			case 3: funcion = $('#radioAdmin').attr('checked', true); break;
+		}
+	}
+</script>
+<style type="text/css">
+	.ast{
+		color: red;
+		font-size: 20px;
+	}
+</style>
 @endsection

@@ -104,6 +104,7 @@
 		//console.log('chekBoxTotal');
 		$("input:checkbox").prop('checked', $(this).prop("checked"));
 	});--}}
+	var imagenCorrecta = true;
 	$('.timepicker').timepicker({
 		showInputs: false
 	});
@@ -112,8 +113,7 @@
 		minDate: moment('{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}','DD/MM/YYYY')
 	});
 	$(document).ready(function() {
-
-
+		imagenCorrecta = true;
 		$('#tabTutorados').DataTable({
 			"oLanguage" : {
 				 "sProcessing":     "Procesando...",
@@ -144,7 +144,6 @@
 			"scrollCollapse": true,
 			"paging": false
 		});
-
 		$('#tabAsistentes').DataTable({
 			"oLanguage" : {
 				 "sProcessing":     "Procesando...",
@@ -178,11 +177,40 @@
 		$('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
 		  $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
 	  });
-
 			 init_contador('#observaciones', '#contadorObservaciones');
 			 init_contador('#recomendaciones', '#contadorRecomendaciones');
 	});
-
+	/* PLUGIN - Dropify*/
+	$('.dropify').dropify({
+	 messages: {
+		  'default': 'Click o arrastrar y soltar',
+		  'replace': 'Click o arrastrar y soltar',
+		  'remove':  'Quitar',
+		  'error':   'Ops! algo anda mal con el archivo'
+	 },
+	 error: {
+		'fileSize': 'El tamaño de la imagen es muy grande (máx. 4MB).',
+		'fileExtension': 'Formato de Imagen no permitido (sólo .png .jpg .jpeg).'
+	 }
+	});
+	var drEvent = $('.dropify').dropify();
+	drEvent.on('dropify.error.fileSize', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.error.fileExtension', function(event, element){
+		imagenCorrecta = false;
+		console.log('fileSize - ERROR  '+imagenCorrecta);
+	});
+	drEvent.on('dropify.fileReady', function(event, element){
+		imagenCorrecta = true;
+		console.log('fileReady - '+imagenCorrecta);
+	});
+	drEvent.on('dropify.beforeClear', function(event, element){
+		imagenCorrecta = false;
+		console.log('beforeClear - '+imagenCorrecta);
+	});
+	/* FIN PLUGIN - Dropify*/
 	function init_contador(idTextArea, idContador){
 		function update_Contador(idTextArea, idContador){
 			var contador = $(idContador);
@@ -196,9 +224,11 @@
 			update_Contador(idTextArea, idContador);
 		});
 	}
-
 	function verAsistencias(){
 		$('#modal-asistencia').modal('show');
+	}
+	function validar(){
+		return imagenCorrecta;
 	}
 
 </script>
