@@ -186,7 +186,7 @@
 		 			<div class="question">
 		 			  <li>
 		 				  <span class="quest-text">
-		 					  <textarea required minlength="2" name="s0_e1" rows="1" class="ff-control" placeholder="Un nuevo enunciado">Enunciado de ejemplo para empezar. Puede eliminarlo si lo desea, pero estará muy triste :(.</textarea>
+		 					  <textarea required minlength="2" name="s0_e1" rows="1" class="ff-control" placeholder="Un nuevo enunciado">Un nuevo enunciado - 1</textarea>
 		 				  </span>
 		 			 </li>
 		 			</div>
@@ -332,7 +332,7 @@ $('#btAddSeccion').on('click', function(){
    $( ".items ol" ).disableSelection();
 });
 $('#btAddAlternativa').on('click', function(){
-	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'"  required  class="form-control" placeholder="Una nueva alternativa" /></li>');
+	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'"  required  class="form-control" placeholder="Una nueva alternativa" value="Alternativa-'+alternativa+'" /></li>');
 	array_alternativas.push('a_'+alternativa);
 	actualizar_items();
 	actualizar_headers();

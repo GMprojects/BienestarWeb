@@ -25,8 +25,11 @@
                  </div>
              </div>
              <div class="caja-body">
-					 <!-- esta es la parte que indica que esta encuesta es una vista previa -->
-					 <h3 style="color:red;"> <p>Esta es la vista previa de la encuesta que será enviada.</p> </h3>
+							 <div id="divErrorSubmit" class="alert alert-danger">
+								 <button type="button" class="close" onclick="ocultarErrorSubmit()"><span aria-hidden="true">&times;</span></button>
+								 <h4> <b>Atención!</b> </h4>
+								 <p>Esta es sólo la vista previa de la encuesta.</p>
+							 </div>
 					 <br>
                 <!--fin  -->
 					 <div class="encu-description">

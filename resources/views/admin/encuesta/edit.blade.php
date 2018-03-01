@@ -501,7 +501,7 @@ $('#btAddSeccion').on('click', function(){
 	$( ".items ol" ).disableSelection();
 });
 $('#btAddAlternativa').on('click', function(){
-	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'_new"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'_new\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'_new"  required  class="form-control" placeholder="Una nueva alternativa" /></li>');
+	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'_new"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'_new\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'_new"  required  class="form-control" placeholder="Una nueva alternativa"  value="Alternativa-'+alternativa+'"  /></li>');
 	array_alternativas.push('a_'+alternativa+'_new');
 	actualizar_items();
 	actualizar_headers();
