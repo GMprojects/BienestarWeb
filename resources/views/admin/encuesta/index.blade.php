@@ -29,7 +29,11 @@
 									<tr>
 										<td>{{$encuestas[$i]->idEncuesta}}</td>
 										<td>{{$encuestas[$i]->titulo}}</td>
-										<td>{{$encuestas[$i]->tipoActividad['tipo']}}</td>
+										<td>
+											@if($encuestas[$i]->tipo == 1)
+												{{$encuestas[$i]->tipoActividad['tipo']}}
+											@endif
+										</td>
 										@if($encuestas[$i]->tipo == 1)
 											@if($encuestas[$i]->destino === 'r')
 												<td>Responsable</td>
@@ -48,7 +52,13 @@
 													<p>Administradores</p>
 												@endif
 				  							 </td>
-				  						 @endif
+				  						 @elseif($encuestas[$i]->tipo == 3)
+											 @if($encuestas[$i]->destino === 'd')
+ 												<td>Tutor</td>
+ 											@else
+ 												<td>Tutorado</td>
+ 											@endif
+										 @endif
 										<td>
 											<a href="{{URL::action('EncuestaController@show',$encuestas[$i]->idEncuesta)}}">
 												<button class="btn btn-ff-blues" data-toggle="tooltip" data-placement="bottom" title="Vista Preliminar de la Encuesta">
@@ -57,15 +67,34 @@
 													</span>
 												</button>
 											</a>
-											<a href="{{URL::action('EncuestaController@edit',$encuestas[$i]->idEncuesta)}}">
-												<button class="btn btn-ff-yellow" data-toggle="tooltip" data-placement="bottom" title="Editar esta encuesta">
-													<span>
-													  <i class="fa fa-edit"></i></i>
-													</span>
-												</button>
-											</a>
+
 											@if($cant_enc_resp[$i] == 0)
+												<a href="{{URL::action('EncuestaController@edit',$encuestas[$i]->idEncuesta)}}">
+													<button class="btn btn-ff-orange" data-toggle="tooltip" data-placement="bottom" title="Editar esta encuesta">
+														<span>
+														  <i class="fa fa-edit"></i></i>
+														</span>
+													</button>
+												</a>
 												<a href="" data-target="#modal-delete-{{$encuestas[$i]->idEncuesta}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
+											@endif
+											@if($encuestas[$i]->tipo != 1)
+												<a href="{{URL::action('EncuestaController@send',$encuestas[$i]->idEncuesta)}}">
+													<button class="btn btn-ff-green" data-toggle="tooltip" data-placement="bottom" title="Enviar esta encuesta">
+														<span>
+														  <i class="fa fa-send"></i></i>
+														</span>
+													</button>
+												</a>
+											@endif
+											@if ($cant_enc_resp[$i] > 0)
+												<a href="{{URL::action('EncuestaController@details',$encuestas[$i]->idEncuesta)}}">
+													<button class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Detalles de esta encuesta">
+														<span>
+														  <i class="fa fa-list"></i></i>
+														</span>
+													</button>
+												</a>
 											@endif
 
 										</td>

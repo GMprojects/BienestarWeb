@@ -3,22 +3,51 @@
 	<script>
 		//EDITARRRRR//
 		$(document).ready(function(){
+				$('input').iCheck({
+					checkboxClass: 'icheckbox_square-green',
+					radioClass: 'iradio_square-green',
+					increaseArea: '20%' // optional
+				});
+				$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+			var destino = '{{ $encuesta->destino }}';
+			switch ( {{ $encuesta->tipo }} ) {
+				case 1:
+					$('#rad_1').prop('checked', true);
+					$('#tipo_1').css('display', 'block');
+					if( destino == 'r' ){
+						$('#op_r').prop('selected', true);
+					}
+					break;
+				case 2:
+					$('#rad_2').prop('checked', true);
+					$('#tipo_2').css('display', 'block');
+					if(destino.includes('1')){
+						$('#cb_alumnos').prop('checked', true);
+					}
+					if(destino.includes('2')){
+						$('#cb_docentes').prop('checked', true);
+					}
+					if(destino.includes('3')){
+						$('#cb_administrativos').prop('checked', true);
+					}
+					break;
+				case 3:
+					$('#rad_3').prop('checked', true);
+					$('#tipo_3').css('display', 'block');
+					if( destino == 'd' ){
+						$('#op_d').prop('selected', true);
+					}else{
+						$('#op_a').prop('selected', true);
+					}
+					break;
+
+			}
 			if( {{ $encuesta->tipo }} == 1 ){ //encuesta de ACTIVIDADES
-				$('#rad_1').prop('checked', true);
-				$('#tipo_2').css('display', 'none');
+
 			}else if( {{ $encuesta->tipo }} == 2){
 				$('#rad_2').prop('checked', true);
 				$('#tipo_1').css('display', 'none');
-				var destino = '{{ $encuesta->destino }}';
-				if(destino.includes('1')){
-					$('#cb_alumnos').prop('checked', true);
-				}
-				if(destino.includes('2')){
-					$('#cb_docentes').prop('checked', true);
-				}
-				if(destino.includes('3')){
-					$('#cb_administrativos').prop('checked', true);
-				}
+
 			}
 		});
 		//IDs de los elementos
@@ -128,7 +157,7 @@
 		}
 	</script>
 
-{!!Form::model($encuesta,['method'=>'PATCH','route'=>['encuesta.update',$encuesta->idEncuesta]])!!}
+{!!Form::model($encuesta,['method'=>'PATCH','route'=>['encuesta.update',$encuesta->idEncuesta], 'onsubmit'=>'return validar()'])!!}
 {{Form::token()}}
 
 <div class="modal fade" id="enc-motivo">
@@ -158,9 +187,15 @@
 										  <strong>Encuesta libre</strong>. Se podrá enviar en cualquier momento.
 									  </span>
 								  </div>
+								  <div class="col-md-12 col-xs-12">
+									  <input id="rad_3" type="radio" name="tipo_encuesta" value="3" onchange="cambiarTipo(3)" >
+									  <span style="margin-left: 10px;" for="tipo_encuesta">
+										  <strong>Encuesta Tutoría</strong>. Se podrá enviar en cualquier momento a tutores o tutorados.
+									  </span>
+								  </div>
 							  </div>
 						  </div>
-						  <div class="row" id="tipo_1">
+						  <div class="row" id="tipo_1" style="display: none;">
 							  <div class="col-md-8">
 								  <div class="form-group">
 									  <label for="idTipoActividad">Categoría de Actividad: </label>
@@ -177,30 +212,44 @@
 							  </div>
 							  <div class="col-md-4">
 								  <div class="form-group">
-									  <label for="destino">Dirigida a: </label>
-									  <select name="destino" class="form-control">
-										  <option value="i">Inscritos</option>
-										  <option value="r">Responsable</option>
+									  <label for="destino_1">Dirigida a: </label>
+									  <select name="destino_1" class="form-control">
+										  <option id="op_i" value="i">Inscritos</option>
+										  <option id="op_r" value="r">Responsable</option>
 									  </select>
 								  </div>
 							  </div>
 						  </div>
-						  <div class="form-group"  id="tipo_2">
+						  <div class="form-group"  id="tipo_2" style="display: none;">
 							  <label for="">Dirigida a:</label>
 							  <div class="row" style="margin-left: 10px;">
 
 									  <div class="col-md-12">
-										  <input type="checkbox" id="cb_alumnos" name="destino[]" value="1"><label style="margin-left: 10px;" for=""> Alumnos</label>
+										  <input type="checkbox" id="cb_alumnos" name="destino_2[]" value="1"><label style="margin-left: 10px;" for=""> Alumnos</label>
 									  </div>
 									  <div class="col-md-12">
-										  <input type="checkbox" id="cb_docentes" name="destino[]" value="2"><label style="margin-left: 10px;" for=""> Docentes</label>
+										  <input type="checkbox" id="cb_docentes" name="destino_2[]" value="2"><label style="margin-left: 10px;" for=""> Docentes</label>
 									  </div>
 									  <div class="col-md-12">
-										  <input type="checkbox" id="cb_administrativos" name="destino[]" value="3"><label style="margin-left: 10px;" for=""> Administrativos</label>
+										  <input type="checkbox" id="cb_administrativos" name="destino_2[]" value="3"><label style="margin-left: 10px;" for=""> Administrativos</label>
 									  </div>
 
 							  </div>
 						  </div>
+
+						  <div class="form-group"  id="tipo_3" style="display: none;">
+							  <div class="form-group">
+								  <label for="destino_3">Dirigida a: </label>
+								  <select name="destino_3" class="form-control">
+									  <option id="op_d" value="d">Tutores</option>
+									  <option id="op_a" value="a">Tutorados</option>
+								  </select>
+							  </div>
+						  </div>
+
+							<span class="help-block"  style='display:none;' id="spanErrorResponsable">
+								<strong style="color:red;"><p>Debe dirigir las encuestas a al menos un tipo de usuario.</p></strong>
+							</span>
 					  </div>
 
 				  </div>
@@ -344,7 +393,7 @@
  							<div class="alternatives hidden-xs hidden-sm alt-headers">
  			 				</div>
  			 				<ol class="enc-list">
-								@foreach ($seccion->preguntas->where('estado', 1) as $pregunta)
+								@foreach ($seccion->preguntas->where('estado', 1)->sortBy('orden') as $pregunta)
 									<div class="item" id="s{{ $seccion->idSeccion }}_i{{ $pregunta->idPregunta }}">
 	 			  			 			<div class="question">
 	 			  			 			  <li>
@@ -384,6 +433,24 @@
 {!!Form::close()!!}
 
 <script>
+
+function validar(){
+		var todoBien = true;
+		if ($('#rad_2').is(':checked')) {
+			if (!$('.destino').is(':checked')) {
+				document.getElementById('spanErrorResponsable').style.display = 'block';
+				todoBien = false;
+			}
+		}
+		if (!todoBien) {
+			$("#enc-motivo").modal("show");
+		}
+		return todoBien;
+}
+
+$("#enc-motivo").on('hidden.bs.modal', function () {
+		document.getElementById('spanErrorResponsable').style.display = 'block';
+});
 
 $('#btAddSeccion').on('click', function(){
 	$('#secciones').append(
@@ -455,11 +522,16 @@ $( function() {
   $( "#entrada_alternativas" ).disableSelection();
 } );
 $('form').on('submit', function(event){
-	if(array_enunciados.length > 0 && array_alternativas.length > 1){
-		return;
-	}else{
+	for (var i = 0; i < array_alternativas.length; i++) {
+		if($('#'.array_alternativas[i]).val() == ""){
+			$('#entrada_alternativas').modal('show');
+		}
+	}
+	if(array_enunciados.length == 0 && array_alternativas.length < 2){
 		event.preventDefault();
 		document.getElementById('divErrorSubmit').style.display = 'block';
+	}else{
+		return;
 	}
 });
 function ocultarErrorSubmit(){
@@ -486,12 +558,13 @@ $(document).on('ready', function(){
 	$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
 });
 function cambiarTipo(tipo){
-	if(tipo == 1){
-		document.getElementById('tipo_2').style.display = 'none';
-		document.getElementById('tipo_1').style.display = 'block';
-	}else{
-		document.getElementById('tipo_1').style.display = 'none';
-		document.getElementById('tipo_2').style.display = 'block';
+	$('#tipo_1').css('display', 'none');
+	$('#tipo_2').css('display', 'none');
+	$('#tipo_3').css('display', 'none');
+	switch (tipo) {
+		case 1: $('#tipo_1').css('display', 'block'); break;
+		case 2: $('#tipo_2').css('display', 'block'); break;
+		case 3: $('#tipo_3').css('display', 'block'); break;
 	}
 }
 </script>

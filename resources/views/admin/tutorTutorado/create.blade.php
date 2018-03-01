@@ -22,7 +22,6 @@
 		</div>
 	</div>
 </div>
-
 <div class="row" style="margin-top: 70px;">
 	<div class="col-md-12" id="cajaDocente" style='display:block;'>
 		<div class="caja">
@@ -30,7 +29,6 @@
 		      <div class="caja-icon">1</div>
 		      <div class="caja-title">Docente</div>
 		   </div>
-
 			<div class="caja-body">
 				<div id="divNoHayTutor" style='display:none;' class="alert alert-danger" >
 						<h4>Error</h4>
@@ -47,17 +45,11 @@
 											<th>Docente</th>
 											<th>Tutor</th>
 										 </thead>
-										 <tbody>
-											 @foreach ($docentes as $docente)
-												 <tr>
-   											 	<td>{{ $docente->codigo }}</td>
-   												<td>{{ $docente->nombre.' '.$docente->apellidoPaterno.' '.$docente->apellidoMaterno }}</td>
-   												<td>
-   													<input type="radio" id="idDocente" class="iradio_square-green" onchange="ocultarError(this)" value="{{$docente->idDocente.'_'.$docente->codigo.'_'.$docente->apellidoPaterno.'_'.$docente->apellidoMaterno.'_'.$docente->nombre}}" name="tutor">
-   												</td>
-   											 </tr>
-											 @endforeach
-										 </tobody>
+										 <tfoot>
+ 											<th>Código</th>
+ 											<th>Docente</th>
+ 											<th>Tutor</th>
+ 										 </tfoot>
 									 </table>
 								</div>
 						 </div>
@@ -72,7 +64,6 @@
 		      <div class="caja-icon">2</div>
 		      <div class="caja-title">Alumnos</div>
 		   </div>
-
 			<div class="caja-body">
 				<div class="row">
 					<div class="col-md-12">
@@ -93,21 +84,21 @@
 								<div class="table-responsive">
 									<table id="tabModAlumnos" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
 										<thead>
-											<th>Código</th>
-											<th>Alumno</th>
-											<th>Tutorado  &nbsp; &nbsp; <input type="checkbox" class="icheckbox_square-green" id="checkTodos"/></th>
+											<tr>
+												<th>Código</th>
+												<th>Alumno</th>
+												<th><input type="checkbox" name="select_all" value="1" class="icheckbox_square-green" id="checkTodos"/></th>
+												<!--<th>Tutorado  &nbsp; &nbsp; <input type="checkbox" class="icheckbox_square-green" id="checkTodos"/></th>-->
+											</tr>
 										</thead>
-										<tbody>
-  											 @foreach ($alumnos as $alumno)
-  												 <tr>
-     											 	<td>{{ $alumno->codigo }}</td>
-     												<td>{{ $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno }}</td>
-     												<td>
-     													<input type="checkbox" class="icheckbox_square-green" onchange="ocultarError(this)" value="{{$alumno->idAlumno.'_'.$alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno}}" name="alumnos[]">
-     												</td>
-     											 </tr>
-  											 @endforeach
-										</tobody>
+										<tfoot>
+											<tr>
+												<th>Código</th>
+												<th>Alumno</th>
+												<th></th>
+												<!--<th>Tutorado  &nbsp; &nbsp; <input type="checkbox" class="icheckbox_square-green" id="checkTodos"/></th>-->
+											</tr>
+										</tfoot>
 									</table>
 							  </div>
 					   </div>
@@ -131,9 +122,7 @@
 		        <div class="modal-body">
 		          	<p> Esta seguro de que el docente <b id="modTutor"></b> tiene como tutorados a: </p>
 						<div id="tutorados">
-							<ol>
-
-							</ol>
+							<ol></ol>
 						</div>
 		        </div>
 				  <div class="modal-footer">
@@ -155,6 +144,26 @@
 
 	$(document).ready(function() {
 		var tutorGeneral;
+		var datosAlumnos = new Array();
+		var datosDocente = new Array();
+		@php($i = 0)
+		@foreach ($alumnos as $alumno)
+			datosAlumnos[{{ $i }}] = [
+				"{{ $alumno->codigo }}",
+				"{{ $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno }}",
+				"{{ $alumno->idAlumno.'_'.$alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno }}"
+			]
+			@php($i++)
+		@endforeach
+		@php($i = 0)
+		@foreach ($docentes as $docente)
+			datosDocente[{{ $i }}] = [
+				"{{ $docente->codigo }}",
+				"{{ $docente->nombre.' '.$docente->apellidoPaterno.' '.$docente->apellidoMaterno }}",
+				"{{$docente->idDocente.'_'.$docente->codigo.'_'.$docente->apellidoPaterno.'_'.$docente->apellidoMaterno.'_'.$docente->nombre}}"
+			]
+			@php($i++)
+		@endforeach
 		 $('#tabDocentes').DataTable({
 				"oLanguage" : {
 					 "sProcessing":     "Procesando...",
@@ -181,13 +190,21 @@
 					 }
 				},
 				"order": [[ 1, 'asc' ]],
-  			 	"scrollX": false,
 				"scrollY": "70vh",
+  			 	"scrollX": true,
 				"scrollCollapse": true,
-				"paging": false
+				"paging": false,
+				"columnDefs": [{
+ 		         "targets": 2,
+ 		         "searchable":false,
+ 		         "orderable":false,
+ 		         "className": "dt-body-center",
+ 		         'render': function (data, type, full, meta){
+ 		             return '<input type="radio" id="idDocente" class="iradio_square-green" onchange="ocultarError(this)" value="'+ $('<div/>').text(data).html() + '" name="tutor">';
+ 		         }
+ 				}],
+ 			  "data" : datosDocente,
 		 });
-
-
 		 $('#tabModAlumnos').DataTable({
 			  "oLanguage" : {
 					"sProcessing":     "Procesando...",
@@ -214,28 +231,35 @@
 					}
 			  },
 			  "order": [[ 1, 'asc' ]],
-			  "scrollX": false,
 			  "scrollY": "70vh",
+			  "scrollX": true,
 			  "scrollCollapse": true,
-			  "paging": false
+			  "paging": false,
+			  "columnDefs": [{
+		         "targets": 2,
+		         "searchable":false,
+		         "orderable":false,
+		         "className": "dt-body-center",
+		         'render': function (data, type, full, meta){
+		             return '<input type="checkbox" class="icheckbox_square-green" onchange="ocultarError(this)" value="'+ $('<div/>').text(data).html() + '"  name="alumnos[]">';
+		         }
+				}],
+			  "data" : datosAlumnos,
+			  "select" : {
+				   "style" : "multi"
+				}
 		 });
-
 		$("#checkTodos").change(function () {
-			//console.log('chekBoxTotal');
 			$("input:checkbox").prop('checked', $(this).prop("checked"));
 		});
-
 		$('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
         	$.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
       });
-
 	});
-
 	function ocultarError(){
 		document.getElementById('divNoHayTutor').style.display = 'none';
 		document.getElementById('divNoHayAlumnos').style.display = 'none';
 	}
-
 	function editarTutor(){
 		document.getElementById('btnSalir').style.display = 'block';
 		document.getElementById('btnSiguiente').style.display = 'block';
@@ -244,7 +268,6 @@
 		document.getElementById('btnVolver').style.display = 'none';
 		document.getElementById('cajaAlumnos').style.display = 'none';
 	}
-
 	function elegirTutor(){
 		var existeDocenteSeleccionado = false;
 		chk1=document.getElementsByName('tutor');
@@ -270,7 +293,6 @@
 			document.getElementById('tutor').innerHTML = datosTutor[4]+' '+datosTutor[3]+' '+datosTutor[2];
 		}
 	}
-
 	function validar(){
 		var existeAlumnoSeleccionado = false;
 		chk2=document.getElementsByName('alumnos[]');
@@ -294,14 +316,13 @@
 				i++;
 			}
 			$('#modal-confirmacion').modal('show');
+			//enviarForm();
 			//return true;
 		}
 	}
-
 	function cancelarForm(){
 		$('ol li').remove();
 	}
-
 	function enviarForm(){
 		document.getElementById('formTutorTutorado').submit();
 	}

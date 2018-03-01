@@ -1,9 +1,9 @@
 <li class="mis-act-list st-{{ $actividad->estado }} mis-act-item">
    <div class="mis-act-img pull-left">
       @if($actividad->rutaImagen == null)
-         <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found"></a>
+         <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="No disponible"></a>
       @else
-         <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
+         <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No disponible"></a>
       @endif
    </div>
    <div class="mis-act-dt">

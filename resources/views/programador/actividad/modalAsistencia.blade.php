@@ -10,6 +10,14 @@
 				<h4 class="modal-title"><b>Registrar asistencia</b></h4>
 			</div>
 			<div class="modal-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="pull-left"></div>
+                  <div class="pull-right">
+                     <p>Seleccionar todos los inscritos <input type="checkbox"  class="icheckbox_square-green" id="checkTodos"> </p>
+                  </div>
+               </div>
+            </div>
 				<div class="table">
 					<div class="table-responsive">
 						<table id="tabAsistentes" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
@@ -42,7 +50,7 @@
 					<button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
 				</div>
 				<div class="pull-right">
-					<button class="btn btn-ff-red" type="reset"><i class="fa fa-eraser"></i> Limpiar</button>
+					<button class="btn btn-ff-red" type="reset" onclick="limpiar()"><i class="fa fa-eraser"></i> Limpiar</button>
 					<button class="btn btn-ff" type="submit"><i class="fa fa-save"></i> Grabar</button>
 				</div>
 			</div>

@@ -10,11 +10,13 @@ class EncuestaRespondida extends Model
       protected $primaryKey = 'idEncuestaRespondida';
       protected $fillable =
       [  'estado',
+         'fh_envio',
+         'fh_registro',
          'idUser',
          'idEncuesta',
          'idActividad'
       ];
-      //public $timestamps = true;
+      public $timestamps = true;
 
       public function encuesta(){
          return $this->belongsTo('BienestarWeb\Encuesta', 'idEncuesta');
@@ -22,13 +24,11 @@ class EncuestaRespondida extends Model
       public function actividad(){
          return $this->belongsTo('BienestarWeb\Actividad', 'idActividad');
       }
-      public function tutorTutorado(){
-         return $this->belongsTo('BienestarWeb\TutorTutorado', 'idTutorTutorado');
-      }
       public function user(){
-         return $this->belongsTo('BienestarWeb\user', 'id');
+         return $this->belongsTo('BienestarWeb\User', 'iduser');
       }
-      public function respuestas(){
-         return $this->hasMany('BienestarWeb\RptaEncuesta', 'idEncuestaRespondida');
+      public function preguntas(){
+         return $this->belongsToMany( 'BienestarWeb\PreguntaEncuesta', 'rptaencuesta', 'idEncuestaRespondida', 'idPregunta')
+         ->withPivot('respuesta');
       }
 }

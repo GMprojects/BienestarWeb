@@ -11,6 +11,18 @@
       <li>
          <a class="ff-li-a" href="{{ action('MiPerfilController@mis_actividades', ['id'=>Auth::user()->id, 'opcion'=>'1']) }}"><i class="fa fa-puzzle-piece"></i>Mis Actividades</a>
       </li>
+      @if(count(Auth::user()->encuestas->where('estado', '0')->where('fh_envio', '<=', date('Y-m-d H:i:s'))) > 0 )
+         <li class="dropdown ">
+            <a href="#" class="ff-li-a dropdown-toggle" data-toggle="dropdown">
+               <i class="fa fa-file-text"></i> Mis Encuestas <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+               @foreach ( Auth::user()->encuestas->where('estado', '0')->where('fh_envio', '<=', date('Y-m-d H:i:s')) as $encuesta)
+                  <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('miembro/member_show/'.$encuesta->idEncuestaRespondida) }}"> {{ $encuesta->encuesta->titulo }} </a></li>
+               @endforeach
+            </ul>
+         </li>
+      @endif
       @if( Auth::user()->idTipoPersona == 1 && count(Auth::user()->alumno->soyTutorado) > 0)
          @foreach (Auth::user()->alumno->soyTutorado as $tutorado)
             @if($tutorado->habitoEstudioRespondido == '0')

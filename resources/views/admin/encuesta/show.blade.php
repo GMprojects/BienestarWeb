@@ -26,13 +26,11 @@
              </div>
              <div class="caja-body">
 					 <!-- esta es la parte que indica que esta encuesta es una vista previa -->
-					 <div class="alert alert-danger"> <h4> <b>¡Atención!</b> </h4>
-		   			 <p style="font-size:1.5em;">Esta es la vista previa de la encuesta que será enviada.</p>
-		   		 </div>
+					 <h3 style="color:red;"> <p>Esta es la vista previa de la encuesta que será enviada.</p> </h3>
 					 <br>
                 <!--fin  -->
 					 <div class="encu-description">
-						 @if($encuesta->tipoActividad != null)
+						 @if($encuesta->tipo == 1)
 							 <p>
 								 Esta encuesta fue generada automáticamente debido a su partipación como
 								 @if($encuesta->destino == 'r')
@@ -40,9 +38,9 @@
 								 @else
 									 <small class="label ff-bg-green">Inscrito</small>
 								 @endif
-								 en la<strong>Actividad</strong>: <strong style="color:#4B367C">Aqui el titulo de la actividad</strong>
+								 en la <strong>Actividad</strong>: <strong style="color:#4B367C"> Aqui el titulo de la actividad</strong>
 							 </p>
-						 @else
+						 @elseif( $encuesta->tipo == 2 )
 							 <span>Esta encuesta fue enviada a todos o algunos miembros que son:</span>
 								 <ul>
 									 @if(strpos($encuesta->destino, '1') !== false)
@@ -52,14 +50,23 @@
 										 <li><small class="label ff-bg-orange">Docentes</small></li>
 									 @endif
 	   							 @if(strpos($encuesta->destino, '3') !== false)
-										 <li><small class="label ff-bg-red">Administradores</small></li>
+										 <li><small class="label ff-bg-red">Administrativos</small></li>
 									 @endif
 								 </ul>
+						 @elseif( $encuesta->tipo == 3 )
+							 <p>
+								 Esta encuesta fue enviada a todos o algunos
+								 @if($encuesta->destino == 'd')
+									 <small class="label ff-bg-red">Tutores</small>
+								 @else
+									 <small class="label ff-bg-green">Tutorados</small>
+								 @endif
+							 </p>
 						 @endif
 		 				<p>{{ $encuesta->descripcion }}</p>
 
 		 			</div>
-					<p style="font-size:1.2em;"> <strong>Por favor, elija una de las alternativas siguientes.</strong> </p>
+					<p> <strong>Por favor, elija una de las alternativas siguientes.</strong> </p>
 					<!-- NOTA NO-SECCION:  por si hay preguntas que no están dentro de alguna sección -->
 					@if(count($encuesta->preguntas->where('idSeccion', null)->where('estado', 1))> 0)
 						<div class="no-sec-items items">
@@ -98,7 +105,7 @@
 
 					@if(count($encuesta->secciones) > 0)
 						<div class="secciones">
-							@foreach ($encuesta->secciones->where('estado', 1) as $seccion)
+							@foreach ($encuesta->secciones->where('estado', 1)->sortBy('orden') as $seccion)
 								<div class="seccion">
 									<div class="s-header">
 										<div class="s-icon"> {{ $seccion->orden }} </div>
@@ -109,7 +116,7 @@
 										<div class="items">
 											@if( count($seccion->preguntas) > 0 )
 												<div class="alternatives hidden-xs hidden-sm">
-													@foreach ( $encuesta->alternativas as $alternativa )
+													@foreach ( $encuesta->alternativas->sortBy('valor') as $alternativa )
 														<div class="alternative alt-header"  style="width:calc(100%/{{ count($encuesta->alternativas) }}); ">
 														  <span>{{ $alternativa->etiqueta }}</span>
 													  </div>
@@ -117,7 +124,7 @@
 												</div>
 
 												<ol class="enc-list">
-													@foreach ($seccion->preguntas->where('estado', 1) as $pregunta)
+													@foreach ($seccion->preguntas->where('estado', 1)->sortBy('orden') as $pregunta)
 													 <div class="item">
 														 <div class="question">
 															<li>
@@ -127,7 +134,7 @@
 														  </li>
 														 </div>
 														 <div class="alternatives">
-															 @foreach ( $encuesta->alternativas as $alternativa )
+															 @foreach ( $encuesta->alternativas->sortBy('valor') as $alternativa )
 																 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
 																	 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
 																 </div>

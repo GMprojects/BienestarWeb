@@ -17,6 +17,10 @@ use BienestarWeb\InscripcionAdministrativo;
 use BienestarWeb\InscripcionADA;
 use BienestarWeb\Semestre;
 
+use BienestarWeb\Docente;
+use BienestarWeb\Administrativo;
+use DB;
+
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
 
@@ -606,6 +610,54 @@ class ActividadController extends Controller{
          $actividad->update();
          return redirect()->back();
     }
+
+    public function verEstadisticaActividad($id){
+        $actividad = Actividad::where('idActividad', $id)->first();
+        $inscripcionesDocentes = Docente::join('inscripcionDocente','docente.idDocente', '=','inscripcionDocente.idDocente' )
+                 ->join('user','docente.idUser', '=','user.id' )
+                 ->where('inscripcionDocente.idActividad', '=', $id)
+                 ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionDocente.asistencia','inscripcionDocente.idActividad','inscripcionDocente.idInscripcionADA')->get();
+        $inscripcionesAlumnos = Alumno::join('inscripcionAlumno','alumno.idAlumno', '=','inscripcionAlumno.idAlumno' )
+                      ->join('user','alumno.idUser', '=','user.id' )
+                      ->where('inscripcionAlumno.idActividad', '=', $id)
+                      ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionAlumno.asistencia','inscripcionAlumno.idActividad','inscripcionAlumno.idInscripcionADA')->get();
+        $inscripcionesAdministrativos = Administrativo::join('inscripcionAdministrativo','administrativo.idAdministrativo', '=','inscripcionAdministrativo.idAdministrativo' )
+              ->join('user','administrativo.idUser', '=','user.id' )
+              ->where('inscripcionAdministrativo.idActividad', '=', $id)
+              ->select('user.nombre','user.apellidoPaterno','user.apellidoMaterno','inscripcionAdministrativo.asistencia','inscripcionAdministrativo.idActividad','inscripcionAdministrativo.idInscripcionADA')->get();
+        //dd($inscripciones);
+        $numAsistentes = 0;    $numAusentes = 0;
+        //numero Inscritos
+        //dd($inscripcionesAlumnos);
+        $numInscritos = count($inscripcionesAlumnos)+count($inscripcionesDocentes)+count($inscripcionesAdministrativos);
+        //numero asistentes        //numero de ausentes
+        if($inscripcionesAlumnos != null){
+          foreach ($inscripcionesAlumnos as $inscripcionAlumno) {
+            ($inscripcionAlumno->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+          }
+        }
+        if($inscripcionesDocentes != null){
+          foreach ($inscripcionesDocentes as $inscripcionDocente) {
+            ($inscripcionDocente->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+          }
+        }
+        if($inscripcionesAdministrativos != null){
+          foreach ($inscripcionesAdministrativos as $inscripcionAdministrativo) {
+            ($inscripcionAdministrativo->asistencia == 1 ) ? $numAsistentes = $numAsistentes + 1 : $numAusentes = $numAusentes + 1  ;
+          }
+        }
+
+        return view('programador.actividad.inscripciones.index')
+            ->with('inscripcionesDocentes',$inscripcionesDocentes)
+            ->with('inscripcionesAlumnos',$inscripcionesAlumnos)
+            ->with('inscripcionesAdministrativos',$inscripcionesAdministrativos)
+            ->with('numInscritos',$numInscritos)
+            ->with('numAsistentes',$numAsistentes)
+            ->with('numAusentes',$numAusentes)
+            ->with('cupos',$actividad->cupos)
+            ->with('opcion', 1)
+            ->with('actividad',$actividad);
+   }
 
     public function verMisEstadisticas(Request $request){
       if($request->ajax()){

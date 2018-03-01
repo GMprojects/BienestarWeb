@@ -6,9 +6,9 @@
    <div class="act-mini">
       <div class="act-mini-header">
          @if( $actividad->rutaImagen == null )
-            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="Not found"></a>
+            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->tipoActividad->rutaImagen) }}" alt="No disponible"></a>
          @else
-            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="Not found"></a>
+            <a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}"><img style="height: 220px;" class="img-rounded" src="{{ asset('storage/'.$actividad->rutaImagen) }}" alt="No disponible"></a>
          @endif
          {{--@switch( $actividad->estado )
             @case(2)

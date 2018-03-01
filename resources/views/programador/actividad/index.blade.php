@@ -158,7 +158,7 @@
    		          	<p> Esta función <b>NO DISPONIBLE</b> por que la actividad ha <b>EXPIRADO</b>.</p>
    		        </div>
    		        <div class="modal-footer">
-   						  <div class="pull-right">
+   						  <div class="pull-left">
    							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
    						  </div>
    		        </div>
@@ -182,7 +182,7 @@
    		          	<p> Esta función <b>NO DISPONIBLE</b> por que la actividad ya ha sido <b>EJECUTADA</b>.</p>
    		        </div>
    		        <div class="modal-footer">
-   						  <div class="pull-right">
+   						  <div class="pull-left">
    							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
    						  </div>
    		        </div>
@@ -206,7 +206,7 @@
    		          	<p> Esta función <b>NO DISPONIBLE</b> por que la actividad ya ha sido <b>CANCELADA</b>.</p>
    		        </div>
    		        <div class="modal-footer">
-   						  <div class="pull-right">
+   						  <div class="pull-left">
    							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
    						  </div>
    		        </div>

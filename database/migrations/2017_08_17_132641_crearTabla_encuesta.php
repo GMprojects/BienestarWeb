@@ -40,8 +40,6 @@ class CrearTablaEncuesta extends Migration
             //puede ser null porque no todas las encuestas están asociadas a una actividad
             $tabla->integer('idTipoActividad')->nullable()->unsigned();
             $tabla->foreign('idTipoActividad')->references('idTipoActividad')->on('TipoActividad')->onDelete('cascade');
-
-            $tabla->timestamps();
         });
 
         Schema::create('Alternativa', function(Blueprint $tabla)
@@ -96,6 +94,8 @@ class CrearTablaEncuesta extends Migration
         {
             $tabla->increments('idEncuestaRespondida');
             $tabla->integer('estado')->default(0);
+            $tabla->dateTime('fh_envio')->nullable();
+            $tabla->dateTime('fh_registro');
             //0 no respondida
             //1 respondida
 
@@ -111,9 +111,6 @@ class CrearTablaEncuesta extends Migration
             //Encuestas que están relacionadas con el tipoActividad
             $tabla->integer('idActividad')->nullable()->unsigned();
             $tabla->foreign('idActividad')->references('idActividad')->on('Actividad')->onDelete('cascade');
-
-            $tabla->integer('idTutorTutorado')->nullable()->unsigned();
-            $tabla->foreign('idTutorTutorado')->references('idTutorTutorado')->on('TutorTutorado')->onDelete('cascade');
 
             $tabla->timestamps();
         });

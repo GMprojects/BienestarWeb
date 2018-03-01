@@ -92,93 +92,92 @@
 {!! Form::close() !!}
 
 <script type="text/javascript">
-	/*$(document).ready(function(){
-		$('input').iCheck({
+	var imagenCorrecta = true;
+	var tableAsistentes;
+	$(document).ready(function(){
+		/*$('#checkTodos').iCheck({
 			checkboxClass: 'icheckbox_square-green',
 			radioClass: 'iradio_square-green',
 			increaseArea: '20%' // optional
 		});
-		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-	});*/
-	{{--$("#checkTodos").change(function () {
-		//console.log('chekBoxTotal');
+		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });*/
+		imagenCorrecta = true;
+		/*$('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+		  $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+	  });*/
+	   init_contador('#observaciones', '#contadorObservaciones');
+	   init_contador('#recomendaciones', '#contadorRecomendaciones');
+		tableAsistentes = $('#tabAsistentes').DataTable({
+			"oLanguage" : {
+				 "sProcessing":     "Procesando...",
+				 "sLengthMenu":     "Mostrar _MENU_ registros",
+				 "sZeroRecords":    "No se encontraron resultados",
+				 "sEmptyTable":     "Ningún dato disponible en esta tabla",
+				 "sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
+				 "sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
+				 "sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
+				 "sInfoPostFix":    "",
+				 "sSearch":         "Buscar:",
+				 "sUrl":            "",
+				 "sInfoThousands":  ",",
+				 "sLoadingRecords": "Cargando...",
+				 "oPaginate": {
+					 "sFirst":    "Primero",
+					 "sLast":     "Último",
+					 "sNext":     "Sig",
+					 "sPrevious": "Ant"
+				 },
+				 "oAria": {
+					 "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+					 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+				 }
+			},
+			"order": [[ 1, 'asc' ]],
+			"scrollY": "400px",
+			"scrollCollapse": true,
+			"paging": false
+		});
+	});
+	$('#tabTutorados').DataTable({
+		"oLanguage" : {
+			 "sProcessing":     "Procesando...",
+			 "sLengthMenu":     "Mostrar _MENU_ registros",
+			 "sZeroRecords":    "No se encontraron resultados",
+			 "sEmptyTable":     "Ningún dato disponible en esta tabla",
+			 "sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
+			 "sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
+			 "sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
+			 "sInfoPostFix":    "",
+			 "sSearch":         "Buscar:",
+			 "sUrl":            "",
+			 "sInfoThousands":  ",",
+			 "sLoadingRecords": "Cargando...",
+			 "oPaginate": {
+				 "sFirst":    "Primero",
+				 "sLast":     "Último",
+				 "sNext":     "Sig",
+				 "sPrevious": "Ant"
+			 },
+			 "oAria": {
+				 "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+				 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+			 }
+		},
+		"order": [[ 1, 'asc' ]],
+		"scrollY": "400px",
+		"scrollCollapse": true,
+		"paging": false
+	});
+
+	$("#checkTodos").change(function (){
 		$("input:checkbox").prop('checked', $(this).prop("checked"));
-	});--}}
-	var imagenCorrecta = true;
+	});
 	$('.timepicker').timepicker({
 		showInputs: false
 	});
 	$('#fechaEjecutada').datetimepicker({
 		format: 'DD/MM/YYYY',
 		minDate: moment('{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}','DD/MM/YYYY')
-	});
-	$(document).ready(function() {
-		imagenCorrecta = true;
-		$('#tabTutorados').DataTable({
-			"oLanguage" : {
-				 "sProcessing":     "Procesando...",
-				 "sLengthMenu":     "Mostrar _MENU_ registros",
-				 "sZeroRecords":    "No se encontraron resultados",
-				 "sEmptyTable":     "Ningún dato disponible en esta tabla",
-				 "sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
-				 "sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
-				 "sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
-				 "sInfoPostFix":    "",
-				 "sSearch":         "Buscar:",
-				 "sUrl":            "",
-				 "sInfoThousands":  ",",
-				 "sLoadingRecords": "Cargando...",
-				 "oPaginate": {
-					 "sFirst":    "Primero",
-					 "sLast":     "Último",
-					 "sNext":     "Sig",
-					 "sPrevious": "Ant"
-				 },
-				 "oAria": {
-					 "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-					 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-				 }
-			},
-			"order": [[ 1, 'asc' ]],
-			"scrollY": "400px",
-			"scrollCollapse": true,
-			"paging": false
-		});
-		$('#tabAsistentes').DataTable({
-			"oLanguage" : {
-				 "sProcessing":     "Procesando...",
-				 "sLengthMenu":     "Mostrar _MENU_ registros",
-				 "sZeroRecords":    "No se encontraron resultados",
-				 "sEmptyTable":     "Ningún dato disponible en esta tabla",
-				 "sInfo":           "Reg. actuales: _START_ - _END_ / Reg. totales: _TOTAL_",
-				 "sInfoEmpty":      "Reg. actuales: 0 - 0 / Reg. totales: 0",
-				 "sInfoFiltered":   "(filtrado de un total _MAX_ registros)",
-				 "sInfoPostFix":    "",
-				 "sSearch":         "Buscar:",
-				 "sUrl":            "",
-				 "sInfoThousands":  ",",
-				 "sLoadingRecords": "Cargando...",
-				 "oPaginate": {
-					 "sFirst":    "Primero",
-					 "sLast":     "Último",
-					 "sNext":     "Sig",
-					 "sPrevious": "Ant"
-				 },
-				 "oAria": {
-					 "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-					 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-				 }
-			},
-			"order": [[ 1, 'asc' ]],
-			"scrollY": "400px",
-			"scrollCollapse": true,
-			"paging": false
-		});
-		$('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
-		  $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
-	  });
-			 init_contador('#observaciones', '#contadorObservaciones');
-			 init_contador('#recomendaciones', '#contadorRecomendaciones');
 	});
 	/* PLUGIN - Dropify*/
 	$('.dropify').dropify({
@@ -226,11 +225,15 @@
 	}
 	function verAsistencias(){
 		$('#modal-asistencia').modal('show');
+		tableAsistentes.columns.adjust();
+		tableAsistentes.responsive.recalc();
 	}
 	function validar(){
 		return imagenCorrecta;
 	}
-
+	function limpiar(){
+		//$("#checkTodos").prop('checked', false);
+	}
 </script>
 
 <style type="text/css">

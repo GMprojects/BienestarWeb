@@ -1,3 +1,7 @@
+@php
+  $encuestasPendientes = (count(Auth::user()->encuestas->where('estado', '0')->where('fh_envio', '<=', date('Y-m-d H:i:s'))) > 0);
+@endphp
+
 <header class="header-princ">
    <nav class="navbar container-fluid navbar-fixed-top" >
       <div class="navbar-header">
@@ -76,11 +80,11 @@
                         @php( $i++ )
                      @endif
                      @if ( $i != 0 )
-                        <span class="label label-danger">{{ $i }}</span>
+                        <span class="label label-danger">{{ $i+$encuestasPendientes }}</span>
                      @endif
                   </a>
                   <ul class="dropdown-menu">
-                     <li class="header-notif">Tu tienes {{ $i }} notificaciones.</li>
+                     <li class="header-notif">Tu tienes {{ $i+$encuestasPendientes }} notificaciones.</li>
                      <li class="divider"></li>
                      <li>
                         <ul class="menu">
@@ -103,6 +107,13 @@
                               </a>
                            </li>
                            @endif
+                           {{--@if ($encuestasPendientes>0)
+                           <li>
+                              <a href="{{ action('MiPerfilController@editPassword',['id' => Auth::user()->id ]) }}">
+                                 <i class="fa fa-file-text" style="color:#4B367C;"></i> Tiene {{ $encuestasPendientes }}  encuestas pendientes por responder.
+                              </a>
+                           </li>
+                         @endif--}}
                         </ul>
                      </li>
                   </ul>

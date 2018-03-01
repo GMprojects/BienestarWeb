@@ -49,6 +49,7 @@
       <script src="{{ asset('plugins/flot/jquery.flot.pie.min.js') }}"></script>
       <script src="{{ asset('plugins/flot/jquery.flot.categories.min.js') }}"></script>
       <script src="{{ asset('plugins/flot/jquery.flot.resize.min.js') }}"></script>
+      <script src="{{ asset('plugins/ChartJs/Chart.bundle.min.js') }}"></script>
    </head>
    <body>
       @if(Auth::user() == null)

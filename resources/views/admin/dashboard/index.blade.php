@@ -103,137 +103,182 @@
    </div>
 </div>
 
-<div class="row">
-   <div class="col-md-12">
-      <div class="caja">
-         <div class="caja-header">
-            <div class="caja-icon">
-               <i class="fa fa-puzzle-piece"></i>
+@if (count($actividadesProximas) > 0)
+   <div class="row">
+      <div class="col-md-12">
+         <div class="caja">
+            <div class="caja-header">
+               <div class="caja-icon">
+                  <i class="fa fa-puzzle-piece"></i>
+               </div>
+               <div class="caja-title">
+                  Actividades Próximas
+               </div>
             </div>
-            <div class="caja-title">
-               Actividades Próximas
-            </div>
-         </div>
-         <div class="caja-body">
-            <div class="table">
-               <div class="table-responsive">
-                  <table id="tabActividades" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
-                     <thead>
-                        <th>Id</th>
-                        <th>Título</th>
-                        <th>Tipo Actividad</th>
-                        <th>Modalidad</th>
-                        <th>Cupos</th>
-                        <th>Fecha Inicio</th>
-                        <th>Hora Inicio</th>
-                     </thead>
-                     <tbody>
-                        @php
-                           $i = 0;
-                        @endphp
-                        @foreach($actividadesProximas as $actividadProximas)
-                           @php($i++)
-                           <tr>
-                              <td>{{ $i }}</td>
-                              <td><a href="{{ action('ActividadController@member_show', ['id'=>$actividadProximas->idActividad]) }}">{{ $actividadProximas->titulo }}</a></td>
-                              <td>{{ $actividadProximas->tipoActividad->tipo }}</td>
-                              @switch($actividadProximas->modalidad)
-                                 @case(1)
-                                 <td><small class="label ff-bg-aqua rounded">Individual</small></td>
-                                 @break
-                                 @case(2)
+            <div class="caja-body">
+               <div class="table">
+                  <div class="table-responsive">
+                     <table id="tabActividades" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+                        <thead>
+                           <th>Id</th>
+                           <th>Título</th>
+                           <th>Tipo Actividad</th>
+                           <th>Modalidad</th>
+                           <th>Cupos</th>
+                           <th>Fecha Inicio</th>
+                           <th>Hora Inicio</th>
+                        </thead>
+                        <tbody>
+                           @php
+                              $i = 0;
+                           @endphp
+                           @foreach($actividadesProximas as $actividadProximas)
+                              @php($i++)
+                              <tr>
+                                 <td>{{ $i }}</td>
+                                 <td><a href="{{ action('ActividadController@member_show', ['id'=>$actividadProximas->idActividad]) }}">{{ $actividadProximas->titulo }}</a></td>
+                                 <td>{{ $actividadProximas->tipoActividad->tipo }}</td>
+                                 @switch($actividadProximas->modalidad)
+                                    @case(1)
+                                    <td><small class="label ff-bg-aqua rounded">Individual</small></td>
+                                    @break
+                                    @case(2)
+                                    @if ($actividadProximas->idTipoActividad == 9 || $actividadProximas->idTipoActividad == 8)
+                                    <td><small class="label ff-bg-purple rounded">Libre</small></td>
+                                    @else
+                                    <td><small class="label ff-bg-green2 rounded">Grupal</small></td>
+                                    @endif
+                                    @break
+                                 @endswitch
                                  @if ($actividadProximas->idTipoActividad == 9 || $actividadProximas->idTipoActividad == 8)
-                                 <td><small class="label ff-bg-purple rounded">Libre</small></td>
+                                    <td>Libre</td>
                                  @else
-                                 <td><small class="label ff-bg-green2 rounded">Grupal</small></td>
+                                    <td>{{ $actividadProximas->cuposTotales }}</td>
                                  @endif
-                                 @break
-                              @endswitch
-                              @if ($actividadProximas->idTipoActividad == 9 || $actividadProximas->idTipoActividad == 8)
-                                 <td>Libre</td>
-                              @else
-                                 <td>{{ $actividadProximas->cuposTotales }}</td>
-                              @endif
-                              <td>{{ date("d/m/Y",strtotime($actividadProximas->fechaInicio)) }}</td>
-                              <td>{{ date("g:i A",strtotime($actividadProximas->horaInicio)) }}</td>
-                           </tr>
-                        @endforeach
-                     </tbody>
-                  </table>
+                                 <td>{{ date("d/m/Y",strtotime($actividadProximas->fechaInicio)) }}</td>
+                                 <td>{{ date("g:i A",strtotime($actividadProximas->horaInicio)) }}</td>
+                              </tr>
+                           @endforeach
+                        </tbody>
+                     </table>
+                  </div>
                </div>
             </div>
          </div>
       </div>
    </div>
-</div>
+@endif
+
+@if (count($actividadesAltas) > 0)
+   <div class="row">
+      <div class="col-md-12">
+         <div class="caja">
+            <div class="caja-header">
+               <div class="caja-icon">
+                  <i class="fa fa-arrow-up"></i>
+               </div>
+               <div class="caja-title">
+                  Actividades Altas
+               </div>
+            </div>
+            <div class="caja-body">
+               <div class="row">
+                  @php($i = 0)
+                  @foreach ($actividadesAltas as $actividadAlta)
+                     <div class="col-md-3">
+                        <div class="member">
+                           <div class="member-img pull-left">
+                              @if($actividadAlta->actividadRutaImagen == null)
+                                 <a href="{{ action('ActividadController@verEstadisticaActividad', ['id'=>$actividadAlta->idActividad]) }}"><img src="{{ asset('storage/'.$actividadAlta->tipoActividadRutaImagen) }}" alt="No disponible" class="img-circle"></a>
+                              @else
+                                 <a href="{{ action('ActividadController@verEstadisticaActividad', ['id'=>$actividadAlta->idActividad]) }}"><img src="{{ asset('storage/'.$actividadAlta->actividadRutaImagen) }}" alt="No disponible" class="img-circle"></a>
+                              @endif
+                           </div>
+                           <div class="member-data">
+                              <div class="member-name"><a href="{{ action('ActividadController@verEstadisticaActividad', ['id'=>$actividadAlta->idActividad]) }}">{{ $actividadAlta->titulo }}</a></div>
+                              {{--<div class="member-email"><a href="#" data-target = "#modal-email-p" data-toggle = "modal">{{ $responsableFrecuente->email }}</a></div>--}}
+                           </div>
+                        </div>
+                     </div>
+                  @endforeach
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+@endif
 
 <div class="row">
-   <div class="col-md-6 col-sm-6 col-xs-6">
-      <div class="caja">
-         <div class="caja-header">
-            <div class="caja-icon">
-               <i class="fa fa-tasks"></i>
+   @if (count($responsablesFrecuentes) > 0)
+      <div class="col-md-6 col-sm-6 col-xs-12">
+         <div class="caja">
+            <div class="caja-header">
+               <div class="caja-icon">
+                  <i class="fa fa-tasks"></i>
+               </div>
+               <div class="caja-title">
+                  Responsables Frecuentes
+               </div>
             </div>
-            <div class="caja-title">
-               Responsables Frecuentes
-            </div>
-         </div>
-         <div class="caja-body">
-               @foreach($responsablesFrecuentes as $responsableFrecuente)
-                  <div class="member">
-                     <div class="member-img pull-left">
-                        @if($responsableFrecuente->foto != null)
-                           <a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}"><img src="{{ asset('storage/'.$responsableFrecuente->foto) }}" alt="No Disponible" class="img-circle"></a>
-                        @else
-                           @if ($responsableFrecuente->sexo == 'h'){{-- Hombre --}}
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}"><img src="{{ asset('img/avatar5.png') }}" alt="No Disponible" class="img-circle"></a>
-                           @else{{-- Mujer --}}
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}"><img src="{{ asset('img/avatar2.png') }}" alt="No Disponible" class="img-circle"></a>
+            <div class="caja-body">
+                  @foreach($responsablesFrecuentes as $responsableFrecuente)
+                     <div class="member">
+                        <div class="member-img pull-left">
+                           @if($responsableFrecuente->foto != null)
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}"><img src="{{ asset('storage/'.$responsableFrecuente->foto) }}" alt="No Disponible" class="img-circle"></a>
+                           @else
+                              @if ($responsableFrecuente->sexo == 'h'){{-- Hombre --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}"><img src="{{ asset('img/avatar5.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @else{{-- Mujer --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}"><img src="{{ asset('img/avatar2.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @endif
                            @endif
-                        @endif
+                        </div>
+                        <div class="member-data">
+                           <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}">{{ $responsableFrecuente->nombre }} {{ $responsableFrecuente->apellidoPaterno }} </a></div>
+                           <div class="member-email"><a href="#" data-target = "#modal-email-p" data-toggle = "modal">{{ $responsableFrecuente->email }}</a></div>
+                        </div>
                      </div>
-                     <div class="member-data">
-                        <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}">{{ $responsableFrecuente->nombre }} {{ $responsableFrecuente->apellidoPaterno }} </a></div>
-                        <div class="member-email"><a href="#" data-target = "#modal-email-p" data-toggle = "modal">{{ $responsableFrecuente->email }}</a></div>
-                     </div>
-                  </div>
-               @endforeach
+                  @endforeach
+            </div>
          </div>
       </div>
-   </div>
-   <div class="col-md-6 col-sm-6 col-xs-6">
-      <div class="caja">
-         <div class="caja-header">
-            <div class="caja-icon">
-               <i class="fa fa-calendar"></i>
+   @endif
+   @if (count($programadoresFrecuentes) > 0)
+      <div class="col-md-6 col-sm-6 col-xs-12">
+         <div class="caja">
+            <div class="caja-header">
+               <div class="caja-icon">
+                  <i class="fa fa-calendar"></i>
+               </div>
+               <div class="caja-title">
+                  Programadores Frecuentes
+               </div>
             </div>
-            <div class="caja-title">
-               Programadores Frecuentes
-            </div>
-         </div>
-         <div class="caja-body">
-               @foreach($programadoresFrecuentes as $programadorFrecuente)
-                  <div class="member">
-                     <div class="member-img pull-left">
-                        @if($programadorFrecuente->foto != null)
-                           <a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}"><img src="{{ asset('storage/'.$programadorFrecuente->foto) }}" alt="No Disponible" class="img-circle"></a>
-                        @else
-                           @if ($programadorFrecuente->sexo == 'h'){{-- Hombre --}}
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}"><img src="{{ asset('img/avatar5.png') }}" alt="No Disponible" class="img-circle"></a>
-                           @else{{-- Mujer --}}
-                              <a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}"><img src="{{ asset('img/avatar2.png') }}" alt="No Disponible" class="img-circle"></a>
+            <div class="caja-body">
+                  @foreach($programadoresFrecuentes as $programadorFrecuente)
+                     <div class="member">
+                        <div class="member-img pull-left">
+                           @if($programadorFrecuente->foto != null)
+                              <a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}"><img src="{{ asset('storage/'.$programadorFrecuente->foto) }}" alt="No Disponible" class="img-circle"></a>
+                           @else
+                              @if ($programadorFrecuente->sexo == 'h'){{-- Hombre --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}"><img src="{{ asset('img/avatar5.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @else{{-- Mujer --}}
+                                 <a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}"><img src="{{ asset('img/avatar2.png') }}" alt="No Disponible" class="img-circle"></a>
+                              @endif
                            @endif
-                        @endif
+                        </div>
+                        <div class="member-data">
+                           <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}">{{ $programadorFrecuente->nombre }} {{ $programadorFrecuente->apellidoPaterno }} </a></div>
+                           <div class="member-email"><a href="#" data-target = "#modal-email-p" data-toggle = "modal">{{ $programadorFrecuente->email }}</a></div>
+                        </div>
                      </div>
-                     <div class="member-data">
-                        <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}">{{ $programadorFrecuente->nombre }} {{ $programadorFrecuente->apellidoPaterno }} </a></div>
-                        <div class="member-email"><a href="#" data-target = "#modal-email-p" data-toggle = "modal">{{ $programadorFrecuente->email }}</a></div>
-                     </div>
-                  </div>
-               @endforeach
+                  @endforeach
+            </div>
          </div>
       </div>
-   </div>
+   @endif
 </div>
 
 

@@ -6,7 +6,16 @@
 		<div class="caja-title">Ejecución de la Actividad</div>
 	</div>
 	<div class="caja-body">
-		<p style="color:red;"> <span class="ast">*</span> Requerido
+		@if ($actividad->estado == 2)
+			<div class="row">
+				<div class="col-md-12">
+					<a href="{{ action('ActividadController@verEstadisticaActividad', ['id'=>$actividad->idActividad]) }}"><i class="fa fa-eye"></i>  Ver datos de la actividad ejecutada
+					</a>
+				</div>
+			</div>
+			<br>
+		@endif
+		<!--<p style="color:red;"> <span class="ast">*</span> Requerido-->
 		<div class="row">
 			<div class="col-md-4">
 			   <div class="form-group">

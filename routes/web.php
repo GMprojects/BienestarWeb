@@ -20,6 +20,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('egresado', 'EgresadoController');
     Route::resource('trabajo', 'TrabajoController');
     Route::resource('encuesta', 'EncuestaController');
+    Route::get('encuesta/send/{idEncuesta}',  ['uses' => 'EncuestaController@send','as' => 'encuesta.send']);
+    Route::get('encuesta/details/{idEncuesta}',  ['uses' => 'EncuestaController@details','as' => 'encuesta.details']);
+    Route::post('encuesta/store_send/{idEncuesta}', ['uses' => 'EncuestaController@store_send','as' => 'encuesta.store_send']);
     Route::resource('user', 'UserController');
     Route::resource('tutorTutorado', 'TutorTutoradoController');
     Route::delete('tutorTutorado/{tutorTutorado}/destroy/{anioSemestre}/{numeroSemestre}', ['uses' =>  'TutorTutoradoController@destroyTutor','as' => 'tutorTutorado.destroyTutor']);
@@ -29,6 +32,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('docentes', 'UserController@indexDocentes');
     Route::get('administrativos', 'UserController@indexAdministrativos');
     Route::resource('semestre', 'SemestreController');
+    Route::get('actividadRealizada/{idActividad}', 'ActividadController@verEstadisticaActividad');
 });
 
 
@@ -39,7 +43,6 @@ Route::middleware(['programador', 'auth'])->prefix('programador')->group(functio
 //PERMISOS DE MIEMBRO
 Route::middleware('auth')->prefix('miembro')->group(function () {
     //Route::get('perfil','MiPerfilController@index');
-
     Route::resource('perfil', 'MiPerfilController');
     Route::get('perfil/{idPerfil}/edit', 'MiPerfilController@edit');
     Route::post('perfil/{idPerfil}',  ['uses' => 'MiPerfilController@update','as' => 'perfil.update']);
@@ -75,6 +78,9 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::post('enviarMensaje', ['uses' => 'ActividadController@enviarMensaje', 'as' => 'tutorTutorado.enviarMensaje']);
 
     Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
+
+    Route::get('member_show/{id}', ['uses' => 'EncuestaController@member_show']);
+    Route::post('member_show/store_answers/{id}', ['uses' => 'EncuestaController@store_answers']);
 
     Route::get('habitoEstudio/{idEncuestaRespondida}', 'EncuestaController@getHabitoEstudio');
     Route::post('habitoEstudio/{idEncuestaRespondida}', ['uses' => 'EncuestaController@storeHabitoEstudio', 'as' => 'encuesta.storeHabitoEstudio']);

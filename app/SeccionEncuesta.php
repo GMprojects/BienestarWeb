@@ -10,7 +10,6 @@ class SeccionEncuesta extends Model
     protected $primaryKey = 'idSeccion';
     protected $fillable = ['titulo', 'descripcion', 'orden', 'estado', 'idEncuesta'];
     public $timestamps = false;
-    
     public function preguntas(){
       return $this->hasMany('BienestarWeb\PreguntaEncuesta','idSeccion');
    }

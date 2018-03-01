@@ -1,7 +1,7 @@
 @extends('template')
 @section ('contenido')
 
-{!!Form::open(['url'=>'admin/encuesta','method'=>'POST','autocomplete'=>'off'])!!}
+{!!Form::open(['url'=>'admin/encuesta','method'=>'POST','autocomplete'=>'off', 'onsubmit'=>'return validar()'])!!}
 {{Form::token()}}
 
 <div class="modal fade" id="enc-motivo">
@@ -20,15 +20,21 @@
 							  <label for="">Tipo de encuesta: </label>
 							  <div class="row" style="margin-left: 10px;">
 								  <div class="col-md-12 col-xs-12" style="margin-bottom: 15px;">
-									  <input type="radio" name="tipo_encuesta" value="1" onchange="cambiarTipo(1)" checked>
+									  <input id="rad_1" type="radio" name="tipo_encuesta" value="1" onchange="cambiarTipo(1)" checked>
 									  <span style="margin-left: 10px;"  for="tipo_encuesta">
 										  <strong>Encuesta asociada a un Tipo de Actividad</strong>. Se enviará a los participantes de una activdad ejecutada.
 									  </span>
 								  </div>
-								  <div class="col-md-12 col-xs-12">
-									  <input type="radio" name="tipo_encuesta" value="2" onchange="cambiarTipo(2)" >
+								  <div class="col-md-12 col-xs-12" style="margin-bottom: 15px;">
+									  <input id="rad_2" type="radio" name="tipo_encuesta" value="2" onchange="cambiarTipo(2)" >
 									  <span style="margin-left: 10px;" for="tipo_encuesta">
 										  <strong>Encuesta libre</strong>. Se podrá enviar en cualquier momento.
+									  </span>
+								  </div>
+								  <div class="col-md-12 col-xs-12">
+									  <input id="rad_3" type="radio" name="tipo_encuesta" value="3" onchange="cambiarTipo(3)" >
+									  <span style="margin-left: 10px;" for="tipo_encuesta">
+										  <strong>Encuesta Tutoría</strong>. Se podrá enviar en cualquier momento a tutores o tutorados.
 									  </span>
 								  </div>
 							  </div>
@@ -46,8 +52,8 @@
 							  </div>
 							  <div class="col-md-4">
 								  <div class="form-group">
-									  <label for="destino">Dirigida a: </label>
-									  <select name="destino" class="form-control">
+									  <label for="destino_1">Dirigida a: </label>
+									  <select name="destino_1" class="form-control">
 										  <option value="i">Inscritos</option>
 										  <option value="r">Responsable</option>
 									  </select>
@@ -55,19 +61,33 @@
 							  </div>
 						  </div>
 						  <div class="form-group"  id="tipo_2" style="display: none;">
-							  <label for="">Dirigida a:</label>
+							  <b>Dirigida a:</b>
 							  <div class="row" style="margin-left: 10px;">
-								  <div class="col-md-12">
-									  <input type="checkbox" name="destino[]" value="1"><b style="margin-left:12px;">Alumnos</b>
-								  </div>
-								  <div class="col-md-12">
-									  <input type="checkbox" name="destino[]" value="2"><b style="margin-left:12px;">Docentes</b>
-								  </div>
-								  <div class="col-md-12">
-									  <input type="checkbox" name="destino[]" value="3"><b style="margin-left:12px;">Administrativos</b>
-								  </div>
+
+									  <div class="col-md-12">
+										  <input type="checkbox" name="destino_2[]" value="1" class="destino"> &nbsp;&nbsp;<b>Alumnos</b>
+									  </div>
+									  <div class="col-md-12">
+										  <input type="checkbox" name="destino_2[]" value="2" class="destino"> &nbsp;&nbsp;<b>Docentes</b>
+									  </div>
+									  <div class="col-md-12">
+										  <input type="checkbox" name="destino_2[]" value="3" class="destino"> &nbsp;&nbsp;<b>Administrativos</b>
+									  </div>
+
 							  </div>
 						  </div>
+						  <div class="form-group"  id="tipo_3" style="display: none;">
+							  <div class="form-group">
+								  <label for="destin_3o">Dirigida a: </label>
+								  <select name="destino_3" class="form-control">
+									  <option value="d">Tutores</option>
+									  <option value="a">Tutorados</option>
+								  </select>
+							  </div>
+						  </div>
+							<span class="help-block"  style='display:none;' id="spanErrorResponsable">
+								<strong style="color:red;"><p>Debe dirigir las encuestas a al menos un tipo de usuario.</p></strong>
+							</span>
 					  </div>
 
 				  </div>
@@ -195,6 +215,25 @@
 {!!Form::close()!!}
 
 <script>
+
+function validar(){
+		var todoBien = true;
+		if ($('#rad_2').is(':checked')) {
+			if (!$('.destino').is(':checked')) {
+				document.getElementById('spanErrorResponsable').style.display = 'block';
+				todoBien = false;
+			}
+		}
+		if (!todoBien) {
+			$("#enc-motivo").modal("show");
+		}
+		return todoBien;
+}
+
+$("#enc-motivo").on('hidden.bs.modal', function () {
+		document.getElementById('spanErrorResponsable').style.display = 'block';
+});
+
 //IDs de los elementos
 var seccion = 1;
 var enunciado = 2;
@@ -357,7 +396,7 @@ $( function() {
   $( "#entrada_alternativas" ).disableSelection();
 } );
 $('form').on('submit', function(event){
-	if(array_enunciados.length > 0 ){
+	if(array_enunciados.length > 0 && array_alternativas.length > 1 ){
 		return;
 	}else{
 		event.preventDefault();
@@ -402,13 +441,15 @@ $(document).ready(function(){
 	$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
 });
 function cambiarTipo(tipo){
-	if(tipo == 1){
-		document.getElementById('tipo_2').style.display = 'none';
-		document.getElementById('tipo_1').style.display = 'block';
-	}else{
-		document.getElementById('tipo_1').style.display = 'none';
-		document.getElementById('tipo_2').style.display = 'block';
+	$('#tipo_1').css('display', 'none');
+	$('#tipo_2').css('display', 'none');
+	$('#tipo_3').css('display', 'none');
+	switch (tipo) {
+		case 1: $('#tipo_1').css('display', 'block'); break;
+		case 2: $('#tipo_2').css('display', 'block'); break;
+		case 3: $('#tipo_3').css('display', 'block'); break;
 	}
+
 }
 </script>
 <style media="screen">

@@ -9,7 +9,7 @@ class Encuesta extends Model
    protected $table = 'Encuesta';
    protected $primaryKey = 'idEncuesta';
    protected $fillable = ['titulo', 'descripcion', 'pred', 'tipo', 'destino', 'idTipoActividad'];
-   public $timestamps = true;
+   public $timestamps = false;
 
    public function preguntas(){
       return $this->hasMany('BienestarWeb\PreguntaEncuesta','idEncuesta');
@@ -22,6 +22,9 @@ class Encuesta extends Model
    }
    public function alternativas(){
       return $this->hasMany('BienestarWeb\Alternativa','idEncuesta');
+   }
+   public function enviadas(){
+      return $this->hasMany('BienestarWeb\EncuestaRespondida', 'idEncuesta');
    }
   /*
   public function actividades(){

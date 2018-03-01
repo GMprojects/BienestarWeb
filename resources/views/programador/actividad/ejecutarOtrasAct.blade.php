@@ -4,7 +4,16 @@
          <div class="caja-title">Ejecución de la Actividad</div>
    	</div>
 		<div class="caja-body">
-			<p style="color:red;"> <span class="ast">*</span> Requerido
+			@if ($actividad->estado == '2')
+				<div class="row">
+					<div class="col-md-12">
+						<a href="{{ action('ActividadController@verEstadisticaActividad', ['id'=>$actividad->idActividad]) }}"><i class="fa fa-eye"></i>  Ver datos de la actividad ejecutada
+						</a>
+					</div>
+				</div>
+				<br>
+			@endif
+			<!--<p style="color:red;"> <span class="ast">*</span> Requerido-->
 			{!! Form::open(['route'=>['actividad.updateExecute', $actividad->idActividad], 'method'=>'POST', 'autocomplete'=>'off']) !!}
 			{{Form::token()}}
 			<div class="row">
@@ -52,9 +61,7 @@
 						<div class="form-group">
 							<label for="horaEjecutada">Asistencias &nbsp; <i class="fa fa-check-square-o" aria-hidden="true"></i><span class="ast">*</span></label>
 							<div class="input-group">
-								<a href="#tabAsistentes" data-toggle="tab">
-									<button type="button" name="button" onclick="verAsistencias()"class="btn btn-ff-orange">Registrar</button>
-								</a>
+								<button type="button" name="button" onclick="verAsistencias()"class="btn btn-ff-orange">Registrar</button>
 							</div>
 						</div>
 					</div>

@@ -74,7 +74,7 @@
                      <div class="signed-up">
                         <a href="#">
                            <div class="signed-up-img pull-left">
-                              <img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle">
+                              <img src="{{ asset('img/avatar3.png') }}" alt="No disponible" class="img-circle">
                            </div>
                            <div class="signed-up-data">
                               <div class="member-name"></i>Raul Álvarez Carbajasdadasdasdal</div>
@@ -85,7 +85,7 @@
                      <div class="signed-up">
                         <a href="#">
                            <div class="signed-up-img pull-left">
-                              <img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle">
+                              <img src="{{ asset('img/avatar3.png') }}" alt="No disponible" class="img-circle">
                            </div>
                            <div class="signed-up-data">
                               <div class="member-name"></i>Raul Álvarez Carbajasdadasdasdal</div>
@@ -96,7 +96,7 @@
                      <div class="signed-up">
                         <a href="#">
                            <div class="signed-up-img pull-left">
-                              <img src="{{ asset('img/avatar3.png') }}" alt="Not found" class="img-circle">
+                              <img src="{{ asset('img/avatar3.png') }}" alt="No disponible" class="img-circle">
                            </div>
                            <div class="signed-up-data">
                               <div class="member-name"></i>Raul Álvarez Carbajasdadasdasdal</div>

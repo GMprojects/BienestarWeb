@@ -6,7 +6,16 @@
 		<div class="caja-title">Ejecución de la Actividad</div>
 	</div>
 	<div class="caja-body">
-		<p style="color:red;"> <span class="ast">*</span> Requerido
+		@if ($actividad->estado == 2)
+			<div class="row">
+				<div class="col-md-12">
+					<a href="{{ action('ActividadController@verEstadisticaActividad', ['id'=>$actividad->idActividad]) }}"><i class="fa fa-eye"></i>  Ver datos de la actividad ejecutada
+					</a>
+				</div>
+			</div>
+			<br>
+		@endif
+		<!--<p style="color:red;"> <span class="ast">*</span> Requerido-->
 		<div class="row">
 			<div class="col-md-4">
 			   <div class="form-group">
@@ -52,30 +61,32 @@
 				<div class="form-group">
 					<label for="formaTutoria"><b>Forma Tutoría</b> <span class="ast">*</span></label>
 					<select name="formaTutoria" id="formaTutoria" required class="form-control">
-						@if ($actividad->actividadesPedagogia[0]->formaTutoria != null)
-							<option value="">Seleccione la Forma de Tutoría</option>
-							@switch($actividad->actividadesPedagogia[0]->formaTutoria)
-								@case('1')
-										<option value="1" selected>Presencial</option>
-										<option value="2">Telefónica</option>
-										<option value="3">Correo Electrónico</option>
-								@break
-								@case('2')
-										<option value="1">Presencial</option>
-										<option value="2" selected>Telefónica</option>
-										<option value="3">Correo Electrónico</option>
-								@break
-								@case('3')
-										<option value="1">Presencial</option>
-										<option value="2">Telefónica</option>
-										<option value="3" selected>Correo Electrónico</option>
-								@break
-							@endswitch
-						@else
-							<option value="">Seleccione la Forma de Tutoría</option>
-							<option value="1">Presencial</option>
-							<option value="2">Telefónica</option>
-							<option value="3">Correo Electrónico</option>
+						@if (count($actividad->actividadesPedagogia)>0)
+							@if ($actividad->actividadesPedagogia[0]->formaTutoria != null)
+								<option value="">Seleccione la Forma de Tutoría</option>
+								@switch($actividad->actividadesPedagogia[0]->formaTutoria)
+									@case('1')
+											<option value="1" selected>Presencial</option>
+											<option value="2">Telefónica</option>
+											<option value="3">Correo Electrónico</option>
+									@break
+									@case('2')
+											<option value="1">Presencial</option>
+											<option value="2" selected>Telefónica</option>
+											<option value="3">Correo Electrónico</option>
+									@break
+									@case('3')
+											<option value="1">Presencial</option>
+											<option value="2">Telefónica</option>
+											<option value="3" selected>Correo Electrónico</option>
+									@break
+								@endswitch
+							@else
+								<option value="">Seleccione la Forma de Tutoría</option>
+								<option value="1">Presencial</option>
+								<option value="2">Telefónica</option>
+								<option value="3">Correo Electrónico</option>
+							@endif
 						@endif
 					</select>
 				</div>

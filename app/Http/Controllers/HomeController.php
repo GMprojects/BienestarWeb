@@ -10,6 +10,12 @@ use BienestarWeb\Administrativo;
 use BienestarWeb\InscripcionAlumno;
 use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
+
+use BienestarWeb\EncuestaRespondida;
+use BienestarWeb\RptaEncuesta;
+use BienestarWeb\Alternativa;
+use DB;
+
 use BienestarWeb\User;
 
 use Carbon\Carbon;
@@ -30,7 +36,7 @@ class HomeController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-   public function index(Request $request){      
+   public function index(Request $request){
       /*Mail::to('mfernanda.mgl95@gmail.com')
            ->send(new MailVerify('Mafer','mfernanda.mgl95@gmail.com', 'dddddddddsdsfsd', 'M'));*/
       //return Redirect::to('admin/user');

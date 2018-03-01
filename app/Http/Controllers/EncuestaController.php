@@ -2,7 +2,8 @@
 
 namespace BienestarWeb\Http\Controllers;
 
-
+use BienestarWeb\TutorTutorado;
+use BienestarWeb\user;
 use BienestarWeb\Alumno;
 use BienestarWeb\Docente;
 use BienestarWeb\Administrativo;
@@ -11,6 +12,7 @@ use BienestarWeb\Alternativa;
 use BienestarWeb\SeccionEncuesta;
 use BienestarWeb\PreguntaEncuesta;
 use BienestarWeb\EncuestaRespondida;
+use Bienestar\Semestre;
 
 use BienestarWeb\Actividad;
 use BienestarWeb\TipoActividad;
@@ -56,26 +58,29 @@ class EncuestaController extends Controller{
      */
 
     public function store(Request $request){
-      dd($request);
       $request->validate([
          'titulo' => 'required',
       ]);
+      switch( $request->tipo_encuesta ){
+         case 1: $destino = $request->destino_1; break;
+         case 2: $destino = implode('_', $request->destino_2); break;
+         case 3: $destino = $request->destino_3; break;
+      }
       $nueva_encuesta = Encuesta::create([
          'titulo' => $request->titulo,
          'tipo' => $request->tipo_encuesta,
-         'destino' => (($request->tipo_encuesta == 2)? implode('_', $request->destino) : $request->destino),
+         'destino' => $destino,
          'descripcion' => $request->descripcion,
-         'idTipoActividad' => (($request->tipo_encuesta == 2)? null : $request->idTipoActividad)
+         'idTipoActividad' => (($request->tipo_encuesta != 1)? null : $request->idTipoActividad)
       ]);
 
-      $entradas = $request->except(['_method', '_token', 'titulo', 'destino', 'idTipoActividad', 'tipo_encuesta']);
+      $entradas = $request->except(['_method', '_token', 'titulo', 'descripcion', 'destino_1', 'destino_2', 'destino_3', 'idTipoActividad', 'tipo_encuesta']);
       $valor = 1;
       $orden = 1;
       $n_seccion = 1;
       $titulo_stemp_new = "";
       $seccion_actual_new = null;
-      foreach ( $entradas as $entrada) {
-         $llave = key($entradas);
+      foreach ( $entradas as $llave => $entrada) {
          if(strpos($llave, 'a_') !== false){ //ALTERNATIVA añadida
             Alternativa::create([
                'etiqueta' => $entrada,
@@ -145,18 +150,26 @@ class EncuestaController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
+
+        dd($request);
       $request->validate([
          'titulo' => 'required',
       ]);
+      //dd($request);
+      switch( $request->tipo_encuesta ){
+         case 1: $destino = $request->destino_1; break;
+         case 2: $destino = implode('_', $request->destino_2); break;
+         case 3: $destino = $request->destino_3; break;
+      }
       $encuesta = Encuesta::findOrFail($id);
       $encuesta->titulo = $request->titulo;
       $encuesta->tipo = $request->tipo_encuesta;
-      $encuesta->destino = (($request->tipo_encuesta == 2)? implode('_', $request->destino) : $request->destino);
+      $encuesta->destino = $destino;
       $encuesta->descripcion = $request->descripcion;
-      $encuesta->idTipoActividad = (($request->tipo_encuesta == 2)? null : $request->idTipoActividad);
+      $encuesta->idTipoActividad = (($request->tipo_encuesta != 1)? null : $request->idTipoActividad);
       $encuesta->update();
 
-      $entradas = $request->except(['_method', '_token', 'titulo', 'destino', 'idTipoActividad', 'tipo_encuesta']);
+      $entradas = $request->except(['_method', '_token', 'titulo', 'descripcion', 'destino_1', 'destino_2', 'destino_3', 'idTipoActividad', 'tipo_encuesta']);
       $valor = 1;
       $orden = 1;
       $n_seccion = 1;
@@ -169,8 +182,7 @@ class EncuestaController extends Controller{
       $preguntas_actuales = $encuesta->preguntas->pluck('idPregunta')->toArray();
       $secciones_actuales = $encuesta->secciones->pluck('idSeccion')->toArray();
       //dd($entradas);
-      foreach ( $entradas as $entrada) {
-         $llave = key($entradas);
+      foreach ( $entradas as $llave => $entrada) {
          if( strpos($llave, '_new') !== false ){ //ELEMENTOS NUEVOS
             if(strpos($llave, 'a_') !== false){ //ALTERNATIVA añadida
                Alternativa::create([
@@ -227,8 +239,8 @@ class EncuestaController extends Controller{
                $seccion_actual->titulo = $titulo_stemp;
                $seccion_actual->descripcion = $entrada;
                $seccion_actual->orden = $n_seccion;
+               $seccion_actual->update();
                $n_seccion++;
-               echo '<br />'.count($secciones_actuales).'<br />';
                for ($j=0; $j < count($secciones_actuales); $j++) {
                   if($secciones_actuales[$j] == $seccion_actual->idSeccion){
                      unset($secciones_actuales[$j]);
@@ -242,7 +254,8 @@ class EncuestaController extends Controller{
                list($st_seccion, $st_enunciado) = explode('_', $llave);
                $pregunta = PreguntaEncuesta::find(str_replace("e", "", $st_enunciado));
                $pregunta->enunciado = $entrada;
-               $pregunta->ordern = $orden;
+               $pregunta->orden = $orden;
+               $pregunta->update();
                $orden++;
                for ($h=0; $h < count($preguntas_actuales); $h++) {
                   if($preguntas_actuales[$h] === $pregunta->idPregunta){
@@ -253,7 +266,7 @@ class EncuestaController extends Controller{
                }
             }
          }
-         next($entradas);
+         //next($entradas);
       }
       foreach ($preguntas_actuales as $pregunta_actual) {
          $p = PreguntaEncuesta::findOrFail($pregunta_actual);
@@ -289,123 +302,172 @@ class EncuestaController extends Controller{
       return Redirect::to('admin/encuesta');
     }
 
-    public function misEncuPendientes(Request $request){
-      /* Inscrito */
-
-      switch ($request->user()->idTipoPersona) {
-         case '1'://Alumno
-            $idAlumno = Alumno::where('idUser', $request->id)->value('idAlumno');
-            $insc_asis = InscripcionAlumno::where(['idAlumno' => $idAlumno, 'asistencia' => '1'])->pluck('idInscripcionADA');
-            $insc_noresp = EncuestaRespondida::whereIn('idInscripcionADA', $insc_asis)->where('estado', '0')->get();
-            break;
-         case '2'://Docente
-            $idDocente = Docente::where('idUser', $request->id)->value('idDocente');
-            $insc_asis = InscripcionDocente::where(['idDocente' => $idDocente, 'asistencia' => '1'])->pluck('idInscripcionADA');
-            $insc_noresp = EncuestaRespondida::whereIn('idInscripcionADA', $insc_asis)->where('estado', '0')->get();
-            break;
-         case '3'://Administrativo
-            $idAdministrativo = Administrativo::where('idUser', $request->id)->value('idAdministrativo');
-            $insc_asis = InscripcionAdministrativo::where(['idAdministrativo' => $idAdministrativo, 'asistencia' => '1'])->pluck('idInscripcionADA');
-            $insc_noresp = EncuestaRespondida::whereIn('idInscripcionADA', $insc_asis)->where('estado', '0')->get();
-            break;
+    public function send(Request $request, $id){
+      $encuesta = Encuesta::findOrFail($id);
+      $alumnos = null;
+      $docentes = null;
+      $administrativos = null;
+      if( $encuesta->tipo == 2){
+         if(strpos($encuesta->destino, '1') !== false){
+            $alumnos = User::where('idTipoPersona', 1)->get();
+         }
+         if(strpos($encuesta->destino, '2') !== false){
+            $docentes = User::where('idTipoPersona', 2)->get();
+         }
+         if(strpos($encuesta->destino, '3') !== false){
+            $administrativos = User::where('idTipoPersona', 3)->get();
+         }
+         return view('admin.encuesta.send')
+         ->with('encuesta', Encuesta::findOrFail($id))
+         ->with('alumnos', $alumnos)
+         ->with('docentes', $docentes)
+         ->with('administrativos', $administrativos);
       }
-      /* Responsable */
-      $resp_act = Actividad::where(['idUserResp' => $request->id, 'estado' => '2'])->pluck('idActividad');
-      $resp_noresp = EncuestaRespondidaResp::whereIn('idActividad', $resp_act)->where('estado', '0')->get();
-      if($request->ajax()){
-         //$enc_noresp = [ 'insc_noresp' => $insc_noresp, 'resp_noresp' => $resp_noresp ];
-         return response()->json(['insc_noresp' => $insc_noresp, 'resp_noresp' => $resp_noresp]);
+      if( $encuesta->tipo == 3 ){
+
+         if($encuesta->destino == 'd'){
+            $tutores = TutorTutorado::join('docente','tutorTutorado.idDocente','=','docente.idDocente')
+              ->join('user','docente.idUser', '=','user.id' )
+              ->select('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo', 'user.id')
+              ->groupBy('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo', 'user.id')
+              ->get();
+           return view('admin.encuesta.send')
+           ->with('encuesta', $encuesta)
+           ->with('tutores', $tutores);
+         }else{
+            $tutorados = TutorTutorado::join('alumno','tutorTutorado.idAlumno','=','alumno.idAlumno')
+              ->join('user','alumno.idUser', '=','user.id' )
+              ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo', 'user.id')
+              ->groupBy('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo', 'user.id')
+              ->get();
+           return view('admin.encuesta.send')
+           ->with('encuesta', $encuesta)
+           ->with('tutorados', $tutorados);
+         }
+
+      }
+
+   }
+
+   public function store_send(Request $request, $id){
+      $encuesta = Encuesta::findOrFail($id);
+      $fh_registro = date('Y-m-d H:i');
+      if( $encuesta->tipo == 2){
+         if(strpos($encuesta->destino, '1') !== false){
+            foreach ($request->alumnos as $alumno) {
+               EncuestaRespondida::create([
+                  'idUser' => $alumno,
+                  'idEncuesta' => $id,
+                  'fh_envio' => $request->fecha_envio.' '.$request->hora_envio,
+                  'fh_registro' => $fh_registro
+               ]);
+            }
+         }
+         if(strpos($encuesta->destino, '2') !== false){
+            foreach ($request->docentes as $docente) {
+               EncuestaRespondida::create([
+                  'idUser' => $docente,
+                  'idEncuesta' => $id,
+                  'fh_envio' => $request->fecha_envio.' '.$request->hora_envio,
+                  'fh_registro' => $fh_registro
+               ]);
+            }
+         }
+         if(strpos($encuesta->destino, '3') !== false){
+            foreach ($request->administrativos as $administrativo) {
+               EncuestaRespondida::create([
+                  'idUser' => $administrativo,
+                  'idEncuesta' => $id,
+                  'fh_envio' => $request->fecha_envio.' '.$request->hora_envio,
+                  'fh_registro' => $fh_registro
+               ]);
+            }
+         }
+      }
+      if( $encuesta->tipo == 3 ){
+         if($encuesta->destino == 'd'){
+            foreach ($request->tutores as $tutor) {
+               EncuestaRespondida::create([
+                  'idUser' => $tutor,
+                  'idEncuesta' => $id,
+                  'fh_envio' => $request->fecha_envio.' '.$request->hora_envio,
+                  'fh_registro' => $fh_registro
+               ]);
+            }
+         }else{
+            foreach ($request->tutorados as $tutorado) {
+               EncuestaRespondida::create([
+                  'idUser' => $tutorado,
+                  'idEncuesta' => $id,
+                  'fh_envio' => $request->fecha_envio.' '.$request->hora_envio,
+                  'fh_registro' => $fh_registro
+               ]);
+            }
+         }
+      }
+      return Redirect::to('admin/encuesta');
+   }
+
+
+   public function member_show(Request $request, $id){
+      $encResp = EncuestaRespondida::findOrFail($id);
+      $encuesta = Encuesta::findOrFail($encResp->idEncuesta);
+      return view('miembro.mis-encuestas.show')
+         ->with('encuesta', $encuesta)
+         ->with('idEncuestaRespondida', $id);
+   }
+
+   public function store_answers(Request $request, $id){
+      $encResp= EncuestaRespondida::findOrFail($id);
+      if($encResp->estado == '0' && $request->user()->id == $encResp->idUser){
+         $preguntas = $encResp->encuesta->preguntas->where('estado', 1);
+         foreach ( $preguntas as $pregunta ) {
+            $encResp->preguntas()->attach($pregunta->idPregunta, ['respuesta' => $request->input($pregunta->idPregunta)]);
+         }
+         $encResp->estado = '1';
+         $encResp->update();
       }else{
-         return view('miembro.mis-encuestas.todas', ['insc_noresp'=>$insc_noresp, 'resp_noresp'=>$resp_noresp]);
-      }
-
-   }
-
-   public function encuestaInsc(Request $request, $id){
-      $encResp_insc = EncuestaRespondidaInsc::findOrFail($id);
-      return view('miembro.mis-encuestas.show')
-         ->with(['encResp' => $encResp_insc, 'opt'=>'1']);
-   }
-
-   public function encuestaResp(Request $request, $id){
-      $encResp_resp = EncuestaRespondidaResp::findOrFail($id);
-      return view('miembro.mis-encuestas.show')
-         ->with(['encResp' => $encResp_resp, 'opt'=>'2']);
-   }
-
-   public function registrar_respuestas(Request $request, $id, $opt){
-      switch($opt){
-         case '1': //encuesta de Inscrito
-            $encResp_insc = EncuestaRespondidaInsc::findOrFail($id);
-            if($encResp_insc->estado == '0'){
-               $preguntas = $encResp_insc->encuesta->preguntas;
-               for ($i=0; $i < count($preguntas) ; $i++) {
-                  $encResp_insc->preguntas()->attach($preguntas[$i], ['respuesta' => $request->input($preguntas[$i]->idPreguntaEncuesta)]);
-               }
-               $encResp_insc->estado = '1';
-               $encResp_insc->update();
-            }
-            break;
-         case '2': //encuesta de Responsable
-            $encResp_resp = EncuestaRespondidaResp::findOrFail($id);
-            if($encResp_resp->estado == '0'){
-               $preguntas = $encResp_resp->encuesta->preguntas;
-               for ($i=0; $i < count($preguntas) ; $i++) {
-                  $encResp_resp->preguntas()->attach($preguntas[$i], ['respuesta' => $request->input($preguntas[$i]->idPreguntaEncuesta)]);
-               }
-               $encResp_resp->estado = '1';
-               $encResp_resp->update();
-            }
-            break;
+         abort('401');
       }
       return redirect('/');
    }
 
-   public function getHabitoEstudio($idEncuestaRespondida){
-      $encuesta = Encuesta::findOrFail((EncuestaRespondida::findOrFail($idEncuestaRespondida))->idEncuesta);
-      return view('miembro.tutorado.habitoEstudio.mis-habitos')->with('encuesta', $encuesta)->with('idEncuestaRespondida', $idEncuestaRespondida);
-   }
+   public function details($id){
+      $encuesta = Encuesta::findOrFail($id);
+      $respondidas = EncuestaRespondida::where(['idEncuesta' => $id, 'estado' => 1]);
+      $fh_envios = $respondidas->groupBy('fh_envio')->pluck('fh_envio');
 
-    public function storeHabitoEstudio(Request $request, $idEncuestaRespondida){
-      $inputs = $request->except(['_method', '_token']);
-      list($keys, $values) = array_divide($inputs);
-      $encuestaRespondida = EncuestaRespondida::findOrFail($idEncuestaRespondida);
-      dd($encuestaRespondida->tutorTutorado);
-      for ($i=0; $i < count($keys) ; $i++) {
-         $rptaEncuesta = new RptaEncuesta;
-         $rptaEncuesta->respuesta = $values[$i];
-         $rptaEncuesta->idEncuestaRespondida = $idEncuestaRespondida;
-         $rptaEncuesta->idPregunta = $keys[$i];;
-         $rptaEncuesta->save();
+      $respXfh = [];
+      foreach ($fh_envios as $fh_envio) {
+         array_push($respXfh, EncuestaRespondida::where(['fh_envio' => $fh_envio, 'estado' => 1])->get());
       }
-      $encuestaRespondida = EncuestaRespondida::findOrFail($idEncuestaRespondida);
-      TutorTutorado::where('idTutorTutorado', $encuestaRespondida->tutorTutorado->idTutorTutorado)->increment('habitoEstudioRespondido');
-      //return view('miembro.mis-encuestas.todos');
-      return redirect('/');
-   }
+      $preguntas = $encuesta->preguntas;
+      $alternativas = $encuesta->alternativas;
+      $matriz_frecuencia = [];
 
-   public function showHabitoEstudio($idTutorTutorado){
-      $tutorTutorado = TutorTutorado::where('idTutorTutorado', $idTutorTutorado)->first();
-      $user = $tutorTutorado->tutorado->user;
+      foreach ($respXfh as $envio) {  // $envio es una collection de EncuestaRespondida que tienen la misma fecha de envio
+         $envio_frec = [];
+         foreach ($preguntas->where('estado', 1) as $pregunta) {
+            $preguntas_frec = [];
+            foreach ($alternativas as $alternativa) {
+               $preguntas_frec[$alternativa->idAlternativa] = 0;
+            }
+            $envio_frec[$pregunta->idPregunta] = $preguntas_frec;
+         }
 
-      $encuestaRespondida = EncuestaRespondida::where('idTutorTutorado', $idTutorTutorado)->first();
-      $encuesta = Encuesta::findOrFail($encuestaRespondida->idEncuesta);
-      $alternativas = Alternativa::where('idEncuesta', $encuesta->idEncuesta)->select('etiqueta', 'valor')->get();
-
-      $i = 0;
-      $respuesta_cantidad = array();
-      foreach ($alternativas as $alternativa) {
-         $respuesta_cantidad[$i] = RptaEncuesta::where([['idEncuestaRespondida', $encuestaRespondida->idEncuestaRespondida],
-                                                        ['respuesta', $alternativa->valor]])
-                                                 ->count('respuesta');
-         $i++;
+         foreach ($envio as $enc_res) { //$enc_res es un objeto de EncuestaRespondida
+            foreach ($enc_res->preguntas->where('estado', 1) as $pregunta) { //acceso a la tabla PIVOTE RptaEncuesta
+               $envio_frec[$pregunta->idPregunta][$pregunta->pivot->respuesta] ++;
+            }
+         }
+         array_push($matriz_frecuencia, $envio_frec);
       }
-      $respuestas = RptaEncuesta::where([['idEncuestaRespondida', $encuestaRespondida->idEncuestaRespondida]])->get();
-      return view('miembro.tutor.habitoEstudio.show')->with('encuesta', $encuesta)
-                                                     ->with('user', $user)
-                                                     ->with('tutorTutorado', $tutorTutorado)
-                                                     ->with('respuestas', $respuestas)
-                                                     ->with('respuesta_cantidad', $respuesta_cantidad)
-                                                     ->with('alternativas', $alternativas->toArray());
+      $alt = $encuesta->alternativas->sortBy('valor');
+      $alt = $alt->values();
+      return view('admin.encuesta.details')
+         ->with('encuesta', $encuesta)
+         ->with('alternativas', $alt)
+         ->with('respXfh', $respXfh)
+         ->with('matriz_frecuencia', $matriz_frecuencia);
    }
 }
