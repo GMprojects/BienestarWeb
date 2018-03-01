@@ -150,8 +150,6 @@ class EncuestaController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-
-        dd($request);
       $request->validate([
          'titulo' => 'required',
       ]);
