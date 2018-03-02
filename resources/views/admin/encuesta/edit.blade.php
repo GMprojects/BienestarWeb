@@ -434,158 +434,156 @@
 		 <button class="btn btn-ff pull-right" type="submit"><i class="fa fa-save"></i> Guardar</button>
 	 </div>
 </div>
-
 {!!Form::close()!!}
 
-<script>
-
-function validar(){
-		var todoBien = true;
-		if ($('#rad_2').is(':checked')) {
-			if (!$('.destino').is(':checked')) {
-				document.getElementById('spanErrorResponsable').style.display = 'block';
-				todoBien = false;
+<script type="text/javascript">
+	function validar(){
+			var todoBien = true;
+			if ($('#rad_2').is(':checked')) {
+				if (!$('.destino').is(':checked')) {
+					document.getElementById('spanErrorResponsable').style.display = 'block';
+					todoBien = false;
+				}
 			}
-		}
-		if (!todoBien) {
-			$("#enc-motivo").modal("show");
-		}
-		return todoBien;
-}
-
-$("#enc-motivo").on('hidden.bs.modal', function () {
-		document.getElementById('spanErrorResponsable').style.display = 'block';
-});
-
-$("#enc-alternativas").on('hidden.bs.modal', function () {
-		if (!validarAlternativas()) {
-			document.getElementById('spanErrorAlternativa').style.display = 'block';
-			$("#enc-alternativas").modal("show");
-		}else{
-			document.getElementById('spanErrorAlternativa').style.display = 'none';
-		}
-});
-
-function validarAlternativas(){
-		var camposLlenos = true;
-		$('.list-alt input').each(function(){
-			if ($(this).val()=='') {
-				camposLlenos = false;
+			if (!todoBien) {
+				$("#enc-motivo").modal("show");
 			}
-		});
-		return camposLlenos;
-}
+			return todoBien;
+	}
 
-$('#btAddSeccion').on('click', function(){
-	$('#secciones').append(
-	'<div class="seccion" id="s'+ seccion +'_new">'+
-		'<div class="s-header">'+
-			'<div class="s-icon">'+ seccion +'</div>'+
-			'<div class="s-title"><textarea required minlength="2" name="titulo_s'+ seccion +'_new" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la sección">Una nueva sección - '+ seccion +'</textarea></div>'+
-			'<div class="s-tools">'+
-				'<div class="s-button">'+
-					'<a data-toggle="collapse" href="#box_s'+ seccion +'_new" aria-expanded="false" aria-controls="items_s'+ seccion +'" > <i class="fa fa-minus"></i></a>'+
-				'</div>'+
-				'<div class="s-button">'+
-					'<div class="dropdown">'+
-						'<a href="#" class="dropdown-toggle" data-toggle="dropdown">'+
-							'<i class="fa fa-ellipsis-v"></i>'+
-						'</a>'+
-						'<ul class="dropdown-menu">'+
-							'<li class="s-option"> <a href="#!" onclick="addEnunciado(\'s'+ seccion +'_new\')">Añadir enunciado</a> </li>'+
-						'</ul>'+
+	$("#enc-motivo").on('hidden.bs.modal', function () {
+			document.getElementById('spanErrorResponsable').style.display = 'block';
+	});
+
+	$("#enc-alternativas").on('hidden.bs.modal', function () {
+			if (!validarAlternativas()) {
+				document.getElementById('spanErrorAlternativa').style.display = 'block';
+				$("#enc-alternativas").modal("show");
+			}else{
+				document.getElementById('spanErrorAlternativa').style.display = 'none';
+			}
+	});
+
+	function validarAlternativas(){
+			var camposLlenos = true;
+			$('.list-alt input').each(function(){
+				if ($(this).val()=='') {
+					camposLlenos = false;
+				}
+			});
+			return camposLlenos;
+	}
+
+	$('#btAddSeccion').on('click', function(){
+		$('#secciones').append(
+		'<div class="seccion" id="s'+ seccion +'_new">'+
+			'<div class="s-header">'+
+				'<div class="s-icon">'+ seccion +'</div>'+
+				'<div class="s-title"><textarea required minlength="2" name="titulo_s'+ seccion +'_new" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la sección">Una nueva sección - '+ seccion +'</textarea></div>'+
+				'<div class="s-tools">'+
+					'<div class="s-button">'+
+						'<a data-toggle="collapse" href="#box_s'+ seccion +'_new" aria-expanded="false" aria-controls="items_s'+ seccion +'" > <i class="fa fa-minus"></i></a>'+
+					'</div>'+
+					'<div class="s-button">'+
+						'<div class="dropdown">'+
+							'<a href="#" class="dropdown-toggle" data-toggle="dropdown">'+
+								'<i class="fa fa-ellipsis-v"></i>'+
+							'</a>'+
+							'<ul class="dropdown-menu">'+
+								'<li class="s-option"> <a href="#!" onclick="addEnunciado(\'s'+ seccion +'_new\')">Añadir enunciado</a> </li>'+
+							'</ul>'+
+						'</div>'+
+					'</div>'+
+					'<div class="s-button">'+
+						'<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion(\'s'+seccion+'_new\')"><i class="fa fa-remove"></i></a>'+
 					'</div>'+
 				'</div>'+
-				'<div class="s-button">'+
-					'<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion(\'s'+seccion+'_new\')"><i class="fa fa-remove"></i></a>'+
+
+			'</div>'+
+			'<div class="s-body">'+
+				'<div class="s-description">'+
+					'<textarea minlength="2" name="descripcion_s'+ seccion +'_new" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la sección (opcional)"></textarea>'+
+				'</div>'+
+				'<div class="items"  id="box_s'+ seccion +'_new">'+
+
+					'<div class="alternatives hidden-xs hidden-sm alt-headers">'+
+						//aquí irán las ALTERNATIVAS que se vayan agregando
+					'</div>'+
+					'<ol class="enc-list sortable">'+
+						//aquí irán los ENUNCIADOS que se vayan agregando
+					'</ol>'+
 				'</div>'+
 			'</div>'+
-
-		'</div>'+
-		'<div class="s-body">'+
-			'<div class="s-description">'+
-				'<textarea minlength="2" name="descripcion_s'+ seccion +'_new" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la sección (opcional)"></textarea>'+
-			'</div>'+
-			'<div class="items"  id="box_s'+ seccion +'_new">'+
-
-				'<div class="alternatives hidden-xs hidden-sm alt-headers">'+
-					//aquí irán las ALTERNATIVAS que se vayan agregando
-				'</div>'+
-				'<ol class="enc-list sortable">'+
-					//aquí irán los ENUNCIADOS que se vayan agregando
-				'</ol>'+
-			'</div>'+
-		'</div>'+
-	'</div>');
-	array_secciones.push('s' + seccion + '_new');
-	seccion++;
-	$( ".items ol" ).sortable({
-		placeholder: "ui-state-highlight"
+		'</div>');
+		array_secciones.push('s' + seccion + '_new');
+		seccion++;
+		$( ".items ol" ).sortable({
+			placeholder: "ui-state-highlight"
+		});
+		$( ".items ol" ).disableSelection();
 	});
-	$( ".items ol" ).disableSelection();
-});
-$('#btAddAlternativa').on('click', function(){
-	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'_new"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'_new\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'_new"  required  class="form-control" placeholder="Una nueva alternativa"  value="Alternativa-'+alternativa+'"  /></li>');
-	array_alternativas.push('a_'+alternativa+'_new');
-	actualizar_items();
-	actualizar_headers();
-	alternativa++;
-});
-
-$('#enc-motivo').modal('show');
-$( function() {
-  $( "#s0 ol" ).sortable({
-	 placeholder: "ui-state-highlight"
-  });
-  $( "#s0 ol" ).disableSelection();
-} );
-$( function() {
-  $( "#entrada_alternativas" ).sortable({
-	 placeholder: "ui-state-highlight"
-  });
-  $( "#entrada_alternativas" ).disableSelection();
-} );
-$('form').on('submit', function(event){
-	if(array_enunciados.length > 0 && array_alternativas.length > 1 ){
-		return;
-	}else{
-		event.preventDefault();
-		document.getElementById('divErrorSubmit').style.display = 'block';
-	}
-});
-function ocultarErrorSubmit(){
-	document.getElementById('divErrorSubmit').style.display = 'none';
-}
-
-$(document).on('change keyup keydown paste cut', 'textarea', function(){
-	$(this).css('height','auto');
-	$(this).height(this.scrollHeight);
-});
-$(document).on('focus', 'textarea', function() {
-	this.select();
-	this.onmouseup = function() {
-		this.onmouseup = null;
-		return false;
-	}
-});
-$(document).on('ready', function(){
-	$('input').iCheck({
-		checkboxClass: 'icheckbox_square-green',
-		radioClass: 'iradio_square-green',
-		increaseArea: '20%' // optional
+	$('#btAddAlternativa').on('click', function(){
+		$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'_new"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'_new\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'_new"  required  class="form-control" placeholder="Una nueva alternativa"  value="Alternativa-'+alternativa+'"  /></li>');
+		array_alternativas.push('a_'+alternativa+'_new');
+		actualizar_items();
+		actualizar_headers();
+		alternativa++;
 	});
-	$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-});
-function cambiarTipo(tipo){
-	$('#tipo_1').css('display', 'none');
-	$('#tipo_2').css('display', 'none');
-	$('#tipo_3').css('display', 'none');
-	switch (tipo) {
-		case 1: $('#tipo_1').css('display', 'block'); break;
-		case 2: $('#tipo_2').css('display', 'block'); break;
-		case 3: $('#tipo_3').css('display', 'block'); break;
+
+	$('#enc-motivo').modal('show');
+	$( function() {
+	  $( "#s0 ol" ).sortable({
+		 placeholder: "ui-state-highlight"
+	  });
+	  $( "#s0 ol" ).disableSelection();
+	} );
+	$( function() {
+	  $( "#entrada_alternativas" ).sortable({
+		 placeholder: "ui-state-highlight"
+	  });
+	  $( "#entrada_alternativas" ).disableSelection();
+	} );
+	$('form').on('submit', function(event){
+		if(array_enunciados.length > 0 && array_alternativas.length > 1 ){
+			return;
+		}else{
+			event.preventDefault();
+			document.getElementById('divErrorSubmit').style.display = 'block';
+		}
+	});
+	function ocultarErrorSubmit(){
+		document.getElementById('divErrorSubmit').style.display = 'none';
 	}
-}
+
+	$(document).on('change keyup keydown paste cut', 'textarea', function(){
+		$(this).css('height','auto');
+		$(this).height(this.scrollHeight);
+	});
+	$(document).on('focus', 'textarea', function() {
+		this.select();
+		this.onmouseup = function() {
+			this.onmouseup = null;
+			return false;
+		}
+	});
+	$(document).on('ready', function(){
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+			increaseArea: '20%' // optional
+		});
+		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+	});
+	function cambiarTipo(tipo){
+		$('#tipo_1').css('display', 'none');
+		$('#tipo_2').css('display', 'none');
+		$('#tipo_3').css('display', 'none');
+		switch (tipo) {
+			case 1: $('#tipo_1').css('display', 'block'); break;
+			case 2: $('#tipo_2').css('display', 'block'); break;
+			case 3: $('#tipo_3').css('display', 'block'); break;
+		}
+	}
 </script>
 
 <style media="screen">
