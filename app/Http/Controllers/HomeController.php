@@ -20,10 +20,10 @@ use BienestarWeb\User;
 
 use Carbon\Carbon;
 use Log;
-use BienestarWeb\Mail\MailVerify;
+use BienestarWeb\Mail\MailVerificacion;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Mail\Mailer;
-
+use BienestarWeb\RecomendacionTutor;
 class HomeController extends Controller{
     /**
      * Create a new contaroller instance.
@@ -41,7 +41,7 @@ class HomeController extends Controller{
      */
    public function index(Request $request){
       /*Mail::to('mfernanda.mgl95@gmail.com')
-           ->send(new MailVerify('Mafer','mfernanda.mgl95@gmail.com', 'dddddddddsdsfsd', 'M'));*/
+           ->send(new MailVerificacion('Mafer','mfernanda.mgl95@gmail.com', 'dddddddddsdsfsd', 'M'));*/
       //return Redirect::to('admin/user');
       //dd('rere');
       $fechaActual = (Carbon::now())->format('Y-m-d');

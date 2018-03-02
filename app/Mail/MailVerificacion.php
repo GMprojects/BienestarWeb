@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MailVerify extends Mailable
+class MailVerificacion extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -36,9 +36,9 @@ class MailVerify extends Mailable
     public function build()
     {
          return $this->from($this->email)
-                      ->markdown('emails.emailConfirmationCode',['destinatario' => $this->nombreApellido,
-                                                       'sexo' => $this->sexo,
-                                                       'confirmation_code' => $this->confirmation_code ])
+                      ->markdown('emails.mailCodigoVerificacion',['destinatario' => $this->nombreApellido,
+                                                                 'sexo' => $this->sexo,
+                                                                 'confirmation_code' => $this->confirmation_code ])
                       ->subject('Por favor confirme su email');
     }
 }

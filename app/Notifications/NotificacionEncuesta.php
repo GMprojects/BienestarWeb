@@ -7,25 +7,18 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-use BienestarWeb\Actividad;
-
-class ActividadActualizadaNotif extends Notification
+class NotificacionEncuesta extends Notification
 {
     use Queueable;
 
-    private $actividad;
-    private $subject;
-    private $url;
     /**
-    * Create a new notification instance.
-    *
-    * @return void
-    */
-    public function __construct(Actividad $actividad, $subject,  $url)
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-         $this->actividad = $actividad;
-         $this->subject = $subject;
-         $this->url = $url;
+        //
     }
 
     /**
@@ -47,13 +40,10 @@ class ActividadActualizadaNotif extends Notification
      */
     public function toMail($notifiable)
     {
-        /*return (new MailMessage)
+        return (new MailMessage)
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');*/
-        return (new MailMessage)->markdown('emails.actividadActualizadaEmail',['actividad' => $this->actividad,
-                                                                               'url' => $this->url])
-                                ->subject($this->subject);
+                    ->line('Thank you for using our application!');
     }
 
     /**

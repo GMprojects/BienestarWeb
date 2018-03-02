@@ -16,7 +16,7 @@ use BienestarWeb\Rules\EmailValidation;
 
 use Illuminate\Support\Facades\Storage;
 
-use BienestarWeb\Jobs\JobEmailVerify;
+use BienestarWeb\Jobs\JobMailVerificacion;
 use File;
 use Carbon\Carbon;
 
@@ -147,7 +147,7 @@ class UserController extends Controller{
                      $user[0]->administrativo()->save($nuevoAdministrativo);
                      break;
         }
-        $job = (new JobEmailVerify(($user[0]->nombre.' '.$user[0]->apellidoPaterno.' '.$user[0]->apellidoMaterno),$request->email, $user[0]->confirmation_code, $user[0]->sexo))
+        $job = (new JobMailVerificacion(($user[0]->nombre.' '.$user[0]->apellidoPaterno.' '.$user[0]->apellidoMaterno),$request->email, $user[0]->confirmation_code, $user[0]->sexo))
            ->delay(Carbon::now()->addSeconds(1));
         dispatch($job);
         return Redirect::to('admin/user');
@@ -165,9 +165,9 @@ class UserController extends Controller{
       return view('miembro.confirmacionMail');
    }
 
-   public function enviarMailVerify(Request $request){
+   public function enviarMailVerificacion(Request $request){
       $user = User::findOrFail($request->id);
-      $job = (new JobEmailVerify(($user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno),$user->email, $user->confirmation_code, $user->sexo))
+      $job = (new JobMailVerificacion(($user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno),$user->email, $user->confirmation_code, $user->sexo))
          ->delay(Carbon::now()->addSeconds(1));
       dispatch($job);
       return redirect()->back();

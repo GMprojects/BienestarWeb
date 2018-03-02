@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
-use BienestarWeb\Jobs\JobEmail;
-use BienestarWeb\Jobs\JobEmailHabitosEstudios;
+use BienestarWeb\Jobs\JobMailBasico;
+use BienestarWeb\Jobs\JobMailHabitosEstudios;
 use DB;
 use Carbon\Carbon;
 
@@ -85,21 +85,6 @@ class TutorTutoradoController extends Controller{
           $docente->tutorados()->attach( (preg_split("/[_]/",$request->alumnos[$i]))[0], ['anioSemestre' => $arraySemestre[0],
                                                                  'numeroSemestre' => $numeroSemestre]);
         }
-        /* Crenando habitos de estudio */
-        $idUserTutorados = (Alumno::whereIn('idUser', $request->alumnos)->pluck('idUser'))->toArray();
-        $idTutorTutorados = TutorTutorado::where([['idDocente', $idDocente], ['anioSemestre', $arraySemestre[0]], ['numeroSemestre', $numeroSemestre]])->pluck('idTutorTutorado');
-        for ($i=0; $i < count($idUserTutorados) ; $i++) {
-           $encuesta = new EncuestaRespondida;
-           $encuesta->idUser = $idUserTutorados[$i];
-           $encuesta->idEncuesta = '3';
-           $encuesta->idTutorTutorado = $idTutorTutorados[$i];
-           $encuesta->idTutorTutorado = $idTutorTutorados[$i];
-           $encuesta->save();
-        }
-        /* --------------------------- */
-        /*$job = (new JobEmailHabitosEstudios($idDocente, $arraySemestre[0], $numeroSemestre))
-           ->delay(Carbon::now()->addSeconds(1));
-        dispatch($job);*/
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -161,18 +146,6 @@ class TutorTutoradoController extends Controller{
           $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
                                                                  'numeroSemestre' => $request->numeroSemestre]);
         }
-        /* Crenando habitos de estudio */
-        $idUserTutorados = (Alumno::whereIn('idUser', $request->alumnos)->pluck('idUser'))->toArray();
-        for ($i=0; $i < count($idUserTutorados) ; $i++) {
-          $encuesta = new EncuestaRespondida;
-          $encuesta->idUser = $idUserTutorados[$i];
-          $encuesta->idEncuesta = '3';
-          $encuesta->save();
-        }
-        /* --------------------------- */
-        /*$job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $numeroSemestre))
-           ->delay(Carbon::now()->addSeconds(1));
-        dispatch($job);*/
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -224,9 +197,7 @@ class TutorTutoradoController extends Controller{
                }
             }
          }
-         if ($tutorTutorado->habitoEstudioRespondido == 1) {
-            $tutorTutorado->habitoEstudio->delete();
-         }// else : -> habito de estudio  no Respondido
+         // else : -> habito de estudio  no Respondido
          $tutorTutorado->delete();
          $tutorTutorados = TutorTutorado::where([
                                        ['idDocente', $idDocente],
@@ -274,10 +245,6 @@ class TutorTutoradoController extends Controller{
                   }
                }
             }
-            if ($tutorTutorado->habitoEstudioRespondido == 1) {
-               //Habito d e Estudio Respondido
-               $tutorTutorado->habitoEstudio->delete();
-            }//  else  Habito d e Estudio NO Respondido'
             $tutorTutorado->delete();
          }
          if ($actividades != null) {
@@ -291,9 +258,11 @@ class TutorTutoradoController extends Controller{
     }
 
    public function enviarEmail(Request $request) {
-         $idAlPer = Alumno::where('idAlumno', $request->idAlumno)->value('idUser');
-         $idDocPer = Docente::where('idDocente', $request->idTutor)->value('idUser');
-         $job = (new JobEmail($idAlPer, $request->mensaje, $request->subject, $idDocPer, '1'))
+         $idUserAlumno = Alumno::where('idAlumno', $request->idAlumno)->value('idUser');
+         $idUserDocente = Docente::where('idDocente', $request->idTutor)->value('idUser');
+         $url = url(route('habitoEstudio.create'));
+         //($idUserEmisor, $idUserReceptor, $subject, $mensaje, $url, $accion)
+         $job = (new JobMailBasico($idUserDocente, $idUserAlumno, $request->subject, $request->mensaje, $url, 'Llenar Hábito Estudio'))
                ->delay(Carbon::now()->addSeconds(5));
          dispatch($job);
          return redirect()->back();

@@ -95,7 +95,7 @@
                            </li>--}}
                            @if (!Auth::user()->confirmed)
                            <li>
-                              <a href="" data-target = "#modal-enviarMailVerify" data-toggle = "modal">
+                              <a href="" data-target = "#modal-enviarMailVerificacion" data-toggle = "modal">
                                  <i class="fa fa-at" style="color:#006400;"></i> Debe verificar su correo.
                               </a>
                            </li>
@@ -182,8 +182,8 @@
    </nav>
 
    <!---- MODALES ---->
-   <div class="modal fade modal-slide-in-right" aria-hidden = "true" role = "dialog" tabindex = "-1" id="modal-enviarMailVerify">
-      {{Form::Open(['action'=>['UserController@enviarMailVerify'],'method'=>'post'])}}
+   <div class="modal fade modal-slide-in-right" aria-hidden = "true" role = "dialog" tabindex = "-1" id="modal-enviarMailVerificacion">
+      {{Form::Open(['action'=>['UserController@enviarMailVerificacion'],'method'=>'post'])}}
       {{ Form::hidden('id', Auth::user()->id) }}
    		<div class="modal-dialog">
    			<div class="modal-content">

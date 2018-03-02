@@ -15,7 +15,7 @@ use BienestarWeb\TutorTutorado;
 
 use BienestarWeb\Notifications\HabitoEstudioNotif;
 
-class JobEmailHabitosEstudios implements ShouldQueue
+class JobMailHabitosEstudios implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     private $idDocente;

@@ -1,34 +1,23 @@
 @component('mail::message')
-  @if($actividad->estado == '3')
-  # Actividad Cancelada
-  @elseif($actividad->estado == '5')
-  # Actividad Eliminada
-  @else
-  # Actividad Actualizada
-  @endif
-
+  # {{ $subject }}
   <br>
-  @component('mail::panel')
+  {{--@component('mail::panel')
    ![Imagen de la Actividad][imagenActividad]
    @if($actividad->rutaImagen != null)
     [imagenActividad]: {{ asset('storage/'.$actividad->rutaImagen) }}
    @else
     [imagenActividad]: {{ asset('storage/'.$actividad->tipoActividad['rutaImagen']) }}
    @endif
-  @endcomponent
+ @endcomponent--}}
   # **{{ $actividad->titulo }}** #
  <dl>
-   @if($actividad->estado == '3')
    <dt>
-   Esta actividad ha sido cancelada, de ser habilitada le estaremos notificando.
-   Puede ponerse en contacto con el programador de la actividad. {{ $actividad->programador['nombre'].' '. $actividad->programador['apellidoPaterno'].' '.$actividad->programador['apellidoMaterno'] }}
+     {{ $mensaje }}
+     @if($actividad->estado == '3' || $actividad->estado == '5')
+       Puede ponerse en contacto con el programador de la actividad. {{ $actividad->programador['nombre'].' '. $actividad->programador['apellidoPaterno'].' '.$actividad->programador['apellidoMaterno'] }}
+     @endif
    </dt>
-   @elseif($actividad->estado == '5')
-   <dt>
-   Esta actividad ha sido eliminada.
-   Puede ponerse en contacto con el programador de la actividad. {{ $actividad->programador['nombre'].' '. $actividad->programador['apellidoPaterno'].' '.$actividad->programador['apellidoMaterno'] }}
-   </dt>
-   @else
+   @if($actividad->estado == '1')
       <dt> {{ $actividad->descripcion }} </dt>
       @if($actividad->informacionAdicional != null)
       <dt> Información Adicional: </dt>
@@ -57,13 +46,19 @@
    @endif
  </dl>
 
- @if($actividad->estado != '3')
- @component('mail::button', ['url' => $url, 'color' => 'blue'])
- Ver Actividad
- @endcomponent
+ @if($actividad->estado == '1')
+   @if ($soyResponsable == 0 && $soyInscrito == 0)
+   @component('mail::button', ['url' => $url, 'color' => 'green'])
+   Inscribirme
+   @endcomponent
+   @else
+   @component('mail::button', ['url' => $url, 'color' => 'blue'])
+   Ver Actividad
+   @endcomponent
+   @endif
  @endif
 
- @if($actividad->estado != '3')
+ @if($actividad->estado == '1')
  Te esperamos!!
  @else
  Nos estaremos comunicando.

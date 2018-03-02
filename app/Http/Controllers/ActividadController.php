@@ -19,21 +19,15 @@ use BienestarWeb\Semestre;
 
 use BienestarWeb\Docente;
 use BienestarWeb\Administrativo;
-use DB;
 
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
 
-use Illuminate\Mail\Message;
-use BienestarWeb\Mail\ProgramacionActividad;
-
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
-use BienestarWeb\Jobs\JobEmailNuevaAct;
-use BienestarWeb\Jobs\JobEmailActualizarAct;
-use BienestarWeb\Jobs\JobEmail;
+use BienestarWeb\Jobs\JobNotificacionActividad;
+use BienestarWeb\Jobs\JobMailBasico;
 
 use File;
 use Validator;
@@ -230,8 +224,6 @@ class ActividadController extends Controller{
       * @return \Illuminate\Http\Response
       */
       public function store(Request $request){
-         $mensajeA = 'Se le invita a participar de una actividad';
-         $mensajeR = 'Ud. ha sido asignado como responsable de una actividad';
          $request->validate([
             'titulo' => 'required|max:100',
             'fechaInicio' => 'required|date_format:d/m/Y',
@@ -279,7 +271,6 @@ class ActividadController extends Controller{
                $inscripcionAlumno->idActividad = $actividad->idActividad;
                $inscripcionAlumno->alumno()->associate($alumno);
                $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
-               $mensajeA = 'Ud. ha sido inscrito en una actividad';
             break;
             case '3':
             case '10':
@@ -290,7 +281,6 @@ class ActividadController extends Controller{
                   $inscripcionAlumno->idActividad = $actividad->idActividad;
                   $inscripcionAlumno->alumno()->associate($alumno);
                   $inscripcionADA->inscripcionAlumno()->save($inscripcionAlumno);
-                  $mensajeA = 'Ud. ha sido inscrito en una actividad';
                }else{//GRUPAL
                   $actGrupal = new ActGrupal;
                   $actGrupal->cuposDisponibles = $request->cuposTotales;
@@ -312,8 +302,6 @@ class ActividadController extends Controller{
                   ]);
                   $actPed->save();
                }
-               $mensajeA = 'Se le ha programado una sesión de tutoría ';
-               $mensajeR = 'Ud. ha sido asignado responsable de la siguiente sesión de tutoría';
                break;
             case '5':           case '6':           case '7':
                $actGrupal = new ActGrupal;
@@ -340,7 +328,7 @@ class ActividadController extends Controller{
          }else{
             $userResp = User::findOrFail($request->idUserResp);
          }
-         $job = (new JobEmailNuevaAct($actividad, $actividad->idTipoActividad, $userAl, $userResp, $mensajeR, $mensajeA, $request->idAlumnoTutorado))
+         $job = (new JobNotificacionActividad($actividad, '1', $request->idAlumnoTutorado))
             ->delay(Carbon::now()->addSeconds(1));
          dispatch($job);
          return redirect('/');
@@ -507,11 +495,23 @@ class ActividadController extends Controller{
              }
 
              $userResp = User::findOrFail($idUserResp);
-             $job = (new JobEmailActualizarAct($actividad, $userResp, '1'))
+             $job = (new JobNotificacionActividad($actividad, '2', null))
                     ->delay(Carbon::now()->addSeconds(1));
              dispatch($job);
            }
            return redirect()->action('MiPerfilController@mis_actividades', ['id' => $request->user()->id, 'opcion'=>'3']);
+    }
+
+    public function cancel($id)  {
+        $actividad = Actividad::findOrFail($id);
+        $actividad->estado ='3';
+        $actividad->update();
+        //---------------Notificacion o E-Mail-------------------//
+        $userResp = User::findOrFail($actividad->idUserResp);
+        $job = (new JobNotificacionActividad($actividad, '3', null))
+               ->delay(Carbon::now()->addSeconds(1));
+        dispatch($job);
+        return redirect()->back();
     }
     /**
      * Remove the specified resource from storage.s
@@ -525,19 +525,7 @@ class ActividadController extends Controller{
         $actividad->update();
         //---------------Notificacion o E-Mail-------------------//
         $userResp = User::findOrFail($actividad->idUserResp);
-        $job = (new JobEmailActualizarAct($actividad, $userResp, '3'))
-               ->delay(Carbon::now()->addSeconds(1));
-        dispatch($job);
-        return redirect()->back();
-    }
-
-    public function cancel($id)  {
-        $actividad = Actividad::findOrFail($id);
-        $actividad->estado ='3';
-        $actividad->update();
-        //---------------Notificacion o E-Mail-------------------//
-        $userResp = User::findOrFail($actividad->idUserResp);
-        $job = (new JobEmailActualizarAct($actividad, $userResp, '2'))
+        $job = (new JobNotificacionActividad($actividad, '4', null))
                ->delay(Carbon::now()->addSeconds(1));
         dispatch($job);
         return redirect()->back();
@@ -833,8 +821,8 @@ class ActividadController extends Controller{
 
    public function enviarMensaje(Request $request){
       $idEmisor = User::where('id', $request->idEmisor)->value('id');
-      $idReceptor = USer::where('id', $request->idReceptor)->value('id');
-      $job = (new JobEmail($idEmisor, $request->mensaje, $request->subject, $idReceptor, '2'))//Comunicarse con el programador y responsable
+      $idReceptor = User::where('id', $request->idReceptor)->value('id');
+      $job = (new JobMailBasico($idEmisor, $idReceptor, $request->subject, $request->mensaje, NULL, NULL))
              ->delay(Carbon::now()->addSeconds(5));
       dispatch($job);
      return redirect()->back();

@@ -91,7 +91,7 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
     Route::get('encuestaResp/{id}', ['uses' => 'EncuestaController@encuestaResp']);
     Route::post('encuesta/registrar_respuestas/{id}/{opt}', ['uses' => 'EncuestaController@registrar_respuestas']);
 
-    Route::post('enviar/verify', ['uses' => 'UserController@enviarMailVerify', 'as' => 'user.enviarMailVerify']);
+    Route::post('enviar/verify', ['uses' => 'UserController@enviarMailVerificacion', 'as' => 'user.enviarMailVerificacion']);
 });
 //Route::middleware('auth')->prefix('miembro')->get('actividad/member_show', ['uses' => 'ActividadController@member_show', 'as' => 'actividad.member_show']);
 

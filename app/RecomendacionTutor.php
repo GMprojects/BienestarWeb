@@ -13,7 +13,7 @@ class RecomendacionTutor extends Model
       'recomendacion'
     ];
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     public function actividadesPedagogia(){
         return $this->belongsToMany('BienestarWeb\ActPedagogia','detallePedagogia','idRecomendacionTutor','idActPedagogia')

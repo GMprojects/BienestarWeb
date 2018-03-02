@@ -9,9 +9,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
 use Illuminate\Support\Facades\Mail;
-use BienestarWeb\Mail\MailVerify;
+use BienestarWeb\Mail\MailVerificacion;
 
-class JobEmailVerify implements ShouldQueue
+class JobMailVerificacion implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -40,6 +40,6 @@ class JobEmailVerify implements ShouldQueue
     public function handle()
     {
          Mail::to($this->email)
-              ->send(new MailVerify($this->nombreApellido, $this->email, $this->confirmation_code, $this->sexo));
+              ->send(new MailVerificacion($this->nombreApellido, $this->email, $this->confirmation_code, $this->sexo));
     }
 }

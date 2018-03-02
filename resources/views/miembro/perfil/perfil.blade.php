@@ -94,7 +94,7 @@
                         @if (Auth::user()->id == $du['user']->id)
                            @if (!Auth::user()->confirmed)
                               <p>
-                                 <a href="" data-target = "#modal-enviarMailVerify" data-toggle = "modal" style="color:red;">
+                                 <a href="" data-target = "#modal-enviarMailVerificacion" data-toggle = "modal" style="color:red;">
                                     <i class="fa fa-warning" style="color:red;"></i> Debe verificar su correo, para poder recibir los e-mails.
                                  </a>
                               </p>
@@ -116,8 +116,8 @@
                      </div>
 
                      <!---- MODALES ---->
-                        <div class="modal fade modal-slide-in-right" aria-hidden = "true" role = "dialog" tabindex = "-1" id="modal-enviarMailVerify">
-                           {{Form::Open(['action'=>['UserController@enviarMailVerify'],'method'=>'post'])}}
+                        <div class="modal fade modal-slide-in-right" aria-hidden = "true" role = "dialog" tabindex = "-1" id="modal-enviarMailVerificacion">
+                           {{Form::Open(['action'=>['UserController@enviarMailVerificacion'],'method'=>'post'])}}
                            {{ Form::hidden('id', Auth::user()->id) }}
                               <div class="modal-dialog">
                                  <div class="modal-content">
