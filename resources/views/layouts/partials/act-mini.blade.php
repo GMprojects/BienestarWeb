@@ -13,7 +13,7 @@
          {{--@switch( $actividad->estado )
             @case(2)
                <div style="background-color:green; padding: 5px; position: absolute;top: 20px; box-shadow: 0px 0px 0px 1px; ">
-                  <b style="color:white;">Actividad Realizada<b>
+                  <b style="color:white;">Actividad Ejecutada<b>
                </div>
             @break
             @case(3)

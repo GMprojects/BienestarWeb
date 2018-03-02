@@ -15,11 +15,11 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
    </head>
    <body>
-      @if(Auth::user() == null)
+      {{---@if(Auth::user() == null)--}}
             @include('layouts.partials.nav')
-      @else
+    {{--  @else
          @include('layouts.partials.member-nav')
-      @endif
+      @endif--}}
       <div id="wrapper">
          <section id="page-content-wrapper" class="content-princ container">
             <div class="caja">
@@ -43,7 +43,7 @@
                   </div>
                </div>
                <br><br><br><br>
-               <div class="caja-footer">
+               {{--<div class="caja-footer">
                   <div class="row">
                      <h1 style="text-align:center;">
                         <a style="left:50%;" href="{{ route('login') }}" class="btn btn-ff">
@@ -52,7 +52,7 @@
                         </a>
                      </h1>
                   </div>
-               </div>
+               </div>--}}
             </div>
             @include('layouts.partials.footer')
          </section>

@@ -107,17 +107,17 @@
             <div class="form-group">
    			  <label for="titulo">Observaciones </label>
    			  @if ($actividad->observaciones != 'Ninguna')
-   				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" placeholder="Añadir algunas observaciones de la Actividad realizada">{{ $actividad->observaciones }}</textarea>
+   				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" placeholder="Añadir algunas observaciones de la Actividad ejecutada">{{ $actividad->observaciones }}</textarea>
    			  @else
-   				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" placeholder="Añadir algunas observaciones de la Actividad realizada"></textarea>
+   				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" placeholder="Añadir algunas observaciones de la Actividad ejecutada"></textarea>
    			  @endif
    		  </div>
    		  <div class="form-group">
    			  <label for="titulo">Recomendaciones </label>
    			  @if ($actividad->recomendaciones != 'Ninguna')
-   				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad">{{ $actividad->recomendaciones }}</textarea>
+   				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" placeholder="Añadir algunas recomendaciones de la Actividad ejecutada que se pueda tener en cuenta en la siguiente actividad">{{ $actividad->recomendaciones }}</textarea>
    			  @else
-   				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad"></textarea>
+   				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" placeholder="Añadir algunas recomendaciones de la Actividad ejecutada que se pueda tener en cuenta en la siguiente actividad"></textarea>
    			  @endif
    		  </div>
          </div>

@@ -183,7 +183,7 @@ class ActividadController extends Controller{
      */
     public function index(Request $request){
       //$actividades = Actividad::where('estado', '<', '5')->orderBy('fechaInicio', 'asc')->get();
-      $actividades = Actividad::where('estado', '<', '5')->get();
+      $actividades = Actividad::where('estado', '<', '5')->orderBy('fechaInicio', 'desc')->get();
       return view('programador.actividad.index',[
          'actividades' => $actividades,
          'idUserProgramador' => $request->idUserProgramador,
@@ -193,8 +193,13 @@ class ActividadController extends Controller{
    }
 
    public function indexPorCategoria($idTipoActividad, Request $request){
-      $tipoActividad = TipoActividad::findOrFail($idTipoActividad);
-      $actividades = Actividad::where([['estado', '<', '5'],['idTipoActividad', '=',$request->idTipoActividad],['fechaInicio','>=',$request->fecha]])->orderBy('fechaInicio', 'asc')->get();
+      if ($idTipoActividad == '0') {
+        $tipoActividad = null;
+        $actividades = Actividad::where([['estado', '<', '5'],['fechaInicio','>=',$request->fecha]])->orderBy('fechaInicio', 'asc')->get();
+      }else{
+        $tipoActividad = TipoActividad::findOrFail($idTipoActividad);
+        $actividades = Actividad::where([['estado', '<', '5'],['idTipoActividad', '=',$request->idTipoActividad],['fechaInicio','>=',$request->fecha]])->orderBy('fechaInicio', 'asc')->get();
+      }
       return view('miembro.actividades-categoria',[
          'tipoActividad' => $tipoActividad,
          'actividades' => $actividades,

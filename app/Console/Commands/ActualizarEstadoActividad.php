@@ -4,7 +4,11 @@ namespace BienestarWeb\Console\Commands;
 
 use Illuminate\Console\Command;
 use BienestarWeb\Actividad;
-
+use Carbon\Carbon;
+//prueba
+use Log;
+use BienestarWeb\RecomendacionTutor;
+//prubea
 class ActualizarEstadoActividad extends Command
 {
     /**
@@ -38,14 +42,25 @@ class ActualizarEstadoActividad extends Command
      */
     public function handle()
     {
-      $actividades = Actividad::get();
+      /*$actividades = Actividad::get();
       $fechaActual = date("Y-m-j H:i:s");
       foreach ($actividades as $actividad) {
-          if(($actividad->fechaEjecucion == null) && ($fechaActual > $actividad->fechaProgramacion.' '.$actividad->horaProgramacion)){
-                  $actividad->estado = '4';
-                  $actividad->update();
-          }
-      }
+        if(($actividad->estado == '1') && ((intval((strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d')))/86400)) < 0) ){
+            Log::info($actividad->titulo);
+            $actividad->estado = '4';
+            $actividad->update();
+        }
+      }*/
+      /*
+      INSERT INTO `recomendaciontutor` (`idRecomendacionTutor`, `situacionEspecifica`, `recomendacion`) VALUES
+      (1, 'Alto rendimiento académico.', 'Canalizar a cursos avanzados. Canalizar a la incorporación de grupos estudiantiles y de investigación.'),
+
+      */
+      $recomendacion = new RecomendacionTutor;
+      $recomendacion->situacionEspecifica = 'situacionEspecificaPrueba';
+      $recomendacion->recomendacion = 'situacionEspecificaPrueba';
+      $recomendacion->save();
+
       $this->info("Se verifico la que actividades ya se vencieron el plazo :$");
     }
 }

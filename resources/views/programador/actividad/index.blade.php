@@ -21,13 +21,13 @@
 					<thead>
 						<th>Id</th>
 						<th>Título</th>
+						<th>Estado</th>
 						<th>Tipo Actividad</th>
 						<th>Modalidad</th>
 						<th>Cupos</th>
 						<th>Semestre</th>
 						<th>Fecha Inicio</th>
 						<th>Hora Inicio</th>
-						<th>Estado</th>
 						<!--<th>Fecha Ejecución</th>
 						<th>Hora Ejecución</th>-->
 						<th>Opciones</th>
@@ -41,28 +41,6 @@
 							<tr>
 								<td>{{ $i }}</td>
 								<td><a href="{{ action('ActividadController@member_show', ['id'=>$actividad->idActividad]) }}">{{ $actividad->titulo }}</a></td>
-								<td>{{ $actividad->tipoActividad->tipo }}</td>
-								@switch($actividad->modalidad)
-									@case(1)
-									<td><small class="label ff-bg-aqua rounded">Individual</small></td>
-									@break
-									@case(2)
-									@if ($actividad->idTipoActividad == 9 || $actividad->idTipoActividad == 8)
-									<td><small class="label ff-bg-purple rounded">Libre</small></td>
-									@else
-									<td><small class="label ff-bg-green2 rounded">Grupal</small></td>
-									@endif
-									@break
-								@endswitch
-								@if ($actividad->idTipoActividad == 9 || $actividad->idTipoActividad == 8)
-									<td>Libre</td>
-								@else
-									<td>{{ $actividad->cuposTotales }}</td>
-								@endif
-								<td>{{ $actividad->anioSemestre }} - @if ( $actividad->numeroSemestre == 1 )I	@else	II @endif</td>
-								<td>{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}</td>
-								<td>{{ date("g:i A",strtotime($actividad->horaInicio)) }}</td>
-
 								@switch($actividad->estado)
 									@case(1)
 										@php($diferencia = strtotime($actividad->fechaInicio) - strtotime(date('Y-m-d')))
@@ -91,6 +69,27 @@
 									<td>Expirada</td>-->
 									@break
 								@endswitch
+								<td>{{ $actividad->tipoActividad->tipo }}</td>
+								@switch($actividad->modalidad)
+									@case(1)
+									<td><small class="label ff-bg-aqua rounded">Individual</small></td>
+									@break
+									@case(2)
+									@if ($actividad->idTipoActividad == 9 || $actividad->idTipoActividad == 8)
+									<td><small class="label ff-bg-purple rounded">Libre</small></td>
+									@else
+									<td><small class="label ff-bg-green2 rounded">Grupal</small></td>
+									@endif
+									@break
+								@endswitch
+								@if ($actividad->idTipoActividad == 9 || $actividad->idTipoActividad == 8)
+									<td>Libre</td>
+								@else
+									<td>{{ $actividad->cuposTotales }}</td>
+								@endif
+								<td>{{ $actividad->anioSemestre }} - @if ( $actividad->numeroSemestre == 1 )I	@else	II @endif</td>
+								<td>{{ date("d/m/Y",strtotime($actividad->fechaInicio)) }}</td>
+								<td>{{ date("g:i A",strtotime($actividad->horaInicio)) }}</td>
 								<td>
 									@switch($actividad->estado)
 										@case('1')

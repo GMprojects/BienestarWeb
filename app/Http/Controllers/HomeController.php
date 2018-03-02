@@ -20,6 +20,9 @@ use BienestarWeb\User;
 
 use Carbon\Carbon;
 use Log;
+use BienestarWeb\Mail\MailVerify;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\Mail\Mailer;
 
 class HomeController extends Controller{
     /**
@@ -40,6 +43,7 @@ class HomeController extends Controller{
       /*Mail::to('mfernanda.mgl95@gmail.com')
            ->send(new MailVerify('Mafer','mfernanda.mgl95@gmail.com', 'dddddddddsdsfsd', 'M'));*/
       //return Redirect::to('admin/user');
+      //dd('rere');
       $fechaActual = (Carbon::now())->format('Y-m-d');
       $actividades = Actividad::where([['modalidad', '=', '2'],['estado', '=', '1'],['fechaInicio','>=', $fechaActual]])->orderBy('fechaInicio', 'asc')->get();
       return view('home')->with('actividades', $actividades);

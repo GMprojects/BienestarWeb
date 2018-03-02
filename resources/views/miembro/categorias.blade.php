@@ -28,6 +28,18 @@
                      <li><a href="{{ route('home') }}">Inicio</a></li>
                      <li class="active"> Categorias </li>
                   </ol>
+                  <div class="col-md-3 col-sm-6 col-xs-6">
+                     <a href="{{ action('ActividadController@indexPorCategoria', ['idTipoActividad' => '0', 'fecha' => date('Y-m-d')]) }}">
+                        <div class="cat-mini">
+                           <div class="cat-mini-body">
+                              <h2 style="line-height: 200px;"> <i class="fa fa-eercast fa-4x"></i> </h2>
+                           </div>
+                           <div class="cat-mini-footer">
+                              <p style="text-align:center;"> <b>Todas</b> </p>
+                           </div>
+                        </div>
+                     </a>
+                  </div>
                   @foreach ($tiposActividad as $tipoActividad)
                      <div class="col-md-3 col-sm-6 col-xs-6">
                         <a href="{{ action('ActividadController@indexPorCategoria', ['idTipoActividad' => $tipoActividad->idTipoActividad, 'fecha' => date('Y-m-d')]) }}">

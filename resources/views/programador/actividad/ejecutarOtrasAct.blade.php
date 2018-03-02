@@ -69,18 +69,18 @@
 			<div class="form-group">
 			  <label for="titulo">Observaciones </label>
 			  @if ($actividad->observaciones != 'Ninguna')
-				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas observaciones de la Actividad realizada">{{ $actividad->observaciones }}</textarea>
+				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas observaciones de la Actividad ejecutada">{{ $actividad->observaciones }}</textarea>
 			  @else
-				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" value ="{{ old('observaciones') }}" placeholder="Añadir algunas observaciones de la Actividad realizada"></textarea>
+				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" value ="{{ old('observaciones') }}" placeholder="Añadir algunas observaciones de la Actividad ejecutada"></textarea>
 			  @endif
 				  <p id="contadorObservaciones">0/500</p>
 		  </div>
 		  <div class="form-group">
 			  <label for="titulo">Recomendaciones </label>
 			  @if ($actividad->recomendaciones != 'Ninguna')
-				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad">{{ $actividad->recomendaciones }}</textarea>
+				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas recomendaciones de la Actividad ejecutada que se pueda tener en cuenta en la siguiente actividad">{{ $actividad->recomendaciones }}</textarea>
 			  @else
-				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" value ="{{ old('recomendaciones') }}"placeholder="Añadir algunas recomendaciones de la Actividad realizada que se pueda tener en cuenta en la siguiente actividad"></textarea>
+				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" value ="{{ old('recomendaciones') }}"placeholder="Añadir algunas recomendaciones de la Actividad ejecutada que se pueda tener en cuenta en la siguiente actividad"></textarea>
 			  @endif
 				  <p id="contadorRecomendaciones">0/500</p>
 		  </div>

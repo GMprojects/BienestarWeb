@@ -3,9 +3,9 @@ INSERT INTO `semestre` (`idSemestre`, `fechaInicio`, `fechaFin`, `semestre`, `cr
 (1, '2017-04-02', '2017-09-08', '2017-I', '2017-12-20 06:22:23', '2017-12-20 06:22:23');
 
 INSERT INTO `tipopersona` (`idTipoPersona`, `tipo`) VALUES
-(3, 'administrativo'),
-(1, 'alumno'),
-(2, 'docente');
+(3, 'Administrativo'),
+(1, 'Alumno'),
+(2, 'Docente');
 
 /*INSERT INTO `tipoactividad` (`idTipoActividad`, `tipo`, `dirigidoA`, `responsable`, `rutaImagen`) VALUES
 (1, 'Atención Médica', '1', '3', 'actividades/tipoActividad/medica.jpg'),

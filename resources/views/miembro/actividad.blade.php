@@ -56,7 +56,7 @@
                         </div>
                         <div class="member-data">
                            <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}">{{ $actividad->programador->nombre }} {{ $actividad->programador->apellidoPaterno }} </a></div>
-                           <div class="member-email"><a href="#" data-target = "#modal-email-p" data-toggle = "modal">{{ $actividad->programador->email }}</a></div>
+                           <div class="member-email"><a href="#" style="color:#4B367C;" data-target = "#modal-email-p" data-toggle = "modal">Enviar Mensaje</a></div>
                         </div>
                      </div>
                   </div>
@@ -79,7 +79,7 @@
                         </div>
                         <div class="member-data">
                            <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$actividad->responsable]) }}"> {{ $actividad->responsable->nombre }} {{ $actividad->responsable->apellidoPaterno }}</a></div>
-                           <div class="member-email"><a href="#" data-target = "#modal-email-r" data-toggle = "modal">{{ $actividad->responsable->email }}</a></div>
+                           <div class="member-email"><a href="#" style="color:#4B367C;" data-target = "#modal-email-r" data-toggle = "modal">Enviar Mensaje</a></div>
                         </div>
                      </div>
                   </div>
@@ -125,7 +125,7 @@
                                  @endif
                               @break
                               @case(2)
-                                    <span class="label-imagen-actividad" style="background-color:#4CAE4C;">Realizada<span>
+                                    <span class="label-imagen-actividad" style="background-color:#4CAE4C;">Ejecutada<span>
                               @break
                               @case(3)
                                     <span class="label-imagen-actividad" style="background-color:#C3301F;">Cancelada</span>

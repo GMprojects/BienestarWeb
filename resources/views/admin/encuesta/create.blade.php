@@ -85,7 +85,7 @@
 								  </select>
 							  </div>
 						  </div>
-							<span class="help-block"  style='display:none;' id="spanErrorResponsable">
+							<span class="help-block"  style='display:none;' id="spanErrorDestino">
 								<strong style="color:red;"><p>Debe dirigir las encuestas a al menos un tipo de usuario.</p></strong>
 							</span>
 					  </div>
@@ -115,14 +115,19 @@
 				  </div>
 				  <div class="modal-body">
 					  <div class="caja-body">
-						  <ul class="enc-list" id="entrada_alternativas" style="margin-bottom: 0px;  padding-left:0px; list-style:none;">
-			 				<li class="item-edit" id="a_1">
-								<input value="Alternativa-1" maxlength="20" type="text" name="a_1"  required  class="form-control" placeholder="Una nueva alternativa" /></li>
-							</li>
-							<li class="item-edit" id="a_2">
-								<input value="Alternativa-2" maxlength="20" type="text" name="a_2"  required  class="form-control" placeholder="Una nueva alternativa" /></li>
-							</li>
-			 			 </ul>
+							<span class="help-block"  style='display:none;' id="spanErrorAlternativa">
+								<strong style="color:red;"><p>El campo de alguna(s) alternativa(s) se encuentra(n) vacío(s).</p></strong>
+							</span>
+						  <div class="list-alt">
+								<ul class="enc-list" id="entrada_alternativas" style="margin-bottom: 0px;  padding-left:0px; list-style:none;">
+				 				<li class="item-edit" id="a_1">
+									<input value="Alternativa-1" maxlength="20" type="text" name="a_1"  required  class="form-control" placeholder="Una nueva alternativa" /></li>
+								</li>
+								<li class="item-edit" id="a_2">
+									<input value="Alternativa-2" maxlength="20" type="text" name="a_2"  required  class="form-control" placeholder="Una nueva alternativa" /></li>
+								</li>
+				 			 </ul>
+						  </div>
 					  </div>
 
 				  </div>
@@ -169,40 +174,37 @@
 		 <div class="encu-description">
 			 <textarea minlength="2" name="descripcion" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la encuesta (opcional)"></textarea>
 		 </div>
-
 		 <div class="items" id="s0">
-
-			 <div class="alternatives hidden-xs hidden-sm alt-headers">
-				 <div class="alternative alt-header">
-					 <span>Alternativa-1</span>
-				 </div>
-				 <div class="alternative alt-header">
-					 <span>Alternativa-2</span>
-				 </div>
-			 </div>
-
-			 <ol class="enc-list sortable">
-				 <div class="item" id="s0_i1">
-		 			<div class="question">
-		 			  <li>
-		 				  <span class="quest-text">
-		 					  <textarea required minlength="2" name="s0_e1" rows="1" class="ff-control" placeholder="Un nuevo enunciado">Un nuevo enunciado - 1</textarea>
-		 				  </span>
-		 			 </li>
-		 			</div>
-		 			<div class="alternatives">
-						<div class="alternative">
-							<input type="radio" name="p1" value="">
-							<label class="hidden-lg hidden-md">Alternativa-1</label>
-						</div>
-						<div class="alternative">
-							<input type="radio" name="p1" value="">
-							<label class="hidden-lg hidden-md">Alternativa-2</label>
-						</div>
-		 			</div>
-		 			<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado('s0', 's0_i1')"></i></a></div>
-		 		</div>
-			 </ol>
+  			 <div class="alternatives hidden-xs hidden-sm alt-headers">
+  				 <div class="alternative alt-header">
+  					 <span>Alternativa-1</span>
+  				 </div>
+  				 <div class="alternative alt-header">
+  					 <span>Alternativa-2</span>
+  				 </div>
+  			 </div>
+  			 <ol class="enc-list sortable">
+  				 <div class="item" id="s0_i1">
+  		 			<div class="question">
+  		 			  <li>
+  		 				  <span class="quest-text">
+  		 					  <textarea required minlength="2" name="s0_e1" rows="1" class="ff-control" placeholder="Un nuevo enunciado">Un nuevo enunciado - 1</textarea>
+  		 				  </span>
+  		 			 </li>
+  		 			</div>
+  		 			<div class="alternatives">
+  						<div class="alternative">
+  							<input type="radio" name="p1" value="">
+  							<label class="hidden-lg hidden-md">Alternativa-1</label>
+  						</div>
+  						<div class="alternative">
+  							<input type="radio" name="p1" value="">
+  							<label class="hidden-lg hidden-md">Alternativa-2</label>
+  						</div>
+  		 			</div>
+  		 			<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado('s0', 's0_i1')"></i></a></div>
+  		 		</div>
+  			 </ol>
 		 </div>
 		 <div class="secciones" id="secciones">
 		 </div>
@@ -214,244 +216,262 @@
 
 {!!Form::close()!!}
 
-<script>
-
-function validar(){
-		var todoBien = true;
-		if ($('#rad_2').is(':checked')) {
-			if (!$('.destino').is(':checked')) {
-				document.getElementById('spanErrorResponsable').style.display = 'block';
-				todoBien = false;
+<script type="text/javascript">
+	function validar(){
+			var tieneDestino = true;
+			if ($('#rad_2').is(':checked')) {
+				if (!$('.destino').is(':checked')) {
+					document.getElementById('spanErrorDestino').style.display = 'block';
+					tieneDestino = false;
+				}
 			}
-		}
-		if (!todoBien) {
-			$("#enc-motivo").modal("show");
-		}
-		return todoBien;
-}
-
-$("#enc-motivo").on('hidden.bs.modal', function () {
-		document.getElementById('spanErrorResponsable').style.display = 'block';
-});
-
-//IDs de los elementos
-var seccion = 1;
-var enunciado = 2;
-var alternativa = 3;
-//CANTIDAD de los elementos
-//ALTERNATIVAS
-var array_alternativas = ['a_1', 'a_2'];
-var array_enunciados = ['s0_i1']; //items -- enunciados
-var array_secciones = ['s0'];
-//--- funciones de ENCUESTA ---//
-function removeSeccion(seccion){
-	$('#'+seccion).remove();
-	array_secciones = array_secciones.filter(item => item !== seccion);
-}
-function removeEnunciado(seccion, enunciado){
-	array_enunciados = array_enunciados.filter(item => item !== enunciado);
-	$('#'+enunciado).remove();
-	if($('#'+seccion+' .item').length == 0){
-		$('#'+seccion+' .alt-headers').html("");
+			if (!tieneDestino) {
+				$("#enc-motivo").modal("show");
+			}
+			return tieneDestino;
 	}
-}
-function removeAlternativa(alternativa){
-	array_alternativas = array_alternativas.filter(item => item !== alternativa);
-	$('#'+alternativa).remove();
-	actualizar_items();
-	actualizar_headers();
-}
-function addEnunciado( seccion ){
-	var alternativas = my_alternatives( enunciado );
-	if($('#'+seccion+' .item').length == 0){
-		$('#'+seccion+' .alt-headers').html(my_headers());
+
+	$("#enc-motivo").on('hidden.bs.modal', function () {
+			document.getElementById('spanErrorDestino').style.display = 'block';
+	});
+
+	$("#enc-alternativas").on('hidden.bs.modal', function () {
+			if (!validarAlternativas()) {
+				document.getElementById('spanErrorAlternativa').style.display = 'block';
+				$("#enc-alternativas").modal("show");
+			}else{
+				document.getElementById('spanErrorAlternativa').style.display = 'none';
+			}
+	});
+
+	function validarAlternativas(){
+			var camposLlenos = true;
+			$('.list-alt input').each(function(){
+				if ($(this).val()=='') {
+					camposLlenos = false;
+				}
+			});
+			return camposLlenos;
 	}
-	$('#'+seccion+' ol').append(
-		'<div class="item" id="'+ seccion + '_i' + enunciado +'">'+
-			'<div class="question">'+
-			  '<li>'+
-				  '<span class="quest-text">'+
-					  '<textarea required minlength="2" name="'+ seccion + '_e' + enunciado +'" rows="1" class="ff-control" placeholder="Ingrese aquí el enunciado">Un nuevo enunciado - '+ enunciado +'</textarea>'+
-				  '</span>'+
-			 '</li>'+
-			'</div>'+
-			'<div class="alternatives">'+ alternativas +
-			'</div>'+
-			'<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado(\''+ seccion + '\', \''+ seccion + '_i' + enunciado +'\')"></i></a></div>'+
-		'</div>'
-	);
-	array_enunciados.push( seccion + '_i' + enunciado );
-	enunciado++;
-}
-$('#btAddSeccion').on('click', function(){
-	$('#secciones').append(
-	'<div class="seccion" id="s'+ seccion +'">'+
-		'<div class="s-header">'+
-			'<div class="s-icon">'+ seccion +'</div>'+
-			'<div class="s-title"><textarea required minlength="2" name="titulo_s'+ seccion +'" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la sección">Una nueva sección - '+ seccion +'</textarea></div>'+
-			'<div class="s-tools">'+
-				'<div class="s-button">'+
-					'<a data-toggle="collapse" href="#box_s'+ seccion +'" aria-expanded="false" aria-controls="items_s'+ seccion +'" > <i class="fa fa-minus"></i></a>'+
+
+	//IDs de los elementos
+	var seccion = 1;
+	var enunciado = 2;
+	var alternativa = 3;
+	//CANTIDAD de los elementos
+	//ALTERNATIVAS
+	var array_alternativas = ['a_1', 'a_2'];
+	var array_enunciados = ['s0_i1']; //items -- enunciados
+	var array_secciones = ['s0'];
+	//--- funciones de ENCUESTA ---//
+	function removeSeccion(seccion){
+		$('#'+seccion).remove();
+		array_secciones = array_secciones.filter(item => item !== seccion);
+	}
+	function removeEnunciado(seccion, enunciado){
+		array_enunciados = array_enunciados.filter(item => item !== enunciado);
+		$('#'+enunciado).remove();
+		if($('#'+seccion+' .item').length == 0){
+			$('#'+seccion+' .alt-headers').html("");
+		}
+	}
+	function removeAlternativa(alternativa){
+		array_alternativas = array_alternativas.filter(item => item !== alternativa);
+		$('#'+alternativa).remove();
+		actualizar_items();
+		actualizar_headers();
+	}
+	function addEnunciado( seccion ){
+		var alternativas = my_alternatives( enunciado );
+		if($('#'+seccion+' .item').length == 0){
+			$('#'+seccion+' .alt-headers').html(my_headers());
+		}
+		$('#'+seccion+' ol').append(
+			'<div class="item" id="'+ seccion + '_i' + enunciado +'">'+
+				'<div class="question">'+
+				  '<li>'+
+					  '<span class="quest-text">'+
+						  '<textarea required minlength="2" name="'+ seccion + '_e' + enunciado +'" rows="1" class="ff-control" placeholder="Ingrese aquí el enunciado">Un nuevo enunciado - '+ enunciado +'</textarea>'+
+					  '</span>'+
+				 '</li>'+
 				'</div>'+
-				'<div class="s-button">'+
-					'<div class="dropdown">'+
-						'<a href="#" class="dropdown-toggle" data-toggle="dropdown">'+
-							'<i class="fa fa-ellipsis-v"></i>'+
-						'</a>'+
-						'<ul class="dropdown-menu">'+
-							'<li class="s-option"> <a href="#!" onclick="addEnunciado(\'s'+ seccion +'\')">Añadir enunciado</a> </li>'+
-						'</ul>'+
+				'<div class="alternatives">'+ alternativas +
+				'</div>'+
+				'<div class="i-tools"><a href="#!"><i class="fa fa-remove" onclick="removeEnunciado(\''+ seccion + '\', \''+ seccion + '_i' + enunciado +'\')"></i></a></div>'+
+			'</div>'
+		);
+		array_enunciados.push( seccion + '_i' + enunciado );
+		enunciado++;
+	}
+	$('#btAddSeccion').on('click', function(){
+		$('#secciones').append(
+		'<div class="seccion" id="s'+ seccion +'">'+
+			'<div class="s-header">'+
+				'<div class="s-icon">'+ seccion +'</div>'+
+				'<div class="s-title"><textarea required minlength="2" name="titulo_s'+ seccion +'" rows="1" class="ff-control" placeholder="Ingrese aquí el título de la sección">Una nueva sección - '+ seccion +'</textarea></div>'+
+				'<div class="s-tools">'+
+					'<div class="s-button">'+
+						'<a data-toggle="collapse" href="#box_s'+ seccion +'" aria-expanded="false" aria-controls="items_s'+ seccion +'" > <i class="fa fa-minus"></i></a>'+
+					'</div>'+
+					'<div class="s-button">'+
+						'<div class="dropdown">'+
+							'<a href="#" class="dropdown-toggle" data-toggle="dropdown">'+
+								'<i class="fa fa-ellipsis-v"></i>'+
+							'</a>'+
+							'<ul class="dropdown-menu">'+
+								'<li class="s-option"> <a href="#!" onclick="addEnunciado(\'s'+ seccion +'\')">Añadir enunciado</a> </li>'+
+							'</ul>'+
+						'</div>'+
+					'</div>'+
+					'<div class="s-button">'+
+						'<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion(\'s'+seccion+'\')"><i class="fa fa-remove"></i></a>'+
 					'</div>'+
 				'</div>'+
-				'<div class="s-button">'+
-					'<a href="#!" data-toggle="tooltip" data-placement="top" title="Eliminar sección" type="button" onclick="removeSeccion(\'s'+seccion+'\')"><i class="fa fa-remove"></i></a>'+
+
+			'</div>'+
+			'<div class="s-body">'+
+				'<div class="s-description">'+
+					'<textarea minlength="2" name="descripcion_s'+ seccion +'" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la sección (opcional)"></textarea>'+
+				'</div>'+
+				'<div class="items"  id="box_s'+ seccion +'">'+
+
+					'<div class="alternatives hidden-xs hidden-sm alt-headers">'+
+						//aquí irán las ALTERNATIVAS que se vayan agregando
+					'</div>'+
+					'<ol class="enc-list sortable">'+
+						//aquí irán los ENUNCIADOS que se vayan agregando
+					'</ol>'+
 				'</div>'+
 			'</div>'+
-
-		'</div>'+
-		'<div class="s-body">'+
-			'<div class="s-description">'+
-				'<textarea minlength="2" name="descripcion_s'+ seccion +'" rows="1" class="ff-control" placeholder="Puede ingresar aquí una descripción de la sección (opcional)"></textarea>'+
-			'</div>'+
-			'<div class="items"  id="box_s'+ seccion +'">'+
-
-				'<div class="alternatives hidden-xs hidden-sm alt-headers">'+
-					//aquí irán las ALTERNATIVAS que se vayan agregando
-				'</div>'+
-				'<ol class="enc-list sortable">'+
-					//aquí irán los ENUNCIADOS que se vayan agregando
-				'</ol>'+
-			'</div>'+
-		'</div>'+
-	'</div>');
-	array_secciones.push('s'+seccion);
-	seccion++;
-	$( ".items ol" ).sortable({
-		placeholder: "ui-state-highlight"
-   });
-   $( ".items ol" ).disableSelection();
-});
-$('#btAddAlternativa').on('click', function(){
-	$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'"  required  class="form-control" placeholder="Una nueva alternativa" value="Alternativa-'+alternativa+'" /></li>');
-	array_alternativas.push('a_'+alternativa);
-	actualizar_items();
-	actualizar_headers();
-	alternativa++;
-});
-function verificarOrden(){
-	array_alternativas = [];
-	$('#entrada_alternativas input').each(function(){
-		array_alternativas.push($(this).attr('name'));
+		'</div>');
+		array_secciones.push('s'+seccion);
+		seccion++;
+		$( ".items ol" ).sortable({
+			placeholder: "ui-state-highlight"
+	   });
+	   $( ".items ol" ).disableSelection();
 	});
-}
-function actualizar_items(){
-	for (var i = 0; i < array_enunciados.length; i++) {
-		$('#'+array_enunciados[i]+ ' .alternatives').html(my_alternatives(array_enunciados[i]));
+	$('#btAddAlternativa').on('click', function(){
+		$('#entrada_alternativas').append('<li class="item-edit"  id="a_'+alternativa+'"> <button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa(\'a_'+alternativa+'\')"><span aria-hidden="true">&times;</span></button><input maxlength="20" type="text" name="a_'+alternativa+'"  required  class="form-control" placeholder="Una nueva alternativa" value="Alternativa-'+alternativa+'" /></li>');
+		array_alternativas.push('a_'+alternativa);
+		actualizar_items();
+		actualizar_headers();
+		alternativa++;
+	});
+	function verificarOrden(){
+		array_alternativas = [];
+		$('#entrada_alternativas input').each(function(){
+			array_alternativas.push($(this).attr('name'));
+		});
 	}
-}
-function actualizar_headers(){
-	for (var i = 0; i < array_secciones.length; i++) {
-		if($('#'+array_secciones[i]+' .item').length > 0){
-			$('#'+array_secciones[i]+' .alt-headers').html(my_headers());
-		}else {
-			$('#'+array_secciones[i]+' .alt-headers').html("");
+	function actualizar_items(){
+		for (var i = 0; i < array_enunciados.length; i++) {
+			$('#'+array_enunciados[i]+ ' .alternatives').html(my_alternatives(array_enunciados[i]));
 		}
 	}
-}
-function my_headers(){
-	var headers = "";
-	for (var i = 0; i < array_alternativas.length; i++) {
-		headers = headers +
-			'<div class="alternative alt-header">'+
-				'<span>' + $('#'+ array_alternativas[i]+' input').val() + '</span>'+
-			'</div>'
+	function actualizar_headers(){
+		for (var i = 0; i < array_secciones.length; i++) {
+			if($('#'+array_secciones[i]+' .item').length > 0){
+				$('#'+array_secciones[i]+' .alt-headers').html(my_headers());
+			}else {
+				$('#'+array_secciones[i]+' .alt-headers').html("");
+			}
+		}
 	}
-	return headers;
-}
-function my_alternatives( enunciado ){
-	var alternativas = "";
-	for (var i = 0; i < array_alternativas.length; i++) {
-		alternativas = alternativas +
-			'<div class="alternative">'+
-				'<input type="radio" name="p' + enunciado + '" value="">'+
-				'<label class="hidden-lg hidden-md">'+ $('#'+ array_alternativas[i]+' input').val() +'</label>'+
-			'</div>';
+	function my_headers(){
+		var headers = "";
+		for (var i = 0; i < array_alternativas.length; i++) {
+			headers = headers +
+				'<div class="alternative alt-header">'+
+					'<span>' + $('#'+ array_alternativas[i]+' input').val() + '</span>'+
+				'</div>'
+		}
+		return headers;
 	}
-	return alternativas;
-}
+	function my_alternatives( enunciado ){
+		var alternativas = "";
+		for (var i = 0; i < array_alternativas.length; i++) {
+			alternativas = alternativas +
+				'<div class="alternative">'+
+					'<input type="radio" name="p' + enunciado + '" value="">'+
+					'<label class="hidden-lg hidden-md">'+ $('#'+ array_alternativas[i]+' input').val() +'</label>'+
+				'</div>';
+		}
+		return alternativas;
+	}
 
 
-$('#enc-motivo').modal('show');
+	$('#enc-motivo').modal('show');
 
-$( function() {
-  $( "#s0 ol" ).sortable({
-	 placeholder: "ui-state-highlight"
-  });
-  $( "#s0 ol" ).disableSelection();
-} );
-$( function() {
-  $( "#entrada_alternativas" ).sortable({
-	 placeholder: "ui-state-highlight"
-  });
-  $( "#entrada_alternativas" ).disableSelection();
-} );
-$('form').on('submit', function(event){
-	if(array_enunciados.length > 0 && array_alternativas.length > 1 ){
-		return;
-	}else{
-		event.preventDefault();
-		document.getElementById('divErrorSubmit').style.display = 'block';
-	}
-});
-
-function ocultarErrorSubmit(){
-	document.getElementById('divErrorSubmit').style.display = 'none';
-}
-
-/*
-//--- funciones de API ---//
-$(document).on('change keyup keydown paste cut', 'textarea', function () {
-        $(this).height(0).height(this.scrollHeight);
-    }).find('textarea').change();
-*/
- $(document).on('keyup keydown paste cut', 'textarea', function(){
-	$(this).css('height','auto');
-	$(this).height(this.scrollHeight);
-});
-$(document).on('focus', 'textarea', function() {
-	this.select();
-	this.onmouseup = function() {
-		this.onmouseup = null;
-		return false;
-	}
-});
-/*$('textarea').focus(function() {
-	this.select();
-	this.onmouseup = function() {
-		this.onmouseup = null;
-		return false;
-	}
-});*/
-$(document).ready(function(){
-	$('input').iCheck({
-		checkboxClass: 'icheckbox_square-green',
-		radioClass: 'iradio_square-green',
-		increaseArea: '20%' // optional
+	$( function() {
+	  $( "#s0 ol" ).sortable({
+		 placeholder: "ui-state-highlight"
+	  });
+	  $( "#s0 ol" ).disableSelection();
+	} );
+	$( function() {
+	  $( "#entrada_alternativas" ).sortable({
+		 placeholder: "ui-state-highlight"
+	  });
+	  $( "#entrada_alternativas" ).disableSelection();
+	} );
+	$('form').on('submit', function(event){
+		if(array_enunciados.length > 0 && array_alternativas.length > 1 ){
+			return;
+		}else{
+			event.preventDefault();
+			document.getElementById('divErrorSubmit').style.display = 'block';
+		}
 	});
-	$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
-});
-function cambiarTipo(tipo){
-	$('#tipo_1').css('display', 'none');
-	$('#tipo_2').css('display', 'none');
-	$('#tipo_3').css('display', 'none');
-	switch (tipo) {
-		case 1: $('#tipo_1').css('display', 'block'); break;
-		case 2: $('#tipo_2').css('display', 'block'); break;
-		case 3: $('#tipo_3').css('display', 'block'); break;
+
+	function ocultarErrorSubmit(){
+		document.getElementById('divErrorSubmit').style.display = 'none';
 	}
 
-}
+	/*
+	//--- funciones de API ---//
+	$(document).on('change keyup keydown paste cut', 'textarea', function () {
+	        $(this).height(0).height(this.scrollHeight);
+	    }).find('textarea').change();
+	*/
+	 $(document).on('keyup keydown paste cut', 'textarea', function(){
+		$(this).css('height','auto');
+		$(this).height(this.scrollHeight);
+	});
+	$(document).on('focus', 'textarea', function() {
+		this.select();
+		this.onmouseup = function() {
+			this.onmouseup = null;
+			return false;
+		}
+	});
+	/*$('textarea').focus(function() {
+		this.select();
+		this.onmouseup = function() {
+			this.onmouseup = null;
+			return false;
+		}
+	});*/
+	$(document).ready(function(){
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+			increaseArea: '20%' // optional
+		});
+		$('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+	});
+	function cambiarTipo(tipo){
+		$('#tipo_1').css('display', 'none');
+		$('#tipo_2').css('display', 'none');
+		$('#tipo_3').css('display', 'none');
+		switch (tipo) {
+			case 1: $('#tipo_1').css('display', 'block'); break;
+			case 2: $('#tipo_2').css('display', 'block'); break;
+			case 3: $('#tipo_3').css('display', 'block'); break;
+		}
+	}
 </script>
+
 <style media="screen">
 	textarea{
 		resize: none;
@@ -465,7 +485,6 @@ function cambiarTipo(tipo){
 	   right: 0px;
 	   left: auto;
 	}
-
 	.ui-state-highlight {
 	   height: 70px;
 	   background-color: #D3C7E8;

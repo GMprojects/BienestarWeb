@@ -32,7 +32,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('docentes', 'UserController@indexDocentes');
     Route::get('administrativos', 'UserController@indexAdministrativos');
     Route::resource('semestre', 'SemestreController');
-    Route::get('actividadRealizada/{idActividad}', 'ActividadController@verEstadisticaActividad');
+    Route::get('actividadEjecutada/{idActividad}', 'ActividadController@verEstadisticaActividad');
 });
 
 

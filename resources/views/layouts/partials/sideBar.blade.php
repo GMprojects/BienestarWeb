@@ -47,7 +47,7 @@
             <ul class="dropdown-menu" role="menu">
                <li class="ff-li-nav"><a style="margin-top: 5px;" class="ff-li-b" href="{{ url('programador/actividad/create') }}"><i class="fa fa-plus"></i> Crear Actividad</a></li>
                <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('programador/actividad') }}"><i class="fa fa-circle-o"></i> Todas</a></li>
-               <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/tipoActividad') }}"><i class="fa fa-circle-o"></i> Tipos</a></li>
+               <li class="ff-li-nav"><a class="ff-li-b" href="{{ url('admin/tipoActividad') }}"><i class="fa fa-circle-o"></i> Categorías</a></li>
             </ul>
          </li>
          <li class="dropdown ">

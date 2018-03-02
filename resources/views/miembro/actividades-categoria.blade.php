@@ -30,12 +30,20 @@
                <ol class="breadcrumb">
                   <li><a href="{{ route('home') }}">Inicio</a></li>
                   <li><a href="{{ action('ActividadController@indexCategorias') }}">Categorías</a></li>
+                  @if ($tipoActividad!=null)
                   <li class="active">{{ $tipoActividad->tipo }}</li>
+                  @else
+                  <li class="active">Todas</li>
+                  @endif
                </ol>
                @if (count($actividades)==0)
                   <div class="col-md-12">
+                    @if ($tipoActividad!=null)
                      <h4>No hay actividades de <b>{{ $tipoActividad->tipo }}</b> registradas.</h4>
-                     <br><br>
+                    @else
+                     <h4>No hay actividades registradas.</h4>
+                    @endif
+                    <br><br>
                   </div>
                @else
                   @foreach ($actividades as $actividad)
@@ -64,22 +72,26 @@
       </div>
 
       <script type="text/javascript">
-         $(document).ready(function (){
-            $('#fechaSeleccionada ').datetimepicker({
+        $(document).ready(function (){
+          $('#fechaSeleccionada ').datetimepicker({
          		format: 'YYYY-MM-DD',
          		useCurrent: false, // Important! See issue #1075
                inline:true,
                defaultDate:'{{ date("Y-m-d",strtotime($fecha)) }}'
 
          	});
-            $('#fechaSeleccionada').on("dp.change", function(e){
-               console.log($('#fechaSeleccionada').data('DateTimePicker').date().format('YYYY-MM-DD'));
-               $('#link').attr('href', '{{ action('ActividadController@indexPorCategoria',
-                  ['idTipoActividad' => $tipoActividad->idTipoActividad, 'fecha' => '' ]) }}'+$('#fechaSeleccionada').data('DateTimePicker').date().format('YYYY-MM-DD'));
-               document.getElementById('link').click();
+          $('#fechaSeleccionada').on("dp.change", function(e){
+                console.log($('#fechaSeleccionada').data('DateTimePicker').date().format('YYYY-MM-DD'));
+                @if ($tipoActividad != null)
+                $('#link').attr('href', '{{ action('ActividadController@indexPorCategoria',
+                   ['idTipoActividad' => $tipoActividad->idTipoActividad, 'fecha' => '' ]) }}'+$('#fechaSeleccionada').data('DateTimePicker').date().format('YYYY-MM-DD'));
+                @else
+                $('#link').attr('href', '{{ action('ActividadController@indexPorCategoria',
+                   ['idTipoActividad' => '0', 'fecha' => '' ]) }}'+$('#fechaSeleccionada').data('DateTimePicker').date().format('YYYY-MM-DD'));
+                @endif
+                document.getElementById('link').click();
          	});
-         });
-
+        });
       </script>
    </body>
 

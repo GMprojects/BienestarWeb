@@ -91,7 +91,7 @@
                   @break
                   @case(2)
                      <div class="act-mini-txt pull-right">
-                        <i style="color:black;" class="fa fa-calendar-check-o"></i> <span style="color:black;">Actividad Realizada</span>
+                        <i style="color:black;" class="fa fa-calendar-check-o"></i> <span style="color:black;">Actividad Ejecutada</span>
                      </div>
                   @break
                   @case(3)
@@ -117,7 +117,7 @@
                   <a href="{{ action('MiPerfilController@show', ['id' =>$actividad->programador]) }}">{{ $actividad->programador->nombre }} {{ $actividad->programador->apellidoPaterno }} </a>
                </span>
                <span class="act-separator">/</span>
-               <span class="act-categoria"> Categoría: <a href="{{ action('ActividadController@indexCategorias') }}">{{ $actividad->tipoActividad->tipo }}</a>
+               <span class="act-categoria"> Categoría: <a href="{{ action('ActividadController@indexPorCategoria', ['idTipoActividad' => $actividad->tipoActividad->idTipoActividad, 'fecha' => date('Y-m-d')]) }}">{{ $actividad->tipoActividad->tipo }}</a>
                   <span class="act-separator">/</span>
                </span>
                @switch( $actividad->estado )
@@ -166,7 +166,7 @@
                   @endif
                @break
                @case(2)
-                     <span class="label-imagen" style="background-color:#4CAE4C;">Realizada<span>
+                     <span class="label-imagen" style="background-color:#4CAE4C;">Ejecutada<span>
                @break
                @case(3)
                      <span class="label-imagen" style="background-color:#C3301F;">Cancelada</span>

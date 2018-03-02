@@ -277,20 +277,25 @@
 				  </div>
 				  <div class="modal-body">
 					  <div class="caja-body">
-						  <ul class="enc-list" id="entrada_alternativas" style="margin-bottom: 0px;  padding-left:0px; list-style:none;">
-							  @php $i_header = 1; @endphp
-							  @foreach ($encuesta->alternativas->sortBy('valor') as $alternativa)
-								  <li class="item-edit"  id="a_{{ $alternativa->idAlternativa }}" >
-									  	@if($i_header > 2)
-											<button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa('a_{{ $alternativa->idAlternativa }}')">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										@endif
-										<input value="{{ $alternativa->etiqueta }}" maxlength="20" type="text" name="a_{{ $alternativa->idAlternativa }}"  required  class="form-control" placeholder="Una alternativa" />
-									</li>
-									@php $i_header++; @endphp
-							  @endforeach
-			 			 </ul>
+							<span class="help-block"  style='display:none;' id="spanErrorAlternativa">
+								<strong style="color:red;"><p>El campo de alguna(s) alternativa(s) se encuentra(n) vacío(s).</p></strong>
+							</span>
+							<div class="list-alt">
+								<ul class="enc-list" id="entrada_alternativas" style="margin-bottom: 0px;  padding-left:0px; list-style:none;">
+								  @php $i_header = 1; @endphp
+								  @foreach ($encuesta->alternativas->sortBy('valor') as $alternativa)
+									  <li class="item-edit"  id="a_{{ $alternativa->idAlternativa }}" >
+										  	@if($i_header > 2)
+												<button data-toggle="tooltip" data-placement="top" title="Eliminar alternativa" type="button" class="close close-red" onclick="removeAlternativa('a_{{ $alternativa->idAlternativa }}')">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											@endif
+											<input value="{{ $alternativa->etiqueta }}" maxlength="20" type="text" name="a_{{ $alternativa->idAlternativa }}"  required  class="form-control" placeholder="Una alternativa" />
+										</li>
+										@php $i_header++; @endphp
+								  @endforeach
+				 			 </ul>
+ 					  	</div>
 					  </div>
 
 				  </div>
@@ -452,6 +457,25 @@ $("#enc-motivo").on('hidden.bs.modal', function () {
 		document.getElementById('spanErrorResponsable').style.display = 'block';
 });
 
+$("#enc-alternativas").on('hidden.bs.modal', function () {
+		if (!validarAlternativas()) {
+			document.getElementById('spanErrorAlternativa').style.display = 'block';
+			$("#enc-alternativas").modal("show");
+		}else{
+			document.getElementById('spanErrorAlternativa').style.display = 'none';
+		}
+});
+
+function validarAlternativas(){
+		var camposLlenos = true;
+		$('.list-alt input').each(function(){
+			if ($(this).val()=='') {
+				camposLlenos = false;
+			}
+		});
+		return camposLlenos;
+}
+
 $('#btAddSeccion').on('click', function(){
 	$('#secciones').append(
 	'<div class="seccion" id="s'+ seccion +'_new">'+
@@ -522,16 +546,11 @@ $( function() {
   $( "#entrada_alternativas" ).disableSelection();
 } );
 $('form').on('submit', function(event){
-	for (var i = 0; i < array_alternativas.length; i++) {
-		if($('#'.array_alternativas[i]).val() == ""){
-			$('#entrada_alternativas').modal('show');
-		}
-	}
-	if(array_enunciados.length == 0 && array_alternativas.length < 2){
+	if(array_enunciados.length > 0 && array_alternativas.length > 1 ){
+		return;
+	}else{
 		event.preventDefault();
 		document.getElementById('divErrorSubmit').style.display = 'block';
-	}else{
-		return;
 	}
 });
 function ocultarErrorSubmit(){

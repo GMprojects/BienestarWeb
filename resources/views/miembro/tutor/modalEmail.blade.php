@@ -58,7 +58,7 @@
                <button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i>Cerrar</button>
       		</div>
       		<div class="pull-right">
-      			<button class="btn btn-ff-red" type="submit"><i class="fa fa-send"></i> Enviar Correo </button>
+      			<button class="btn btn-ff" type="submit"><i class="fa fa-send"></i> Enviar Correo </button>
       		</div>
 			</div>
 		</div>

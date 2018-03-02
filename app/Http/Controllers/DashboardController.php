@@ -24,9 +24,11 @@ class DashboardController extends Controller{
       $semestres = Actividad::select('anioSemestre','numeroSemestre')->distinct()->get();
       $actividadesProximas = Actividad::where([['estado','1'], ['fechaInicio','>=',(Carbon::now())->format('Y-m-d')]])->orderBy('fechaInicio', 'asc')->limit(5)->get();
       $idResponsablesFrecuentes = Actividad::select('idUserResp', DB::raw('count(idUserResp) as cantidad'))->groupBy('idUserResp')->orderBy('cantidad', 'desc')->limit(5)->pluck('idUserResp');
-      $responsablesFrecuentes = User::whereIn('id', $idResponsablesFrecuentes)->get();
+      $responsablesFrecuentes = User::join('tipoPersona', 'user.idTipoPersona', '=', 'tipoPersona.idTipoPersona')
+                                      ->whereIn('id', $idResponsablesFrecuentes)->get();
       $idProgramadoresFrecuentes = Actividad::select('idUserProg', DB::raw('count(idUserProg) as cantidad'))->groupBy('idUserProg')->orderBy('cantidad', 'desc')->limit(5)->pluck('idUserProg');
-      $programadoresFrecuentes = User::whereIn('id', $idProgramadoresFrecuentes)->get();
+      $programadoresFrecuentes = User::join('tipoPersona', 'user.idTipoPersona', '=', 'tipoPersona.idTipoPersona')
+                                       ->whereIn('id', $idProgramadoresFrecuentes)->get();
       /*         */
       $actividadesAltas = Actividad::join('tipoActividad', 'actividad.idTipoActividad', '=', 'tipoActividad.idTipoActividad')
                         ->join('encuestarespondida', 'actividad.idActividad', '=', 'encuestaRespondida.idActividad')
