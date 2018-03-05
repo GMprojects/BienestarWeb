@@ -85,7 +85,7 @@
 					<textarea style="resize: none;" name="informacionAdicional"  class="form-control" rows="6" cols="30" placeholder="Añadir información Adicional">{{ $actividad->informacionAdicional }}</textarea>
 				</div>
 				<div class="form-group">
-					<input type="checkbox" id="envioCorreos" name="envioCorreos" class="minimal"> &nbsp;&nbsp; &nbsp; <b>Enviar correos a todos los inscritos</b>&nbsp; &nbsp;
+					<input type="checkbox" id="envioCorreos" class="icheckbox_square-green" name="envioCorreos"> &nbsp;&nbsp; &nbsp; <b>Enviar correos a todos los inscritos</b>&nbsp; &nbsp;
 					<span>
 						<button type="button" class="btn btn-default btn-circle" data-toggle="modal" data-target="#modal-default">
 							<i class="fa fa-question" style="padding-left:4px;"></i>
@@ -219,9 +219,8 @@
 						<select name="idAlumnoTutorado[]" id="selectIdAlumnoTutorado" onchange="ocultar()" class="selectpicker form-control" multiple title="Selecciona Tutorado.."data-size="15" data-live-search="true" data-show-subtext="true"> </select>
 					</div>
 				</div>
-				<div id="divNoHayTutor" class="callout callout-danger" style='display:none;'>
-		         <h4>Tutores</h4>
-		         <p id="mensajeTutor">No hay tutor dentro del bla bla.</p>
+				<div id="divNoHayTutor" class="alert alert-danger" style='display:none;'>
+		         <p id="mensajeTutor">No existen tutores registrados en el ciclo académico.</p>
          	</div>
 				@if ($actividad->cuposTotales != 1)
 				<div id="divCuposTotales" style='display:none;'>
@@ -609,33 +608,34 @@
 	      dataType: 'json',
 	      success:function(data) {
 	        if (data == 'error') {
-				  document.getElementById('divNoHayTutor').style.display = 'block';
- 				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
-				  $('#modal-errorTut').modal('show');
+					  document.getElementById('divNoHayTutor').style.display = 'block';
+	 				  document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+					  $('#modal-errorTut').modal('show');
 	        }else{
-				  if(data.length == 0){
-					   document.getElementById('divNoHayTutor').style.display = 'block';
-					   document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
-						$('#modal-errorTut').modal('show');
-				  }else {
-						  op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
-						  $("#selectIdResponsable").append(op);
-						  for (var i = 0; i < data.length; i++) {
-							  if({{ $actividad->idUserResp }} == data[i].id){
- 								op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" value="'+data[i].id+'" selected>'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
- 							 }else{
- 								op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
- 							 }
-							 $("#selectIdResponsable").append(op);
-						  }
-						  $("#selectIdResponsable").selectpicker("refresh");
-				  }
-			  }
+					  if(data.length == 0){
+						   document.getElementById('divNoHayTutor').style.display = 'block';
+						   document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
+							$('#modal-errorTut').modal('show');
+					  }else {
+							  op ='<option value="" selected> Seleccione un '+placeholder+' </option>';
+							  $("#selectIdResponsable").append(op);
+							  for (var i = 0; i < data.length; i++) {
+								  if({{ $actividad->idUserResp }} == data[i].id){
+	 								op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" value="'+data[i].id+'" selected>'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
+	 							 }else{
+	 								op ='<option data-tokens="'+data[i].codigo+'" data-subtext="'+data[i].codigo+'" value="'+data[i].id+'">'+data[i].apellidoPaterno+' '+data[i].apellidoMaterno+' '+data[i].nombre+'</option>';
+	 							 }
+								 $("#selectIdResponsable").append(op);
+							  }
+							  $("#selectIdResponsable").selectpicker("refresh");
+					  }
+			  	}
 	      },
-	      error:function() {$('#modal-errorTut').modal('show');
+	      error:function() {
+					$('#modal-errorTut').modal('show');
 					document.getElementById('divNoHayTutor').style.display = 'block';
 					document.getElementById('mensajeTutor').innerHTML = 'No existen tutores registrados en el ciclo académico '+"{{(String)$semestre}}"+'.';
-	          	console.log("Error en Obtener lista de tutores.");
+	        console.log("Error en Obtener lista de tutores.");
 	      }
 	    });
 	    //Fin del AJAX

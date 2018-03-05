@@ -11,6 +11,8 @@ class Semestre extends Model
       protected $fillable = [
         'fechaInicio',
         'fechaFin',
+        'anioSemestre',
+        'numeroSemestre',
         'semestre'
       ];
 

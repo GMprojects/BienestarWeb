@@ -58,7 +58,7 @@
 		        </div>
 		        <div class="modal-footer">
 						  <div class="pull-right">
-							  <button class="btn btn-ff-default" type="button"  onclick="seleccionarCero()" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
+							  <button class="btn btn-ff-default" type="button" data-dismiss="modal"><i class="fa fa-remove"></i> Cerrar</button>
 						  </div>
 		        </div>
 		   </div>

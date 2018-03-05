@@ -35,7 +35,7 @@ class SemestreValidation implements Rule
     {
 
         //convertir Fecha a formato de la bd
-         $fecha = SemestreValidation::getFecha($value);
+         $fecha = $this->getFecha($value);
         //verificar que no este dentro del palzo de ningun otro registro
         if ($this->id == '') {
             $semestres = Semestre::whereDate('fechaFin','>',$fecha)->get();

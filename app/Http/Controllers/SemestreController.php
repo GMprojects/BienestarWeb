@@ -24,7 +24,7 @@ class SemestreController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function index(){
-          $semestres = Semestre::get();
+          $semestres = Semestre::orderBy('fechaInicio')->get();
           return view('admin.semestre.index')->with('semestres', $semestres)->with('numSemestres', count($semestres));
     }
 
@@ -34,7 +34,7 @@ class SemestreController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function create(){
-       return view('admin.semestre.create');
+          return view('admin.semestre.create');
     }
 
     /**
@@ -45,15 +45,15 @@ class SemestreController extends Controller{
      */
     public function store(Request $request){
           $request->validate([
-             'fechaInicio' => [new SemestreValidation(null)],
-             'fechaFin' => [new SemestreValidation(null)],
-             'numeroSemestre' => [new NumSemestreValidation($request->anioSemestre)]
+             'fechaInicio' => ['required',new SemestreValidation(null)],
+             'fechaFin' => ['required',new SemestreValidation(null)],
+             'numeroSemestre' => ['required',new NumSemestreValidation($request->anioSemestre)]
           ]);
-          $ciclo = ($request->numeroSemestre == 1) ? 'I' : 'II' ;
           $semestre = new Semestre;
           $semestre->fechaInicio = SemestreController::getFecha($request->fechaInicio);
           $semestre->fechaFin = SemestreController::getFecha($request->fechaFin);
-          $semestre->semestre = $request->anioSemestre.'-'.$ciclo;
+          $semestre->anioSemestre = $request->anioSemestre;
+          $semestre->numeroSemestre = $request->numeroSemestre;
           $semestre->save();
           return Redirect::to('admin/semestre');
     }

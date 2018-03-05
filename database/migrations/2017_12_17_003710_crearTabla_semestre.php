@@ -18,7 +18,8 @@ class CrearTablaSemestre extends Migration
               $tabla->increments('idSemestre');
               $tabla->date('fechaInicio');
               $tabla->date('fechaFin');
-              $tabla->string('semestre', 10)->unique();
+              $tabla->smallInteger('anioSemestre');
+              $tabla->enum('numeroSemestre', [1, 2]);
               $tabla->timestamps();
          });
     }

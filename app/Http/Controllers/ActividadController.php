@@ -151,7 +151,7 @@ class ActividadController extends Controller{
    }
    public function getSemestre(){
       $fechaActual = (Carbon::now())->format('Y-m-d');
-      $semestres = Semestre::get();
+      $semestres = Semestre::orderBy('fechaInicio')->get();
       $i = 0; $existe = false; $nroSem = count($semestres);
       while ($i < $nroSem && !$existe) {
          $fechaInicio = $semestres[$i]['fechaInicio'];
@@ -164,9 +164,9 @@ class ActividadController extends Controller{
          $i++;
       }
       if ($existe) {//True
-         return $semestres[$i-1]['semestre'];
+         return $semestres[$i-1]['anioSemestre'].'-'.($semestres[$i-1]['numeroSemestre']);
       } else {
-         return $semestres[$nroSem-1]['semestre'];
+         return $semestres[$nroSem-1]['anioSemestre'].'-'.($semestres[$nroSem-1]['numeroSemestre']);
       }
    }
 
@@ -212,9 +212,10 @@ class ActividadController extends Controller{
      */
     public function create(){
       $tiposActividad=TipoActividad::get();
+      $semestre = explode("-",$this->getSemestre());
       return view('programador.actividad.create')
               ->with('tiposActividad', $tiposActividad)
-              ->with('semestre', $this->getSemestre());
+              ->with('semestre', ( $semestre[0].' - '.(($semestre[1] == 1) ? 'I' : 'II') ));
     }
 
       /**
@@ -241,7 +242,7 @@ class ActividadController extends Controller{
             $fechaFin = $this->getFecha($request->fechaFin);
             $horaFin = (Carbon::parse($request->horaFin))->toTimeString();
          }
-         $arraySemestre = explode("-",$this->getSemestre());
+         $semestre = explode("-",$this->getSemestre());
          $actividad = Actividad::create([
             'titulo' => $request->titulo,
             'fechaInicio' => $this->getFecha($request->fechaInicio),
@@ -255,8 +256,8 @@ class ActividadController extends Controller{
             'rutaImagen' => $this->getRutaImagen($request),
             'invitado' => $this->getInivitado($request),
             'cuposTotales' => $this->getCuposTotales($request),
-            'anioSemestre' => $arraySemestre[0],
-            'numeroSemestre' => ($arraySemestre[1] == 'I') ? 1 : 2 ,
+            'anioSemestre' => $semestre[0],
+            'numeroSemestre' => $semestre[1],
             'modalidad' => $this->getModalidad($request),
             'idTipoActividad' => $idTipoActividad,
             'idUserResp' => $this->getResp($request),
@@ -364,6 +365,7 @@ class ActividadController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
+        $semestre = explode("-",$this->getSemestre());
         $actividad = Actividad::findOrFail($id);
         switch ($actividad->idTipoActividad) {
           case '1':          case '3':        case '2':         case '4':       case '10':
@@ -380,7 +382,7 @@ class ActividadController extends Controller{
               $idAlumnos = null;
           break;
         }
-        return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos, 'semestre' => $this->getSemestre()]);
+        return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos, 'semestre' => ( $semestre[0].'-'.$semestre[1] )]);
         //return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
     }
 

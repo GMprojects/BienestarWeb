@@ -17,7 +17,7 @@
 			<div class="caja">
 				<div class="caja-header">
 			      <div class="caja-icon">1</div>
-			      <div class="caja-title">Editar Semestre {{ $semestre->semestre }} </div>
+			      <div class="caja-title">Editar Semestre {{ $semestre->anioSemestre.' - '.(($semestre->numeroSemestre == 1) ? 'I' : 'II') }} </div>
 			   </div>
 
 				<div class="caja-body">

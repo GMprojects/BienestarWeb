@@ -1,6 +1,6 @@
 
 INSERT INTO `semestre` (`idSemestre`, `fechaInicio`, `fechaFin`, `semestre`, `created_at`, `updated_at`) VALUES
-(1, '2017-04-02', '2017-09-08', '2017-I', '2017-12-20 06:22:23', '2017-12-20 06:22:23');
+(1, '2017-04-02', '2017-09-08', '2017', '1', '2017-12-20 06:22:23', '2017-12-20 06:22:23');
 
 INSERT INTO `tipopersona` (`idTipoPersona`, `tipo`) VALUES
 (3, 'Administrativo'),

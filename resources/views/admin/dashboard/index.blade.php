@@ -236,7 +236,7 @@
                         </div>
                         <div class="member-data">
                            <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$responsableFrecuente]) }}">{{ $responsableFrecuente->nombre }} {{ $responsableFrecuente->apellidoPaterno }} </a></div>
-                           <div class="member-email"><a href="" style="color:#4B367C;">{{ $responsableFrecuente->tipo }}</a></div>
+                           <div><p style="color:#4B367C;">{{ $responsableFrecuente->tipo }}</p></div>
                         </div>
                      </div>
                   @endforeach
@@ -271,7 +271,7 @@
                         </div>
                         <div class="member-data">
                            <div class="member-name"><a href="{{ action('MiPerfilController@show', ['id' =>$programadorFrecuente]) }}">{{ $programadorFrecuente->nombre }} {{ $programadorFrecuente->apellidoPaterno }} </a></div>
-                           <div class="member-email"><a href="" style="color:#4B367C;">{{ $programadorFrecuente->tipo }}</a></div>
+                           <div><p style="color:#4B367C;">{{ $responsableFrecuente->tipo }}</p></div>
                         </div>
                      </div>
                   @endforeach

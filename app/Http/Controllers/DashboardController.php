@@ -100,13 +100,11 @@ class DashboardController extends Controller{
    }
 
    public function listarActividades(Request $request, $estado){
-      //dd($request);
       if ($request->aS == 0 && $request->nS == 0) {
          $actividades = Actividad::where([['estado', $estado]])->get();
       } else {
          $actividades = Actividad::where([['estado', $estado],['anioSemestre', $request->aS],['numeroSemestre', $request->nS]])->get();
       }
-      //dd($request->aS.' - '.$request->numeroSemestre);
       return view('admin.dashboard.actividades',['actividades' =>  $actividades, 'estado' => $estado, 'anioSemestre' => $request->aS, 'numeroSemestre' => $request->nS]);
    }
 

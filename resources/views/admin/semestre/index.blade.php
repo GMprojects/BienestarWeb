@@ -26,7 +26,7 @@
                   <tr>
                      <td>{{ date("d/m/Y",strtotime($semestre->fechaInicio )) }}</td>
                      <td>{{ date("d/m/Y",strtotime($semestre->fechaFin )) }}</td>
-                     <td>{{ $semestre->semestre }}</td>
+                     <td>{{ $semestre->anioSemestre.' - '.(($semestre->numeroSemestre == 1) ? 'I' : 'II') }}</td>
                      <td>
                         <a href="{{ action('SemestreController@edit',$semestre->idSemestre) }}""><button class="btn btn-ff-yellow"><i class="fa fa-edit"></i></button></a>
                         <a href="" data-target = "#modal-delete-{{ $semestre->idSemestre }}" data-toggle = "modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
