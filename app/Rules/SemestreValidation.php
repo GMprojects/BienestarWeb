@@ -38,17 +38,16 @@ class SemestreValidation implements Rule
          $fecha = $this->getFecha($value);
         //verificar que no este dentro del palzo de ningun otro registro
         if ($this->id == '') {
-            $semestres = Semestre::whereDate('fechaFin','>',$fecha)->get();
+            $semestres = Semestre::where('fechaFin','>=',$fecha)->get();
         } else {
-            $semestres = Semestre::whereDate('fechaFin','>',$fecha)->where('idSemestre','<>',$this->id)->get();
+            $semestres = Semestre::where('fechaFin','>=',$fecha)->where('idSemestre','<>',$this->id)->get();
         }
 
-         if (count($semestres)==0) {
-            return true;
-         } else {
-            return false;
-         }
-
+        if (count($semestres)==0) {
+          return true;
+        } else {
+          return false;
+        }
     }
 
     /**

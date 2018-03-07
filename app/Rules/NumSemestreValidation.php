@@ -12,7 +12,7 @@ class NumSemestreValidation implements Rule
      *
      * @return void
      */
-     private $anioSemestre;
+    private $anioSemestre;
     public function __construct($anioSemestre)
     {
         $this->anioSemestre = $anioSemestre;
@@ -27,9 +27,8 @@ class NumSemestreValidation implements Rule
      */
     public function passes($attribute, $value)
     {
-        $ciclo = ($value == 1) ? 'I' : 'II' ;
          //verificar sino hay otro registro del mismo años y ciclo
-         $semestres = Semestre::where('semestre', $this->anioSemestre.'-'.$ciclo)->get();
+         $semestres = Semestre::where([['anioSemestre', $this->anioSemestre], ['numeroSemestre', $value]])->get();
          if (count($semestres)==0) {
               return true;
            } else {
@@ -44,6 +43,6 @@ class NumSemestreValidation implements Rule
      */
     public function message()
     {
-        return 'Este semestre ya se encuentra registrado, puede eliminar o editar el otro registro.';
+        return 'Este semestre ya se encuentra registrado, puede eliminar o editar el registro.';
     }
 }

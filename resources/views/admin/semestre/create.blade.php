@@ -22,7 +22,7 @@
 
 				<div class="caja-body">
 					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							@if(count($errors)>0)
 								<div class="alert alert-danger">
 									<ul>
@@ -35,7 +35,7 @@
 						</div>
 					</div>
 					<div id="error" class="alert alert-danger" style='display:none;'>
-							<p>La <b>Fecha Fin </b> debe ser diferente y mayor a la <b>Fecha Inicio</b>.</p>
+							<p>El campo Fecha Inicio debe ser posterior a la fecha del campo Fecha Fin.</p>
 					</div>
 					<div class="row">
 						<p style="color:red;"> <span class="ast">*</span> Requerido
@@ -127,7 +127,7 @@
 		function validar(){
 			var array1 = ($('#fechaInicio').val()).split('/');
 			var array2 = ($('#fechaFin').val()).split('/');
-			if((array1[0] === array2[0]) && (array1[1] === array2[1]) && (array1[2] === array2[2])){
+			if((array1[0] >= array2[0]) && (array1[1] >= array2[1]) && (array1[2] >= array2[2])){
 				document.getElementById('error').style.display = 'block';
 				return false;
 			}else{

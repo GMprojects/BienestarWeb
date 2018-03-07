@@ -44,6 +44,7 @@ return [
         BienestarWeb\Providers\AuthServiceProvider::class,
         BienestarWeb\Providers\EventServiceProvider::class,
         BienestarWeb\Providers\RouteServiceProvider::class,
+        BienestarWeb\Providers\SettingsServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

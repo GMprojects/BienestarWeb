@@ -1,6 +1,6 @@
 @extends('template')
 @section ('contenido')
-	{!! Form::model($semestre, ['method'=>'PATCH', 'route'=>['semestre.update', $semestre->idSemestre]]) !!}
+	{!! Form::model($semestre, ['method'=>'PATCH', 'route'=>['semestre.update', $semestre->idSemestre], 'onsubmit'=>'return validar()']) !!}
 	{{ Form::token() }}
 	<div class="row">
 		<div class="col-xs-12">
@@ -34,6 +34,9 @@
 							@endif
 						</div>
 					</div>
+					<div id="error" class="alert alert-danger" style='display:none;'>
+							<p>El campo Fecha Inicio debe ser posterior a la fecha del campo Fecha Fin.</p>
+					</div>
 					<div class="row">
 						<p style="color:red;"> <span class="ast">*</span> Requerido
 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -43,7 +46,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input type="text" name="fechaInicio" required value="{{ date("d/m/Y",strtotime($semestre->fechaInicio )) }}" class="form-control"  id="fechaInicio" >
+									<input type="text" name="fechaInicio" required  onclick="ocultarError()" value="{{ date("d/m/Y",strtotime($semestre->fechaInicio )) }}" class="form-control"  id="fechaInicio" >
 								</div>
 							</div>
 						</div>
@@ -54,7 +57,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-calendar"></i>
 									</div>
-									<input type="text" name="fechaFin" required value="{{ date("d/m/Y",strtotime($semestre->fechaFin )) }}" class="form-control"  id="fechaFin" >
+									<input type="text" name="fechaFin" required  onclick="ocultarError()" value="{{ date("d/m/Y",strtotime($semestre->fechaFin )) }}" class="form-control"  id="fechaFin" >
 								</div>
 							</div>
 						</div>
@@ -84,6 +87,20 @@
 		$('#fechaFin').on("dp.change", function(e){
 			$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
 		});
+		function ocultarError(){
+			document.getElementById('error').style.display = 'none';
+		}
+
+		function validar(){
+			var array1 = ($('#fechaInicio').val()).split('/');
+			var array2 = ($('#fechaFin').val()).split('/');
+			if((array1[0] >= array2[0]) && (array1[1] >= array2[1]) && (array1[2] >= array2[2])){
+				document.getElementById('error').style.display = 'block';
+				return false;
+			}else{
+				return true;
+			}
+		}
 	</script>
 	<style type="text/css">
 		.ast{

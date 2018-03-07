@@ -13,6 +13,20 @@
          </div>
       </div>
       <div class="box-body">
+          @php
+             $diasRestantesSemestre = intval((strtotime(config('semestre')['fechaFin']) - strtotime(date('Y-m-d')))/86400);
+          @endphp
+          @if ($diasRestantesSemestre<=2 && $diasRestantesSemestre>0)
+          <div class="alert alert-info">
+            <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
+            <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Queda(n) {{ $diasRestantesSemestre }} día(s).</p>
+          </div>
+          @elseif($diasRestantesSemestre<0)
+          <div class="alert alert-info">
+            <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
+            <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Esta excedido en {{ (-1)*$diasRestantesSemestre }} día(s).</p>
+          </div>
+          @endif
          <div class="table-responsive">
             <table id="tabEgresados" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
                <thead>

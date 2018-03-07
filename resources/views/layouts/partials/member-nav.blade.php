@@ -1,7 +1,3 @@
-@php
-  $encuestasPendientes = (count(Auth::user()->encuestas->where('estado', '0')->where('fh_envio', '<=', date('Y-m-d H:i:s'))) > 0);
-@endphp
-
 <header class="header-princ">
    <nav class="navbar container-fluid navbar-fixed-top" >
       <div class="navbar-header">
@@ -33,45 +29,13 @@
                   </a>
                </li>
             </ul>
-
-         {{--<div class="div-buttons">
-            <ul class="nav navbar-nav nav-izq">
-               <li>
-                  <a class="hamburger" href="#">
-                     <i class="fa fa-bars" aria-hidden="true"></i>
-                  </a>
-               </li>
-               <li>
-                  <a href="{{ url('actividades-demo') }}" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Actividades">
-                     <i class="fa fa-calendar" aria-hidden="true"></i> <span class="hidden-sm hidden-xs">Actividades</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="#" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Categorías">
-                     <i class="fa fa-tags" aria-hidden="true"></i> <span class="hidden-sm hidden-xs">Categorías</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="#" class="ff-tool"  data-toggle="tooltip" data-placement="bottom" title="Nosotros">
-                     <i class="fa fa-star" aria-hidden="true"></i> <span class="hidden-sm hidden-xs">Nosotros</span>
-                  </a>
-               </li>
-               <li class="hidden-xs" style="overflow-x:hidden;">
-                  <form class="navbar-form">
-                    <div class="input-group">
-                       <input type="search" class="form-control input-addon-right" placeholder="Buscar..">
-                       <span class="input-group-btn">
-                       <button class="btn btn-default rounded-right" type="button"><i class="fa fa-search "></i></button>
-                     </span>
-                    </div>
-                  </form>
-               </li>
-            </ul>
---}}
             <ul class="nav navbar-nav pull-right">
                <li class="dropdown menu-notificaciones">
                   <a href="#" class="dropdown-toggle icon-nav" data-toggle="dropdown">
                      <i class="fa fa-bell-o"></i>
+                     @php
+                        $diasRestantesSemestre = intval((strtotime(config('semestre')['fechaFin']) - strtotime(date('Y-m-d')))/86400);
+                     @endphp
                      @php( $i=0 )
                      @if (!Auth::user()->confirmed)
                         @php( $i++ )
@@ -79,20 +43,18 @@
                      @if (!Auth::user()->changed_pass)
                         @php( $i++ )
                      @endif
+                     @if ( $diasRestantesSemestre<=2 && $diasRestantesSemestre>0 )
+                        @php( $i++ )
+                     @endif
                      @if ( $i != 0 )
-                        <span class="label label-danger">{{ $i+$encuestasPendientes }}</span>
+                        <span class="label label-danger">{{ $i }}</span>
                      @endif
                   </a>
                   <ul class="dropdown-menu">
-                     <li class="header-notif">Tu tienes {{ $i+$encuestasPendientes }} notificaciones.</li>
+                     <li class="header-notif">Tu tienes {{ $i }} notificaciones.</li>
                      <li class="divider"></li>
                      <li>
                         <ul class="menu">
-                           {{--<li>
-                              <a href="#">
-                                 <i class="fa fa-file-text" style="color:#D9534F;"></i> Tiene 4 encuestas por llenar.
-                              </a>
-                           </li>--}}
                            @if (!Auth::user()->confirmed)
                            <li>
                               <a href="" data-target = "#modal-enviarMailVerificacion" data-toggle = "modal">
@@ -107,6 +69,18 @@
                               </a>
                            </li>
                            @endif
+                           <li>
+                              <a href="{{ action('SemestreController@index') }}">
+                                @if ($diasRestantesSemestre<=2 && $diasRestantesSemestre>0)
+                                  <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
+                                  <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Queda(n) {{ $diasRestantesSemestre }} día(s).</p>
+                                @elseif($diasRestantesSemestre<0)
+                                  <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
+                                  <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Esta excedido en {{ (-1)*$diasRestantesSemestre }} día(s).</p>
+                                @endif
+                              </a>
+                           </li>
+
                            {{--@if ($encuestasPendientes>0)
                            <li>
                               <a href="{{ action('MiPerfilController@editPassword',['id' => Auth::user()->id ]) }}">

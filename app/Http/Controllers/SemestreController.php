@@ -9,6 +9,7 @@ use BienestarWeb\Rules\SemestreValidation;
 use BienestarWeb\Rules\NumSemestreValidation;
 
 use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
 
 class SemestreController extends Controller{
 
@@ -45,9 +46,9 @@ class SemestreController extends Controller{
      */
     public function store(Request $request){
           $request->validate([
-             'fechaInicio' => ['required',new SemestreValidation(null)],
-             'fechaFin' => ['required',new SemestreValidation(null)],
-             'numeroSemestre' => ['required',new NumSemestreValidation($request->anioSemestre)]
+             'fechaInicio' => ['required', 'date_format:"d/m/Y"', new SemestreValidation(null)],
+             'fechaFin' => ['required', 'after:fechaInicio', 'date_format:"d/m/Y"', new SemestreValidation(null)],
+             'numeroSemestre' => ['required', new NumSemestreValidation($request->anioSemestre)]
           ]);
           $semestre = new Semestre;
           $semestre->fechaInicio = SemestreController::getFecha($request->fechaInicio);
@@ -87,10 +88,9 @@ class SemestreController extends Controller{
      */
     public function update(Request $request, $id){
          $request->validate([
-           'fechaInicio' => [new SemestreValidation($id)],
-           'fechaFin' => [new SemestreValidation($id)]
+           'fechaInicio' => ['required', 'date_format:"d/m/Y"', new SemestreValidation($id)],
+           'fechaFin' => ['required', 'after:fechaInicio', 'date_format:"d/m/Y"', new SemestreValidation($id)]
         ]);
-
         $semestre = Semestre::findOrFail($id);
         $semestre->fechaInicio = SemestreController::getFecha($request->fechaInicio);
         $semestre->fechaFin = SemestreController::getFecha($request->fechaFin);

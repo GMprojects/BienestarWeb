@@ -150,7 +150,6 @@ class EncuestaController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-      dd($request);
       $request->validate([
          'titulo' => 'required',
       ]);
@@ -411,9 +410,13 @@ class EncuestaController extends Controller{
    public function member_show(Request $request, $id){
       $encResp = EncuestaRespondida::findOrFail($id);
       $encuesta = Encuesta::findOrFail($encResp->idEncuesta);
-      return view('miembro.mis-encuestas.show')
-         ->with('encuesta', $encuesta)
-         ->with('idEncuestaRespondida', $id);
+      if( $request->user()->idUser == $encResp->idUser ){
+         return view('miembro.mis-encuestas.show')
+            ->with('encuesta', $encuesta)
+            ->with('encResp', $encResp);
+      }else{
+         abort(401);
+      }
    }
 
    public function store_answers(Request $request, $id){

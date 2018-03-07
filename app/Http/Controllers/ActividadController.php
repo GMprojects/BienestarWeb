@@ -149,27 +149,6 @@ class ActividadController extends Controller{
          return $request->idUserResp;
       }
    }
-   public function getSemestre(){
-      $fechaActual = (Carbon::now())->format('Y-m-d');
-      $semestres = Semestre::orderBy('fechaInicio')->get();
-      $i = 0; $existe = false; $nroSem = count($semestres);
-      while ($i < $nroSem && !$existe) {
-         $fechaInicio = $semestres[$i]['fechaInicio'];
-         $fechaFin = $semestres[$i]['fechaFin'];
-         if (($fechaActual >= $fechaInicio) && ($fechaActual <= $fechaFin)) {
-           $existe = true;
-         } else {
-           $existe = false;
-         }
-         $i++;
-      }
-      if ($existe) {//True
-         return $semestres[$i-1]['anioSemestre'].'-'.($semestres[$i-1]['numeroSemestre']);
-      } else {
-         return $semestres[$nroSem-1]['anioSemestre'].'-'.($semestres[$nroSem-1]['numeroSemestre']);
-      }
-   }
-
     /**
      * Display a listing of the resource.
      *
@@ -212,10 +191,10 @@ class ActividadController extends Controller{
      */
     public function create(){
       $tiposActividad=TipoActividad::get();
-      $semestre = explode("-",$this->getSemestre());
+      $semestre = config('semestre');
       return view('programador.actividad.create')
               ->with('tiposActividad', $tiposActividad)
-              ->with('semestre', ( $semestre[0].' - '.(($semestre[1] == 1) ? 'I' : 'II') ));
+              ->with('semestre', ( $semestre['anioSemestre'].'-'.(($semestre['numeroSemestre'] == 1) ? 'I' : 'II') ));
     }
 
       /**
@@ -242,7 +221,7 @@ class ActividadController extends Controller{
             $fechaFin = $this->getFecha($request->fechaFin);
             $horaFin = (Carbon::parse($request->horaFin))->toTimeString();
          }
-         $semestre = explode("-",$this->getSemestre());
+         $semestre = config('semestre');
          $actividad = Actividad::create([
             'titulo' => $request->titulo,
             'fechaInicio' => $this->getFecha($request->fechaInicio),
@@ -256,8 +235,8 @@ class ActividadController extends Controller{
             'rutaImagen' => $this->getRutaImagen($request),
             'invitado' => $this->getInivitado($request),
             'cuposTotales' => $this->getCuposTotales($request),
-            'anioSemestre' => $semestre[0],
-            'numeroSemestre' => $semestre[1],
+            'anioSemestre' => $semestre['anioSemestre'],
+            'numeroSemestre' => $semestre['numeroSemestre'],
             'modalidad' => $this->getModalidad($request),
             'idTipoActividad' => $idTipoActividad,
             'idUserResp' => $this->getResp($request),
@@ -365,7 +344,7 @@ class ActividadController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        $semestre = explode("-",$this->getSemestre());
+        $semestre = config('semestre');
         $actividad = Actividad::findOrFail($id);
         switch ($actividad->idTipoActividad) {
           case '1':          case '3':        case '2':         case '4':       case '10':
@@ -382,7 +361,7 @@ class ActividadController extends Controller{
               $idAlumnos = null;
           break;
         }
-        return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos, 'semestre' => ( $semestre[0].'-'.$semestre[1] )]);
+        return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos, 'semestre' => ( $semestre['anioSemestre'].'-'.$semestre['numeroSemestre'] )]);
         //return view('programador.actividad.edit', ['actividad' => $actividad, 'idAlumnos' => $idAlumnos]);
     }
 
