@@ -28,7 +28,7 @@
 			   </div>
 			   <div class="caja-body">
 					<div class="encu-description">
-						@if($encuesta->tipo == 1)
+						{{--@if($encuesta->tipo == 1)
 							<p>
 								Esta encuesta fue generada automáticamente debido a su partipación como
 								@if($encuesta->destino == 'r')
@@ -60,11 +60,11 @@
 									<small class="label ff-bg-green">Tutorados</small>
 								@endif
 							</p>
-						@endif
+						@endif--}}
 					  <p>{{ $encuesta->descripcion }}</p>
 
 				  </div>
-				  <p> <strong>Por favor, elija una de las alternativas siguientes.</strong> </p>
+				  <h4> <strong>Por favor, elija una de las alternativas siguientes.</strong> </h4>
 				  <!-- NOTA NO-SECCION:  por si hay preguntas que no están dentro de alguna sección -->
 				  @if(count($encuesta->preguntas->where('idSeccion', null)->where('estado', 1))> 0)
 					  <div class="no-sec-items items">

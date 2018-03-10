@@ -48,6 +48,10 @@
                      @elseif( Auth::user()->funcion == 3 && $diasRestantesSemestre<=0)
                        @php( $i++ )
                      @endif
+                     @php( $encuestasPendientes = (Auth::user()->encuestas->where('estado', '0')->where('fh_envio', '<=', date('Y-m-d H:i:s'))))
+                     @if(count($encuestasPendientes) > 0 )
+                         @php( $i+=count($encuestasPendientes) )
+                     @endif
                      @if ( $i != 0 )
                         <span class="label label-danger">{{ $i }}</span>
                      @endif
@@ -71,25 +75,28 @@
                               </a>
                            </li>
                            @endif
+                           @if (Auth::user()->funcion == 3)
                            <li>
                               <a href="{{ action('SemestreController@index') }}">
-                                @if ( Auth::user()->funcion == 3 && ($diasRestantesSemestre<=2 && $diasRestantesSemestre>0) )
+                                @if ( $diasRestantesSemestre<=2 && $diasRestantesSemestre>0 )
                                   <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
                                   <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Queda(n) {{ $diasRestantesSemestre }} día(s).</p>
-                                @elseif( Auth::user()->funcion == 3 && $diasRestantesSemestre<=0)
+                                @elseif( $diasRestantesSemestre<=0 )
                                   <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
                                   <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Esta excedido en {{ (-1)*$diasRestantesSemestre }} día(s).</p>
                                 @endif
                               </a>
                            </li>
-
-                           {{--@if ($encuestasPendientes>0)
+                           @endif
+                           @if ( count($encuestasPendientes)>0 )
+                           @foreach ( Auth::user()->encuestas->where('estado', '0')->where('fh_envio', '<=', date('Y-m-d H:i:s')) as $encuesta)
                            <li>
-                              <a href="{{ action('MiPerfilController@editPassword',['id' => Auth::user()->id ]) }}">
-                                 <i class="fa fa-file-text" style="color:#4B367C;"></i> Tiene {{ $encuestasPendientes }}  encuestas pendientes por responder.
+                              <a href="{{ url('miembro/member_show/'.$encuesta->idEncuestaRespondida) }}">
+                                 <i class="fa fa-file-text" style="color:#4B367C;"></i> {{ $encuesta->encuesta->titulo }}
                               </a>
                            </li>
-                         @endif--}}
+                           @endforeach
+                           @endif
                         </ul>
                      </li>
                   </ul>

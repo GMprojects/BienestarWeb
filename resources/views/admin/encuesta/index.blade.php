@@ -78,7 +78,7 @@
 												</a>
 												<a href="" data-target="#modal-delete-{{$encuestas[$i]->idEncuesta}}" data-toggle="modal"><button class="btn btn-ff-red"><i class="fa fa-trash"></i></button></a>
 											@endif
-											@if($encuestas[$i]->tipo != 1)
+											@if($encuestas[$i]->tipo != 1 && $encuestas[$i]->idEncuesta != '3')
 												<a href="{{URL::action('EncuestaController@send',$encuestas[$i]->idEncuesta)}}">
 													<button class="btn btn-ff-green" data-toggle="tooltip" data-placement="bottom" title="Enviar esta encuesta">
 														<span>
@@ -87,7 +87,7 @@
 													</button>
 												</a>
 											@endif
-											@if ($cant_enc_resp[$i] > 0)
+											@if ($cant_enc_resp[$i] > 0 && $encuestas[$i]->idEncuesta != '3')
 												<a href="{{URL::action('EncuestaController@details',$encuestas[$i]->idEncuesta)}}">
 													<button class="btn btn-ff-default" data-toggle="tooltip" data-placement="bottom" title="Detalles de esta encuesta">
 														<span>

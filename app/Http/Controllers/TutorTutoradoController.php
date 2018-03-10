@@ -27,7 +27,6 @@ use BienestarWeb\Jobs\JobMailBasico;
 use BienestarWeb\Jobs\JobMailHabitosEstudios;
 use DB;
 use Carbon\Carbon;
-use Log;
 
 class TutorTutoradoController extends Controller{
     /**
@@ -300,12 +299,18 @@ class TutorTutoradoController extends Controller{
     }
 
    public function enviarEmail(Request $request) {
-         $idUserAlumno = Alumno::where('idAlumno', $request->idAlumno)->value('idUser');
-         $idUserDocente = Docente::where('idDocente', $request->idTutor)->value('idUser');
-         $url = url(route('habitoEstudio.create'));
+         $aux = TutorTutorado::findOrFail($request->idTutorTutorado);
+         $semestre = Semestre::where( ['anioSemestre' => $aux->anioSemestre, 'numeroSemestre' => $aux->numeroSemestre] )->get();
+         $encuesta = Encuesta::findOrFail(3);
+         $enviada = EncuestaRespondida::where(['idUser' => $aux->tutorado->user->id, 'idEncuesta' => 3])->whereBetween('fh_registro', [$semestre[0]->fechaInicio, $semestre[0]->fechaFin])->get();
+
+         $idUserAlumno = Alumno::where('idAlumno', $aux->idAlumno)->value('idUser');
+         $idUserDocente = Docente::where('idDocente', $aux->idDocente)->value('idUser');
+
+         $url = url('miembro/member_show/'.$enviada[0]->idEncuestaRespondida);
          //($idUserEmisor, $idUserReceptor, $subject, $mensaje, $url, $accion)
          $job = (new JobMailBasico($idUserDocente, $idUserAlumno, $request->subject, $request->mensaje, $url, 'Llenar Hábito Estudio'))
-               ->delay(Carbon::now()->addSeconds(5));
+               ->delay(Carbon::now()->addSeconds(1));
          dispatch($job);
          return redirect()->back();
     }

@@ -1,18 +1,4 @@
-@extends('template')
-@section('contenido')
-<div class="row">
-	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-		@if(count($errors)>0)
-		<div class="alert alert-danger" >
-			<ul>
-				@foreach($errors->all() as $error)
-				<li>{{$error}}</li>
-				@endforeach
-			</ul>
-		</div>
-		@endif
-	</div>
-</div>
+
  <div class="row">
      <div class="col-md-12">
          <div class="caja">
@@ -25,14 +11,11 @@
                  </div>
              </div>
              <div class="caja-body">
-							 <div id="divErrorSubmit" class="alert alert-danger">
-								 <button type="button" class="close"></button>
-								 <h4> <b>Atención!</b> </h4>
-								 <p>Esta es sólo la vista previa de la encuesta.</p>
-							 </div>
-					 <br>
-                <!--fin  -->
+					 <!--fin  -->
 					 <div class="encu-description">
+                   <h4 style="color: black;"><strong>Fecha y hora de Envío: </strong> {{ Date::make($enviada->fh_envio)->format('\E\l l d \d\e F \d\e\l Y \a \l\a\s H:i') }}</h4>
+                   <h4 style="color: black;"><strong>Fecha y hora de Respuesta: </strong> {{ Date::make($enviada->updated_at)->format('\E\l l d \d\e F \d\e\l Y \a \l\a\s H:i') }}</h4>
+
 						 @if($encuesta->tipo == 1)
 							 <p>
 								 Esta encuesta fue generada automáticamente debido a su partipación como
@@ -41,7 +24,7 @@
 								 @else
 									 <small class="label ff-bg-green">Inscrito</small>
 								 @endif
-								 en la <strong>Actividad</strong>: <strong style="color:#4B367C"> Aqui el titulo de la actividad</strong>
+								 en la <strong>Actividad</strong>: <strong style="color:#4B367C"> <a href="{{ action('ActividadController@member_show', ['id'=>$enviada->idActividad]) }}">{{ $enviada->actividad->titulo }}</a></strong>
 							 </p>
 						 @elseif( $encuesta->tipo == 2 )
 							 <span>Esta encuesta fue enviada a todos o algunos miembros que son:</span>
@@ -82,8 +65,7 @@
 							</div>
 
 							<ol class="enc-list">
-
-								@foreach ($encuesta->preguntas->where('idSeccion', null)->where('estado', 1)->sortBy('orden') as $pregunta)
+                        @foreach ($enviada->preguntas->where('idSeccion', null)->where('estado', 1)->sortBy('orden') as $pregunta)
 								 <div class="item">
 									 <div class="question">
 										<li>
@@ -95,7 +77,13 @@
 									 <div class="alternatives">
 										 @foreach ( $encuesta->alternativas->sortBy('valor') as $alternativa )
 											 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
-												 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+                                     @if( $pregunta->pivot->respuesta == $alternativa->idAlternativa )
+                                        <input type="radio" name="{{$key}}_{{ $pregunta->idPregunta }}_{{ $enviada->user->id }}" value="{{ $alternativa->valor }}" checked>
+                                        <label class="hidden-lg hidden-md" >{{ $alternativa->etiqueta }}</label>
+                                     @else
+                                        <input disabled type="radio" name="{{$key}}_{{ $pregunta->idPregunta }}_{{ $enviada->user->id }}" value="{{ $alternativa->valor }}">
+                                        <label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+                                     @endif
 											 </div>
 										 @endforeach
 									 </div>
@@ -127,7 +115,7 @@
 												</div>
 
 												<ol class="enc-list">
-													@foreach ($seccion->preguntas->where('estado', 1)->sortBy('orden') as $pregunta)
+													@foreach ($enviada->preguntas->where('estado', 1)->where('idSeccion', $seccion->idSeccion)->sortBy('orden') as $pregunta)
 													 <div class="item">
 														 <div class="question">
 															<li>
@@ -139,7 +127,13 @@
 														 <div class="alternatives">
 															 @foreach ( $encuesta->alternativas->sortBy('valor') as $alternativa )
 																 <div class="alternative"  style="width:calc(100%/{{ count($encuesta->alternativas) }});">
-																	 <input required type="radio" name="{{ $pregunta->idPregunta }}" value="{{ $alternativa->valor }}"><label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+																	@if( $pregunta->pivot->respuesta == $alternativa->idAlternativa )
+                                                      <input type="radio" name="{{$key}}_{{ $pregunta->idPregunta }}_{{ $enviada->user->id }}" value="{{ $alternativa->valor }}" checked>
+                                                      <label class="hidden-lg hidden-md" >{{ $alternativa->etiqueta }}</label>
+                                                   @else
+                                                      <input disabled type="radio" name="{{$key}}_{{ $pregunta->idPregunta }}_{{ $enviada->user->id }}" value="{{ $alternativa->valor }}">
+                                                      <label class="hidden-lg hidden-md">{{ $alternativa->etiqueta }}</label>
+                                                   @endif
 																 </div>
 															 @endforeach
 														 </div>
@@ -156,21 +150,17 @@
 						</div>
 					@endif
              </div>
-             <div class="caja-footer">
-                <button class="pull-right btn btn-ff" type="button" data-toggle="tooltip" data-placement="bottom" title="Es una prueba"><i class="fa fa-send"></i>Enviar</button>
-             </div>
+
          </div>
      </div>
  </div>
- {!!Form::close()!!}
- <script type="text/javascript">
- $(document).ready(function(){
-	 $('input').iCheck({
-		 checkboxClass: 'icheckbox_square-green',
-		 radioClass: 'iradio_square-green',
-		 increaseArea: '20%' // optional
-	 });
-	 $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
- });
- </script>
-@endsection
+<script type="text/javascript">
+   $(document).ready(function(){
+      $('input').iCheck({
+         checkboxClass: 'icheckbox_square-green',
+         radioClass: 'iradio_square-green',
+         increaseArea: '20%' // optional
+      });
+         $('input').on('ifChanged', function (event) { $(event.target).trigger('change'); });
+   });
+</script>

@@ -25,7 +25,7 @@ class EncuestaRespondida extends Model
          return $this->belongsTo('BienestarWeb\Actividad', 'idActividad');
       }
       public function user(){
-         return $this->belongsTo('BienestarWeb\User', 'iduser');
+         return $this->belongsTo('BienestarWeb\User', 'idUser');
       }
       public function preguntas(){
          return $this->belongsToMany( 'BienestarWeb\PreguntaEncuesta', 'rptaencuesta', 'idEncuestaRespondida', 'idPregunta')

@@ -17,7 +17,6 @@ use BienestarWeb\Semestre;
 use BienestarWeb\Actividad;
 use BienestarWeb\TipoActividad;
 
-use Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -36,7 +35,6 @@ class EncuestaController extends Controller{
       foreach ($encuestas as $encuesta) {
          array_push($cant_enc_resp, EncuestaRespondida::where(['idEncuesta' => $encuesta->idEncuesta, 'estado' => '1'])->count());
       }
-      //dd($cant_enc_resp);
       return view('admin.encuesta.index')->with('encuestas',$encuestas)->with('cant_enc_resp', $cant_enc_resp);
     }
 

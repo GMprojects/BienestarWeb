@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use BienestarWeb\User;
 
 use BienestarWeb\Notifications\NotificacionHabitoEstudio;
-use Log;
+
 class JobMailHabitosEstudios implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

@@ -19,7 +19,7 @@ use DB;
 use BienestarWeb\User;
 
 use Carbon\Carbon;
-use Log;
+
 use BienestarWeb\Mail\MailVerificacion;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Mail\Mailer;

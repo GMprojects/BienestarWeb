@@ -804,7 +804,7 @@ class ActividadController extends Controller{
       $idEmisor = User::where('id', $request->idEmisor)->value('id');
       $idReceptor = User::where('id', $request->idReceptor)->value('id');
       $job = (new JobMailBasico($idEmisor, $idReceptor, $request->subject, $request->mensaje, NULL, NULL))
-             ->delay(Carbon::now()->addSeconds(5));
+             ->delay(Carbon::now()->addSeconds(1));
       dispatch($job);
      return redirect()->back();
    }

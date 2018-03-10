@@ -17,7 +17,7 @@
         <br> <br>
   			<div class="table">
   					<div class="table-responsive">
-  						<table id="tabTutores" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
+              <table id="tabTutores" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
   							<thead>
                   <th>Código</th>
                   <th>Nombres y Apellidos</th>
@@ -39,7 +39,7 @@
                         </td>
                       @else
                       <td>
-                        <a href="{{ action('EncuestaController@showHabitoEstudio', ['idTutorTutorado' => $tutorado->idTutorTutorado]) }}">
+                        <a href="{{ action('EncuestaController@show_habito', ['id' => $tutorado->idTutorTutorado]) }}">
                           <button type="button" class="btn btn-ff-blues" >
                              <span>
                                <i class="fa fa-eye"><i class="glyphicon glyphicon-list-alt"></i></i>

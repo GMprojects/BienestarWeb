@@ -8,8 +8,7 @@
 			</div>
 
 			<div class="modal-body">
-            {{ Form::hidden('idAlumno', $tutorado->idAlumno) }}
-            {{ Form::hidden('idTutor', $idTutor) }}
+            {{ Form::hidden('idTutorTutorado', $tutorado->idTutorTutorado) }}
             <p>Notificar que debe llenar el hábito de estudio</p>
 				<div class="row">
 	            <div class="col-md-12">
