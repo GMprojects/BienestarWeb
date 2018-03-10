@@ -422,15 +422,16 @@ class EncuestaController extends Controller{
 
    public static function store_habi($id_resp){
       $fh_registro = date('Y-m-d H:i');
-      $semestre = SemestreController::getSemestre();
-      $existe = EncuestaRespondida::where(['idUser' => $id_resp, 'idEncuesta' => 3])->whereBetween('fh_registro', [$semestre->fechaInicio, $semestre->fechaFin])->get();
+      $semestre = config('semestre');
+      $existe = EncuestaRespondida::where(['idUser' => $id_resp, 'idEncuesta' => 3])->whereBetween('fh_registro', [$semestre['fechaInicio'], $semestre['fechaFin']])->get();
       if( $existe->isEmpty() ){
-         EncuestaRespondida::create([
+         $encuesta = EncuestaRespondida::create([
             'idUser' => $id_resp,
             'idEncuesta' => 3,
             'fh_registro' => $fh_registro,
             'fh_envio' => $fh_registro
          ]);
+         return $encuesta;
       }
    }
 
