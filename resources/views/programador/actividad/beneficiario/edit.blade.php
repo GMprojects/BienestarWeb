@@ -75,7 +75,6 @@
 				<div class="form-group">
 					<label for="observaciones">Observaciones </label>
 					<textarea name="observaciones" id="observaciones" class="form-control" rows="6" cols="30" placeholder="Describir observaciones... ">{{ $beneficiario->observaciones }}</textarea>
-					<p id="contadorObservaciones">0/500</p>
 			  </div>
 		  </div>
 
@@ -157,6 +156,9 @@
 	});
 	$('#fechaFin').on("dp.change", function(e){
 		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
+	});
+	$('textarea#observaciones').maxlength({
+					alwaysShow: true
 	});
 	function validar(){
 		var existeUnSeleccionado = false;

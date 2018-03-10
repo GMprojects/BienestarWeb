@@ -40,13 +40,15 @@
 				</div>
 
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<div class="form-horizontal">
 							<p style="color:red;"> <span class="ast">*</span> Requerido	</p>
 						</div>
 						<div id="error" class="alert alert-danger" style='display:none;'>
 							<p>No existen Egresados registrados</p>
 						</div>
+					</div>
+					<div class="col-sm-6">
 						@if ($op == 2)<!-- no viene desde egresado -->
 								<div class="form-group">
 									<label for="idEgresado">Egresado </label><span class="ast">*</span>
@@ -91,9 +93,9 @@
 									<i class="fa fa-calendar"></i>
 								</div>
 								@if (old('fechaFin') == null)
-									<input type="text" name="fechaFin" required placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaFin" >
+									<input type="text" name="fechaFin" placeholder="{{date("d/m/Y")}}" class="form-control"  id="fechaFin" >
 								@else
-									<input type="text" name="fechaFin" required value="{{old('fechaFin')}}" class="form-control"  id="fechaFin" >
+									<input type="text" name="fechaFin" value="{{old('fechaFin')}}" class="form-control"  id="fechaFin" >
 								@endif
 							</div>
 						</div>
@@ -112,12 +114,10 @@
 						<div class="form-group">
 							<label for="recomendaciones">Recomendaciones</label>
 							<textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas recomendaciones que pueda dar sobre su trabajo"></textarea>
-			 				<p id="contadorRecomendaciones">0/500</p>
 						</div>
 						<div class="form-group">
 							<label for="observaciones">Observaciones</label>
 							<textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas observaciones que pueda dar sobre su trabajo"></textarea>
-			 				<p id="contadorObservaciones">0/500</p>
 						</div>
 					</div>
 				</div>
@@ -146,24 +146,12 @@
 	$('#fechaFin').on("dp.change", function(e){
 		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
 	});
-
-	$(document).ready(function() {
-			 init_contador('#observaciones', '#contadorObservaciones');
-			 init_contador('#recomendaciones', '#contadorRecomendaciones');
+	$('textarea#observaciones').maxlength({
+					alwaysShow: true
 	});
-	function init_contador(idTextArea, idContador){
-		function update_Contador(idTextArea, idContador){
-			var contador = $(idContador);
-			var ta = $(idTextArea);
-			contador.html(ta.val().length+'/500');
-		}
-		$(idTextArea).keyup(function(){
-			update_Contador(idTextArea, idContador);
-		});
-		$(idTextArea).change(function(){
-			update_Contador(idTextArea, idContador);
-		});
-	}
+	$('textarea#recomendaciones').maxlength({
+					alwaysShow: true
+	});
 	/*function validar(){
 		if (({/{$egresados}}).length == 0) {
 			document.getElementById('error').style.display = 'block';

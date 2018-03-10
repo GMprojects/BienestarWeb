@@ -79,17 +79,9 @@ Route::middleware('auth')->prefix('miembro')->group(function () {
 
     Route::get('misTutorados', 'TutorTutoradoController@misTutorados');
 
+    Route::get('show_habito/{id}', ['uses' => 'EncuestaController@show_habito']);
     Route::get('member_show/{id}', ['uses' => 'EncuestaController@member_show']);
     Route::post('member_show/store_answers/{id}', ['uses' => 'EncuestaController@store_answers']);
-
-    Route::get('habitoEstudio/{idEncuestaRespondida}', 'EncuestaController@getHabitoEstudio');
-    Route::post('habitoEstudio/{idEncuestaRespondida}', ['uses' => 'EncuestaController@storeHabitoEstudio', 'as' => 'encuesta.storeHabitoEstudio']);
-    Route::get('habitoEstudio/tutorTutorado/{idTutorTutorado}', 'EncuestaController@showHabitoEstudio');
-
-    Route::get('encuesta', 'EncuestaController@encuesta');
-    Route::get('encuestaInsc/{id}', ['uses' => 'EncuestaController@encuestaInsc']);
-    Route::get('encuestaResp/{id}', ['uses' => 'EncuestaController@encuestaResp']);
-    Route::post('encuesta/registrar_respuestas/{id}/{opt}', ['uses' => 'EncuestaController@registrar_respuestas']);
 
     Route::post('enviar/verify', ['uses' => 'UserController@enviarMailVerificacion', 'as' => 'user.enviarMailVerificacion']);
 });

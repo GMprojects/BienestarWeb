@@ -22,17 +22,7 @@
                @endforeach
             </ul>
          </li>
-      @endif
-      @if( Auth::user()->idTipoPersona == 1 && count(Auth::user()->alumno->soyTutorado) > 0)
-         @foreach (Auth::user()->alumno->soyTutorado as $tutorado)
-            @if($tutorado->habitoEstudioRespondido == '0')
-               <li>
-                   <a class="ff-li-a" href="{{ action('EncuestaController@getHabitoEstudio',[ 'idEncuestaRespondida' => $tutorado->habitoEstudio->idEncuestaRespondida  ]) }}">
-                      <i class="fa fa-plus"></i> Habitos de Estudio</a>
-               </li>
-            @endif
-         @endforeach
-      @endif
+      @endif      
       @if( Auth::user()->funcion == 2)
          <li>
             <a class="ff-li-a" href="{{ url('programador/actividad/create') }}"><i class="fa fa-plus"></i> Crear Actividad</a>

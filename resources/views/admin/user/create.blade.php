@@ -419,13 +419,6 @@
 		}
 		return false;
 	}
-	function limpiar(){
-		switch({{ $user->funcion }}){
-			case 1: funcion = $('#radioMiembro').attr('checked', true); break;
-			case 2: funcion = $('#radioProgramador').attr('checked', true); break;
-			case 3: funcion = $('#radioAdmin').attr('checked', true); break;
-		}
-	}
 </script>
 <style type="text/css">
 	.ast{

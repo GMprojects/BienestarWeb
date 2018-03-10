@@ -50,6 +50,8 @@
       <script src="{{ asset('plugins/flot/jquery.flot.categories.min.js') }}"></script>
       <script src="{{ asset('plugins/flot/jquery.flot.resize.min.js') }}"></script>
       <script src="{{ asset('plugins/ChartJs/Chart.bundle.min.js') }}"></script>
+
+      <script src="{{ asset('plugins/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
    </head>
    <body>
       @if(Auth::user() == null)

@@ -7,19 +7,18 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-use BienestarWeb\User;
-
-class HabitoEstudioNotif extends Notification
+class NotificacionHabitoEstudio extends Notification
 {
     use Queueable;
     private $user;
     private $url;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct( User $user, $url)
+    public function __construct ($user, $url)
     {
           $this->user = $user;
           $this->url = $url;
@@ -44,9 +43,14 @@ class HabitoEstudioNotif extends Notification
      */
     public function toMail($notifiable)
     {
-      return (new MailMessage)->markdown('emails.habitoEstudioEmail',['user' => $this->user,
-                                                                       'url' => $this->url ])
-                              ->subject('Registrar Hábito de Estudio');
+        return (new MailMessage)->markdown('emails.mailBasico',[ 'subject' => 'Registrar Hábito de Estudio',
+                                                                 'mensaje' => 'Se le pide por favor que llene la encuesta de hábito de estudio, la cual es muy necesaria para las próximas sesiones de tutoría.',
+                                                                 'url' => $this->url,
+                                                                 'accion' => 'Llenar Hábito de Estudio',
+                                                                 'nombreEmisor' => null,
+                                                                 'nombreReceptor' => $this->user->nombre.' '.$this->user->apellidoPaterno.' '.$this->user->apellidoMaterno,
+                                                                 'sexoReceptor' => $this->user->sexo ])
+                                ->subject('Registrar Hábito de Estudio');
     }
 
     /**

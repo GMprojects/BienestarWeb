@@ -13,7 +13,7 @@
 		@endif
 	</div>
 </div>
-{!!Form::open(['url'=>['miembro/member_show/store_answers', 'id'=> $idEncuestaRespondida],'method'=>'POST','autocomplete'=>'off'])!!}
+{!!Form::open(['url'=>['miembro/member_show/store_answers', 'id'=> $encResp->idEncuestaRespondida],'method'=>'POST','autocomplete'=>'off'])!!}
 {{ Form::token() }}
 <div class="row">
 	 <div class="col-md-12">

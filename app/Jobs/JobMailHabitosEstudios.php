@@ -9,28 +9,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
 use BienestarWeb\User;
-use BienestarWeb\Alumno;
-use BienestarWeb\Docente;
-use BienestarWeb\TutorTutorado;
 
-use BienestarWeb\Notifications\HabitoEstudioNotif;
-
+use BienestarWeb\Notifications\NotificacionHabitoEstudio;
+use Log;
 class JobMailHabitosEstudios implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    private $idDocente;
-    private $anioSemestre;
-    private $numeroSemestre;
+    private $encuestasUsers = [];
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($idDocente, $anioSemestre, $numeroSemestre)
+    public function __construct(array $encuestasUsers)
     {
-        $this->idDocente = $idDocente;
-        $this->anioSemestre = $anioSemestre;
-        $this->numeroSemestre = $numeroSemestre;
+        $this->encuestasUsers = $encuestasUsers;
     }
 
     /**
@@ -40,19 +33,12 @@ class JobMailHabitosEstudios implements ShouldQueue
      */
     public function handle()
     {
-         $users = User::join('alumno','user.id','=','alumno.idUser')
-                        ->join('tutorTutorado','alumno.idAlumno', '=','tutorTutorado.idAlumno' )
-                        ->where([['tutorTutorado.idDocente', $this->idDocente], ['tutorTutorado.anioSemestre', $this->anioSemestre], ['tutorTutorado.numeroSemestre', $this->numeroSemestre], ['tutorTutorado.habitoEstudioRespondido', '0'], ['confirmed', '=', 1]])
-                        ->get();
-         //-----------enviar los emails------------------------------------------------------------------------
-         //"Enviar correo a los inscritos "
-         if (count($users)!=0) {
-            foreach ($users as $user) {
-                 $url = url(route('habitoEstudio.create'));
-                 $user->notify(new HabitoEstudioNotif($user, $url));
-            }
+       if (count($this->encuestasUsers)!=0) {
+         for ($i=0; $i < count($this->encuestasUsers) ; $i++) {
+           $url = url('miembro/member_show/'.$this->encuestasUsers[$i]['idEncuestaRespondida']);
+           $user = User::findOrFail($this->encuestasUsers[$i]['idUser']);
+           $user->notify( new NotificacionHabitoEstudio($user , $url) );
          }
-         //Fin Enviar Correos;
-
+       }
     }
 }

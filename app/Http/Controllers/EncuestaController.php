@@ -12,7 +12,7 @@ use BienestarWeb\Alternativa;
 use BienestarWeb\SeccionEncuesta;
 use BienestarWeb\PreguntaEncuesta;
 use BienestarWeb\EncuestaRespondida;
-use Bienestar\Semestre;
+use BienestarWeb\Semestre;
 
 use BienestarWeb\Actividad;
 use BienestarWeb\TipoActividad;
@@ -272,7 +272,6 @@ class EncuestaController extends Controller{
          $p->update();
       }
       for($j=0 ; $j<count($secciones_actuales) ; $j++) {
-         echo 'what';
          $s = SeccionEncuesta::findOrFail($secciones_actuales[$j]);
          $s->estado = 0;
          $s->update();
@@ -406,11 +405,48 @@ class EncuestaController extends Controller{
       return Redirect::to('admin/encuesta');
    }
 
+   public static function store_free($id_resp, $actividad, $destino){
+      $fh_registro = date('Y-m-d H:i');
+      $encuesta = Encuesta::where(['tipo' => 1, 'destino' => $destino, 'idTipoActividad' => $actividad->idTipoActividad, 'pred' =>  '1'])->get();
+      $existe = EncuestaRespondida::where(['idUser' => $id_resp, 'idActividad' => $actividad->idActividad, 'idEncuesta' => $encuesta[0]->idEncuesta])->get();
+      if($encuesta != null && $existe->isEmpty()){
+         EncuestaRespondida::create([
+            'idUser' => $id_resp,
+            'idEncuesta' => $encuesta[0]->idEncuesta,
+            'idActividad' => $actividad->idActividad,
+            'fh_registro' => $fh_registro,
+            'fh_envio' => $fh_registro
+         ]);
+      }
+   }
+
+   public static function store_habi($id_resp){
+      $fh_registro = date('Y-m-d H:i');
+      $semestre = SemestreController::getSemestre();
+      $existe = EncuestaRespondida::where(['idUser' => $id_resp, 'idEncuesta' => 3])->whereBetween('fh_registro', [$semestre->fechaInicio, $semestre->fechaFin])->get();
+      if( $existe->isEmpty() ){
+         EncuestaRespondida::create([
+            'idUser' => $id_resp,
+            'idEncuesta' => 3,
+            'fh_registro' => $fh_registro,
+            'fh_envio' => $fh_registro
+         ]);
+      }
+   }
+
+   public static function destroy_habi($id){
+      $aux = TutorTutorado::findOrFail($id);
+      $semestre = Semestre::where( ['anioSemestre' => $aux->anioSemestre, 'numeroSemestre' => $aux->numeroSemestre] )->get();
+      $existe = EncuestaRespondida::where(['idUser' => $aux->tutorado->user->id, 'idEncuesta' => 3])->whereBetween('fh_envio', [$semestre[0]->fechaInicio, $semestre[0]->fechaFin])->get();
+      if( $existe->isNotEmpty() ){
+         EncuestaRespondida::destroy($existe[0]->idEncuestaRespondida);
+      }
+   }
 
    public function member_show(Request $request, $id){
       $encResp = EncuestaRespondida::findOrFail($id);
-      $encuesta = Encuesta::findOrFail($encResp->idEncuesta);
-      if( $request->user()->idUser == $encResp->idUser ){
+      if( $request->user()->id == $encResp->idUser ){
+         $encuesta = Encuesta::findOrFail($encResp->idEncuesta);
          return view('miembro.mis-encuestas.show')
             ->with('encuesta', $encuesta)
             ->with('encResp', $encResp);
@@ -428,6 +464,14 @@ class EncuestaController extends Controller{
          }
          $encResp->estado = '1';
          $encResp->update();
+         //estoy obligada a esto por la extraña dependecia con "tutorTutorado"
+         if( $encResp->idEncuesta == 3 ){
+            $user = User::findOrFail($encResp->idUser);
+            $semestre = Semestre::where([['fechaInicio', '<=', $encResp->fh_envio],  ['fechaFin', '>=', $encResp->fh_envio]])->get();
+            $tutorTutorado = TutorTutorado::where(['idAlumno' => $user->alumno->idAlumno, 'anioSemestre' => $semestre[0]->anioSemestre, 'numeroSemestre' => $semestre[0]->numeroSemestre])->get();
+            $tutorTutorado[0]->habitoEstudioRespondido = '1';
+            $tutorTutorado[0]->update();
+         }
       }else{
          abort('401');
       }
@@ -436,18 +480,46 @@ class EncuestaController extends Controller{
 
    public function details($id){
       $encuesta = Encuesta::findOrFail($id);
-      $respondidas = EncuestaRespondida::where(['idEncuesta' => $id, 'estado' => 1]);
-      $fh_envios = $respondidas->groupBy('fh_envio')->pluck('fh_envio');
-
-      $respXfh = [];
-      foreach ($fh_envios as $fh_envio) {
-         array_push($respXfh, EncuestaRespondida::where(['fh_envio' => $fh_envio, 'estado' => 1])->get());
+      $agrupadas = [];
+      switch( $encuesta->tipo ){
+         case 1: {
+            $grupos = EncuestaRespondida::where('idEncuesta', $id)->groupBy('fh_envio')->pluck('fh_envio');
+            foreach ($grupos as $fh_envio) {
+               array_push($agrupadas, EncuestaRespondida::where(['idEncuesta' => $id, 'fh_envio' => $fh_envio])->get());
+            }
+            break;
+         }
+         case 2: {
+            $grupos = EncuestaRespondida::where('idEncuesta', $id)->groupBy('idActividad')->pluck('idActividad');
+            foreach ($grupos as $idActividad) {
+               array_push($agrupadas, EncuestaRespondida::where(['idEncuesta' => $id, 'idActividad' => $idActividad])->get());
+            }
+            break;
+         }
+         case 3: {
+            if($id > 4){
+               $grupos = EncuestaRespondida::where('idEncuesta', $id)->groupBy('fh_envio')->pluck('fh_envio');
+               foreach ($grupos as $fh_envio) {
+                  array_push($agrupadas, EncuestaRespondida::where(['idEncuesta' => $id, 'fh_envio' => $fh_envio])->get());
+               }
+               break;
+            }else{
+               $grupos = Semestre::get();
+               foreach ($grupos as $semestre) {
+                  $grupo = EncuestaRespondida::where('idEncuesta', $id)->whereBetween('fh_registro', [$semestre->fechaInicio, $semestre->fechaFin])->get();
+                  if($grupo->isNotEmpty()){
+                     array_push($agrupadas, $grupo);
+                  }
+               }
+            }
+            break;
+         }
       }
       $preguntas = $encuesta->preguntas;
       $alternativas = $encuesta->alternativas;
       $matriz_frecuencia = [];
 
-      foreach ($respXfh as $envio) {  // $envio es una collection de EncuestaRespondida que tienen la misma fecha de envio
+      foreach ($agrupadas as $envio) {  // $envio es una collection de EncuestaRespondida que tienen la misma fecha de envio
          $envio_frec = [];
          foreach ($preguntas->where('estado', 1) as $pregunta) {
             $preguntas_frec = [];
@@ -457,19 +529,33 @@ class EncuestaController extends Controller{
             $envio_frec[$pregunta->idPregunta] = $preguntas_frec;
          }
 
-         foreach ($envio as $enc_res) { //$enc_res es un objeto de EncuestaRespondida
+         foreach ($envio->where('estado', 1) as $enc_res) { //$enc_res es un objeto de EncuestaRespondida
             foreach ($enc_res->preguntas->where('estado', 1) as $pregunta) { //acceso a la tabla PIVOTE RptaEncuesta
                $envio_frec[$pregunta->idPregunta][$pregunta->pivot->respuesta] ++;
             }
          }
          array_push($matriz_frecuencia, $envio_frec);
       }
+
       $alt = $encuesta->alternativas->sortBy('valor');
       $alt = $alt->values();
       return view('admin.encuesta.details')
          ->with('encuesta', $encuesta)
          ->with('alternativas', $alt)
-         ->with('respXfh', $respXfh)
+         ->with('respXfh', $agrupadas)
+         ->with('semestres', $grupos)
          ->with('matriz_frecuencia', $matriz_frecuencia);
+   }
+
+   public function show_habito(Request $request, $id){
+      $aux = TutorTutorado::findOrFail($id);
+      $semestre = Semestre::where( ['anioSemestre' => $aux->anioSemestre, 'numeroSemestre' => $aux->numeroSemestre] )->get();
+      $encuesta = Encuesta::findOrFail(3);
+      $enviada = EncuestaRespondida::where(['idUser' => $aux->tutorado->user->id, 'idEncuesta' => 3])->whereBetween('fh_registro', [$semestre[0]->fechaInicio, $semestre[0]->fechaFin])->get();
+
+      return view('miembro.tutor.habitoEstudio.show_habito')
+         ->with('encuesta', $encuesta)
+         ->with('enviada', $enviada[0])
+         ->with('semestre', $semestre);
    }
 }

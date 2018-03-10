@@ -17,6 +17,7 @@ use BienestarWeb\InscripcionAlumno;
 
 use Illuminate\Http\Request;
 use BienestarWeb\Http\Controllers\Controller;
+use BienestarWeb\Http\Controllers\EncuestaController;
 
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -89,10 +90,19 @@ class TutorTutoradoController extends Controller{
           $docente->tutorados()->attach( (preg_split("/[_]/",$request->alumnos[$i]))[0],
                                           ['anioSemestre' => $semestre['anioSemestre'], 'numeroSemestre' => $semestre['numeroSemestre']]);
         }
-
-        /*$job = (new JobEmailHabitosEstudios($idDocente, $arraySemestre[0], $numeroSemestre))
+        $i=0;
+        $encuestasUsers = array();
+        $idUserAlumnos = Alumno::whereIn('idAlumno',$request->alumnos)->pluck('idUser');
+        foreach ($idUserAlumnos as $idUserAlumno) {
+          $idEncuestaRespondida = EncuestaController::store_habi($idUserAlumno);
+          if ($idEncuestaRespondida != null) {
+            $encuestasUsers[$i] = array('idEncuestaRespondida' => $idEncuestaRespondida, 'idUser' => $idUserAlumno);
+          }
+          $i++;
+        }
+        $job = (new JobMailHabitosEstudios($encuestasUsers))
            ->delay(Carbon::now()->addSeconds(1));
-        dispatch($job);*/
+        dispatch($job);
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -120,25 +130,33 @@ class TutorTutoradoController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, $idTutor){
-         $tutor = Docente::join('user','docente.idUser', '=','user.id' )
-                        ->where('idDocente', $idTutor)
-                        ->select('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-                        ->first();
+		$semestre = config('semestre');
+		$fechaActual = (Carbon::now())->format('Y-m-d');
+		$existe = (($fechaActual >= $semestre['fechaInicio']) && ($fechaActual <= $semestre['fechaFin'])) ? true : false ;
+		if($existe){
+			$tutor = Docente::join('user','docente.idUser', '=','user.id' )
+						->where('idDocente', $idTutor)
+						->select('docente.idDocente','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+						->first();
 
-         $idAlumnosTutorados = TutorTutorado::where([['numeroSemestre', $request->numeroSemestre],['anioSemestre',  $request->anioSemestre],['idDocente',  $tutor->idDocente]])
-                                           ->pluck('idAlumno');
+			$idAlumnosTutorados = TutorTutorado::where([['numeroSemestre', $request->numeroSemestre],['anioSemestre',  $request->anioSemestre],['idDocente',  $tutor->idDocente]])
+										   ->pluck('idAlumno');
 
-         $alumnosLibres = Alumno::join('user','alumno.idUser', '=','user.id' )//alumnos Libres
-                         ->whereNotIn('alumno.idAlumno', $idAlumnosTutorados)
-                         ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
-                         ->orderBy('user.nombre')
-                         ->get();
+			$alumnosLibres = Alumno::join('user','alumno.idUser', '=','user.id' )//alumnos Libres
+						 ->whereNotIn('alumno.idAlumno', $idAlumnosTutorados)
+						 ->select('alumno.idAlumno','user.nombre','user.apellidoPaterno','user.apellidoMaterno','user.codigo')
+						 ->orderBy('user.nombre')
+						 ->get();
 
-         return view('admin.tutorTutorado.edit',['tutor' => $tutor,
-                                               //'idTutorados' => $idTutorados,
-                                               'anioSemestre' => $request->anioSemestre,
-                                               'numeroSemestre' => $request->numeroSemestre,
-                                               'alumnos' => $alumnosLibres]);
+			return view('admin.tutorTutorado.edit',['tutor' => $tutor,
+											   //'idTutorados' => $idTutorados,
+											   'anioSemestre' => $request->anioSemestre,
+											   'numeroSemestre' => $request->numeroSemestre,
+											   'alumnos' => $alumnosLibres,
+											   'status' => null]);
+		}else{
+            return view('admin.tutorTutorado.edit')->with('status', 'No se encuentra dentro del rango de fechas del Semestre Actual.');
+         }
     }
 
     /**
@@ -154,18 +172,20 @@ class TutorTutoradoController extends Controller{
           $docente->tutorados()->attach( $request->alumnos[$i], ['anioSemestre' => $request->anioSemestre,
                                                                  'numeroSemestre' => $request->numeroSemestre]);
         }
-        /* Crenando habitos de estudio */
-        $idUserTutorados = (Alumno::whereIn('idUser', $request->alumnos)->pluck('idUser'))->toArray();
-        for ($i=0; $i < count($idUserTutorados) ; $i++) {
-          $encuesta = new EncuestaRespondida;
-          $encuesta->idUser = $idUserTutorados[$i];
-          $encuesta->idEncuesta = '3';
-          $encuesta->save();
+        //$encuestasUser = array();
+        $i=0;
+        $encuestasUser = array();
+        $idUserAlumnos = Alumno::whereIn('idAlumno',$request->alumnos)->pluck('idUser');
+        foreach ($idUserAlumnos as $idUserAlumno) {
+          $idEncuestaRespondida = EncuestaController::store_habi($idUserAlumno);
+          if ($idEncuestaRespondida != null) {
+            $encuestasUser[$i] = array('idEncuestaRespondida' => $idEncuestaRespondida, 'idUser' => $idUserAlumno);
+          }
+          $i++;
         }
-        /* --------------------------- */
-        /*$job = (new JobEmailHabitosEstudios($idTutor, $request->anioSemestre, $numeroSemestre))
+        $job = (new JobMailHabitosEstudios($encuestasUser))
            ->delay(Carbon::now()->addSeconds(1));
-        dispatch($job);*/
+        dispatch($job);
         return Redirect::to('admin/tutorTutorado');
     }
 
@@ -218,6 +238,8 @@ class TutorTutoradoController extends Controller{
             }
          }
          // else : -> habito de estudio  no Respondido
+         //ELIMINAR LA Encuesta
+         EncuestaController::destroy_habi($tutorTutorado->idTutorTutorado);
          $tutorTutorado->delete();
          $tutorTutorados = TutorTutorado::where([
                                        ['idDocente', $idDocente],

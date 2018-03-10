@@ -19,38 +19,40 @@
   					<div class="table-responsive">
   						<table id="tabTutores" class="table table-bordered table-striped table-hover dt-responsive nowrap" cellspacing="0" width="100%">
   							<thead>
-                        <th>Código</th>
-								<th>Nombres y Apellidos</th>
-                        <th>Semestre Académico</th>
-  								<th>Opciones</th>
+                  <th>Código</th>
+                  <th>Nombres y Apellidos</th>
+                  <th>Semestre Académico</th>
+                  <th>Opciones</th>
   							</thead>
-                     @php($i = 1)
-                     @foreach($tutorados as $tutorado)
-     							<tr>
-                           <td>{{ $tutorado->codigo }}</td>
-     								<td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
-                           <td>{{ $tutorado->anioSemestre.'-'.$tutorado->numeroSemestre }}</td>
-                           @if ($tutorado->habitoEstudioRespondido == '0')
-                             <td>
-                               <a href="" data-target = "#modal-email-{{ $tutorado->idAlumno }}-{{ $idTutor }}" data-toggle = "modal">
-                                 <button class="btn btn-ff-greenOs" ><i class="fa fa-envelope" aria-hidden="true"></i></i> Enviar Mensaje</button>
-                               </a>
-                             </td>
-                           @else
-                             <td>
-                               <a href="{{ action('EncuestaController@showHabitoEstudio', ['idTutorTutorado' => $tutorado->idTutorTutorado]) }}">
-                                 <button type="button" class="btn btn-ff-blues" >
-                                    <span>
-                                      <i class="fa fa-eye"><i class="glyphicon glyphicon-list-alt"></i></i>
-                                    </span>
-                                    Ver Hábitos
-                                 </button>
-                               </a>
-                            </td>
-                           @endif
-     							</tr>
-                        @include('miembro.tutor.modalEmail')
-  							@endforeach
+                <tbody>
+                  @php($i = 1)
+                  @foreach($tutorados as $tutorado)
+                    <tr>
+                      <td>{{ $tutorado->codigo }}</td>
+                      <td>{{ $tutorado->nombre.' '.$tutorado->apellidoPaterno.' '.$tutorado->apellidoMaterno }}</td>
+                      <td>{{ $tutorado->anioSemestre.'-'.$tutorado->numeroSemestre }}</td>
+                      @if ($tutorado->habitoEstudioRespondido == '0')
+                        <td>
+                          <a href="" data-target = "#modal-email-{{ $tutorado->idAlumno }}-{{ $idTutor }}" data-toggle = "modal">
+                            <button class="btn btn-ff-greenOs" ><i class="fa fa-envelope" aria-hidden="true"></i></i> Enviar Mensaje</button>
+                          </a>
+                        </td>
+                      @else
+                      <td>
+                        <a href="{{ action('EncuestaController@showHabitoEstudio', ['idTutorTutorado' => $tutorado->idTutorTutorado]) }}">
+                          <button type="button" class="btn btn-ff-blues" >
+                             <span>
+                               <i class="fa fa-eye"><i class="glyphicon glyphicon-list-alt"></i></i>
+                             </span>
+                             Ver Hábitos
+                          </button>
+                        </a>
+                      </td>
+                      @endif
+                    </tr>
+                    @include('miembro.tutor.modalEmail')
+                  @endforeach
+                </tbody>
   						</table>
   					</div>
   		   </div>

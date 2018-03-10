@@ -67,7 +67,7 @@
 									<i class="fa fa-calendar"></i>
 								</div>
 								@if ($trabajo->fechaFin != null)
-									<input type="text" name="fechaInicio" required class="form-control" required  value="{{ date("d/m/Y",strtotime($trabajo->fechaFin)) }}" id="fechaInicio">
+									<input type="text" name="fechaInicio" required class="form-control" required  value="{{ date("d/m/Y",strtotime($trabajo->fechaFin)) }}" id="fechaFin">
 								@else
 									<input type="text" name="fechaFin" class="form-control"  placeholder="{{ date("d/m/Y") }}" id="fechaFin">
 								@endif
@@ -120,12 +120,10 @@
 						<div class="form-group">
 							<label for="recomendaciones">Recomendaciones</label>
 							<textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas recomendaciones que pueda dar sobre su trabajo">{{ $trabajo->recomendaciones }}</textarea>
-			 				<p id="contadorRecomendaciones">0/500</p>
-						</div>
+			 			</div>
 						<div class="form-group">
 							<label for="observaciones">Observaciones</label>
 							<textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" placeholder="Añadir algunas observaciones que pueda dar sobre su trabajo">{{ $trabajo->observaciones }}</textarea>
-			 				<p id="contadorRecomendaciones">0/500</p>
 						</div>
 					</div>
 				</div>
@@ -154,25 +152,12 @@
 	$('#fechaFin').on("dp.change", function(e){
 		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
 	});
-	$(document).ready(function() {
-			 init_contador('#observaciones', '#contadorObservaciones');
-			 init_contador('#recomendaciones', '#contadorRecomendaciones');
+	$('textarea#observaciones').maxlength({
+					alwaysShow: true
 	});
-
-	function init_contador(idTextArea, idContador){
-		function update_Contador(idTextArea, idContador){
-			var contador = $(idContador);
-			var ta = $(idTextArea);
-			contador.html(ta.val().length+'/500');
-		}
-		$(idTextArea).keyup(function(){
-			update_Contador(idTextArea, idContador);
-		});
-		$(idTextArea).change(function(){
-			update_Contador(idTextArea, idContador);
-		});
-	}
-
+	$('textarea#recomendaciones').maxlength({
+					alwaysShow: true
+	});
 </script>
 <style type="text/css">
 	textarea{

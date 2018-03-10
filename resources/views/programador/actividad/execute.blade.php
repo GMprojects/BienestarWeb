@@ -95,6 +95,13 @@
 	var imagenCorrecta = true;
 	var tableAsistentes;
 	$(document).ready(function(){
+		$('input[maxlength]').maxlength();
+		$('textarea#observaciones').maxlength({
+            alwaysShow: true
+    });
+		$('textarea#recomendaciones').maxlength({
+            alwaysShow: true
+    });
 		/*$('#checkTodos').iCheck({
 			checkboxClass: 'icheckbox_square-green',
 			radioClass: 'iradio_square-green',
@@ -105,8 +112,6 @@
 		/*$('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
 		  $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
 	  });*/
-	   init_contador('#observaciones', '#contadorObservaciones');
-	   init_contador('#recomendaciones', '#contadorRecomendaciones');
 		tableAsistentes = $('#tabAsistentes').DataTable({
 			"oLanguage" : {
 				 "sProcessing":     "Procesando...",
@@ -210,19 +215,6 @@
 		console.log('beforeClear - '+imagenCorrecta);
 	});
 	/* FIN PLUGIN - Dropify*/
-	function init_contador(idTextArea, idContador){
-		function update_Contador(idTextArea, idContador){
-			var contador = $(idContador);
-			var ta = $(idTextArea);
-			contador.html(ta.val().length+'/500');
-		}
-		$(idTextArea).keyup(function(){
-			update_Contador(idTextArea, idContador);
-		});
-		$(idTextArea).change(function(){
-			update_Contador(idTextArea, idContador);
-		});
-	}
 	function verAsistencias(){
 		$('#modal-asistencia').modal('show');
 		tableAsistentes.columns.adjust();

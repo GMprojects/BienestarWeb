@@ -54,7 +54,7 @@ class JobMailBasico implements ShouldQueue
 
         if ($userReceptor->confirmed) {
            Mail::to($userReceptor->email)
-                ->send(new MailBasico($this->subject, $this->mensaje, $this->url, $this->accion, $nombreEmisor, $nombreReceptor, $userReceptor->sexo, $userReceptor->mail));
+                ->send(new MailBasico($this->subject, $this->mensaje, $this->url, $this->accion, $nombreEmisor, $nombreReceptor, $userReceptor->sexo, $userEmisor->mail));
         }
     }
 }

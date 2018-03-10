@@ -21,7 +21,7 @@
             <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
             <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Queda(n) {{ $diasRestantesSemestre }} día(s).</p>
           </div>
-          @elseif($diasRestantesSemestre<0)
+         @elseif($diasRestantesSemestre<=0)
           <div class="alert alert-info">
             <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
             <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Esta excedido en {{ (-1)*$diasRestantesSemestre }} día(s).</p>

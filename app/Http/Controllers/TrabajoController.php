@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use BienestarWeb\Http\Controllers\Controller;
 
 class TrabajoController extends Controller{
-   
+
       function getFecha($fechaIn){
          if( $fechaIn == null ){
             return null;
@@ -74,7 +74,9 @@ class TrabajoController extends Controller{
         $request->validate([
             'institucion' => 'required',
             'lugar' => 'required',
-            'nivelSatisfaccion' => 'required'
+            'nivelSatisfaccion' => 'required',
+            'fechaInicio' => 'required|date_format:"d/m/Y"',
+            'fechaFin' => 'nullable|after:fechaInicio|date_format:"d/m/Y"'
         ]);
         $trabajo = new Trabajo;
         $trabajo->institucion = $request->get('institucion');
@@ -131,6 +133,13 @@ class TrabajoController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
+        $request->validate([
+            'institucion' => 'required',
+            'lugar' => 'required',
+            'nivelSatisfaccion' => 'required',
+            'fechaInicio' => 'required|date_format:"d/m/Y"',
+            'fechaFin' => 'nullable|after:fechaInicio|date_format:"d/m/Y"'
+        ]);
         $trabajo = Trabajo::findOrFail($id);
         $trabajo->institucion = $request->get('institucion');
         $trabajo->lugar = $request->get('lugar');

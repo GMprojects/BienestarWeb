@@ -97,7 +97,6 @@
                <div class="form-group">
                   <label for="observaciones">Observaciones </label>
                   <textarea name="observaciones" id="observaciones" class="form-control" value ="{{old('observaciones')}}"  rows="6" cols="30" placeholder="Describir observaciones... "></textarea>
-						<p id="contadorObservaciones">0/500</p>
               </div>
            </div>
       	@else<!-- comedor -->
@@ -215,9 +214,10 @@
 	$('#fechaFin').on("dp.change", function(e){
 		$('#fechaInicio').data("DateTimePicker").maxDate(e.date);
 	});
+	$('textarea#observaciones').maxlength({
+					alwaysShow: true
+	});
 	$(document).ready(function() {
-		 init_contador('#observaciones', '#contadorObservaciones');
-		 init_contador('#recomendaciones', '#contadorRecomendaciones');
 		 $('#tabAlumnos').DataTable({
 				"lengthMenu": [ 10, 25, 50, 75, 100 ],
 				"oLanguage" : {
@@ -248,21 +248,6 @@
 		 });
 			//FalumnosLibres
 	});
-
-	function init_contador(idTextArea, idContador){
-		function update_Contador(idTextArea, idContador){
-			var contador = $(idContador);
-			var ta = $(idTextArea);
-			contador.html(ta.val().length+'/500');
-		}
-		$(idTextArea).keyup(function(){
-			update_Contador(idTextArea, idContador);
-		});
-		$(idTextArea).change(function(){
-			update_Contador(idTextArea, idContador);
-		});
-	}
-
 	function agregar(){
 		document.getElementById('divNoHayAlumno').style.display = 'none';
 	  $('input[type=radio]').each(function(){

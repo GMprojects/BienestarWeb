@@ -37,14 +37,16 @@
                         $diasRestantesSemestre = intval((strtotime(config('semestre')['fechaFin']) - strtotime(date('Y-m-d')))/86400);
                      @endphp
                      @php( $i=0 )
-                     @if (!Auth::user()->confirmed)
+                     @if ( !Auth::user()->confirmed )
                         @php( $i++ )
                      @endif
-                     @if (!Auth::user()->changed_pass)
+                     @if ( !Auth::user()->changed_pass )
                         @php( $i++ )
                      @endif
-                     @if ( $diasRestantesSemestre<=2 && $diasRestantesSemestre>0 )
-                        @php( $i++ )
+                     @if ( Auth::user()->funcion == 3 && ($diasRestantesSemestre<=2 && $diasRestantesSemestre>0) )
+                       @php( $i++ )
+                     @elseif( Auth::user()->funcion == 3 && $diasRestantesSemestre<=0)
+                       @php( $i++ )
                      @endif
                      @if ( $i != 0 )
                         <span class="label label-danger">{{ $i }}</span>
@@ -55,14 +57,14 @@
                      <li class="divider"></li>
                      <li>
                         <ul class="menu">
-                           @if (!Auth::user()->confirmed)
+                           @if ( !Auth::user()->confirmed )
                            <li>
                               <a href="" data-target = "#modal-enviarMailVerificacion" data-toggle = "modal">
                                  <i class="fa fa-at" style="color:#006400;"></i> Debe verificar su correo.
                               </a>
                            </li>
                            @endif
-                           @if (!Auth::user()->changed_pass)
+                           @if ( !Auth::user()->changed_pass )
                            <li>
                               <a href="{{ action('MiPerfilController@editPassword',['id' => Auth::user()->id ]) }}">
                                  <i class="fa fa-lock" style="color:#4B367C;"></i> Debe cambiar su contraseña.
@@ -71,10 +73,10 @@
                            @endif
                            <li>
                               <a href="{{ action('SemestreController@index') }}">
-                                @if ($diasRestantesSemestre<=2 && $diasRestantesSemestre>0)
+                                @if ( Auth::user()->funcion == 3 && ($diasRestantesSemestre<=2 && $diasRestantesSemestre>0) )
                                   <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
                                   <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Queda(n) {{ $diasRestantesSemestre }} día(s).</p>
-                                @elseif($diasRestantesSemestre<0)
+                                @elseif( Auth::user()->funcion == 3 && $diasRestantesSemestre<=0)
                                   <p> <i class="fa fa-calendar" style="color:red;"></i> Debe agregar nuevo semestre. </p>
                                   <p style="color:#7d8187"> &nbsp; &nbsp; &nbsp;  Esta excedido en {{ (-1)*$diasRestantesSemestre }} día(s).</p>
                                 @endif

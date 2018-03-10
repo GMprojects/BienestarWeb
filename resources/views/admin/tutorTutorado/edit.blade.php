@@ -9,7 +9,9 @@
 							<div class="caja-title">Tutor - Tutorados</div>
 					 </div>
 					<div class="caja-body">
-							<h4>{{ $status }}</h4>
+						<div class="alert alert-info">
+							<p> <i class="fa fa-calendar-times-o fa-1x" style="color:red;"></i> {{ $status }} </p>	
+						</div>
 					</div>
 				</div>
 			</div>

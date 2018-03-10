@@ -73,7 +73,6 @@
 			  @else
 				  <textarea name="observaciones" class="form-control" id="observaciones" rows="6" cols="30" maxlength="500" value ="{{ old('observaciones') }}" placeholder="Añadir algunas observaciones de la Actividad ejecutada"></textarea>
 			  @endif
-				  <p id="contadorObservaciones">0/500</p>
 		  </div>
 		  <div class="form-group">
 			  <label for="titulo">Recomendaciones </label>
@@ -82,7 +81,6 @@
 			  @else
 				  <textarea name="recomendaciones" class="form-control" id="recomendaciones" rows="6" cols="30" maxlength="500" value ="{{ old('recomendaciones') }}"placeholder="Añadir algunas recomendaciones de la Actividad ejecutada que se pueda tener en cuenta en la siguiente actividad"></textarea>
 			  @endif
-				  <p id="contadorRecomendaciones">0/500</p>
 		  </div>
 		</div>
 		<div class="caja-footer">
