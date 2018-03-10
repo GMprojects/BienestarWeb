@@ -122,8 +122,6 @@ class EncuestaController extends Controller{
      */
     public function show($id){
       $encuesta = Encuesta::findOrFail($id);
-      //$encResp_insc = EncuestaRespondidaInsc::findOrFail($id);
-
       return view('admin.encuesta.show')->with('encuesta', $encuesta);
     }
 
@@ -135,9 +133,8 @@ class EncuestaController extends Controller{
      */
     public function edit($id){
         $tipos=TipoActividad::get();
-        return view('admin.encuesta.edit')
-        ->with('encuesta', Encuesta::findOrFail($id))
-        ->with('tipos',$tipos);
+        return view('admin.encuesta.edit')->with('encuesta', Encuesta::findOrFail($id))
+                                          ->with('tipos',$tipos);
     }
 
     /**
