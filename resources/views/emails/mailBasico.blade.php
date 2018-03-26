@@ -15,6 +15,7 @@
 @if ($nombreEmisor!=null)
 Atentamente, {{ ucwords(strtolower($nombreEmisor)) }}
 @endif
+<br>
 Gracias,<br>
 {{ config('app.name') }}
 [Pagina Web]({{ config('app.url') }})

@@ -22,7 +22,7 @@
                @endforeach
             </ul>
          </li>
-      @endif      
+      @endif
       @if( Auth::user()->funcion == 2)
          <li>
             <a class="ff-li-a" href="{{ url('programador/actividad/create') }}"><i class="fa fa-plus"></i> Crear Actividad</a>
@@ -106,7 +106,7 @@
          dataType: 'json',
          success:function(data) {
             if(data.tutorados > 0){
-               $('#buttons-list').append('<a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados',[]) }}"><i class="fa fa-book"></i>Mis Tutorados</a>');
+               $('#buttons-list').append('<li><a class="ff-li-a" href="{{ action('TutorTutoradoController@misTutorados',[]) }}"><i class="fa fa-book"></i>  Mis Tutorados</a></li>');
             }
          },
          error:function() {
