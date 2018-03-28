@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
+use BienestarWeb\User;
+
 trait AuthenticatesUsers
 {
     use RedirectsUsers, ThrottlesLogins;
@@ -127,9 +129,24 @@ trait AuthenticatesUsers
      */
     protected function sendFailedLoginResponse(Request $request)
     {
-        throw ValidationException::withMessages([
+      if ( ! User::where('email', $request->email)->first() ) {
+            return redirect()->back()
+                ->withInput($request->only($this->username(), 'remember'))
+                ->withErrors([
+                    $this->username() => [trans('auth.email')],
+                ]);
+        }
+
+        if ( ! User::where('email', $request->email)->where('password', bcrypt($request->password))->first() ) {
+            return redirect()->back()
+                ->withInput($request->only($this->username(), 'remember'))
+                ->withErrors([
+                    'password' => [trans('auth.password')],
+                ]);
+        }
+      /*  throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],
-        ]);
+        ]);*/
     }
 
     /**

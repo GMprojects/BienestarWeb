@@ -25,10 +25,10 @@
       @endif
 
       <dt> Fecha y Hora Inicio:</dt>
-      <dd> {{ date("d",strtotime($actividad->fechaInicio))." de ".date("F",strtotime($actividad->fechaInicio))." del ".date("Y",strtotime($actividad->fechaInicio))." a las ".date('g:i A',strtotime($actividad->horaInicio)) }} </dd>
+      <dd> {{ (Date::make($actividad->fechaInicio)->format('l\, d \d\e F \d\e\l Y'))." a las ".date('g:i A',strtotime($actividad->horaInicio)) }} </dd>
       @if ($actividad->idTipoActividad != 1 || $actividad->idTipoActividad != 2)
       <dt> Fecha y Hora Fin:</dt>
-      <dd> {{ date("d",strtotime($actividad->fechaFin))." de ".date("F",strtotime($actividad->fechaFin))." del ".date("Y",strtotime($actividad->fechaFin))." a las ".date('g:i A',strtotime($actividad->horaFin)) }} </dd>
+      <dd> {{ (Date::make($actividad->fechaFin)->format('l\, d \d\e F \d\e\l Y'))." a las ".date('g:i A',strtotime($actividad->horaFin)) }} </dd>
       @endif
 
       @if($actividad->cuposTotales > 1)
@@ -46,6 +46,7 @@
    @endif
  </dl>
 
+ <br><br>
  @if($actividad->estado == '1')
    @if ($soyResponsable == 0 && $soyInscrito == 0)
    @component('mail::button', ['url' => $url, 'color' => 'green'])
@@ -65,6 +66,5 @@
  @endif
 
  Gracias,<br>
- {{ config('app.name') }}
- [Pagina Web]({{ config('app.url') }})
+ [{{ config('app.name') }}]({{ config('app.url') }})
 @endcomponent

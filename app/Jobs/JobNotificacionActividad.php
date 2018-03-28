@@ -17,7 +17,7 @@ use BienestarWeb\InscripcionDocente;
 use BienestarWeb\InscripcionAdministrativo;
 //Notifications
 use BienestarWeb\Notifications\NotificacionActividad;
-
+use Log;
 class JobNotificacionActividad implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -30,7 +30,7 @@ class JobNotificacionActividad implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Actividad $actividad, $opcion, $tutorados)
+    public function __construct($actividad, $opcion, $tutorados)
     {
         $this->actividad = $actividad;
         $this->opcion = $opcion;
@@ -78,20 +78,29 @@ class JobNotificacionActividad implements ShouldQueue
             $mensajeResp = 'Ud. ha sido asignado responsable de la siguiente sesión de tutoría';
              for ($i=0; $i < count($this->tutorados) ; $i++) {
                  $alumno = User::join('alumno', 'user.id', '=', 'alumno.idUser' )
-                                 ->where([['alumno.idAlumno', $this->tutorados[$i]],['confirmed', '=', 1]])
+                                 ->where([['alumno.idAlumno', $this->tutorados[$i]],['user.confirmed', '=', 1], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])
                                  ->whereNotNull('email')->first();
                  if ($alumno != null) {
                      $nombres = $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno;
-                     $alumno->notify(new NotificacionActividad($subject, $this->actividad, $mensajeDemas, $user->sexo, $url, $nombres, '0', '1'));
+                     $alumno->notify(new NotificacionActividad($subject, $this->actividad, $mensajeDemas, $alumno->sexo, $url, $nombres, '0', '1'));
                  }
              }
+          }else if($this->actividad->modalidad == '1' && ($tipoActividad->idTipoActividad < 4 ||  $tipoActividad->idTipoActividad == 10)){
+              $mensajeDemas = 'Ud. ha sido inscrito en la siguiente actividad ';
+              $alumno = User::join('alumno', 'user.id', '=', 'alumno.idUser' )
+                              ->where([['alumno.idAlumno', $this->tutorados], ['user.confirmed', '=', 1], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])
+                              ->whereNotNull('user.email')->first();
+              if ($alumno != null) {
+                  $nombres = $alumno->nombre.' '.$alumno->apellidoPaterno.' '.$alumno->apellidoMaterno;
+                  $alumno->notify(new NotificacionActividad($subject, $this->actividad, $mensajeDemas, $alumno->sexo, $url, $nombres, '0', '1'));
+              }
           }else{
-             $users = User::where([['confirmed', '=', 1]])->whereIn('idTipoPersona', $tipoPersona)->get();
-             if (count($users)!=0) {
-                foreach ($users as $user) {
-                     $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
-                     $user->notify(new NotificacionActividad($subject, $this->actividad, $mensajeDemas, $user->sexo, $url, $nombres, '0', '0'));
-                }
+            $users = User::where([['user.confirmed', '=', 1], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])->whereIn('idTipoPersona', $tipoPersona)->whereNotNull('email')->get();
+              if (count($users)!=0) {
+                 foreach ($users as $user) {
+                      $nombres = $user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno;
+                      $user->notify(new NotificacionActividad($subject, $this->actividad, $mensajeDemas, $user->sexo, $url, $nombres, '0', '0'));
+                 }
              }
           }
         }else{
@@ -161,7 +170,8 @@ class JobNotificacionActividad implements ShouldQueue
           }
         }
         //Envio a responsable
-        $userResp = User::findOrFail($this->actividad->idUserResp);
+        $userResp = User::where([['user.id', $this->actividad->idUserResp], ['user.confirmed', '=', 1], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])
+                          ->whereNotNull('email')->first();
         if ($userResp != null && $userResp->confirmed) {
           $nombres = $userResp->nombre.' '.$userResp->apellidoPaterno.' '.$userResp->apellidoMaterno;
           $userResp->notify(new NotificacionActividad($subject, $this->actividad, $mensajeResp, $userResp->sexo, $url, $nombres, '1', '0'));

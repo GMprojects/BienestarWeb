@@ -43,7 +43,7 @@
                <div class="col-md-12">
                    <div class="form-group">
                        <label for="mensaje">Mensaje </label>
-                       <textarea id="mensaje" required name="mensaje" required class="form-control" style="resize: none;" rows="4" >Se le pide por favor que llenen la encuesta de hábito de estudio, la cual es muy necesaria para las próximas sesiones de tutoría.</textarea>
+                       <textarea id="mensaje" required name="mensaje" required class="form-control" style="resize: none;" rows="4" >Escriba su mensaje.</textarea>
                        <div class="help-block with-errors"></div>
                    </div>
                </div>

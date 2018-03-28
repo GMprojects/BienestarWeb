@@ -50,7 +50,8 @@ class MailBasico extends Mailable
                                                    'accion' => $this->accion,
                                                    'nombreEmisor' => $this->nombreEmisor,
                                                    'nombreReceptor' => $this->nombreReceptor,
-                                                   'sexoReceptor' => $this->sexoReceptor ])
+                                                   'sexoReceptor' => $this->sexoReceptor,
+                                                   'mailEmisor' => $this->mailEmisor ])
                   ->subject($this->subject);
     }
 }

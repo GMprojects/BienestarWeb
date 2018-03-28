@@ -36,8 +36,10 @@ class JobMailHabitosEstudios implements ShouldQueue
        if (count($this->encuestasUsers)!=0) {
          for ($i=0; $i < count($this->encuestasUsers) ; $i++) {
            $url = url('miembro/member_show/'.$this->encuestasUsers[$i]['idEncuestaRespondida']);
-           $user = User::findOrFail($this->encuestasUsers[$i]['idUser']);
-           $user->notify( new NotificacionHabitoEstudio($user , $url) );
+           $user = User::where([['user.id', $this->encuestasUsers[$i]['idUser']], ['user.confirmed', '=', 1], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])->whereNotNull('email')->first();
+           if($user != null){
+             $user->notify( new NotificacionHabitoEstudio($user , $url) );
+           }
          }
        }
     }

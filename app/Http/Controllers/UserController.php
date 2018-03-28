@@ -166,13 +166,13 @@ class UserController extends Controller{
    }
 
    public function enviarMailVerificacion(Request $request){
-      $user = User::findOrFail($request->id);
-      $job = (new JobMailVerificacion(($user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno),$user->email, $user->confirmation_code, $user->sexo))
-         ->delay(Carbon::now()->addSeconds(1));
-      dispatch($job);
+      $user = User::where([['user.id', $request->id], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])->whereNotNull('email')->first();
+      if ($user != null) {
+        $job = (new JobMailVerificacion(($user->nombre.' '.$user->apellidoPaterno.' '.$user->apellidoMaterno),$user->email, $user->confirmation_code, $user->sexo))->delay(Carbon::now()->addSeconds(1));
+        dispatch($job);
+      }
       return redirect()->back();
    }
-
     /**
      * Display the specified resource.
      *

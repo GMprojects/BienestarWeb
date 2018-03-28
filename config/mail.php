@@ -21,7 +21,7 @@ return [
     'port' => env('MAIL_PORT', 587),
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'farmaciaBienestar@facfar.unitru.edu.pe'),
-        'name' => env('MAIL_FROM_NAME', 'FR - Bienestar Web'),
+        'name' => env('MAIL_FROM_NAME', 'FB - Bienestar Web'),
     ],
     'encryption' => env('MAIL_ENCRYPTION', 'tls'),
     'username' => env('MAIL_USERNAME'),

@@ -47,15 +47,19 @@ class JobMailBasico implements ShouldQueue
      */
     public function handle()
     {
-        $userEmisor = User::findOrFail($this->idUserEmisor);
-        $userReceptor = User::findOrFail($this->idUserReceptor);
+        $userEmisor = User::where([['user.id', $this->idUserEmisor], ['user.confirmed', '=', 1], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])
+                          ->whereNotNull('email')->first();
+        $userReceptor = User::where([['user.id', $this->idUserReceptor], ['user.confirmed', '=', 1], ['user.email', 'not like', '%-'], ['user.estado', '=', '1']])
+                          ->whereNotNull('email')->first();
 
-        $nombreEmisor = $userEmisor->nombre.' '.$userEmisor->apellidoPaterno.' '.$userEmisor->apellidoMaterno;
-        $nombreReceptor = $userReceptor->nombre.' '.$userReceptor->apellidoPaterno.' '.$userReceptor->apellidoMaterno;
+        if($userEmisor != null && $userReceptor != null){
+          $nombreEmisor = $userEmisor->nombre.' '.$userEmisor->apellidoPaterno.' '.$userEmisor->apellidoMaterno;
+          $nombreReceptor = $userReceptor->nombre.' '.$userReceptor->apellidoPaterno.' '.$userReceptor->apellidoMaterno;
 
-        if ($userReceptor->confirmed) {
-           Mail::to($userReceptor->email)
-                ->send(new MailBasico($this->subject, $this->mensaje, $this->url, $this->accion, $nombreEmisor, $nombreReceptor, $userReceptor->sexo, $userEmisor->email));
+          if ($userReceptor->confirmed) {
+             Mail::to($userReceptor->email)
+                  ->send(new MailBasico($this->subject, $this->mensaje, $this->url, $this->accion, $nombreEmisor, $nombreReceptor, $userReceptor->sexo, $userEmisor->email));
+          }
         }
     }
 }

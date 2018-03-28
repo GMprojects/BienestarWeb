@@ -24,7 +24,7 @@ class NotificacionActividad extends Notification
      *
      * @return void
      */
-    public function __construct($subject, Actividad $actividad,  $mensaje, $sexo, $url, $nombres, $soyResponsable, $soyInscrito)
+    public function __construct($subject, $actividad,  $mensaje, $sexo, $url, $nombres, $soyResponsable, $soyInscrito)
     {
         $this->subject = $subject;
         $this->actividad = $actividad;

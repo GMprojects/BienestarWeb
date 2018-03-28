@@ -105,9 +105,11 @@
 									 <span class="input-group-addon"><i class="fa fa-venus-mars"></i></span>
 									 <select name="sexo"  required class="form-control">
 										 @if ( $user->sexo == 'h' )
-   											<option value="h">Hombre</option>
-										 @else
+   											<option value="h" selected>Hombre</option>
 												<option value="m">Mujer</option>
+										 @else
+										 	<option value="h" selected>Hombre</option>
+											<option value="m">Mujer</option>
 										 @endif
 									 </select>
 								</div>

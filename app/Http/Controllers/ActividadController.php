@@ -297,20 +297,16 @@ class ActividadController extends Controller{
             break;
          }
          //---------------Notificacion o E-Mail-------------------//
-         if($request->idAlumno != null){
-            $alumno = Alumno::findOrFail($request->idAlumno);
-            $userAl = $alumno->user;
+         if($idTipoActividad < 4 ||  $idTipoActividad == 10){
+            $job = (new JobNotificacionActividad($actividad, '1', $request->idAlumno))->delay(Carbon::now()->addSeconds(1));
          }else{
-            $userAl = null;
+            $job = (new JobNotificacionActividad($actividad, '1', $request->idAlumnoTutorado))->delay(Carbon::now()->addSeconds(1));
          }
-         if($actividad->idTipoActividad < 3){
-            $userResp = null;
-         }else{
-            $userResp = User::findOrFail($request->idUserResp);
-         }
-         $job = (new JobNotificacionActividad($actividad, '1', $request->idAlumnoTutorado))
-            ->delay(Carbon::now()->addSeconds(1));
          dispatch($job);
+         $alumno = User::join('alumno', 'user.id', '=', 'alumno.idUser' )
+                         ->where([['alumno.idAlumno',$request->idAlumno], ['confirmed', '=', 1], ['email', 'not like', '%-'], ['estado', '=', '1']])
+                         ->whereNotNull('user.email')->first();
+         dd($alumno);
          return redirect('/');
          //}
      }
